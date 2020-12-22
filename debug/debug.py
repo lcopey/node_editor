@@ -29,18 +29,19 @@ def print_scene(scene):
 
 def print_items(item):
     if 'QNEGraphicsEdge' in item.__str__():
+        print(item)
         print('EDGE : ', item.edge)
-        print('  Start sockets : ', item.edge.start_socket)
-        print('  End sockets : ', item.edge.end_socket)
+        print('  Start socket : ', item.edge.start_socket)
+        print('  End socket : ', item.edge.end_socket)
 
     elif 'QNEGraphicsSocket' in item.__str__():
         print('SOCKET :', item.socket)
-        print('  Edge :', item.socket.edge)
+        print('  Edges :', item.socket.edges)
 
     elif 'QNEGraphicsNode' in item.__str__():
         print('NODE :', item.node)
-        print('  Input sockets :', *item.node.inputs)
-        print('  Output sockets :', *item.node.outputs)
+        print('  Input socket :', *item.node.inputs)
+        print('  Output socket :', *item.node.outputs)
 
     else:
         print(item)

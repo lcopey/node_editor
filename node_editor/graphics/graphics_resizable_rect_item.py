@@ -1,7 +1,9 @@
 from PyQt5.QtCore import Qt, QRectF, QPointF
 from PyQt5.QtGui import QBrush, QPainterPath, QPainter, QColor, QPen, QFont
 from PyQt5.QtWidgets import QGraphicsRectItem, QGraphicsItem, QWidget, QVBoxLayout, QGraphicsSceneMouseEvent, \
-    QGraphicsSceneHoverEvent, QStyleOptionGraphicsItem
+    QGraphicsSceneHoverEvent, QStyleOptionGraphicsItem, QLabel, QTextEdit, QGraphicsProxyWidget, QGraphicsTextItem
+from ..widgets import QNENodeContentWidget
+
 from .const import Handle, handleCursors, handleUpdate
 from typing import Optional
 
@@ -35,10 +37,33 @@ class QGraphicsResizableRectItem(QGraphicsRectItem):
         self.setFlag(QGraphicsItem.ItemIsFocusable, True)
         self.updateHandles()
         self.initUI()
+        self.initTitle()
+
+        self.initContent()
 
     def initUI(self):
         self.setFlag(QGraphicsItem.ItemIsMovable, True)
         self.setFlag(QGraphicsItem.ItemIsSelectable, True)
+
+    def initContent(self):
+        self.content = QNENodeContentWidget(None)
+        self.grContent = QGraphicsProxyWidget(self)
+        self.content.setGeometry(self.edge_size, self.title_height + self.edge_size,
+                                 self.width - 2 * self.edge_size, self.height - 2 * self.edge_size - self.title_height)
+        self.grContent.setWidget(self.content)
+
+    def initTitle(self):
+        # Draw the _title
+        self._title_color = Qt.white
+        self._title_font = QFont('Ubuntu', 10)
+        self._padding = 5.
+        self.title_height = 24
+        self.title_item = QGraphicsTextItem(self)
+        # self.title_item.node = self.node
+        self.title_item.setDefaultTextColor(self._title_color)
+        self.title_item.setFont(self._title_font)
+        self.title_item.setPos(self._padding, 0)
+        self.title_item.setTextWidth(self.width - 2 * self._padding)
 
     @property
     def height(self):
@@ -153,7 +178,7 @@ class QGraphicsResizableRectItem(QGraphicsRectItem):
             rect.setBottom(boundingRect.bottom())
         if update_right:
             if to_right - from_left <= self.min_width:
-                boundingRect.setRight(from_left+self.min_width)
+                boundingRect.setRight(from_left + self.min_width)
             else:
                 boundingRect.setRight(to_right)
             rect.setRight(boundingRect.right())

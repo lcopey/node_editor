@@ -11,8 +11,8 @@ DEBUG = False
 from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
-    from node_scene import Scene
-    from node_socket import Socket
+    from .node_scene import Scene
+    from .node_socket import Socket
 
 
 class Edge(Serializable):
@@ -21,6 +21,10 @@ class Edge(Serializable):
                  edge_type=EDGE_TYPE_DIRECT):
         super().__init__()
         self.scene = scene
+        # default init
+        self._start_socket = None
+        self._end_socket = None
+
         self.start_socket = start_socket
         self.end_socket = end_socket
         self.edge_type = edge_type
@@ -34,9 +38,15 @@ class Edge(Serializable):
 
     @start_socket.setter
     def start_socket(self, value):
+        # If we wer assigne to some socket before, delte us from the socket
+        if self._start_socket is not None:
+            self._start_socket.removeEdge(self)
+
+        # assign new start socket
         self._start_socket = value
+        # addEdge to the Socket class
         if self.start_socket is not None:
-            self.start_socket.edge = self
+            self.start_socket.addEdge(self)
 
     @property
     def end_socket(self):
@@ -44,9 +54,15 @@ class Edge(Serializable):
 
     @end_socket.setter
     def end_socket(self, value):
+        # If we wer assigne to some socket before, delte us from the socket
+        if self._end_socket is not None:
+            self._end_socket.removeEdge(self)
+
+        # assign new end socket
         self._end_socket = value
+        # addEdge to the Socket class
         if self.end_socket is not None:
-            self.end_socket.edge = self
+            self.end_socket.addEdge(self)
 
     @property
     def edge_type(self):
@@ -89,11 +105,12 @@ class Edge(Serializable):
 
         - Remove  the reference of the edge in the sockets.
         - Start socket and end socket are assigned to None"""
-        if self.start_socket is not None:
-            self.start_socket.edge = None
-
-        if self.end_socket is not None:
-            self.end_socket.edge = None
+        # # TODO Fix Me!!!!
+        # if self.start_socket is not None:
+        #     self.start_socket.removeEdge(None)
+        #
+        # if self.end_socket is not None:
+        #     self.end_socket.removeEdge(None)
 
         self.end_socket = None
         self.start_socket = None

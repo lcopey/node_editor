@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 from debug.debug import return_simple_id
 
-DEBUG = False
+DEBUG = True
 
 
 class Node(Serializable):
@@ -36,11 +36,11 @@ class Node(Serializable):
         self.inputs = []
         self.outputs = []
         for n, item in enumerate(inputs):
-            socket = Socket(node=self, index=n, position=LEFT_BOTTOM, socket_type=item)
+            socket = Socket(node=self, index=n, position=LEFT_BOTTOM, socket_type=item, multi_edges=False)
             self.inputs.append(socket)
 
         for n, item in enumerate(outputs):
-            socket = Socket(node=self, index=n, position=RIGHT_TOP, socket_type=item)
+            socket = Socket(node=self, index=n, position=RIGHT_TOP, socket_type=item, multi_edges=True)
             self.outputs.append(socket)
 
     # convenience funcion to update and get the position of the node in the graphical scene
@@ -61,7 +61,6 @@ class Node(Serializable):
         if hasattr(self, 'grNode'):
             self.grNode.title = self._title
 
-    # TODO move to grNode ?
     def getSocketPosition(self, index, position):
         x = 0 if position in (LEFT_TOP, LEFT_BOTTOM) else self.grNode.width
         if position in (LEFT_BOTTOM, RIGHT_BOTTOM):
@@ -73,22 +72,23 @@ class Node(Serializable):
 
         return [x, y]
 
-    # TODO move to grNode ?
     def updateConnectedEdges(self):
         for socket in self.inputs + self.outputs:
-            if socket.hasEdge():
-                socket.edge.updatePositions()
+            # if socket.hasEdge():
+            for edge in socket.edges:
+                edge.updatePositions()
 
     def __str__(self):
         return return_simple_id(self, 'Node')
 
     def remove(self):
         if DEBUG: print('> Removing Node', self)
-        if DEBUG: print(' - remove alll edges from sockets', self)
+        if DEBUG: print(' - remove all edges from sockets', self)
         for socket in (self.inputs + self.outputs):
-            if socket.hasEdge():
-                if DEBUG: print('   - removing edge ', socket.edge, ' from socket ', socket)
-                socket.edge.remove()
+            # if socket.hasEdge():
+            for edge in socket.edges:
+                if DEBUG: print('   - removing edge ', edge, ' from socket ', socket)
+                edge.remove()
 
         if DEBUG: print(' - remove grNode', self)
         self.scene.grScene.removeItem(self.grNode)
@@ -125,7 +125,7 @@ class Node(Serializable):
         self.inputs = []
         for socket_data in data['inputs']:
             new_socket = Socket(node=self, index=socket_data['index'], position=socket_data['position'],
-                                socket_type=socket_data['socket_type'])
+                                socket_type=socket_data['socket_type'], )
             new_socket.deserialize(socket_data, hashmap, restore_id)
             self.inputs.append(new_socket)
 

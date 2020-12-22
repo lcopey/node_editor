@@ -23,6 +23,7 @@ class NodeEditorWindow(QMainWindow):
     def initUI(self):
         menubar = self.menuBar()
 
+        # Add menubar
         # initialize main menu
         fileMenu = menubar.addMenu('&File')
         fileMenu.addAction(self.createAct('&New', 'Ctrl+N', 'Create new graph', self.onFileNew))
@@ -33,6 +34,7 @@ class NodeEditorWindow(QMainWindow):
         fileMenu.addSeparator()
         fileMenu.addAction(self.createAct('E&xit', 'Ctrl+Q', 'Exit application', self.close))
 
+        # initialize editmenu
         editMenu = menubar.addMenu('&Edit')
         editMenu.addAction(self.createAct('&Undo', 'Ctrl+Z', 'Undo last operation', self.onEditUndo))
         editMenu.addAction(self.createAct('&Redo', 'Ctrl+Shift+Z', 'Redo last operation', self.onEditRedo))

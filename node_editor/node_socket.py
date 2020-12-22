@@ -15,26 +15,38 @@ RIGHT_BOTTOM = 4
 
 
 class Socket(Serializable):
-    def __init__(self, node: 'Node', index=0, position=LEFT_TOP, socket_type=1):
+    def __init__(self, node: 'Node', index=0, position=LEFT_TOP, socket_type=1, multi_edges=True):
         super().__init__()
         self.node = node
         self.index = index
         self.position = position
         self.socket_type = socket_type
+        self.is_multi_edges = multi_edges
 
         self.grSocket = QNEGraphicsSocket(self, self.socket_type)
         self.grSocket.setPos(*self.getSocketPosition())
 
-        self.edge = None
+        self.edges = []
 
     def getSocketPosition(self):
         return self.node.getSocketPosition(self.index, self.position)
 
-    def setConnectedEdge(self, edge=None):
-        self.edge = edge
+    def addEdge(self, edge):
+        self.edges.append(edge)
 
-    def hasEdge(self):
-        return self.edge is not None
+    def removeEdge(self, edge):
+        if edge in self.edges:
+            self.edges.remove(edge)
+        else:
+            print('!W', 'Socket:removeEdge', 'wanna remove edge', edge, 'from self.edges but it is not in the list!')
+
+    def removeAllEdges(self):
+        while self.edges:
+            edge = self.edges.pop(0)
+            edge.remove()
+        # self.edges.clear()
+    # def hasEdge(self):
+    #     return self.edges is not None
 
     def __str__(self):
         return return_simple_id(self, 'Socket')
@@ -43,12 +55,14 @@ class Socket(Serializable):
         return OrderedDict([
             ('id', self.id),
             ('index', self.index),
+            ('multi_edges', self.is_multi_edges),
             ('position', self.position),
-            ('socket_type', self.socket_type)
+            ('socket_type', self.socket_type),
         ])
 
     def deserialize(self, data, hashmap={}, restore_id=True):
         if restore_id:
             self.id = data['id']
+        self.is_multi_edges = data['multi_edges']
         hashmap[data['id']] = self
         return True

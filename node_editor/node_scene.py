@@ -34,6 +34,7 @@ class Scene(Serializable):
 
     @property
     def has_been_modified(self):
+        return False
         return self._has_been_modified
 
     @has_been_modified.setter
@@ -60,11 +61,16 @@ class Scene(Serializable):
         self.edges.append(edge)
 
     def removeNode(self, node):
-        self.nodes.remove(node)
+        if node in self.nodes:
+            self.nodes.remove(node)
+        else:
+            print('!W', 'Scene:removeNode', 'wanna remove edge', node, 'from self.nodes but it is not in the list!')
 
     def removeEdge(self, edge):
         if edge in self.edges:
             self.edges.remove(edge)
+        else:
+            print('!W', 'Scene:removeEdge', 'wanna remove edge', edge, 'from self.edges but it is not in the list!')
 
     def clear(self):
         while len(self.nodes) > 0:
