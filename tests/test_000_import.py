@@ -5,7 +5,7 @@
 
 import unittest
 
-from node_editor.node_scene import Scene
+from node_editor.node_editor_widget import NodeEditorWidget
 
 
 class TestTemplate(unittest.TestCase):
@@ -17,6 +17,7 @@ class TestTemplate(unittest.TestCase):
     def tearDown(self):
         """Tear down test fixtures, if any."""
 
-    def test_000_something(self):
+    def test_000_nodeeditorwidget(self):
         """Test if Scene got has_been_modified properly."""
-        assert hasattr(Scene, 'has_been_modified')
+        NodeEditorWidget()
+        assert hasattr(NodeEditorWidget, 'has_been_modified')

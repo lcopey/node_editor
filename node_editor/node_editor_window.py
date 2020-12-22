@@ -8,19 +8,42 @@ DEBUG = True
 
 
 class NodeEditorWindow(QMainWindow):
+    """Main application window
+
+    Contains :
+        - menubar with File, Edit
+        - statusbar displaying cursor position on the scene
+        - NodeEditorWidget instance containing a graphics view and the scene
+    """
+
     def __init__(self):
         super().__init__()
         self.filename = None
         self.initUI()
 
-    def createAct(self, name, shortcut, tooltip, callback):
-        act = QAction(name, self)
-        act.setShortcut(shortcut)
-        act.setToolTip(tooltip)
-        act.triggered.connect(callback)
+    def createAct(self, name: str, shortcut: str, tooltip: str, callback: 'function') -> QAction:
+        """Utility function - create action to add in menubar
+
+        Parameters
+        ----------
+        name : Name to display in the menubar
+        shortcut : Keyboard shortcut - Exemple : Ctrl+C
+        tooltip : Tooltip to display on hover
+        callback : function to call on click
+
+        Returns
+        -------
+        QAction
+
+        """
+        act = QAction(name, self)  # create new QAction
+        act.setShortcut(shortcut)  # Assign keyboard shortcut
+        act.setToolTip(tooltip)  # Assign tooltip
+        act.triggered.connect(callback)  # assign event on click
         return act
 
     def initUI(self):
+        """Initialize main window UI setup"""
         menubar = self.menuBar()
 
         # Add menubar
@@ -62,6 +85,7 @@ class NodeEditorWindow(QMainWindow):
         self.show()
 
     def changeTitle(self):
+        """Handle title change updon modification of the scene"""
         title = 'Node Editor - '
         if self.filename is None:
             title += 'New'
@@ -73,17 +97,17 @@ class NodeEditorWindow(QMainWindow):
 
         self.setWindowTitle(title)
 
-    def closeEvent(self, event: QCloseEvent) -> None:
-        if self.maybeSave():
-            event.accept()
-        else:
-            event.ignore()
-
     def isModified(self):
         return self.centralWidget().scene.has_been_modified
 
     def maybeSave(self):
-        # Logic handling the messageBox asking to save the file when closing the window
+        """Handling the dialog asking to save the file when closing the window
+
+        Returns
+        -------
+            True : if change are saved or discarded
+            False : if change are canceled
+        """
         if not self.isModified():
             return True
 
@@ -96,27 +120,37 @@ class NodeEditorWindow(QMainWindow):
             return False
         return True
 
+    def closeEvent(self, event: QCloseEvent) -> None:
+        """Close if no change is detected, else prompt a dialog asking to save."""
+        if self.maybeSave():
+            event.accept()
+        else:
+            event.ignore()
+
     def onScenePosChanged(self, x, y):
+        """Update mouse position to status bar"""
         self.status_mouse_pos.setText('Scene Pos: [{}, {}]'.format(x, y))
 
     def onFileNew(self):
+        """Clear the scene after prompting dialod asking to save"""
         if self.maybeSave():
             if DEBUG: print('On File New clicked')
             self.centralWidget().scene.clear()
-            self.filename = None
-            self.changeTitle()
+            self.filename = None  # clear filename (default save) when starting new scene
+            self.changeTitle()  # reset the title
 
     def onFileOpen(self):
         if self.maybeSave():
             if DEBUG: print('On File New open')
+            # OpenFile dialog
             fname, filter = QFileDialog.getOpenFileName(self, 'Open graph from file')
             if fname == '':
                 return
 
             if os.path.isfile(fname):
-                self.centralWidget().scene.loadFromFile(fname)
-                self.filename = fname
-                self.changeTitle()
+                self.centralWidget().scene.loadFromFile(fname)  # load scene
+                self.filename = fname  # store current filename
+                self.changeTitle()  # reset title
 
     def onFileSave(self) -> bool:
         if DEBUG: print('On File save')
