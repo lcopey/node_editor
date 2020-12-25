@@ -10,17 +10,19 @@ from .node_scene import Scene
 
 
 class NodeEditorWidget(QWidget):
-    """Implement the main window of the app"""
+    """Widget holding the graphics view and the scene"""
 
     def __init__(self, parent=None):
         super().__init__(parent)
 
+        # load style sheet
         self.stylesheet_filename = 'qss/nodestyle.qss'
         self.loadStylessheet(self.stylesheet_filename)
 
         self.initUI()
 
     def initUI(self):
+        """Initialize widget UI"""
         self.layout = QVBoxLayout()
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(self.layout)
@@ -38,6 +40,7 @@ class NodeEditorWidget(QWidget):
         # self.addDebugContent()
 
     def addNodes(self):
+        """Add nodes for debug purpose"""
         node1 = Node(self.scene, 'My Node', inputs=[INPUT_SOCKET_1] * 3, outputs=[OUTPUT_SOCKET])
         node2 = Node(self.scene, 'My Node', inputs=[INPUT_SOCKET_1] * 3, outputs=[OUTPUT_SOCKET])
         node3 = Node(self.scene, 'My Node', inputs=[INPUT_SOCKET_1] * 3, outputs=[OUTPUT_SOCKET])
@@ -47,29 +50,6 @@ class NodeEditorWidget(QWidget):
 
         edge1 = Edge(self.scene, node1.outputs[0], node2.inputs[0], edge_type=EDGE_TYPE_BEZIER)
         edge2 = Edge(self.scene, node2.outputs[0], node3.inputs[0], edge_type=EDGE_TYPE_BEZIER)
-
-    def addDebugContent(self):
-        greenBrush = QBrush(Qt.green)
-        outlinePen = QPen(Qt.black)
-        outlinePen.setWidth(2)
-
-        rect = self.grScene.addRect(-100, -100, 80, 100, outlinePen, greenBrush)
-        rect.setFlag(QGraphicsItem.ItemIsMovable)
-
-        text = self.grScene.addText('Blabla', QFont('Ubuntu'))
-        text.setFlag(QGraphicsItem.ItemIsSelectable)
-        text.setFlag(QGraphicsItem.ItemIsMovable)
-        text.setDefaultTextColor(QColor.fromRgbF(1., 1., 1.))
-
-        widget1 = QPushButton('Hello World')
-        proxy1 = self.grScene.addWidget(widget1, )
-        proxy1.setFlag(QGraphicsItem.ItemIsMovable)
-        proxy1.setPos(0, 30)
-
-        widget2 = QTextEdit()
-        proxy2 = self.grScene.addWidget(widget2, )
-        proxy2.setFlag(QGraphicsItem.ItemIsSelectable)
-        proxy2.setPos(0, 60)
 
     def loadStylessheet(self, filename):
         print('STYLE loading', filename)

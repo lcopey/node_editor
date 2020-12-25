@@ -26,14 +26,19 @@ class NodeEditorWindow(QMainWindow):
 
         Parameters
         ----------
-        name : Name to display in the menubar
-        shortcut : Keyboard shortcut - Exemple : Ctrl+C
-        tooltip : Tooltip to display on hover
-        callback : function to call on click
+        name : str
+            Name to display in the menubar
+        shortcut : str
+            Keyboard shortcut - Exemple : Ctrl+C
+        tooltip : str
+            Tooltip to display on hover
+        callback : function
+            function to call on click
 
         Returns
         -------
         QAction
+            Returns a QAction with defined name, shortcut and tooltip
 
         """
         act = QAction(name, self)  # create new QAction
@@ -105,8 +110,9 @@ class NodeEditorWindow(QMainWindow):
 
         Returns
         -------
-            True : if change are saved or discarded
-            False : if change are canceled
+        bool
+            - True : if change are saved or discarded
+            - False : if change are canceled
         """
         if not self.isModified():
             return True
@@ -140,6 +146,7 @@ class NodeEditorWindow(QMainWindow):
             self.changeTitle()  # reset the title
 
     def onFileOpen(self):
+        """Open OpenFileDialog"""
         if self.maybeSave():
             if DEBUG: print('On File New open')
             # OpenFile dialog
@@ -153,14 +160,17 @@ class NodeEditorWindow(QMainWindow):
                 self.changeTitle()  # reset title
 
     def onFileSave(self) -> bool:
+        """Save file without dialog. Overwrite filename.
+        Return True if save is not canceled and successful."""
         if DEBUG: print('On File save')
-        if self.filename is None:
+        if self.filename is None:  # if no filename exist, open SaveAs dialog
             return self.onFileSaveAs()
         self.centralWidget().scene.saveToFile(self.filename)
         self.statusBar().showMessage('Successfully saved {}'.format(self.filename))
         return True
 
     def onFileSaveAs(self) -> bool:
+        """Open SaveAs dialog. Return True if save is not canceled and successful."""
         if DEBUG: print('OnFileSaveAs')
         fname, filter = QFileDialog.getSaveFileName(self, 'Save graph to file')
         if fname == '':
@@ -171,30 +181,36 @@ class NodeEditorWindow(QMainWindow):
         return True
 
     def onEditUndo(self):
+        """Undo callback"""
         if DEBUG: print('Undo')
         self.centralWidget().scene.history.undo()
 
     def onEditRedo(self):
+        """Redo callback"""
         if DEBUG: print('Redo')
         self.centralWidget().scene.history.redo()
 
     def onEditDelete(self):
+        """Delate callback"""
         if DEBUG: print('Delete')
         self.centralWidget().scene.grScene.views()[0].deleteSelected()
 
     def onEditCut(self):
+        """Cut callback"""
         data = self.centralWidget().scene.clipboard.serializeSelected(delete=True)
         str_data = json.dumps(data, indent=4)
         if DEBUG: print('Cut :', str_data)
         QApplication.instance().clipboard().setText(str_data)
 
     def onEditCopy(self):
+        """Copy callback"""
         data = self.centralWidget().scene.clipboard.serializeSelected(delete=False)
         str_data = json.dumps(data, indent=4)
         if DEBUG: print('Copy :', str_data)
         QApplication.instance().clipboard().setText(str_data)
 
     def onEditPaste(self):
+        """Paste callback"""
         raw_data = QApplication.instance().clipboard().text()
         try:
             data = json.loads(raw_data)

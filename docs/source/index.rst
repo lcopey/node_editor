@@ -10,7 +10,8 @@ Welcome to Node Editor's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-
+   graph
+   module
 
 Indices and tables
 ==================
