@@ -45,6 +45,7 @@ class Socket(Serializable):
             edge = self.edges.pop(0)
             edge.remove()
         # self.edges.clear()
+
     # def hasEdge(self):
     #     return self.edges is not None
 
@@ -60,9 +61,16 @@ class Socket(Serializable):
             ('socket_type', self.socket_type),
         ])
 
+    def determineMultiedges(self, data):
+        if 'multi_edges' in data:
+            return data['multi_edges']
+        else:
+            # probably older versions of file
+            return data['position'] in (RIGHT_BOTTOM, RIGHT_TOP)
+
     def deserialize(self, data, hashmap={}, restore_id=True):
         if restore_id:
             self.id = data['id']
-        self.is_multi_edges = data['multi_edges']
+        self.is_multi_edges = self.determineMultiedges(data)
         hashmap[data['id']] = self
         return True

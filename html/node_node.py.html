@@ -1,0 +1,279 @@
+<!--
+ * Copyright (c) 2015 Mountainstorm
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *
+ * Original from https://github.com/mountainstorm/jquery.graphviz.svg/blob/master/demo.html
+ -->
+<html>
+	<head>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap.min.css">
+		<!-- <link rel="stylesheet" href="css/graphviz.svg.css"> -->
+	</head>
+
+	<style>
+        #instructions {
+            color: #000000;
+            position: absolute;
+            z-index: 100;
+            bottom: 0px;
+            left: 0px;
+        }
+    </style>
+	<body>
+		<h4 id="instructions">Click node to highlight; Shift-scroll to zoom; Esc to unhighlight</h4>
+		<div id="graph" style="width: 100%; height: 100%; overflow: scroll;"></div>
+
+		<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+		<script type="text/javascript" src="https://cdn.rawgit.com/jquery/jquery-mousewheel/master/jquery.mousewheel.min.js"></script>
+		<script type="text/javascript" src="https://cdn.rawgit.com/jquery/jquery-color/master/jquery.color.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
+		<script type="text/javascript">!function(t){"use strict";String.prototype.startsWith=function(t){return 0==this.indexOf(t)},String.prototype.endsWith=function(t){return-1!==this.indexOf(t,this.length-t.length)};var e=function(t,e){this.type=null,this.options=null,this.enabled=null,this.$element=null,this.init("graphviz.svg",t,e)};e.VERSION="1.0.1",e.GVPT_2_PX=32.5,e.DEFAULTS={url:null,svg:null,shrink:"0.125pt",tooltips:{init:function(e){var i=t(this);i.tooltip({container:e,placement:"auto left",animation:!1,viewport:null}).on("hide.bs.tooltip",function(){if(i.attr("data-tooltip-keepvisible"))return!1})},show:function(){var e=t(this);e.attr("data-tooltip-keepvisible",!0),e.tooltip("show")},hide:function(){var e=t(this);e.removeAttr("data-tooltip-keepvisible"),e.tooltip("hide")},update:function(){var e=t(this);e.attr("data-tooltip-keepvisible")&&e.tooltip("show")}},zoom:!0,highlight:{selected:function(t,e){return t},unselected:function(t,e){return jQuery.Color(t).transition(e,.9)}},ready:null},e.prototype.init=function(e,i,n){if(this.enabled=!0,this.type=e,this.$element=t(i),this.options=this.getOptions(n),n.url){var o=this;t.get(n.url,null,function(e){var i=t("svg",e);o.$element.html(document.adoptNode(i[0])),o.setup()},"xml")}else n.svg&&this.$element.html(n.svg),this.setup()},e.prototype.getDefaults=function(){return e.DEFAULTS},e.prototype.getOptions=function(e){return(e=t.extend({},this.getDefaults(),this.$element.data(),e)).shrink&&("object"!=typeof e.shrink&&(e.shrink={x:e.shrink,y:e.shrink}),e.shrink.x=this.convertToPx(e.shrink.x),e.shrink.y=this.convertToPx(e.shrink.y)),e},e.prototype.setup=function(){var e=this.options,i=t(this.$element.children("svg")),n=i.children("g:first");this.$svg=i,this.$graph=n,this.$background=n.children("polygon:first"),this.$nodes=n.children(".node"),this.$edges=n.children(".edge"),this._nodesByName={},this._edgesByName={},this.$element.addClass("graphviz-svg"),this.$background.length&&this.$element.css("background",this.$background.attr("fill"));var o=this;this.$nodes.each(function(){o.setupNodesEdges(t(this),!0)}),this.$edges.each(function(){o.setupNodesEdges(t(this),!1)});var r=this.$graph.children("title");this.$graph.attr("data-name",r.text()),r.remove(),e.zoom&&this.setupZoom(),e.ready&&e.ready.call(this)},e.prototype.setupNodesEdges=function(e,i){var n=this,o=this.options;e.find("polygon, ellipse, path").each(function(){var e=t(this);e.data("graphviz.svg.color",{fill:e.attr("fill"),stroke:e.attr("stroke")}),i&&o.shrink&&n.scaleNode(e)});var r,s,h=e.children("title");if(h[0]){var a=h.text().replace(/:[snew][ew]?/g,"");e.attr("data-name",a),h.remove(),i?this._nodesByName[a]=e[0]:this._edgesByName[a]=e[0];for(var l=e[0].previousSibling;l&&8!=l.nodeType;)l=l.previousSibling;if(null!=l&&8==l.nodeType){var p=(r=l.nodeValue.trim(),(s=document.createElement("div")).innerHTML=r,s.childNodes[0].nodeValue);p!=a&&e.attr("data-comment",p)}}e.children("a").filter(function(){return t(this).attr("xlink:title")}).each(function(){var e=t(this);e.attr("title",e.attr("xlink:title")),e.removeAttr("xlink:title"),o.tooltips&&o.tooltips.init.call(this,n.$element)})},e.prototype.setupZoom=function(){var t=this,e=this.$element,i=this.$svg;this.zoom={width:i.attr("width"),height:i.attr("height"),percentage:null},this.scaleView(100),e.mousewheel(function(n){if(n.shiftKey){var o=t.zoom.percentage;(o-=n.deltaY*n.deltaFactor)<100&&(o=100);var r=n.pageX-i.offset().left,s=n.pageY-i.offset().top,h=r/i.width(),a=s/i.height(),l=n.pageX-e.offset().left,p=n.pageY-e.offset().top;return t.scaleView(o),e.scrollLeft(h*i.width()+.5-l),e.scrollTop(a*i.height()+.5-p),!1}})},e.prototype.scaleView=function(t){var e=this,i=this.$svg;i.attr("width",t+"%"),i.attr("height",t+"%"),this.zoom.percentage=t,this.$nodes.add(this.$edges).children("a[title]").each(function(){e.options.tooltips.update.call(this)})},e.prototype.scaleNode=function(t){var e=this.options.shrink.x,i=this.options.shrink.y,n=t.prop("tagName");if("ellipse"==n)t.attr("rx",parseFloat(t.attr("rx"))-e),t.attr("ry",parseFloat(t.attr("ry"))-i);else if("polygon"==n){var o=t[0].getBBox(),r=o.x+o.width/2,s=o.y+o.height/2,h=t.attr("points").split(" "),a="";for(var l in h){var p=h[l].split(","),d=parseFloat(p[0]),u=parseFloat(p[1]);a+=(r-d)/(o.width/2)*e+d+","+((s-u)/(o.height/2)*i+u)+" "}t.attr("points",a)}},e.prototype.convertToPx=function(t){var i=t;if("string"==typeof t){var n=t.length,o=1;t.endsWith("px")?n-=2:t.endsWith("pt")&&(n-=2,o=e.GVPT_2_PX),i=parseFloat(t.substring(0,n))*o}return i},e.prototype.findEdge=function(t,e,i){var n=[];for(var o in this._edgesByName){var r=e(t,o);r&&(i&&i.push(this._edgesByName[o]),n.push(r))}return n},e.prototype.findLinked=function(e,i,n,o){var r=t(e),s=null;i&&(s=o);var h=this.findEdge(r.attr("data-name"),n,s);for(var a in h){var l=this._nodesByName[h[a]];o.is(l)||(o.push(l),this.findLinked(l,i,n,o))}},e.prototype.colorElement=function(e,i){var n=this.$element.css("background");e.find("polygon, ellipse, path").each(function(){var e=t(this),o=e.data("graphviz.svg.color");o.fill&&"path"!=e.prop("tagName")&&e.attr("fill",i(o.fill,n)),o.stroke&&e.attr("stroke",i(o.stroke,n))})},e.prototype.restoreElement=function(e){e.find("polygon, ellipse, path").each(function(){var e=t(this),i=e.data("graphviz.svg.color");i.fill&&e.attr("fill",i.fill),i.stroke&&e.attr("stroke",i.stroke)})},e.prototype.nodes=function(){return this.$nodes},e.prototype.edges=function(){return this.$edges},e.prototype.nodesByName=function(){return this._nodesByName},e.prototype.edgesByName=function(){return this._edgesByName},e.prototype.linkedTo=function(e,i){var n=t();return this.findLinked(e,i,function(t,e){var i=null,n="->"+t;return e.endsWith(n)&&(i=e.substring(0,e.length-n.length)),i},n),n},e.prototype.linkedFrom=function(e,i){var n=t();return this.findLinked(e,i,function(t,e){var i=null,n=t+"->";return e.startsWith(n)&&(i=e.substring(n.length)),i},n),n},e.prototype.linked=function(e,i){var n=t();return this.findLinked(e,i,function(t,e){return"^"+name+"--(.*)$"},n),this.findLinked(e,i,function(t,e){return"^(.*)--"+name+"$"},n),n},e.prototype.tooltip=function(e,i){var n=this.options;e.each(function(){t(this).children("a[title]").each(function(){i?n.tooltips.show.call(this):n.tooltips.hide.call(this)})})},e.prototype.bringToFront=function(t){t.detach().appendTo(this.$graph)},e.prototype.sendToBack=function(t){this.$background.length?$element.insertAfter(this.$background):t.detach().prependTo(this.$graph)},e.prototype.highlight=function(e,i){var n=this,o=this.options,r=this.$nodes.add(this.$edges);e&&e.length>0?(r.not(e).each(function(){n.colorElement(t(this),o.highlight.unselected),n.tooltip(t(this))}),e.each(function(){n.colorElement(t(this),o.highlight.selected)}),i&&this.tooltip(e,!0)):(r.each(function(){n.restoreElement(t(this))}),this.tooltip(r))},e.prototype.destroy=function(){var t=this;this.hide(function(){t.$element.off("."+t.type).removeData(t.type)})};var i=t.fn.graphviz;t.fn.graphviz=function(i){return this.each(function(){var n=t(this),o=n.data("graphviz.svg"),r="object"==typeof i&&i;!o&&/destroy/.test(i)||(o||n.data("graphviz.svg",o=new e(this,r)),"string"==typeof i&&o[i]())})},t.fn.graphviz.Constructor=e,t.fn.graphviz.noConflict=function(){return t.fn.graphviz=i,this}}(jQuery);</script>
+		<script type="text/javascript">
+ 			$(document).ready(function(){
+                $("#graph").graphviz({
+                    svg: `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.44.1 (20200629.0846)
+ -->
+<!-- Title: G Pages: 1 -->
+<svg width="697pt" height="535pt"
+ viewBox="0.00 0.00 696.95 535.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 531)">
+<title>G</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-531 692.95,-531 692.95,4 -4,4"/>
+<g id="clust1" class="cluster">
+<title>cluster_G</title>
+<path fill="#808080" fill-opacity="0.094118" stroke="black" d="M20,-8C20,-8 668.95,-8 668.95,-8 674.95,-8 680.95,-14 680.95,-20 680.95,-20 680.95,-507 680.95,-507 680.95,-513 674.95,-519 668.95,-519 668.95,-519 20,-519 20,-519 14,-519 8,-513 8,-507 8,-507 8,-20 8,-20 8,-14 14,-8 20,-8"/>
+</g>
+<g id="clust2" class="cluster">
+<title>cluster_nodeX_editor__nodeX_nodeX</title>
+<path fill="#808080" fill-opacity="0.094118" stroke="black" d="M252.28,-16C252.28,-16 660.95,-16 660.95,-16 666.95,-16 672.95,-22 672.95,-28 672.95,-28 672.95,-499 672.95,-499 672.95,-505 666.95,-511 660.95,-511 660.95,-511 252.28,-511 252.28,-511 246.28,-511 240.28,-505 240.28,-499 240.28,-499 240.28,-28 240.28,-28 240.28,-22 246.28,-16 252.28,-16"/>
+<text text-anchor="middle" x="456.62" y="-495.8" font-family="Times New Roman,serif" font-size="14.00">node_editor.node_node</text>
+</g>
+<g id="clust3" class="cluster">
+<title>cluster_nodeX_editor__nodeX_nodeX__Node</title>
+<path fill="#808080" fill-opacity="0.094118" stroke="black" d="M349.38,-36C349.38,-36 652.95,-36 652.95,-36 658.95,-36 664.95,-42 664.95,-48 664.95,-48 664.95,-459 664.95,-459 664.95,-465 658.95,-471 652.95,-471 652.95,-471 349.38,-471 349.38,-471 343.38,-471 337.38,-465 337.38,-459 337.38,-459 337.38,-48 337.38,-48 337.38,-42 343.38,-36 349.38,-36"/>
+<text text-anchor="middle" x="501.16" y="-455.8" font-family="Times New Roman,serif" font-size="14.00">node_editor.node_node.Node</text>
+</g>
+<!-- nodeX_editor__nodeX_nodeX -->
+<g id="node1" class="node">
+<title>nodeX_editor__nodeX_nodeX</title>
+<ellipse fill="#ffffff" fill-opacity="0.698039" stroke="black" cx="114.14" cy="-260" rx="98.28" ry="18"/>
+<text text-anchor="middle" x="114.14" y="-256.3" font-family="Times New Roman,serif" font-size="14.00" fill="#000000">node_editor.node_node</text>
+</g>
+<!-- nodeX_editor__nodeX_nodeX__Node -->
+<g id="node2" class="node">
+<title>nodeX_editor__nodeX_nodeX__Node</title>
+<ellipse fill="#ff9999" fill-opacity="0.698039" stroke="black" cx="278.83" cy="-260" rx="30.59" ry="18"/>
+<text text-anchor="middle" x="278.83" y="-256.3" font-family="Times New Roman,serif" font-size="14.00" fill="#000000">Node</text>
+</g>
+<!-- nodeX_editor__nodeX_nodeX&#45;&gt;nodeX_editor__nodeX_nodeX__Node -->
+<g id="edge1" class="edge">
+<title>nodeX_editor__nodeX_nodeX&#45;&gt;nodeX_editor__nodeX_nodeX__Node</title>
+<path fill="none" stroke="#838b8b" stroke-dasharray="5,2" d="M212.6,-260C221.44,-260 230.01,-260 237.88,-260"/>
+<polygon fill="#838b8b" stroke="#838b8b" points="238.14,-263.5 248.14,-260 238.14,-256.5 238.14,-263.5"/>
+</g>
+<!-- nodeX_editor__nodeX_nodeX__Node____init__ -->
+<g id="node3" class="node">
+<title>nodeX_editor__nodeX_nodeX__Node____init__</title>
+<ellipse fill="#ff6565" fill-opacity="0.698039" stroke="black" cx="616.01" cy="-116" rx="40.89" ry="18"/>
+<text text-anchor="middle" x="616.01" y="-112.3" font-family="Times New Roman,serif" font-size="14.00" fill="#000000">__init__</text>
+</g>
+<!-- nodeX_editor__nodeX_nodeX__Node&#45;&gt;nodeX_editor__nodeX_nodeX__Node____init__ -->
+<g id="edge11" class="edge">
+<title>nodeX_editor__nodeX_nodeX__Node&#45;&gt;nodeX_editor__nodeX_nodeX__Node____init__</title>
+<path fill="none" stroke="#838b8b" stroke-dasharray="5,2" d="M281.65,-241.95C286.97,-193.18 304.26,-60.72 337.38,-35 408.18,19.97 456.81,0.63 539.06,-35 564.83,-46.16 585.87,-70.85 599.21,-90.06"/>
+<polygon fill="#838b8b" stroke="#838b8b" points="596.33,-92.05 604.79,-98.43 602.15,-88.17 596.33,-92.05"/>
+</g>
+<!-- nodeX_editor__nodeX_nodeX__Node____str__ -->
+<g id="node4" class="node">
+<title>nodeX_editor__nodeX_nodeX__Node____str__</title>
+<ellipse fill="#ff6565" fill-opacity="0.698039" stroke="black" cx="442.22" cy="-62" rx="39.79" ry="18"/>
+<text text-anchor="middle" x="442.22" y="-58.3" font-family="Times New Roman,serif" font-size="14.00" fill="#000000">__str__</text>
+</g>
+<!-- nodeX_editor__nodeX_nodeX__Node&#45;&gt;nodeX_editor__nodeX_nodeX__Node____str__ -->
+<g id="edge4" class="edge">
+<title>nodeX_editor__nodeX_nodeX__Node&#45;&gt;nodeX_editor__nodeX_nodeX__Node____str__</title>
+<path fill="none" stroke="#838b8b" stroke-dasharray="5,2" d="M280.52,-241.79C282.85,-206.88 293.04,-130.33 337.38,-89 352.29,-75.1 373.42,-68.15 392.74,-64.75"/>
+<polygon fill="#838b8b" stroke="#838b8b" points="393.26,-68.21 402.63,-63.28 392.23,-61.29 393.26,-68.21"/>
+</g>
+<!-- nodeX_editor__nodeX_nodeX__Node__deserialize -->
+<g id="node5" class="node">
+<title>nodeX_editor__nodeX_nodeX__Node__deserialize</title>
+<ellipse fill="#ff6565" fill-opacity="0.698039" stroke="black" cx="442.22" cy="-170" rx="48.19" ry="18"/>
+<text text-anchor="middle" x="442.22" y="-166.3" font-family="Times New Roman,serif" font-size="14.00" fill="#000000">deserialize</text>
+</g>
+<!-- nodeX_editor__nodeX_nodeX__Node&#45;&gt;nodeX_editor__nodeX_nodeX__Node__deserialize -->
+<g id="edge9" class="edge">
+<title>nodeX_editor__nodeX_nodeX__Node&#45;&gt;nodeX_editor__nodeX_nodeX__Node__deserialize</title>
+<path fill="none" stroke="#838b8b" stroke-dasharray="5,2" d="M290.85,-243.29C301.2,-228.92 317.97,-208.7 337.38,-197 352.17,-188.08 369.88,-182.08 386.44,-178.05"/>
+<polygon fill="#838b8b" stroke="#838b8b" points="387.58,-181.39 396.57,-175.79 386.05,-174.56 387.58,-181.39"/>
+</g>
+<!-- nodeX_editor__nodeX_nodeX__Node__getSocketPosition -->
+<g id="node6" class="node">
+<title>nodeX_editor__nodeX_nodeX__Node__getSocketPosition</title>
+<ellipse fill="#ff6565" fill-opacity="0.698039" stroke="black" cx="442.22" cy="-350" rx="76.89" ry="18"/>
+<text text-anchor="middle" x="442.22" y="-346.3" font-family="Times New Roman,serif" font-size="14.00" fill="#000000">getSocketPosition</text>
+</g>
+<!-- nodeX_editor__nodeX_nodeX__Node&#45;&gt;nodeX_editor__nodeX_nodeX__Node__getSocketPosition -->
+<g id="edge7" class="edge">
+<title>nodeX_editor__nodeX_nodeX__Node&#45;&gt;nodeX_editor__nodeX_nodeX__Node__getSocketPosition</title>
+<path fill="none" stroke="#838b8b" stroke-dasharray="5,2" d="M290.85,-276.71C301.2,-291.08 317.97,-311.3 337.38,-323 347,-328.8 357.86,-333.37 368.83,-336.96"/>
+<polygon fill="#838b8b" stroke="#838b8b" points="367.89,-340.33 378.47,-339.87 369.91,-333.63 367.89,-340.33"/>
+</g>
+<!-- nodeX_editor__nodeX_nodeX__Node__pos -->
+<g id="node7" class="node">
+<title>nodeX_editor__nodeX_nodeX__Node__pos</title>
+<ellipse fill="#ff6565" fill-opacity="0.698039" stroke="black" cx="442.22" cy="-296" rx="27" ry="18"/>
+<text text-anchor="middle" x="442.22" y="-292.3" font-family="Times New Roman,serif" font-size="14.00" fill="#000000">pos</text>
+</g>
+<!-- nodeX_editor__nodeX_nodeX__Node&#45;&gt;nodeX_editor__nodeX_nodeX__Node__pos -->
+<g id="edge5" class="edge">
+<title>nodeX_editor__nodeX_nodeX__Node&#45;&gt;nodeX_editor__nodeX_nodeX__Node__pos</title>
+<path fill="none" stroke="#838b8b" stroke-dasharray="5,2" d="M307.57,-266.19C334.98,-272.3 376.99,-281.67 406.58,-288.27"/>
+<polygon fill="#838b8b" stroke="#838b8b" points="405.96,-291.72 416.48,-290.48 407.48,-284.89 405.96,-291.72"/>
+</g>
+<!-- nodeX_editor__nodeX_nodeX__Node__remove -->
+<g id="node8" class="node">
+<title>nodeX_editor__nodeX_nodeX__Node__remove</title>
+<ellipse fill="#ff6565" fill-opacity="0.698039" stroke="black" cx="442.22" cy="-224" rx="37.89" ry="18"/>
+<text text-anchor="middle" x="442.22" y="-220.3" font-family="Times New Roman,serif" font-size="14.00" fill="#000000">remove</text>
+</g>
+<!-- nodeX_editor__nodeX_nodeX__Node&#45;&gt;nodeX_editor__nodeX_nodeX__Node__remove -->
+<g id="edge10" class="edge">
+<title>nodeX_editor__nodeX_nodeX__Node&#45;&gt;nodeX_editor__nodeX_nodeX__Node__remove</title>
+<path fill="none" stroke="#838b8b" stroke-dasharray="5,2" d="M307.57,-253.81C332.4,-248.27 369.21,-240.06 397.91,-233.66"/>
+<polygon fill="#838b8b" stroke="#838b8b" points="398.7,-237.07 407.7,-231.48 397.17,-230.24 398.7,-237.07"/>
+</g>
+<!-- nodeX_editor__nodeX_nodeX__Node__serialize -->
+<g id="node9" class="node">
+<title>nodeX_editor__nodeX_nodeX__Node__serialize</title>
+<ellipse fill="#ff6565" fill-opacity="0.698039" stroke="black" cx="442.22" cy="-404" rx="38.99" ry="18"/>
+<text text-anchor="middle" x="442.22" y="-400.3" font-family="Times New Roman,serif" font-size="14.00" fill="#000000">serialize</text>
+</g>
+<!-- nodeX_editor__nodeX_nodeX__Node&#45;&gt;nodeX_editor__nodeX_nodeX__Node__serialize -->
+<g id="edge3" class="edge">
+<title>nodeX_editor__nodeX_nodeX__Node&#45;&gt;nodeX_editor__nodeX_nodeX__Node__serialize</title>
+<path fill="none" stroke="#838b8b" stroke-dasharray="5,2" d="M283.68,-278C290.18,-303.87 305.8,-351.25 337.38,-377 353.04,-389.77 374.08,-396.57 393.13,-400.16"/>
+<polygon fill="#838b8b" stroke="#838b8b" points="392.72,-403.64 403.16,-401.8 393.85,-396.73 392.72,-403.64"/>
+</g>
+<!-- nodeX_editor__nodeX_nodeX__Node__setPos -->
+<g id="node10" class="node">
+<title>nodeX_editor__nodeX_nodeX__Node__setPos</title>
+<ellipse fill="#ff6565" fill-opacity="0.698039" stroke="black" cx="616.01" cy="-278" rx="35.19" ry="18"/>
+<text text-anchor="middle" x="616.01" y="-274.3" font-family="Times New Roman,serif" font-size="14.00" fill="#000000">setPos</text>
+</g>
+<!-- nodeX_editor__nodeX_nodeX__Node&#45;&gt;nodeX_editor__nodeX_nodeX__Node__setPos -->
+<g id="edge6" class="edge">
+<title>nodeX_editor__nodeX_nodeX__Node&#45;&gt;nodeX_editor__nodeX_nodeX__Node__setPos</title>
+<path fill="none" stroke="#838b8b" stroke-dasharray="5,2" d="M278.96,-278.19C278.2,-317.16 282.67,-408.47 337.38,-449 373.39,-475.68 501.48,-473.43 539.06,-449 551.94,-440.63 587.24,-351.3 604.8,-305.2"/>
+<polygon fill="#838b8b" stroke="#838b8b" points="608.09,-306.39 608.37,-295.8 601.55,-303.91 608.09,-306.39"/>
+</g>
+<!-- nodeX_editor__nodeX_nodeX__Node__title -->
+<g id="node11" class="node">
+<title>nodeX_editor__nodeX_nodeX__Node__title</title>
+<ellipse fill="#ff6565" fill-opacity="0.698039" stroke="black" cx="616.01" cy="-413" rx="27" ry="18"/>
+<text text-anchor="middle" x="616.01" y="-409.3" font-family="Times New Roman,serif" font-size="14.00" fill="#000000">title</text>
+</g>
+<!-- nodeX_editor__nodeX_nodeX__Node&#45;&gt;nodeX_editor__nodeX_nodeX__Node__title -->
+<g id="edge8" class="edge">
+<title>nodeX_editor__nodeX_nodeX__Node&#45;&gt;nodeX_editor__nodeX_nodeX__Node__title</title>
+<path fill="none" stroke="#838b8b" stroke-dasharray="5,2" d="M282.16,-277.93C288.45,-323.24 307.35,-440.3 337.38,-463 408.88,-517.05 453.19,-488.73 539.06,-463 558.22,-457.26 577.02,-444.95 591.12,-433.99"/>
+<polygon fill="#838b8b" stroke="#838b8b" points="593.68,-436.41 599.25,-427.4 589.28,-430.97 593.68,-436.41"/>
+</g>
+<!-- nodeX_editor__nodeX_nodeX__Node__updateConnectedEdges -->
+<g id="node12" class="node">
+<title>nodeX_editor__nodeX_nodeX__Node__updateConnectedEdges</title>
+<ellipse fill="#ff6565" fill-opacity="0.698039" stroke="black" cx="442.22" cy="-116" rx="96.68" ry="18"/>
+<text text-anchor="middle" x="442.22" y="-112.3" font-family="Times New Roman,serif" font-size="14.00" fill="#000000">updateConnectedEdges</text>
+</g>
+<!-- nodeX_editor__nodeX_nodeX__Node&#45;&gt;nodeX_editor__nodeX_nodeX__Node__updateConnectedEdges -->
+<g id="edge2" class="edge">
+<title>nodeX_editor__nodeX_nodeX__Node&#45;&gt;nodeX_editor__nodeX_nodeX__Node__updateConnectedEdges</title>
+<path fill="none" stroke="#838b8b" stroke-dasharray="5,2" d="M283.68,-242C290.18,-216.13 305.8,-168.75 337.38,-143 343.13,-138.31 349.62,-134.42 356.46,-131.2"/>
+<polygon fill="#838b8b" stroke="#838b8b" points="358.11,-134.31 365.98,-127.22 355.4,-127.85 358.11,-134.31"/>
+</g>
+<!-- nodeX_editor__nodeX_nodeX__Node____init__&#45;&gt;nodeX_editor__nodeX_nodeX__Node____init__ -->
+<g id="edge12" class="edge">
+<title>nodeX_editor__nodeX_nodeX__Node____init__&#45;&gt;nodeX_editor__nodeX_nodeX__Node____init__</title>
+<path fill="none" stroke="#000000" d="M588.29,-129.67C577.21,-140.66 586.44,-152 616.01,-152 637.25,-152 648,-146.14 648.25,-138.76"/>
+<polygon fill="#000000" stroke="#000000" points="651.31,-137.06 643.72,-129.67 645.05,-140.18 651.31,-137.06"/>
+</g>
+<!-- nodeX_editor__nodeX_nodeX__Node__deserialize&#45;&gt;nodeX_editor__nodeX_nodeX__Node____init__ -->
+<g id="edge18" class="edge">
+<title>nodeX_editor__nodeX_nodeX__Node__deserialize&#45;&gt;nodeX_editor__nodeX_nodeX__Node____init__</title>
+<path fill="none" stroke="#000000" d="M482.1,-159.68C499.59,-154.88 520.45,-148.92 539.06,-143 550.61,-139.32 563.04,-135.04 574.43,-130.99"/>
+<polygon fill="#000000" stroke="#000000" points="575.9,-134.18 584.13,-127.51 573.53,-127.59 575.9,-134.18"/>
+</g>
+<!-- nodeX_editor__nodeX_nodeX__Node__deserialize&#45;&gt;nodeX_editor__nodeX_nodeX__Node__setPos -->
+<g id="edge17" class="edge">
+<title>nodeX_editor__nodeX_nodeX__Node__deserialize&#45;&gt;nodeX_editor__nodeX_nodeX__Node__setPos</title>
+<path fill="none" stroke="#000000" d="M486.76,-177.03C503.92,-181.1 523.25,-187.39 539.06,-197 562.42,-211.2 583.2,-234.52 597.09,-252.5"/>
+<polygon fill="#000000" stroke="#000000" points="594.54,-254.93 603.34,-260.83 600.15,-250.73 594.54,-254.93"/>
+</g>
+<!-- nodeX_editor__nodeX_nodeX__Node__remove&#45;&gt;nodeX_editor__nodeX_nodeX__Node__remove -->
+<g id="edge14" class="edge">
+<title>nodeX_editor__nodeX_nodeX__Node__remove&#45;&gt;nodeX_editor__nodeX_nodeX__Node__remove</title>
+<path fill="none" stroke="#000000" d="M416.48,-237.29C405.48,-248.4 414.06,-260 442.22,-260 462.46,-260 472.58,-254.01 472.59,-246.51"/>
+<polygon fill="#000000" stroke="#000000" points="475.58,-244.65 467.96,-237.29 469.32,-247.8 475.58,-244.65"/>
+</g>
+<!-- nodeX_editor__nodeX_nodeX__Node__serialize&#45;&gt;nodeX_editor__nodeX_nodeX__Node__serialize -->
+<g id="edge15" class="edge">
+<title>nodeX_editor__nodeX_nodeX__Node__serialize&#45;&gt;nodeX_editor__nodeX_nodeX__Node__serialize</title>
+<path fill="none" stroke="#000000" d="M416.12,-417.67C405.67,-428.66 414.37,-440 442.22,-440 462.23,-440 472.35,-434.14 472.59,-426.76"/>
+<polygon fill="#000000" stroke="#000000" points="475.74,-425.23 468.32,-417.67 469.4,-428.21 475.74,-425.23"/>
+</g>
+<!-- nodeX_editor__nodeX_nodeX__Node__serialize&#45;&gt;nodeX_editor__nodeX_nodeX__Node__title -->
+<g id="edge16" class="edge">
+<title>nodeX_editor__nodeX_nodeX__Node__serialize&#45;&gt;nodeX_editor__nodeX_nodeX__Node__title</title>
+<path fill="none" stroke="#000000" d="M481.34,-406C510.48,-407.52 550.38,-409.61 578.98,-411.11"/>
+<polygon fill="#000000" stroke="#000000" points="578.8,-414.61 588.97,-411.64 579.17,-407.62 578.8,-414.61"/>
+</g>
+<!-- nodeX_editor__nodeX_nodeX__Node__updateConnectedEdges&#45;&gt;nodeX_editor__nodeX_nodeX__Node____init__ -->
+<g id="edge13" class="edge">
+<title>nodeX_editor__nodeX_nodeX__Node__updateConnectedEdges&#45;&gt;nodeX_editor__nodeX_nodeX__Node____init__</title>
+<path fill="none" stroke="#000000" d="M539.16,-116C548.02,-116 556.74,-116 564.93,-116"/>
+<polygon fill="#000000" stroke="#000000" points="564.99,-119.5 574.99,-116 564.99,-112.5 564.99,-119.5"/>
+</g>
+</g>
+</svg>
+`,
+                    ready: function() {
+                        var gv = this
+                        gv.nodes().click(function () {
+                            var $set = $()
+                            $set.push(this)
+                            $set = $set.add(gv.linkedFrom(this, true))
+                            $set = $set.add(gv.linkedTo(this, true))
+                            gv.highlight($set, true)
+                            gv.bringToFront($set)
+                        })
+                        $(document).keydown(function (evt) {
+                            if (evt.keyCode == 27) {
+                                gv.highlight()
+                            }
+                        })
+                    }
+                });
+            });
+		</script>
+	</body>
+</html>

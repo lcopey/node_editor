@@ -18,7 +18,7 @@ class QNEGraphicsNode(QGraphicsItem):
 
         # Diverse parameters for drawing
         self._title_color = Qt.white
-        self._title_font = QFont('Ubuntu', 10)
+        self._title_font = QFont('Ubuntu', 8)
         self.title_height = 24
         self._padding = 5.
 

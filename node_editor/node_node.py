@@ -1,8 +1,9 @@
 from collections import OrderedDict
 from .node_serializable import Serializable
 from .node_graphics_node import QNEGraphicsNode
-from node_editor.widgets.node_content_widget import QNENodeContentWidget
+from .widgets.node_content_widget import QNENodeContentWidget
 from .node_socket import Socket, LEFT_TOP, LEFT_BOTTOM, RIGHT_BOTTOM, RIGHT_TOP
+from .utils import dumpException
 
 from typing import TYPE_CHECKING
 
@@ -11,7 +12,7 @@ if TYPE_CHECKING:
 
 from debug.debug import return_simple_id
 
-DEBUG = True
+DEBUG = False
 
 
 class Node(Serializable):
@@ -43,7 +44,7 @@ class Node(Serializable):
             socket = Socket(node=self, index=n, position=RIGHT_TOP, socket_type=item, multi_edges=True)
             self.outputs.append(socket)
 
-    # convenience funcion to update and get the position of the node in the graphical scene
+    # convenience function to update and get the position of the node in the graphical scene
     @property
     def pos(self):
         return self.grNode.pos()

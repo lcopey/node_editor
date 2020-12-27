@@ -1,3 +1,4 @@
+import os
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
@@ -6,7 +7,10 @@ from .node_edge import Edge, EDGE_TYPE_BEZIER
 from .node_graphics_socket import OUTPUT_SOCKET, INPUT_SOCKET_1
 from .node_graphics_view import QNEGraphicsView
 from .node_node import Node
-from .node_scene import Scene
+from .node_scene import Scene, InvalidFile
+from .utils import dumpException
+
+# TODO support for mdi application, implement setTitle as in Node Editor Widget
 
 
 class NodeEditorWidget(QWidget):
@@ -15,9 +19,7 @@ class NodeEditorWidget(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
 
-        # load style sheet
-        self.stylesheet_filename = 'qss/nodestyle.qss'
-        self.loadStylessheet(self.stylesheet_filename)
+        self.filename = None
 
         self.initUI()
 
@@ -39,6 +41,66 @@ class NodeEditorWidget(QWidget):
 
         # self.addDebugContent()
 
+    def isModified(self):
+        return self.scene.has_been_modified
+
+    def isFilenameSet(self):
+        return self.filename is not None
+
+    def getUserFriendlyFilename(self):
+        """
+
+        Returns
+        -------
+
+        """
+        name = os.path.basename(self.filename) if self.isFilenameSet() else "New Graph"
+        return name + ("*" if self.isModified() else "")
+
+    def fileLoad(self, filename: str) -> bool:
+        """
+
+        Parameters
+        ----------
+        filename : str
+            Path of the file to load
+
+
+        Returns
+        -------
+        bool :
+            - True : if the file is successfully loaded
+            - False : in case of error
+
+        """
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        try:
+            self.scene.loadFromFile(filename)
+            self.filename = filename
+            # clear history
+            return True
+
+        except InvalidFile as e:
+            QApplication.restoreOverrideCursor()
+            QMessageBox.warning(self, f'Error loading {os.path.basename(filename)}', str(e))
+            return False
+
+        except Exception as e:
+            dumpException(e)
+
+        finally:
+            QApplication.restoreOverrideCursor()
+
+        return False
+
+    def fileSave(self, filename=None):
+        if filename is not None:
+            self.filename = filename
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        self.scene.saveToFile(self.filename)
+        QApplication.restoreOverrideCursor()
+        return True
+
     def addNodes(self):
         """Add nodes for debug purpose"""
         node1 = Node(self.scene, 'My Node', inputs=[INPUT_SOCKET_1] * 3, outputs=[OUTPUT_SOCKET])
@@ -50,10 +112,3 @@ class NodeEditorWidget(QWidget):
 
         edge1 = Edge(self.scene, node1.outputs[0], node2.inputs[0], edge_type=EDGE_TYPE_BEZIER)
         edge2 = Edge(self.scene, node2.outputs[0], node3.inputs[0], edge_type=EDGE_TYPE_BEZIER)
-
-    def loadStylessheet(self, filename):
-        print('STYLE loading', filename)
-        file = QFile(filename)
-        file.open(QFile.ReadOnly | QFile.Text)
-        stylesheet = file.readAll()
-        QApplication.instance().setStyleSheet(str(stylesheet, encoding='utf-8'))

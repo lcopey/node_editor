@@ -32,9 +32,11 @@ class QNEGraphicsScene(QGraphicsScene):
         self.setBackgroundBrush(self._color_background)
 
     def setGrScene(self, width, height):
+        """Define the size of the graphical scene"""
         self.setSceneRect(-width // 2, -height // 2, width, height)
 
-    def drawBackground(self, painter: QPainter, rect: QRectF) -> None:
+    def drawBackground(self, painter: QPainter, rect: QRectF):
+        """Draw background of the graphical scene """
         super().drawBackground(painter, rect)
 
         # create a grid

@@ -3,6 +3,15 @@ MANIFEST.in
 README.rst
 requirements.txt
 setup.py
+docs/Makefile
+docs/make.bat
+docs/build/html/_static/file.png
+docs/build/html/_static/minus.png
+docs/build/html/_static/plus.png
+docs/source/conf.py
+docs/source/graph.rst
+docs/source/index.rst
+docs/source/module.rst
 node_editor/__init__.py
 node_editor/node_edge.py
 node_editor/node_editor_widget.py
