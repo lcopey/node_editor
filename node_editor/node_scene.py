@@ -32,10 +32,25 @@ class Scene(Serializable):
 
         self._has_been_modified = False  # flag identifying wether the current scene has been modified
         self._has_been_modified_listeners = []  # list of function to call when the scene is modified
+        self._item_selected_listeners = []
+        self._items_deselected_listeners = []
 
         self.initUI()
         self.history = SceneHistory(self)
         self.clipboard = SceneClipboard(self)
+
+        self.grScene.itemSelected.connect(self.onItemSelected)
+        self.grScene.itemsDeselected.connect(self.onItemsDeselected)
+
+    def initUI(self):
+        self.grScene = QNEGraphicsScene(self)
+        self.grScene.setGrScene(self.scene_width, self.scene_height)
+
+    def onItemSelected(self):
+        print('SCENE : on Item Selected')
+
+    def onItemsDeselected(self):
+        print('SCENE : onItemsDeselected')
 
     def isModified(self):
         return self.has_been_modified
@@ -58,12 +73,21 @@ class Scene(Serializable):
         """Add callabck to call everytime the scene is modified"""
         self._has_been_modified_listeners.append(callback)
 
+    def addItemSelectedListener(self, callback: 'function'):
+        self._item_selected_listeners.append(callback)
+
+    def addItemsDeselectedListener(self, callbak: 'function'):
+        self._items_deselected_listeners.append(callbak)
+
+    # custom flag to detect node or edge has been selected
+    def resetLastSelectedStates(self):
+        for node in self.nodes:
+            node.grNode._last_selected_state = False
+        for edge in self.edges:
+            edge.grEdge._last_selected_state = False
+
     def getSelectedItems(self):
         return self.grScene.selectedItems()
-
-    def initUI(self):
-        self.grScene = QNEGraphicsScene(self)
-        self.grScene.setGrScene(self.scene_width, self.scene_height)
 
     def addNode(self, node):
         """Append node to the list of nodes"""

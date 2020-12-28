@@ -13,12 +13,23 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .node_edge import Edge
 
-
 class QNEGraphicsEdge(QGraphicsPathItem):
     def __init__(self, edge: 'Edge', parent=None):
         super().__init__(parent)
 
         self.edge = edge  # link to the Edge class implementing the logic
+        self._last_selected_state = False
+        # self.posSource = [0, 0]
+        # self.posDestination = [0, 0]
+
+        self.initAssets()
+        self.initUI()
+
+    def initUI(self):
+        self.setFlag(QGraphicsItem.ItemIsSelectable)
+        self.setZValue(-1)
+
+    def initAssets(self):
         # Diverse parameters for drawing
         self._color = QColor("#001000")
         self._color_selected = QColor("#00ff00")
@@ -33,11 +44,19 @@ class QNEGraphicsEdge(QGraphicsPathItem):
         self._pen_dragging.setWidthF(EDGE_WIDTH)
         self._pen_dragging.setStyle(Qt.DashLine)
 
-        self.setFlag(QGraphicsItem.ItemIsSelectable)
-        self.setZValue(-1)
+    def onSelected(self):
+        # print('grEdge on Selected')
+        self.edge.scene.grScene.itemSelected.emit()
 
-        # self.posSource = [0, 0]
-        # self.posDestination = [0, 0]
+    def mouseReleaseEvent(self, event: 'QGraphicsSceneMouseEvent') -> None:
+        super().mouseReleaseEvent(event)
+        if self._last_selected_state != self.isSelected():
+            # reset all other selected flags to False
+            self.edge.scene.resetLastSelectedStates()
+            # set the new state of this object only
+            self._last_selected_state = self.isSelected()
+            self.onSelected()
+
 
     def setSource(self, x, y):
         """Set itinial position of the edge to x, y"""
@@ -106,7 +125,8 @@ class QNEGraphicsEdgeBezier(QNEGraphicsEdge):
 
         if self.edge.start_socket is not None:
             sspos = self.edge.start_socket.position
-            if (s[0] > d[0] and sspos in [RIGHT_BOTTOM, RIGHT_TOP]) or (s[0] < d[0] and sspos in [LEFT_TOP, LEFT_BOTTOM]):
+            if (s[0] > d[0] and sspos in [RIGHT_BOTTOM, RIGHT_TOP]) or (
+                    s[0] < d[0] and sspos in [LEFT_TOP, LEFT_BOTTOM]):
                 cpx_d *= -1
                 cpx_s *= -1
 

@@ -15,35 +15,43 @@ class QNEGraphicsNode(QGraphicsItem):
         super().__init__(parent=parent)
         self.node = node  # Reference to parent class Node implementing the logic
         self.content = self.node.content  # Reference to content of the node
+        # init flags
+        self._was_moved = False
+        self._last_selected_state = False
 
-        # Diverse parameters for drawing
-        self._title_color = Qt.white
-        self._title_font = QFont('Ubuntu', 8)
-        self.title_height = 24
-        self._padding = 5.
+        self.initSizes()
+        self.initAssets()
+        self.initUI()
 
-        self.width = 180
-        self.height = 240
-        self.edge_size = 15.
-
-        self._pen_default = QPen(QColor("#7F00000"))
-        self._pen_selected = QPen(QColor("#FFFFA637"))
-
-        self._brush_title = QBrush(QColor("#FF313131"))
-        self._brush_background = QBrush(QColor("#E3212121"))
+    def initUI(self):
+        # Define the node as selectable and movable
+        self.setFlag(QGraphicsItem.ItemIsSelectable)
+        self.setFlag(QGraphicsItem.ItemIsMovable)
 
         # init _title
         self.initTitle()
         self.title = self.node.title
         # init content
         self.initContent()
-        self.initUI()
-        self.wasMoved = False
 
-    def initUI(self):
-        # Define the node as selectable and movable
-        self.setFlag(QGraphicsItem.ItemIsSelectable)
-        self.setFlag(QGraphicsItem.ItemIsMovable)
+    def initSizes(self):
+        self.width = 180
+        self.height = 240
+
+        # Diverse parameters for drawing
+        self.edge_size = 15.
+        self.title_height = 24
+        self._padding = 5.
+
+    def initAssets(self):
+        self._title_color = Qt.white
+        self._title_font = QFont('Ubuntu', 8)
+
+        self._pen_default = QPen(QColor("#7F00000"))
+        self._pen_selected = QPen(QColor("#FFFFA637"))
+
+        self._brush_title = QBrush(QColor("#FF313131"))
+        self._brush_background = QBrush(QColor("#E3212121"))
 
     def initContent(self):
         # Draw the contents
@@ -61,6 +69,10 @@ class QNEGraphicsNode(QGraphicsItem):
         self.title_item.setPos(self._padding, 0)
         self.title_item.setTextWidth(self.width - 2 * self._padding)
 
+    def onSelected(self):
+        # print('grNode on Selected')
+        self.node.scene.grScene.itemSelected.emit()
+
     def mouseMoveEvent(self, event: 'QGraphicsSceneMouseEvent') -> None:
         # When the node move because of drag
         # update the corresponding edges0
@@ -70,13 +82,20 @@ class QNEGraphicsNode(QGraphicsItem):
         for node in self.scene().scene.nodes:
             if node.grNode.isSelected():
                 node.updateConnectedEdges()
-        self.wasMoved = True
+        self._was_moved = True
 
     def mouseReleaseEvent(self, event):
         super().mouseReleaseEvent(event)
-        if self.wasMoved:
-            self.wasMoved = False
+        if self._was_moved:
+            self._was_moved = False
             self.node.scene.history.storeHistory('Node moved', setModified=True)
+
+        if self._last_selected_state != self.isSelected():
+            # reset all other selected flags to False
+            self.node.scene.resetLastSelectedStates()
+            # set the new state of this object only
+            self._last_selected_state = self.isSelected()
+            self.onSelected()
 
     def boundingRect(self):
         # Return rectangle for selection detection

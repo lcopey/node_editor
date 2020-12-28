@@ -10,6 +10,9 @@ if TYPE_CHECKING:
 
 class QNEGraphicsScene(QGraphicsScene):
     """Implement the scene containing the backgroung"""
+    # TODO why in the grScene instead of the scene ?
+    itemSelected = pyqtSignal()
+    itemsDeselected = pyqtSignal()
 
     def __init__(self, scene: 'Scene', parent=None):
         super().__init__(parent=parent)

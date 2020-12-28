@@ -183,8 +183,9 @@ class QNEGraphicsView(QGraphicsView):
 
         if self.rubberBandDraggingRectangle:
             # TODO Do not store if selection stay the same
-            self.scene.history.storeHistory('Selection changed')
             self.rubberBandDraggingRectangle = False
+            self.scene.history.storeHistory('Selection changed')
+
 
         super().mouseReleaseEvent(event)
 
