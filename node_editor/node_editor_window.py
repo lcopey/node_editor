@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import QMainWindow, QAction, QFileDialog, QLabel, QApplicat
 from PyQt5.QtCore import QSettings, QPoint, QSize
 from PyQt5.QtGui import QCloseEvent
 from .node_editor_widget import NodeEditorWidget
+from .utils import dumpException
 
 DEBUG = True
 
@@ -158,8 +159,9 @@ class NodeEditorWindow(QMainWindow):
         """Clear the scene after prompting dialod asking to save"""
         if self.maybeSave():
             if DEBUG: print('On File New clicked')
-            self.getCurrentNodeEditorWidget().scene.clear()
-            self.getCurrentNodeEditorWidget().filename = None  # clear filename (default save) when starting new scene
+            self.getCurrentNodeEditorWidget().fileNew()
+            # self.getCurrentNodeEditorWidget().scene.clear()
+            # self.getCurrentNodeEditorWidget().filename = None  # clear filename (default save) when starting new scene
             self.setTitle()  # reset the title
 
     def onFileOpen(self):
@@ -231,17 +233,23 @@ class NodeEditorWindow(QMainWindow):
 
     def onEditCut(self):
         """Cut callback"""
-        data = self.getCurrentNodeEditorWidget().scene.clipboard.serializeSelected(delete=True)
-        str_data = json.dumps(data, indent=4)
-        if DEBUG: print('Cut :', str_data)
-        QApplication.instance().clipboard().setText(str_data)
+        try:
+            data = self.getCurrentNodeEditorWidget().scene.clipboard.serializeSelected(delete=True)
+            str_data = json.dumps(data, indent=4)
+            if DEBUG: print('Cut :', str_data)
+            QApplication.instance().clipboard().setText(str_data)
+        except Exception as e:
+            dumpException(e)
 
     def onEditCopy(self):
         """Copy callback"""
-        data = self.getCurrentNodeEditorWidget().scene.clipboard.serializeSelected(delete=False)
-        str_data = json.dumps(data, indent=4)
-        if DEBUG: print('Copy :', str_data)
-        QApplication.instance().clipboard().setText(str_data)
+        try:
+            data = self.getCurrentNodeEditorWidget().scene.clipboard.serializeSelected(delete=False)
+            str_data = json.dumps(data, indent=4)
+            if DEBUG: print('Copy :', str_data)
+            QApplication.instance().clipboard().setText(str_data)
+        except Exception as e:
+            dumpException(e)
 
     def onEditPaste(self):
         """Paste callback"""

@@ -11,6 +11,7 @@ from node_editor.utils import loadStylessheet
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     wnd = NodeEditorWindow()
+    wnd.nodeEditor.addNodes()
     module_path = os.path.dirname(inspect.getfile(wnd.__class__))
 
     loadStylessheet(os.path.join(module_path, 'qss\\nodestyle.qss'))

@@ -28,7 +28,7 @@ class Scene(Serializable):
         self.edges = []
         self.scene_width = 64000
         self.scene_height = 64000
-        self.grScene = None
+        # self.grScene = None
 
         self._has_been_modified = False  # flag identifying wether the current scene has been modified
         self._has_been_modified_listeners = []  # list of function to call when the scene is modified
@@ -36,6 +36,9 @@ class Scene(Serializable):
         self.initUI()
         self.history = SceneHistory(self)
         self.clipboard = SceneClipboard(self)
+
+    def isModified(self):
+        return self.has_been_modified
 
     @property
     def has_been_modified(self):
@@ -54,6 +57,9 @@ class Scene(Serializable):
     def addHasBeenModifiedListener(self, callback: 'function'):
         """Add callabck to call everytime the scene is modified"""
         self._has_been_modified_listeners.append(callback)
+
+    def getSelectedItems(self):
+        return self.grScene.selectedItems()
 
     def initUI(self):
         self.grScene = QNEGraphicsScene(self)

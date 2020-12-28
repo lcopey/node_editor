@@ -78,6 +78,9 @@ class CalculatorWindow(NodeEditorWindow):
         self.helpMenu = self.menuBar().addMenu("&Help")
         self.helpMenu.addAction(self.actAbout)
 
+        # Any time the edit menu is about to be shown, update it
+        self.editMenu.aboutToShow.connect(self.updateEditMenu)
+
     def createToolBars(self):
         pass
 
@@ -110,6 +113,23 @@ class CalculatorWindow(NodeEditorWindow):
         self.actNext.setEnabled(hasMdiChild)
         self.actPrevious.setEnabled(hasMdiChild)
         self.actSeparator.setVisible(hasMdiChild)
+
+        self.updateEditMenu()
+
+    def updateEditMenu(self):
+        print('updateEditMenu')
+        active = self.getCurrentNodeEditorWidget()
+        hasMdiChild = (active is not None)
+        hasSelectedItems = hasMdiChild and active.hasSelectedItems()
+
+        self.actPaste.setEnabled(hasMdiChild)
+
+        self.actCut.setEnabled(hasSelectedItems)
+        self.actCopy.setEnabled(hasSelectedItems)
+        self.actDelete.setEnabled(hasSelectedItems)
+
+        self.actUndo.setEnabled(hasMdiChild and active.canUndo())
+        self.actRedo.setEnabled(hasMdiChild and active.canRedo())
 
     def updateWindowMenu(self):
         self.windowMenu.clear()
@@ -157,6 +177,7 @@ class CalculatorWindow(NodeEditorWindow):
     def onFileNew(self):
         try:
             subwnd = self.createMdiChild()
+            subwnd.widget().fileNew()
             subwnd.show()
         except Exception as e:
             dumpException(e)

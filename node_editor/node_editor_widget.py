@@ -10,6 +10,7 @@ from .node_node import Node
 from .node_scene import Scene, InvalidFile
 from .utils import dumpException
 
+
 # TODO support for mdi application, implement setTitle as in Node Editor Widget
 
 
@@ -31,8 +32,6 @@ class NodeEditorWidget(QWidget):
 
         # create graphics scene
         self.scene = Scene()
-        # self.grScene = self.scene.grScene
-        self.addNodes()
 
         # create graphics view
         self.view = QNEGraphicsView(self.scene, self)
@@ -40,12 +39,25 @@ class NodeEditorWidget(QWidget):
         self.layout.addWidget(self.view)
 
         # self.addDebugContent()
+        # TODO Call fileNew ?
 
     def isModified(self):
-        return self.scene.has_been_modified
+        return self.scene.isModified()
 
     def isFilenameSet(self):
         return self.filename is not None
+
+    def hasSelectedItems(self) -> bool:
+        return len(self.getSelectedItems()) > 0
+
+    def getSelectedItems(self):
+        return self.scene.getSelectedItems()
+
+    def canUndo(self):
+        return self.scene.history.canUndo()
+
+    def canRedo(self):
+        return self.scene.history.canRedo()
 
     def getUserFriendlyFilename(self):
         """
@@ -78,6 +90,8 @@ class NodeEditorWidget(QWidget):
             self.scene.loadFromFile(filename)
             self.filename = filename
             # clear history
+            self.scene.history.clear()
+            self.scene.history.storeInitialHistoryStamp()
             return True
 
         except InvalidFile as e:
@@ -101,6 +115,13 @@ class NodeEditorWidget(QWidget):
         QApplication.restoreOverrideCursor()
         return True
 
+    def fileNew(self):
+        # TODO uses ???
+        self.scene.clear()
+        self.filename = None
+        self.scene.history.clear()
+        self.scene.history.storeInitialHistoryStamp()
+
     def addNodes(self):
         """Add nodes for debug purpose"""
         node1 = Node(self.scene, 'My Node', inputs=[INPUT_SOCKET_1] * 3, outputs=[OUTPUT_SOCKET])
@@ -112,3 +133,5 @@ class NodeEditorWidget(QWidget):
 
         edge1 = Edge(self.scene, node1.outputs[0], node2.inputs[0], edge_type=EDGE_TYPE_BEZIER)
         edge2 = Edge(self.scene, node2.outputs[0], node3.inputs[0], edge_type=EDGE_TYPE_BEZIER)
+
+        self.scene.history.storeInitialHistoryStamp()

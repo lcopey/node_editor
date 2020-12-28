@@ -55,7 +55,7 @@ class SceneClipboard:
         ])
         # if CUT (delete=True), remove selected items
         if delete:
-            self.scene.grScene.view()[0].deleteSelected()
+            self.scene.grScene.views()[0].deleteSelected()
             # store our history
             self.scene.history.storeHistory('Cut out elements from scene to clipboard', setModified=True)
 
