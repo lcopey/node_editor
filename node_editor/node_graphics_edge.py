@@ -45,7 +45,6 @@ class QNEGraphicsEdge(QGraphicsPathItem):
         self._pen_dragging.setStyle(Qt.DashLine)
 
     def onSelected(self):
-        # print('grEdge on Selected')
         self.edge.scene.grScene.itemSelected.emit()
 
     def mouseReleaseEvent(self, event: 'QGraphicsSceneMouseEvent') -> None:

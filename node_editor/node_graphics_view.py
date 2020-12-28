@@ -15,7 +15,7 @@ EDGE_DRAG_START_THRESHOLD = 10
 
 from debug.debug import print_func_name, print_scene, print_items
 
-DEBUG = True
+DEBUG = False
 
 
 class QNEGraphicsView(QGraphicsView):
@@ -181,11 +181,22 @@ class QNEGraphicsView(QGraphicsView):
             self.mode = MODE_NOOP
             return
 
+        # Dragging rectangle selection
         if self.rubberBandDraggingRectangle:
-            # TODO Do not store if selection stay the same
             self.rubberBandDraggingRectangle = False
-            self.scene.history.storeHistory('Selection changed')
+            current_selected_items = self.grScene.selectedItems()
 
+            if current_selected_items != self.grScene.scene._last_selected_items:
+                if current_selected_items == []:
+                    self.grScene.itemsDeselected.emit()
+                else:
+                    self.grScene.itemSelected.emit()
+                self.grScene.scene._last_selected_items = current_selected_items
+            return
+
+        # otherwise deselect everything
+        if item is None:
+            self.grScene.itemsDeselected.emit()
 
         super().mouseReleaseEvent(event)
 

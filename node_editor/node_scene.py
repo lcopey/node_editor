@@ -31,6 +31,8 @@ class Scene(Serializable):
         # self.grScene = None
 
         self._has_been_modified = False  # flag identifying wether the current scene has been modified
+        self._last_selected_items = []
+        # initialize all listeners
         self._has_been_modified_listeners = []  # list of function to call when the scene is modified
         self._item_selected_listeners = []
         self._items_deselected_listeners = []
@@ -47,10 +49,29 @@ class Scene(Serializable):
         self.grScene.setGrScene(self.scene_width, self.scene_height)
 
     def onItemSelected(self):
-        print('SCENE : on Item Selected')
+        """On item selected events - store history stamp
+
+        When the selection changed, store the current selected items and stor history stamp"""
+        current_selected_items = self.getSelectedItems()
+        if current_selected_items != self._last_selected_items:
+            self._last_selected_items = current_selected_items
+            self.history.storeHistory('Selection Changed')
+            for callback in self._item_selected_listeners:
+                callback()
 
     def onItemsDeselected(self):
-        print('SCENE : onItemsDeselected')
+        """On items deselected events - store history stamp
+
+        Reset selected flag of every items
+        Store the history stamp"""
+        # TODO monitor usage of this function, may be call more than once
+        self.resetLastSelectedStates()
+        # on change
+        if self._last_selected_items:
+            self._last_selected_items = []
+            self.history.storeHistory('Deselected Everything')
+            for callback in self._items_deselected_listeners:
+                callback()
 
     def isModified(self):
         return self.has_been_modified
@@ -69,6 +90,7 @@ class Scene(Serializable):
 
         self._has_been_modified = value
 
+    # helper listener function
     def addHasBeenModifiedListener(self, callback: 'function'):
         """Add callabck to call everytime the scene is modified"""
         self._has_been_modified_listeners.append(callback)

@@ -70,7 +70,6 @@ class QNEGraphicsNode(QGraphicsItem):
         self.title_item.setTextWidth(self.width - 2 * self._padding)
 
     def onSelected(self):
-        # print('grNode on Selected')
         self.node.scene.grScene.itemSelected.emit()
 
     def mouseMoveEvent(self, event: 'QGraphicsSceneMouseEvent') -> None:
@@ -86,11 +85,24 @@ class QNEGraphicsNode(QGraphicsItem):
 
     def mouseReleaseEvent(self, event):
         super().mouseReleaseEvent(event)
+
+        # handle when grNode moved
         if self._was_moved:
             self._was_moved = False
             self.node.scene.history.storeHistory('Node moved', setModified=True)
 
-        if self._last_selected_state != self.isSelected():
+            self.node.scene.resetLastSelectedStates()
+            self._last_selected_state = True
+            # store the last selected state, because moving also select the node
+            self.node.scene._last_selected_items = self.node.scene.getSelectedItems()
+
+            # skip storing selection
+            return
+
+        # handle when grNode was clicked on
+        # condition met when changing from one selection to another or
+        # when multiple items are selected and the current node is then selected
+        if self._last_selected_state != self.isSelected() or self.node.scene._last_selected_items != self.node.scene.getSelectedItems():
             # reset all other selected flags to False
             self.node.scene.resetLastSelectedStates()
             # set the new state of this object only
