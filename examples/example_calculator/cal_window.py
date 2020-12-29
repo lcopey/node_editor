@@ -22,6 +22,8 @@ class CalculatorWindow(NodeEditorWindow):
         loadStylessheets(os.path.join(os.path.dirname(__file__), 'qss/nodeeditor-dark.qss'),
                          self.stylesheet_filename)
 
+        self.empty_icon = QIcon(".")
+
         self.mdiArea = QMdiArea()
         self.mdiArea.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         self.mdiArea.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
@@ -118,18 +120,20 @@ class CalculatorWindow(NodeEditorWindow):
 
     def updateEditMenu(self):
         print('updateEditMenu')
-        active = self.getCurrentNodeEditorWidget()
-        hasMdiChild = (active is not None)
-        hasSelectedItems = hasMdiChild and active.hasSelectedItems()
+        try:
+            active = self.getCurrentNodeEditorWidget()
+            hasMdiChild = (active is not None)
+            hasSelectedItems = hasMdiChild and active.hasSelectedItems()
 
-        self.actPaste.setEnabled(hasMdiChild)
+            self.actPaste.setEnabled(hasMdiChild)
 
-        self.actCut.setEnabled(hasSelectedItems)
-        self.actCopy.setEnabled(hasSelectedItems)
-        self.actDelete.setEnabled(hasSelectedItems)
+            self.actCut.setEnabled(hasSelectedItems)
+            self.actCopy.setEnabled(hasSelectedItems)
+            self.actDelete.setEnabled(hasSelectedItems)
 
-        self.actUndo.setEnabled(hasMdiChild and active.canUndo())
-        self.actRedo.setEnabled(hasMdiChild and active.canRedo())
+            self.actUndo.setEnabled(hasMdiChild and active.canUndo())
+            self.actRedo.setEnabled(hasMdiChild and active.canRedo())
+        except Exception as e: dumpException(e)
 
     def updateWindowMenu(self):
         self.windowMenu.clear()
@@ -194,12 +198,13 @@ class CalculatorWindow(NodeEditorWindow):
                     if existing:
                         self.mdiArea.setActiveSubWindow(existing)
                     else:
+                        # do not use createMdiChild as a new node editor to call the fileLoad method
                         # Create new subwindow and open file
                         nodeeditor = CalculatorSubWindow()
                         if nodeeditor.fileLoad(fname):
                             self.statusBar().showMessage(f'File {fname} loaded', 5000)
                             nodeeditor.setTitle()
-                            subwnd = self.mdiArea.addSubWindow(nodeeditor, )
+                            subwnd = self.createMdiChild(nodeeditor)
                             subwnd.show()
                         else:
                             nodeeditor.close()
@@ -219,10 +224,29 @@ class CalculatorWindow(NodeEditorWindow):
             self.writeSettings()
             event.accept()
 
-    def createMdiChild(self):
-        nodeeditor = CalculatorSubWindow()
+    def createMdiChild(self, child_widget=None):
+        nodeeditor = child_widget if child_widget is not None else CalculatorSubWindow()
         subwnd = self.mdiArea.addSubWindow(nodeeditor, )
+        subwnd.setWindowIcon(self.empty_icon)
+        # nodeeditor.scene.addItemSelectedListener(self.updateEditMenu)
+        # nodeeditor.scene.addItemsDeselectedListener(self.updateEditMenu)
+        nodeeditor.scene.history.addHistoryModifiedListener(self.updateEditMenu)
+        nodeeditor.addCloseEventListener(self.onSubWndClose)
         return subwnd
+
+    def onSubWndClose(self, widget: CalculatorSubWindow, event: QCloseEvent):
+        # close event from the nodeeditor works by asking the active widget
+        # if modification occurs on the active widget, ask to save or not.
+        # Therefore when closing a subwindow, select the corresponding subwindow
+        existing = self.findMdiChild(widget.filename)
+        self.mdiArea.setActiveSubWindow(existing)
+
+        # Does the active widget need to be saved ?
+        if self.maybeSave():
+            event.accept()
+        else:
+            event.ignore()
+
 
     def findMdiChild(self, fileName):
         for window in self.mdiArea.subWindowList():
