@@ -7,6 +7,7 @@ from node_editor.node_editor_window import NodeEditorWindow
 from node_editor.node_editor_widget import NodeEditorWidget
 from node_editor.utils import dumpException, pp
 from .calc_sub_window import CalculatorSubWindow
+from .calc_drag_listbox import QNEDragListbox
 
 # images for the dark skin
 import examples.example_calculator.qss.nodeeditor_dark_resources
@@ -35,13 +36,12 @@ class CalculatorWindow(NodeEditorWindow):
         self.windowMapper = QSignalMapper(self)
         self.windowMapper.mapped[QWidget].connect(self.setActiveSubWindow)
 
+        self.createNodesDock()
         self.createActions()
         self.createMenus()
         self.createToolBars()
         self.createStatusBar()
         self.updateMenus()
-
-        self.createNodesDock()
 
         self.readSettings()
 
@@ -83,21 +83,23 @@ class CalculatorWindow(NodeEditorWindow):
         # Any time the edit menu is about to be shown, update it
         self.editMenu.aboutToShow.connect(self.updateEditMenu)
 
+    def onWindowNodesToolbar(self):
+        if self.nodesDock.isVisible():
+            self.nodesDock.hide()
+        else:
+            self.nodesDock.show()
+
     def createToolBars(self):
         pass
 
     def createNodesDock(self):
-        self.listWidget = QListWidget()
-        self.listWidget.addItem("Add")
-        self.listWidget.addItem("Substract")
-        self.listWidget.addItem("Multiply")
-        self.listWidget.addItem("Divide")
+        self.nodeListWidget = QNEDragListbox()
 
-        self.items = QDockWidget("Nodes")
-        self.items.setWidget(self.listWidget)
-        self.items.setFloating(False)
+        self.nodesDock = QDockWidget("Nodes")
+        self.nodesDock.setWidget(self.nodeListWidget)
+        self.nodesDock.setFloating(False)
 
-        self.addDockWidget(Qt.RightDockWidgetArea, self.items)
+        self.addDockWidget(Qt.RightDockWidgetArea, self.nodesDock)
 
     def createStatusBar(self):
         self.statusBar().showMessage("Ready", )
@@ -133,10 +135,18 @@ class CalculatorWindow(NodeEditorWindow):
 
             self.actUndo.setEnabled(hasMdiChild and active.canUndo())
             self.actRedo.setEnabled(hasMdiChild and active.canRedo())
-        except Exception as e: dumpException(e)
+        except Exception as e:
+            dumpException(e)
 
     def updateWindowMenu(self):
         self.windowMenu.clear()
+
+        toolbar_nodes = self.windowMenu.addAction('Nodes toolbar')
+        toolbar_nodes.setCheckable(True)
+        toolbar_nodes.triggered.connect(self.onWindowNodesToolbar)
+        toolbar_nodes.setChecked(self.nodesDock.isVisible())
+        self.windowMenu.addSeparator()
+
         self.windowMenu.addAction(self.actClose)
         self.windowMenu.addAction(self.actCloseAll)
         self.windowMenu.addSeparator()
@@ -246,7 +256,6 @@ class CalculatorWindow(NodeEditorWindow):
             event.accept()
         else:
             event.ignore()
-
 
     def findMdiChild(self, fileName):
         for window in self.mdiArea.subWindowList():
