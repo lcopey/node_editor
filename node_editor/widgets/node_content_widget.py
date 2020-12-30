@@ -1,5 +1,5 @@
 from collections import OrderedDict
-from node_editor.node_serializable import Serializable
+from ..node_serializable import Serializable
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QKeyEvent, QFocusEvent
 

@@ -115,20 +115,34 @@ class DataframeModel(QAbstractTableModel):
 
     def data(self, index, role=Qt.DisplayRole):
         if index.isValid():
+            value = self._data.iloc[index.row(), index.column()]
             if role == Qt.DisplayRole:
-                return str(self._data.iloc[index.row(), index.column()])
+                return str(value)
+            elif role == Qt.TextAlignmentRole:
+                return self._align(value)
+            # elif role == Qt.DecorationRole
+
         return None
 
+    def _align(self, value):
+        if pd.api.types.is_numeric_dtype(value):
+            return Qt.AlignVCenter + Qt.AlignRight
+        else:
+            return Qt.AlignVCenter + Qt.AlignLeft
+
     def headerData(self, p_int, Qt_Orientation, role=None):
-        if Qt_Orientation == Qt.Horizontal and role == Qt.DisplayRole:
-            return self._data.columns[p_int]
+        if role == Qt.DisplayRole:
+            if Qt_Orientation == Qt.Horizontal:
+                return self._data.columns[p_int]
+            if Qt_Orientation == Qt.Vertical:
+                return self._data.index[p_int]
         return None
 
 
 if __name__ == '__main__':
     df = pd.DataFrame({'a': ['Mary', 'Jim', 'John'],
                        'b': [100, 200, 300],
-                       'c': ['a', 'b', 'c']})
+                       'c': ['a', 'ba', 'c']})
 
     app = QApplication(sys.argv)
     # model = DataframeModel(df)

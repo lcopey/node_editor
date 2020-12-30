@@ -55,7 +55,7 @@ class QNEGraphicsNode(QGraphicsItem):
 
     def initContent(self):
         # Draw the contents
-        self.grContent = QGraphicsProxyWidget(self)
+        self.grContent = QGraphicsProxyWidget(self)  # defines the content as a proxy widget with parent self
         self.content.setGeometry(self.edge_size, self.title_height + self.edge_size,
                                  self.width - 2 * self.edge_size, self.height - 2 * self.edge_size - self.title_height)
         self.grContent.setWidget(self.content)
@@ -102,7 +102,8 @@ class QNEGraphicsNode(QGraphicsItem):
         # handle when grNode was clicked on
         # condition met when changing from one selection to another or
         # when multiple items are selected and the current node is then selected
-        if self._last_selected_state != self.isSelected() or self.node.scene._last_selected_items != self.node.scene.getSelectedItems():
+        if self._last_selected_state != self.isSelected() or \
+                self.node.scene._last_selected_items != self.node.scene.getSelectedItems():
             # reset all other selected flags to False
             self.node.scene.resetLastSelectedStates()
             # set the new state of this object only

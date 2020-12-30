@@ -28,8 +28,8 @@ class Node(Serializable):
         self.grNode = QNEGraphicsNode(self)
 
         # add the node to the scene and to the graphical scene
-        self.scene.addNode(self)
-        self.scene.grScene.addItem(self.grNode)
+        self.scene.addNode(self)  # basically append self to the list of nodes in Scene
+        self.scene.grScene.addItem(self.grNode)  # add item to the graphical scene, so it can be displayed
 
         self.socket_spacing = 22
 
