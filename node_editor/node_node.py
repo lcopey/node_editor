@@ -23,25 +23,52 @@ class Node(Serializable):
         # reference to the actual scene
         self.scene = scene
         self.title = title
-        self.content = QNENodeContentWidget(self)
-        # reference to the graphic
-        self.grNode = QNEGraphicsNode(self)
+
+        self.initInnerClasses()
+        self.initSettings()
 
         # add the node to the scene and to the graphical scene
         self.scene.addNode(self)  # basically append self to the list of nodes in Scene
         self.scene.grScene.addItem(self.grNode)  # add item to the graphical scene, so it can be displayed
 
-        self.socket_spacing = 22
-
         # instantiate sockets
         self.inputs = []
         self.outputs = []
+        self.initSockets(inputs, outputs)
+
+    def initInnerClasses(self):
+        # Reference to the content
+        self.content = QNENodeContentWidget(self)
+        # Reference to the graphic
+        self.grNode = QNEGraphicsNode(self)
+
+    def initSettings(self):
+        self.socket_spacing = 22
+        self.input_socket_position = LEFT_BOTTOM
+        self.output_socket_position = RIGHT_TOP
+        self.input_multi_edged = False
+        self.output_multi_edged = True
+
+    def initSockets(self, inputs, outputs, reset=True):
+        """"Create sockets for inputs and outputs"""
+
+        if reset:
+            # clear old sockets
+            if hasattr(self, 'inputs') and hasattr(self, 'outputs'):
+                # remove grSockets from scene
+                for socket in self.inputs + self.outputs:
+                    self.scene.grScene.removeItem(socket.grSocket)
+                self.inputs = []
+                self.outputs = []
+
         for n, item in enumerate(inputs):
-            socket = Socket(node=self, index=n, position=LEFT_BOTTOM, socket_type=item, multi_edges=False)
+            socket = Socket(node=self, index=n, position=self.input_socket_position, socket_type=item,
+                            multi_edges=self.input_multi_edged)
             self.inputs.append(socket)
 
         for n, item in enumerate(outputs):
-            socket = Socket(node=self, index=n, position=RIGHT_TOP, socket_type=item, multi_edges=True)
+            socket = Socket(node=self, index=n, position=self.output_socket_position, socket_type=item,
+                            multi_edges=self.output_multi_edged)
             self.outputs.append(socket)
 
     # convenience function to update and get the position of the node in the graphical scene

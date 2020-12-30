@@ -1,6 +1,7 @@
 from PyQt5.QtCore import Qt, QIODevice, QDataStream
 from PyQt5.QtGui import QCloseEvent, QDropEvent, QDragEnterEvent, QPixmap
 from .calc_conf import *
+from .calc_node_base import *
 
 from node_editor.node_node import Node
 from node_editor.node_editor_widget import NodeEditorWidget
@@ -57,7 +58,7 @@ class CalculatorSubWindow(NodeEditorWidget):
             if DEBUG: print(f'DROP: {op_code} {text} at {scene_pos}')
 
             # TODO Fix me here
-            node = Node(self.scene, title=text, inputs=[1,1], outputs=[2])
+            node = CalcNode(self.scene, op_code, text, inputs=[1,1], outputs=[2])
             node.setPos(scene_pos.x(), scene_pos.y())
             # self.scene.addNode(node) # necessary ?
             event.setDropAction(Qt.MoveAction)
