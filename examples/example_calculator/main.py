@@ -1,5 +1,6 @@
 import sys, os
 from PyQt5.QtWidgets import QApplication
+from node_editor.utils import dumpException
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../..'))
 

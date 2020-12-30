@@ -6,14 +6,6 @@ def func_name(func):
     return inner
 
 
-def print_func_name(func):
-    def inner(*args, **kwargs):
-        print(f'Entering function : {func.__name__}')
-        return func(*args, **kwargs)
-
-    return inner
-
-
 def return_simple_id(obj, text):
     return "<{} {}...{}>".format(text, f'{id(obj):02x}'[2:5], f'{id(obj):02x}'[-3:])
 

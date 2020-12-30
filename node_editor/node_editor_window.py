@@ -109,7 +109,8 @@ class NodeEditorWindow(QMainWindow):
         self.setWindowTitle(title)
 
     def isModified(self):
-        return self.getCurrentNodeEditorWidget().scene.isModified()
+        nodeeditor = self.getCurrentNodeEditorWidget()
+        return nodeeditor.scene.isModified() if nodeeditor else False
 
     def getCurrentNodeEditorWidget(self) -> NodeEditorWidget:
         """Return the widget currently holding the scene.

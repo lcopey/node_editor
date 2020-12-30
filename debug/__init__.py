@@ -1,1 +1,1 @@
-from .debug import print_func_name, print_items, print_scene, return_simple_id
+from .debug import print_items, print_scene, return_simple_id

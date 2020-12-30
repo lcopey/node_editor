@@ -13,7 +13,8 @@ MODE_EDGE_CUT = 3
 
 EDGE_DRAG_START_THRESHOLD = 10
 
-from debug.debug import print_func_name, print_scene, print_items
+from debug.debug import print_scene, print_items
+from .utils import print_func_name
 
 DEBUG = False
 
@@ -49,6 +50,10 @@ class QNEGraphicsView(QGraphicsView):
         self.rubberBandDraggingRectangle = False
         self.grScene.addItem(self.cutLine)
 
+        # listeners for drag and drop event
+        self._drag_enter_listeners = []
+        self._drop_listeners = []
+
     def initUI(self):
         """Define render settings"""
         # define render settings
@@ -60,6 +65,22 @@ class QNEGraphicsView(QGraphicsView):
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setTransformationAnchor(QGraphicsView.AnchorUnderMouse)
         self.setDragMode(QGraphicsView.RubberBandDrag)
+        # enable drag and drop
+        self.setAcceptDrops(True)
+
+    def dragEnterEvent(self, event: QDragEnterEvent) -> None:
+        for callback in self._drag_enter_listeners:
+            callback(event)
+
+    def dropEvent(self, event: QDropEvent) -> None:
+        for callback in self._drop_listeners:
+            callback(event)
+
+    def addDragEnterListener(self, callback: 'function'):
+        self._drag_enter_listeners.append(callback)
+
+    def addDropListener(self, callback: 'function'):
+        self._drop_listeners.append(callback)
 
     def mousePressEvent(self, event: QMouseEvent) -> None:
         """Redirect click events according to the button pressed"""

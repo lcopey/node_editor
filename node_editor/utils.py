@@ -5,6 +5,15 @@ from pprint import PrettyPrinter
 
 pp = PrettyPrinter(indent=4).pprint
 
+
+def print_func_name(func):
+    def inner(*args, **kwargs):
+        print(f'Entering function : {func.__name__}')
+        return func(*args, **kwargs)
+
+    return inner
+
+
 def dumpException(e):
     print('Exception:', e)
     traceback.print_tb(e.__traceback__)

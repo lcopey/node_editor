@@ -12,6 +12,8 @@ from .calc_drag_listbox import QNEDragListbox
 # images for the dark skin
 import examples.example_calculator.qss.nodeeditor_dark_resources
 
+DEBUG = False
+
 
 class CalculatorWindow(NodeEditorWindow):
 
@@ -121,7 +123,7 @@ class CalculatorWindow(NodeEditorWindow):
         self.updateEditMenu()
 
     def updateEditMenu(self):
-        print('updateEditMenu')
+        if DEBUG: print('updateEditMenu')
         try:
             active = self.getCurrentNodeEditorWidget()
             hasMdiChild = (active is not None)
@@ -227,12 +229,15 @@ class CalculatorWindow(NodeEditorWindow):
                           "document interface applications using PyQt5 and NodeEditor.")
 
     def closeEvent(self, event: QCloseEvent) -> None:
-        self.mdiArea.closeAllSubWindows()
-        if self.mdiArea.currentSubWindow():
-            event.ignore()
-        else:
-            self.writeSettings()
-            event.accept()
+        try:
+            self.mdiArea.closeAllSubWindows()
+            if self.mdiArea.currentSubWindow():
+                event.ignore()
+            else:
+                self.writeSettings()
+                event.accept()
+        except Exception as e:
+            dumpException(e)
 
     def createMdiChild(self, child_widget=None):
         nodeeditor = child_widget if child_widget is not None else CalculatorSubWindow()

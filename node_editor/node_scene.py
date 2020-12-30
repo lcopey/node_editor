@@ -9,7 +9,7 @@ from .node_edge import Edge
 from .node_scene_history import SceneHistory
 from .node_scene_clipboard import SceneClipboard
 
-from debug import print_func_name
+from .utils import print_func_name
 
 DEBUG = False
 
@@ -100,6 +100,12 @@ class Scene(Serializable):
 
     def addItemsDeselectedListener(self, callbak: 'function'):
         self._items_deselected_listeners.append(callbak)
+
+    def addDragEnterListener(self, callback: 'function'):
+        self.grScene.views()[0].addDragEnterListener(callback)
+
+    def addDropListener(self, callback: 'function'):
+        self.grScene.views()[0].addDropListener(callback)
 
     # custom flag to detect node or edge has been selected
     def resetLastSelectedStates(self):
