@@ -87,6 +87,10 @@ class Edge(Serializable):
         if self.start_socket is not None:
             self.updatePositions()
 
+    def getOtherSocket(self, known_socket):
+        # return the other end of the edge
+        return self.start_socket if known_socket == self.end_socket else self.end_socket
+
     def updatePositions(self):
         source_pos = self.start_socket.getSocketPosition()
         source_pos[0] += self.start_socket.node.grNode.pos().x()

@@ -1,4 +1,6 @@
-from PyQt5.QtWidgets import QLabel
+from PyQt5.QtWidgets import QLabel, QWidget
+from PyQt5.QtGui import QImage, QPainter
+from PyQt5.QtCore import QRectF
 from node_editor.node_node import Node
 from node_editor.widgets.node_content_widget import QNENodeContentWidget
 from node_editor.node_graphics_node import QNEGraphicsNode
@@ -16,6 +18,19 @@ class CalcGraphicsNode(QNEGraphicsNode):
         self.edge_padding = 0
         self.title_horizontal_padding = 8.
         self.title_vertical_padding = 10
+
+    def initAssets(self):
+        super().initAssets()
+        self.icons = QImage('icons/status_icons.png')
+
+    def paint(self, painter: QPainter, option: 'QStyleOptionGraphicsItem', widget: QWidget = None) -> None:
+        super().paint(painter, option, widget)
+        offset = 24.0
+        if self.node.isDirty(): offset = 0.
+        if self.node.isInvalid(): offset = 48.
+        painter.drawImage(QRectF(-10., -10., 24., 24.),
+                          self.icons,
+                          QRectF(offset, 0, 24., 24.))
 
 
 class CalcContent(QNENodeContentWidget):
@@ -49,7 +64,6 @@ class CalcNode(Node):
         res = super().serialize()
         res['op_code'] = self.__class__.op_code
         return res
-
 
     def deserialize(self, data, hashmap={}, restore_id=True):
         res = super().deserialize(data, hashmap, restore_id)

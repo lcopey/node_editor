@@ -36,6 +36,10 @@ class Node(Serializable):
         self.outputs = []
         self.initSockets(inputs, outputs)
 
+        # dirty and evaluation
+        self._is_dirty = False
+        self._is_invalid = False
+
     def initInnerClasses(self):
         # Reference to the content
         self.content = QNENodeContentWidget(self)
@@ -112,7 +116,6 @@ class Node(Serializable):
             y = top_offset + available_height / 2. + (index - 0.5) * self.socket_spacing - \
                 (num_sockets - 1) * self.socket_spacing / 2
 
-
         elif position in (LEFT_TOP, RIGHT_TOP):
             # start from top
             y = index * self.socket_spacing + self.grNode.title_height + self.grNode.title_vertical_padding + self.grNode.edge_roundness
@@ -123,7 +126,6 @@ class Node(Serializable):
 
     def updateConnectedEdges(self):
         for socket in self.inputs + self.outputs:
-            # if socket.hasEdge():
             for edge in socket.edges:
                 edge.updatePositions()
 
@@ -145,6 +147,70 @@ class Node(Serializable):
         if DEBUG: print(' - remove node from scene', self)
         self.scene.removeNode(self)
         if DEBUG: print(' - everything was done')
+
+    # node evaluation function
+    def isDirty(self):
+        return self._is_dirty
+
+    def markDirty(self, new_value=True):
+        self._is_dirty = new_value
+        if self._is_dirty:
+            self.onMarkedDirty()
+
+    def markChildrenDirty(self, new_value=True):
+        for other_node in self.getChildrenNodes():
+            other_node.markDirty(new_value)
+
+    def markDescendantDirty(self, new_value=True):
+        for other_node in self.getChildrenNodes():
+            other_node.markDirty(new_value)
+            other_node.markChildrenDirty(new_value)
+
+    def isInvalid(self):
+        return self._is_invalid
+
+    def markInvalid(self, new_value=True):
+        self._is_invalid = new_value
+        if self._is_invalid:
+            self.onMarkedInvalid()
+
+    def markChildrenInvalid(self, new_value=True):
+        for other_node in self.getChildrenNodes():
+            other_node.markInvalid(new_value)
+
+    def markDescendantInvalid(self, new_value=True):
+        for other_node in self.getChildrenNodes():
+            other_node.markInvalid(new_value)
+            other_node.markChildrenInvalid(new_value)
+
+    def onMarkedDirty(self):
+        pass
+
+    def onMarkedInvalid(self):
+        pass
+
+    def eval(self):
+        self.markDirty(False)
+        self.markInvalid(False)
+        return 0
+
+    # traversing nodes functions
+
+    def evalChildren(self):
+        for node in self.getChildrenNodes():
+            node.eval()
+
+    def getChildrenNodes(self):
+        if not self.outputs:
+            return []
+        other_nodes = []
+        for output in self.outputs:
+            for edge in output.edges:
+                other_node = edge.getOtherSocket(output).node
+                other_nodes.append(other_node)
+        return other_nodes
+
+    # serialization function
 
     def serialize(self):
         inputs = [socket.serialize() for socket in self.inputs]

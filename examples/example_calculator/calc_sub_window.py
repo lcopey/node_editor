@@ -141,6 +141,7 @@ class CalculatorSubWindow(NodeEditorWidget):
         # define the context menu
         context_menu = QMenu(self)
         markDirtyAct = context_menu.addAction('Mark Dirty')
+        markDirtyDescendant = context_menu.addAction('Mark Descendant Dirty')
         markInvalidAct = context_menu.addAction('Mark Invalid')
         unmarkInvalidAct = context_menu.addAction('Unmark Invalid')
         evalAct = context_menu.addAction('Eval')
@@ -159,7 +160,18 @@ class CalculatorSubWindow(NodeEditorWidget):
             selected = item.socket.node
 
         if DEBUG_CONTEXT: print('>>Item selected', item)
-        # TODO
+
+        if selected and action == markDirtyAct:
+            selected.markDirty()
+        elif selected and action == markInvalidAct:
+            selected.markInvalid()
+        elif selected and action == unmarkInvalidAct:
+            selected.markInvalid(False)
+        elif selected and action == markDirtyDescendant:
+            selected.markDescendantDirty(True)
+        elif selected and action == evalAct:
+            val = selected.eval()
+            if DEBUG_CONTEXT: print(val)
 
     def handleNewNodeContextMenu(self, event: QContextMenuEvent):
         if DEBUG_CONTEXT: print('Context: New Node')
@@ -171,4 +183,3 @@ class CalculatorSubWindow(NodeEditorWidget):
             new_calc_node = get_call_from_opcode(action.data())(self.scene)
             scene_pos = self.scene.getView().mapToScene(event.pos())
             new_calc_node.setPos(scene_pos.x(), scene_pos.y())
-
