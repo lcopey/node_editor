@@ -1,7 +1,7 @@
 from collections import OrderedDict
 from .node_serializable import Serializable
 from .node_graphics_socket import QNEGraphicsSocket
-from debug.debug import return_simple_id
+from .utils import return_simple_id
 
 from typing import TYPE_CHECKING
 

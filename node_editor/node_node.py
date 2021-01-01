@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .node_scene import Scene
 
-from debug.debug import return_simple_id
+from .utils import return_simple_id
 
 DEBUG = False
 

@@ -13,8 +13,8 @@ MODE_EDGE_CUT = 3
 
 EDGE_DRAG_START_THRESHOLD = 10
 
-from debug.debug import print_scene, print_items
-from .utils import print_func_name
+# from debug.debug import print_scene, print_items
+from .utils import print_func_name, print_scene, print_items
 
 DEBUG = False
 
