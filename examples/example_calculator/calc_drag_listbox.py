@@ -18,12 +18,11 @@ class QNEDragListbox(QListWidget):
         self.addMyItems()
 
     def addMyItems(self):
-        self.addMyItem("Input", "icons/in.png", OP_NODE_INPUT)
-        self.addMyItem("Output", "icons/out.png", OP_NODE_OUTPUT)
-        self.addMyItem("Add", "icons/add.png", OP_NODE_ADD)
-        self.addMyItem("Subtract", "icons/sub.png", OP_NODE_SUB)
-        self.addMyItem("Multiply", "icons/mul.png", OP_NODE_MUL)
-        self.addMyItem("Divide", "icons/divide.png", OP_NODE_DIV)
+        keys = list(CALC_NODES.keys())
+        keys.sort()
+        for key in keys:
+            node = get_call_from_opcode(key)
+            self.addMyItem(node.op_title, node.icon, node.op_code)
 
     def addMyItem(self, name: str, icon: str = None, op_code: int = 0):
         """Helper function adding item to the current ListWidget
@@ -55,13 +54,11 @@ class QNEDragListbox(QListWidget):
         item.setData(Qt.UserRole + 1, op_code)  # store op_code at position Qt.UserRole + 1
 
     def startDrag(self, *args, **kwargs):
-        print('Listbox::startDrag')
         try:
             # Retrieve the operational code
             item = self.currentItem()
             op_code = item.data(Qt.UserRole + 1)
             # name = item.text()
-            print('Dragging item', op_code, item)
 
             # Define Mime data
             # Retrieve pixmap

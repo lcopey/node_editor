@@ -33,17 +33,16 @@ class CalculatorSubWindow(NodeEditorWidget):
             callback(self, event)
 
     def onDragEnter(self, event: QDragEnterEvent):
-        # print('CalcSubWnd : onDragEnter')
-        # print(event.mimeData().text())
         if event.mimeData().hasFormat(LISTBOX_MIMETYPE):
             event.acceptProposedAction()
         else:
-            print('... denied drag enter event')
+            if DEBUG: print('... denied drag enter event')
             event.setAccepted(False)
 
     def onDrop(self, event: QDropEvent):
-        # print('CalcSubWnd : onDrop')
-        # print(event.mimeData().text())
+        if DEBUG:
+            print('CalcSubWnd : onDrop')
+            print(event.mimeData().text())
         if event.mimeData().hasFormat(LISTBOX_MIMETYPE):
             eventData = event.mimeData().data(LISTBOX_MIMETYPE)
             dataStream = QDataStream(eventData, QIODevice.ReadOnly)
@@ -57,12 +56,14 @@ class CalculatorSubWindow(NodeEditorWidget):
 
             if DEBUG: print(f'DROP: {op_code} {text} at {scene_pos}')
 
-            # TODO Fix me here
-            node = CalcNode(self.scene, op_code, text, inputs=[1,1], outputs=[2])
-            node.setPos(scene_pos.x(), scene_pos.y())
-            # self.scene.addNode(node) # necessary ?
+            try:
+                node = get_call_from_opcode(op_code)(self.scene)
+                node.setPos(scene_pos.x(), scene_pos.y())
+                self.scene.history.storeHistory('Create node {}'.format(node.__class__.__name__))
+            except Exception as e:
+                dumpException(e)
             event.setDropAction(Qt.MoveAction)
             event.accept()
         else:
-            print(' ... drop ignored, not requested format ', LISTBOX_MIMETYPE)
+            if DEBUG: print(' ... drop ignored, not requested format ', LISTBOX_MIMETYPE)
             event.ignore()

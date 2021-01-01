@@ -8,6 +8,8 @@ from node_editor.node_editor_widget import NodeEditorWidget
 from node_editor.utils import dumpException, pp
 from .calc_sub_window import CalculatorSubWindow
 from .calc_drag_listbox import QNEDragListbox
+from .calc_conf import CALC_NODES
+from .calc_conf_nodes import *
 
 # images for the dark skin
 import examples.example_calculator.qss.nodeeditor_dark_resources
@@ -26,6 +28,10 @@ class CalculatorWindow(NodeEditorWindow):
                          self.stylesheet_filename)
 
         self.empty_icon = QIcon(".")
+
+        if DEBUG:
+            print('Registered Node')
+            pp(CALC_NODES)
 
         self.mdiArea = QMdiArea()
         self.mdiArea.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)

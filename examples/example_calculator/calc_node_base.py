@@ -22,13 +22,14 @@ class CalcContent(QNENodeContentWidget):
 
 
 class CalcNode(Node):
-    def __init__(self, scene: 'Scene', op_code, op_title, content_label="", content_label_objname="calc_node_bg",
-                 inputs=[2, 2], outputs=[1]):
-        self.op_code = op_code
-        self.op_title = op_title
-        self.content_label = content_label
-        self.content_label_objname = content_label_objname
-        super().__init__(scene, title=op_title, inputs=inputs, outputs=outputs)
+    icon = ""
+    op_code = 0
+    op_title = 'Undefined'
+    content_label = ''
+    content_label_objname = 'calc_node_bg'
+
+    def __init__(self, scene: 'Scene', inputs=[2, 2], outputs=[1]):
+        super().__init__(scene, title=self.__class__.op_title, inputs=inputs, outputs=outputs)
 
     def initInnerClasses(self):
         # Reference to the content
