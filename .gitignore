@@ -5,3 +5,6 @@
 /dist/
 /nodeeditor.egg-info/
 __pycache__
+/debug/__pycache__
+/node_editor/__pycache__
+/node_editor/graphics/__pycache__
