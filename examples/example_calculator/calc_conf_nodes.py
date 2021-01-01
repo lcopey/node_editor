@@ -1,3 +1,5 @@
+from PyQt5.QtWidgets import QLineEdit, QLabel
+from PyQt5.QtCore import Qt
 from .calc_conf import *
 from .calc_node_base import *
 
@@ -8,6 +10,7 @@ class CalcNode_Add(CalcNode):
     op_code = OP_NODE_ADD
     op_title = 'Add'
     content_label = '+'
+    content_label_objname = 'calc_node_bg'
 
 
 @register_node(OP_NODE_SUB)
@@ -16,6 +19,7 @@ class CalcNode_Sub(CalcNode):
     op_code = OP_NODE_SUB
     op_title = 'Substract'
     content_label = '-'
+    content_label_objname = 'calc_node_bg'
 
 
 @register_node(OP_NODE_MUL)
@@ -24,6 +28,7 @@ class CalcNode_Mul(CalcNode):
     op_code = OP_NODE_MUL
     op_title = 'Multiply'
     content_label = '*'
+    content_label_objname = 'calc_node_mul'
 
 
 @register_node(OP_NODE_DIV)
@@ -32,6 +37,14 @@ class CalcNode_Div(CalcNode):
     op_code = OP_NODE_DIV
     op_title = 'Divide'
     content_label = '/'
+    content_label_objname = 'calc_node_div'
+
+
+class CalcInputContent(QNENodeContentWidget):
+    def initUI(self):
+        self.edit = QLineEdit("1", self)
+        self.edit.setAlignment(Qt.AlignRight)
+        self.edit.setObjectName(self.node.content_label_objname)
 
 
 @register_node(OP_NODE_INPUT)
@@ -40,9 +53,21 @@ class CalcNode_Input(CalcNode):
     op_code = OP_NODE_INPUT
     op_title = 'Input'
     content_label = ''
+    content_label_objname = 'calc_node_input'
 
     def __init__(self, scene):
         super().__init__(scene, inputs=[], outputs=[3])
+
+    def initInnerClasses(self):
+        self.content = CalcInputContent(self)
+        self.grNode = CalcGraphicsNode(self)
+
+
+class CalcOutputContent(QNENodeContentWidget):
+    def initUI(self):
+        self.lbl = QLabel("42", self)
+        self.lbl.setAlignment(Qt.AlignLeft)
+        self.lbl.setObjectName(self.node.content_label_objname)
 
 
 @register_node(OP_NODE_OUTPUT)
@@ -51,9 +76,14 @@ class CalcNode_Output(CalcNode):
     op_code = OP_NODE_OUTPUT
     op_title = 'Output'
     content_label = ''
+    content_label_objname = 'calc_node_output'
 
     def __init__(self, scene):
         super().__init__(scene, inputs=[1], outputs=[])
+
+    def initInnerClasses(self):
+        self.content = CalcOutputContent(self)
+        self.grNode = CalcGraphicsNode(self)
 
 # register by function call
 # register_node_now(OP_NODE_ADD, CalcNode_Add)
