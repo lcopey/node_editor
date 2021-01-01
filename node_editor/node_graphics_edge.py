@@ -13,12 +13,15 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .node_edge import Edge
 
+
 class QNEGraphicsEdge(QGraphicsPathItem):
     def __init__(self, edge: 'Edge', parent=None):
         super().__init__(parent)
 
         self.edge = edge  # link to the Edge class implementing the logic
+        # init flags
         self._last_selected_state = False
+        self.hovered = False
         # self.posSource = [0, 0]
         # self.posDestination = [0, 0]
 
@@ -27,12 +30,14 @@ class QNEGraphicsEdge(QGraphicsPathItem):
 
     def initUI(self):
         self.setFlag(QGraphicsItem.ItemIsSelectable)
+        self.setAcceptHoverEvents(True)
         self.setZValue(-1)
 
     def initAssets(self):
         # Diverse parameters for drawing
         self._color = QColor("#001000")
         self._color_selected = QColor("#00ff00")
+        self._color_hovered = QColor("#FF37A6FF")
 
         self._pen = QPen(self._color)
         self._pen.setWidthF(EDGE_WIDTH)
@@ -43,6 +48,9 @@ class QNEGraphicsEdge(QGraphicsPathItem):
         self._pen_dragging = QPen(self._color)
         self._pen_dragging.setWidthF(EDGE_WIDTH)
         self._pen_dragging.setStyle(Qt.DashLine)
+
+        self._pen_hovered = QPen(self._color_hovered)
+        self._pen_hovered.setWidthF(EDGE_WIDTH + 2.)
 
     def onSelected(self):
         self.edge.scene.grScene.itemSelected.emit()
@@ -56,6 +64,13 @@ class QNEGraphicsEdge(QGraphicsPathItem):
             self._last_selected_state = self.isSelected()
             self.onSelected()
 
+    def hoverEnterEvent(self, event: 'QGraphicsSceneHoverEvent') -> None:
+        self.hovered = True
+        self.update()
+
+    def hoverLeaveEvent(self, event: 'QGraphicsSceneHoverEvent') -> None:
+        self.hovered = False
+        self.update()
 
     def setSource(self, x, y):
         """Set itinial position of the edge to x, y"""
@@ -81,6 +96,12 @@ class QNEGraphicsEdge(QGraphicsPathItem):
         """
         path = self.calcPath()
         self.setPath(path)
+
+        # hover effect
+        if self.hovered and self.edge.end_socket is not None:
+            painter.setPen(self._pen_hovered)
+            painter.setBrush(Qt.NoBrush)
+            painter.drawPath(self.path())
 
         if self.edge.end_socket is None:
             painter.setPen(self._pen_dragging)
