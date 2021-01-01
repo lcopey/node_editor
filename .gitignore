@@ -1,4 +1,6 @@
 /_template/
-/build/
-.idea/
+/.idea/
 /.tox/
+/build/
+/dist/
+/nodeeditor.egg-info/
