@@ -1,6 +1,6 @@
 from collections import OrderedDict
 from .node_serializable import Serializable
-from .utils import return_simple_id
+from .utils import return_simple_id, dumpException
 from .node_graphics_edge import *
 
 EDGE_TYPE_DIRECT = 1
@@ -108,21 +108,12 @@ class Edge(Serializable):
         self.grEdge.update()
 
     def remove_from_sockets(self):
-        """Remove the edges from the sockets
-
-        - Remove  the reference of the edge in the sockets.
-        - Start socket and end socket are assigned to None"""
-        # # TODO Fix Me!!!!
-        # if self.start_socket is not None:
-        #     self.start_socket.removeEdge(None)
-        #
-        # if self.end_socket is not None:
-        #     self.end_socket.removeEdge(None)
-
         self.end_socket = None
         self.start_socket = None
 
     def remove(self):
+        old_sockets = [self.start_socket, self.end_socket]
+
         if DEBUG: print("> Removing Edge")
         if DEBUG: print(" - remove edge from all sockets")
         self.remove_from_sockets()
@@ -130,8 +121,21 @@ class Edge(Serializable):
         self.scene.grScene.removeItem(self.grEdge)
         self.grEdge = None
         if DEBUG: print(" - remove edge from scene")
-        self.scene.removeEdge(self)
+        try:
+            self.scene.removeEdge(self)
+        except ValueError:
+            pass
         if DEBUG: print(" - everything was done")
+
+        # On change, notify that the connection and eventually the inputs changed
+        try:
+            for socket in old_sockets:
+                if socket and socket.node:
+                    socket.node.onEdgeConnectionChanged(self)
+                    if socket.is_input:
+                        socket.node.onInputChanged(self)
+        except Exception as e:
+            dumpException(e)
 
     def __str__(self):
         return return_simple_id(self, 'Edge')

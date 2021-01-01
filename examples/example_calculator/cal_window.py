@@ -9,7 +9,6 @@ from node_editor.utils import dumpException, pp
 from .calc_sub_window import CalculatorSubWindow
 from .calc_drag_listbox import QNEDragListbox
 from .calc_conf import CALC_NODES
-from .calc_conf_nodes import *
 
 # images for the dark skin
 import examples.example_calculator.qss.nodeeditor_dark_resources

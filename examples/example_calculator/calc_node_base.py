@@ -5,6 +5,7 @@ from node_editor.node_node import Node
 from node_editor.widgets.node_content_widget import QNENodeContentWidget
 from node_editor.node_graphics_node import QNEGraphicsNode
 from node_editor.node_socket import LEFT_CENTER, RIGHT_CENTER
+from node_editor.utils import dumpException
 
 
 class CalcGraphicsNode(QNEGraphicsNode):
@@ -48,6 +49,9 @@ class CalcNode(Node):
 
     def __init__(self, scene: 'Scene', inputs=[2, 2], outputs=[1]):
         super().__init__(scene, title=self.__class__.op_title, inputs=inputs, outputs=outputs)
+        self.value = None
+        # Nodes are dirty by default
+        self.markDirty()
 
     def initInnerClasses(self):
         # Reference to the content
@@ -69,3 +73,53 @@ class CalcNode(Node):
         res = super().deserialize(data, hashmap, restore_id)
         print("Deserialize CalcNode {}: res : {}".format(self.__class__.__name__, res))
         return res
+
+    def evalOperation(self, i1, i2):
+        return 123
+
+    def evalImplementation(self):
+        self.markInvalid(False)
+        self.markDirty(False)
+        i1 = self.getInput(0)
+        i2 = self.getInput(1)
+
+        if i1 is None or i2 is None:
+            self.markInvalid()
+            self.markDescendantDirty()
+            self.grNode.setToolTip('Connect all inputs')
+            return None
+        else:
+            val = self.evalOperation(i1.eval(), i2.eval())
+            self.value = val
+            self.markDirty(False)
+            self.markInvalid(False)
+            self.grNode.setToolTip('')
+
+            self.markDescendantDirty()
+
+            self.evalChildren()
+
+            return self.value
+
+    def eval(self):
+        if not self.isDirty() and not self.isInvalid():
+            print(f" _> return cached {self.__class__.__name__} value {self.value}")
+            return self.value
+
+        try:
+            val = self.evalImplementation()
+            return val
+
+        except ValueError as e:
+            self.markInvalid()
+            self.grNode.setToolTip(str(e))
+            self.markDescendantDirty()
+        except Exception as e:
+            self.markInvalid()
+            self.grNode.setToolTip(str(e))
+            dumpException(e)
+
+    def onInputChanged(self, new_edge):
+        print(f'{self.__class__.__name__}::onInputChanged {new_edge}')
+        self.markDirty()
+        self.eval()

@@ -77,6 +77,14 @@ class Node(Serializable):
                             count_on_this_node_side=len(outputs), is_input=False)
             self.outputs.append(socket)
 
+    def onEdgeConnectionChanged(self, new_edge):
+        print(f'{self.__class__.__name__}::onEdgeConnectionChanged {new_edge}')
+
+    def onInputChanged(self, new_edge):
+        print(f'{self.__class__.__name__}::onInputChanged {new_edge}')
+        self.markDirty()
+        self.markDescendantDirty()
+
     # convenience function to update and get the position of the node in the graphical scene
     @property
     def pos(self):
@@ -209,6 +217,32 @@ class Node(Serializable):
                 other_node = edge.getOtherSocket(output).node
                 other_nodes.append(other_node)
         return other_nodes
+
+    def getInput(self, index=0):
+        try:
+            edge = self.inputs[index].edges[0]
+            socket = edge.getOtherSocket(self.inputs[index])
+            return socket.node
+        except IndexError:
+            print(f'Exception : Trying to get input, but none is attached to {self}')
+            return None
+        except Exception as e:
+            dumpException(e)
+            return None
+
+    def getInputs(self, index=0):
+        ins = []
+        for edge in self.inputs[index].edges:
+            other_socket = edge.getOtherSocket(self.inputs[index])
+            ins.append(other_socket.node)
+        return ins
+
+    def getOutputs(self, index=0):
+        outs = []
+        for edge in self.outputs[index].edges:
+            other_socket = edge.getOtherSocket(self.outputs[index])
+            outs.append(other_socket.node)
+        return outs
 
     # serialization function
 

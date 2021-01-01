@@ -39,3 +39,6 @@ def get_call_from_opcode(op_code):
     if op_code not in CALC_NODES:
         raise OpCodeNotRegistered('OpCode {} is not registered'.format(op_code))
     return CALC_NODES[op_code]
+
+# import all nodes register them
+from .nodes import *

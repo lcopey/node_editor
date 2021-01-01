@@ -13,6 +13,7 @@ def print_func_name(func):
 
     return inner
 
+
 def return_simple_id(obj, text):
     return "<{} {}...{}>".format(text, f'{id(obj):02x}'[2:5], f'{id(obj):02x}'[-3:])
 
@@ -47,7 +48,7 @@ def print_items(item):
 
 
 def dumpException(e):
-    print('Exception:', e)
+    print('Exception:', e.__class__, e)
     traceback.print_tb(e.__traceback__)
 
 

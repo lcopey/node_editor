@@ -10,7 +10,7 @@ from node_editor.node_editor_widget import NodeEditorWidget
 from node_editor.utils import dumpException
 
 DEBUG = False
-DEBUG_CONTEXT = True
+DEBUG_CONTEXT = False
 
 
 class CalculatorSubWindow(NodeEditorWidget):
@@ -31,6 +31,16 @@ class CalculatorSubWindow(NodeEditorWidget):
         if 'op_code' not in data:
             return Node
         return get_call_from_opcode(data['op_code'])
+
+    def fileLoad(self, filename: str) -> bool:
+        if super().fileLoad(filename):
+            # eval all output nodes
+            for node in self.scene.nodes:
+                if node.__class__.__name__ == 'CalcNodeOutput':
+                    node.eval()
+            return True
+        return False
+
 
     def initNewNodeActions(self):
         self.node_actions = {}
