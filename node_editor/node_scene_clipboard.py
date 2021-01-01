@@ -87,7 +87,7 @@ class SceneClipboard:
 
         # create each node
         for node_data in datas['nodes']:
-            new_node = Node(self.scene)
+            new_node = self.scene.getNodeClassFromData(node_data)(self.scene)
             new_node.deserialize(node_data, hashmap, restore_id=False)
             # adjust the new node's position
             pos = new_node.pos

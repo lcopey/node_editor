@@ -161,6 +161,13 @@ class Node(Serializable):
         ])
 
     def deserialize(self, data, hashmap={}, restore_id=True):
+        """Deserialize the node.
+
+        Handle :
+            - id
+            - node position
+            - sockets
+            - content"""
         if restore_id:
             self.id = data['id']
         hashmap[data['id']] = self
@@ -189,4 +196,7 @@ class Node(Serializable):
             new_socket.deserialize(socket_data, hashmap, restore_id)
             self.outputs.append(new_socket)
 
-        return True
+        # deserialize the content of the node
+        res = self.content.deserialize(data['content'], hashmap)
+
+        return True & res

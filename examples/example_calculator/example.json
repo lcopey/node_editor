@@ -1,0 +1,216 @@
+{
+    "id": 2790422884160,
+    "scene_width": 64000,
+    "scene_height": 64000,
+    "nodes": [
+        {
+            "id": 2790424605744,
+            "title": "Input",
+            "pos_x": -359.0,
+            "pos_y": -233.0,
+            "inputs": [],
+            "outputs": [
+                {
+                    "id": 2790424658656,
+                    "index": 0,
+                    "multi_edges": true,
+                    "position": 5,
+                    "socket_type": 3
+                }
+            ],
+            "content": {
+                "value": "1"
+            },
+            "op_code": 1
+        },
+        {
+            "id": 2790424605792,
+            "title": "Output",
+            "pos_x": 296.75,
+            "pos_y": -90.0,
+            "inputs": [
+                {
+                    "id": 2790424683376,
+                    "index": 0,
+                    "multi_edges": false,
+                    "position": 2,
+                    "socket_type": 1
+                }
+            ],
+            "outputs": [],
+            "content": {},
+            "op_code": 2
+        },
+        {
+            "id": 2790424712144,
+            "title": "Input",
+            "pos_x": -354.0,
+            "pos_y": -131.0,
+            "inputs": [],
+            "outputs": [
+                {
+                    "id": 2790424712336,
+                    "index": 0,
+                    "multi_edges": true,
+                    "position": 5,
+                    "socket_type": 3
+                }
+            ],
+            "content": {
+                "value": "1"
+            },
+            "op_code": 1
+        },
+        {
+            "id": 2790424714160,
+            "title": "Input",
+            "pos_x": -357.0,
+            "pos_y": 27.5,
+            "inputs": [],
+            "outputs": [
+                {
+                    "id": 2790424714400,
+                    "index": 0,
+                    "multi_edges": true,
+                    "position": 5,
+                    "socket_type": 3
+                }
+            ],
+            "content": {
+                "value": "4"
+            },
+            "op_code": 1
+        },
+        {
+            "id": 2790424714304,
+            "title": "Add",
+            "pos_x": -124.25,
+            "pos_y": -183.0,
+            "inputs": [
+                {
+                    "id": 2790424714592,
+                    "index": 0,
+                    "multi_edges": false,
+                    "position": 2,
+                    "socket_type": 2
+                },
+                {
+                    "id": 2790424714640,
+                    "index": 1,
+                    "multi_edges": false,
+                    "position": 2,
+                    "socket_type": 2
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 2790424714688,
+                    "index": 0,
+                    "multi_edges": true,
+                    "position": 5,
+                    "socket_type": 1
+                }
+            ],
+            "content": {},
+            "op_code": 3
+        },
+        {
+            "id": 2790424714832,
+            "title": "Substract",
+            "pos_x": 87.0,
+            "pos_y": -74.5,
+            "inputs": [
+                {
+                    "id": 2790424715024,
+                    "index": 0,
+                    "multi_edges": false,
+                    "position": 2,
+                    "socket_type": 2
+                },
+                {
+                    "id": 2790424715072,
+                    "index": 1,
+                    "multi_edges": false,
+                    "position": 2,
+                    "socket_type": 2
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 2790424715120,
+                    "index": 0,
+                    "multi_edges": true,
+                    "position": 5,
+                    "socket_type": 1
+                }
+            ],
+            "content": {},
+            "op_code": 4
+        },
+        {
+            "id": 2790478266224,
+            "title": "Divide",
+            "pos_x": -26.0,
+            "pos_y": 228.0,
+            "inputs": [
+                {
+                    "id": 2790478295488,
+                    "index": 0,
+                    "multi_edges": false,
+                    "position": 2,
+                    "socket_type": 2
+                },
+                {
+                    "id": 2790478295536,
+                    "index": 1,
+                    "multi_edges": false,
+                    "position": 2,
+                    "socket_type": 2
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 2790478295584,
+                    "index": 0,
+                    "multi_edges": true,
+                    "position": 5,
+                    "socket_type": 1
+                }
+            ],
+            "content": {},
+            "op_code": 6
+        }
+    ],
+    "edges": [
+        {
+            "id": 2790424714112,
+            "edge_type": 2,
+            "start": 2790424658656,
+            "end": 2790424714592
+        },
+        {
+            "id": 2790424714448,
+            "edge_type": 2,
+            "start": 2790424712336,
+            "end": 2790424714640
+        },
+        {
+            "id": 2790424712816,
+            "edge_type": 2,
+            "start": 2790424714400,
+            "end": 2790424715072
+        },
+        {
+            "id": 2790424712384,
+            "edge_type": 2,
+            "start": 2790424714688,
+            "end": 2790424715024
+        },
+        {
+            "id": 2790424713344,
+            "edge_type": 2,
+            "start": 2790424715120,
+            "end": 2790424683376
+        }
+    ]
+}
