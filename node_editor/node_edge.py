@@ -70,6 +70,9 @@ class Edge(Serializable):
 
     @edge_type.setter
     def edge_type(self, value):
+        """Setter for the edge type.
+
+        In case of change, the graphical edge is automatically set to the corresponding edge type."""
         if hasattr(self, 'grEdge') and self.grEdge is not None:
             self.scene.grScene.removeItem(self.grEdge)
         self._edge_type = value

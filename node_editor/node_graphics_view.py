@@ -106,6 +106,15 @@ class QNEGraphicsView(QGraphicsView):
 
     def middleMouseButtonPress(self, event: QMouseEvent):
         """Implement dragging of the scene using middle button"""
+
+        if DEBUG:
+            item = self.getItemAtClick(event)
+            if item is None:
+                print_scene(self.scene)
+            else:
+                print_items(item)
+
+        # Faking event
         # release event from left click ?
         releaseEvent = QMouseEvent(QEvent.MouseButtonRelease, event.localPos(), event.screenPos(),
                                    Qt.LeftButton, Qt.NoButton, event.modifiers())
@@ -223,13 +232,6 @@ class QNEGraphicsView(QGraphicsView):
 
     def rightMouseButtonPress(self, event):
         super().mousePressEvent(event)
-
-        item = self.getItemAtClick(event)
-        if DEBUG:
-            if item is None:
-                print_scene(self.scene)
-            else:
-                print_items(item)
 
     def rightMouseButtonRelease(self, event):
         super().mouseReleaseEvent(event)

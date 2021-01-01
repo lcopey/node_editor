@@ -21,7 +21,7 @@ class QNENodeContentWidget(QWidget, Serializable):
 
     def setEditingFlag(self, value):
         # TODO refaire avec une fonction dans QNEGraphicsView
-        self.node.scene.grScene.views()[0].editingFlag = value
+        self.node.scene.getView().editingFlag = value
 
     def serialize(self):
         return OrderedDict([

@@ -236,7 +236,7 @@ class NodeEditorWindow(QMainWindow):
         if DEBUG: print('Delete')
         current_nodeeditor = self.getCurrentNodeEditorWidget()
         if current_nodeeditor:
-            current_nodeeditor.scene.grScene.views()[0].deleteSelected()
+            current_nodeeditor.scene.getView().deleteSelected()
 
     def onEditCut(self):
         """Cut callback"""
