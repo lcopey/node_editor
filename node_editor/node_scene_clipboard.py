@@ -3,7 +3,8 @@ from .node_graphics_edge import QNEGraphicsEdge
 from .node_node import Node
 from .node_edge import Edge
 
-DEBUG = True
+DEBUG = False
+DEBUG_PASTING = False
 
 
 class SceneClipboard:
@@ -78,25 +79,54 @@ class SceneClipboard:
             maxx = max(x, maxx)
             maxy = max(y, maxy)
 
-        bbox_center_x = (minx + maxx) / 2
-        bbox_center_y = (miny + maxy) / 2
+        # add width and height of a node
+        maxx -= 180
+        maxy += 100
+
+        relbboxcenterx = (minx + maxx) / 2
+        relbboxcentery = (miny + maxy) / 2
 
         # calculate the offset of the newly create nodes
-        offset_x = mouse_scene_pos.x() - bbox_center_x
-        offset_y = mouse_scene_pos.y() - bbox_center_y
+        mousex, mousey = mouse_scene_pos.x(), mouse_scene_pos.y()
+
+        if DEBUG_PASTING:
+            print (" *** PASTA:")
+            print("Copied boudaries:\n\tX:", minx, maxx, "   Y:", miny, maxy)
+            print("\tbbox_center:", relbboxcenterx, relbboxcentery)
+
+        created_nodes = []
+        self.scene.setSilentSelectionEvents()
+
+        self.scene.doDeselectItems()
 
         # create each node
         for node_data in datas['nodes']:
             new_node = self.scene.getNodeClassFromData(node_data)(self.scene)
             new_node.deserialize(node_data, hashmap, restore_id=False)
+            created_nodes.append(new_node)
+
             # adjust the new node's position
-            pos = new_node.pos
-            new_node.setPos(pos.x() + offset_x, pos.y() + offset_y)
+            posx, posy = new_node.pos.x(), new_node.pos.y()
+            newx, newy = mousex + posx - minx, mousey + posy - miny
+            new_node.setPos(newx, newy)
+
+            # do not trigger event as setSilentSelectionEvents was called
+            new_node.doSelect()
+
+            if DEBUG_PASTING:
+                print("** PASTA SUM:")
+                print("\tMouse pos:", mousex, mousey)
+                print("\tnew node pos:", posx, posy)
+                print("\tFINAL:", newx, newy)
 
         # create each edge
         for edge_data in datas['edges']:
             new_edge = Edge(self.scene)
             new_edge.deserialize(edge_data, hashmap, restore_id=False)
 
+        self.scene.setSilentSelectionEvents(False)
+
         # store history
         self.scene.history.storeHistory('Elements pasted from the clipboard', setModified=True)
+
+        return created_nodes

@@ -206,7 +206,8 @@ class CalculatorWindow(NodeEditorWindow):
     def onFileOpen(self):
         """Open OpenFileDialog"""
         # OpenFile dialog
-        fnames, filter = QFileDialog.getOpenFileNames(self, 'Open graph from file')
+        fnames, filter = QFileDialog.getOpenFileNames(self, 'Open graph from file', self.getFileDialogDirectory(),
+                                                      self.getFileDialogFilter())
 
         try:
             for fname in fnames:
@@ -241,6 +242,9 @@ class CalculatorWindow(NodeEditorWindow):
             else:
                 self.writeSettings()
                 event.accept()
+                # In case of fixing the application closing
+                # import sys
+                # sys.exit(0)
         except Exception as e:
             dumpException(e)
 

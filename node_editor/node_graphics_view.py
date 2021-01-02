@@ -37,6 +37,7 @@ class QNEGraphicsView(QGraphicsView):
         self.editingFlag = False  # Control variable set to True when editing the content of a node
 
         # Zoom parameters
+        self.last_scene_mouse_position = QPoint(0, 0)
         self.zoomInFactor = 1.25
         self.zoomClamp = True
         self.zoom = 5
@@ -151,7 +152,7 @@ class QNEGraphicsView(QGraphicsView):
                 return
 
         # logic for starting dragging an edge
-        if type(item) == QNEGraphicsSocket:  # Clicking on a socket
+        if isinstance(item, QNEGraphicsSocket):  # Clicking on a socket
             if self.mode == MODE_NOOP:  # when the mode is noop
                 self.mode = MODE_EDGE_DRAG  # enter dragging mode
                 self.edgeDragStart(item)
@@ -235,23 +236,19 @@ class QNEGraphicsView(QGraphicsView):
         super().mouseReleaseEvent(event)
 
     def mouseMoveEvent(self, event: QMouseEvent) -> None:
+        scenepos = self.mapToScene(event.pos())
         if self.mode == MODE_EDGE_DRAG:
-            pos = self.mapToScene(event.pos())
-            self.drag_edge.grEdge.setDestination(pos.x(), pos.y())
+            self.drag_edge.grEdge.setDestination(scenepos.x(), scenepos.y())
             self.drag_edge.grEdge.update()
 
         if self.mode == MODE_EDGE_CUT:
-            pos = self.mapToScene(event.pos())
-            self.cutLine.line_points.append(pos)
+            self.cutLine.line_points.append(scenepos)
             self.cutLine.update()
 
-        self.last_scene_mouse_position = self.mapToScene(event.pos())
+        self.last_scene_mouse_position = scenepos
 
         # Trigger new event scenePosChanged returning the current mouse position
-        self.scenePosChanged.emit(
-            int(self.last_scene_mouse_position.x()),
-            int(self.last_scene_mouse_position.y())
-        )
+        self.scenePosChanged.emit(int(self.scenepos.x()), int(self.scenepos.y()))
 
         super().mouseMoveEvent(event)
 
@@ -366,7 +363,7 @@ class QNEGraphicsView(QGraphicsView):
         self.drag_edge = None
 
         try:
-            if type(item) is QNEGraphicsSocket and item.socket is not self.drag_start_socket:
+            if isinstance(item, QNEGraphicsSocket) and item.socket is not self.drag_start_socket:
                 # if we released dragging on a socket (other than beginning socket)
                 # if not multi_edges, remove all edges from the existing socket
                 if not item.socket.is_multi_edges:
@@ -385,7 +382,7 @@ class QNEGraphicsView(QGraphicsView):
                 for socket in [self.drag_start_socket, item.socket]:
                     socket.node.onEdgeConnectionChanged(new_edge)
                     if socket.is_input:
-                        socket.node.onInputChanged(new_edge)
+                        socket.node.onInputChanged(socket)
 
                 self.grScene.scene.history.storeHistory('Created new edge by dragging', setModified=True)
 

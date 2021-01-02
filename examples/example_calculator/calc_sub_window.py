@@ -17,7 +17,7 @@ DEBUG_CONTEXT = False
 class CalculatorSubWindow(NodeEditorWidget):
     def __init__(self):
         super().__init__()
-        self.setAttribute(Qt.WA_DeleteOnClose)
+        # self.setAttribute(Qt.WA_DeleteOnClose)
 
         self.setTitle()
         self.initNewNodeActions()
@@ -190,6 +190,22 @@ class CalculatorSubWindow(NodeEditorWidget):
             val = selected.eval()
             if DEBUG_CONTEXT: print(val)
 
+    def determine_target_socket_of_node(self, was_dragged_flag, new_calc_node):
+        target_socket = None
+        if was_dragged_flag:
+            if len(new_calc_node.inputs) > 0:
+                target_socket = new_calc_node.inputs[0]
+        else:
+            if len(new_calc_node.outputs) > 0:
+                target_socket = new_calc_node.outputs[0]
+
+        return target_socket
+
+    def finish_new_node_state(self, new_calc_node):
+        self.scene.doDeselectItems()
+        new_calc_node.grNode.doSelect(True)
+        new_calc_node.grNode.onSelected()
+
     def handleNewNodeContextMenu(self, event: QContextMenuEvent):
         if DEBUG_CONTEXT: print('Context: New Node')
         context_menu = self.initNodesContextMenu()
@@ -203,12 +219,15 @@ class CalculatorSubWindow(NodeEditorWidget):
 
             if self.scene.getView().mode == MODE_EDGE_DRAG:
                 # in dragging edge mode, connect the current edge to the first input
-                self.scene.getView().edgeDragEnd(new_calc_node.inputs[0].grSocket)
+                target_socket = self.determine_target_socket_of_node(
+                    self.scene.getView().drag_edge.start_socket.is_output,
+                    new_calc_node)
+                if target_socket is not None:
+                    self.scene.getView().edgeDragEnd(target_socket.grSocket)
+                    self.finish_new_node_state(new_calc_node)
 
                 # select the newly create node
                 new_calc_node.doSelect(True)
-                # new_calc_node.inputs[0].edges[-1].doSelect(True)
-
 
             else:
                 self.scene.history.storeHistory(f'Created {new_calc_node.__class__.__name__}')

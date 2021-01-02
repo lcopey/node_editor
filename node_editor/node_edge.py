@@ -90,7 +90,7 @@ class Edge(Serializable):
         if self.start_socket is not None:
             self.updatePositions()
 
-    def getOtherSocket(self, known_socket):
+    def getOtherSocket(self, known_socket: 'Socket'):
         # return the other end of the edge
         return self.start_socket if known_socket == self.end_socket else self.end_socket
 
@@ -117,15 +117,17 @@ class Edge(Serializable):
         self.end_socket = None
         self.start_socket = None
 
-    def remove(self):
+    def remove(self, silent_for_socket: 'Socket' = None, silent=False):
         old_sockets = [self.start_socket, self.end_socket]
 
         if DEBUG: print("> Removing Edge")
         if DEBUG: print(" - remove edge from all sockets")
+
         self.remove_from_sockets()
         if DEBUG: print(" - remove grEdge")
         self.scene.grScene.removeItem(self.grEdge)
         self.grEdge = None
+
         if DEBUG: print(" - remove edge from scene")
         try:
             self.scene.removeEdge(self)
@@ -137,6 +139,12 @@ class Edge(Serializable):
         try:
             for socket in old_sockets:
                 if socket and socket.node:
+                    if silent:
+                        continue
+                    if silent_for_socket is not None and socket == silent_for_socket:
+                        continue
+
+                    # notify Socket's Node
                     socket.node.onEdgeConnectionChanged(self)
                     if socket.is_input:
                         socket.node.onInputChanged(self)
@@ -147,8 +155,8 @@ class Edge(Serializable):
         return OrderedDict([
             ('id', self.id),
             ('edge_type', self.edge_type),
-            ('start', self.start_socket.id),
-            ('end', self.end_socket.id)
+            ('start', self.start_socket.id if self.start_socket is not None else None),
+            ('end', self.end_socket.id if self.end_socket is not None else None)
         ])
 
     def deserialize(self, data: dict, hashmap: dict = {}, restore_id: bool = True):

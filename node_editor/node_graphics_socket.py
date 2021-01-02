@@ -14,38 +14,65 @@ INPUT_SOCKET_2 = 2
 INPUT_SOCKET_3 = 3
 INPUT_SOCKET_4 = 4
 
+SOCKET_COLOR = [QColor('#FFFF7F0E'),
+                QColor('#FF1F77B4'),
+                QColor('#Ff2CA02C'),
+                QColor('#FFD62728'),
+                QColor('#FF9467BD'),
+                QColor('#FF8C564B'),
+                QColor('#FFE377C2'),
+                QColor('#FF7F7F7F'),
+                QColor('#FFBCBD22'),
+                QColor('#FF17BECF')]
+
 
 class QNEGraphicsSocket(QGraphicsItem):
-    def __init__(self, socket: 'Socket', socket_type=1):
+    def __init__(self, socket: 'Socket'):
         super().__init__(socket.node.grNode)
         self.socket = socket
 
         self.radius = 6
         self.outline_width = 1
-        # self._colors = [
-        #     QColor('#FFFF7700'),
-        #     QColor('#FF52e220'),
-        #     QColor('#FF0056a6'),
-        #     QColor('#FFa86db1'),
-        #     QColor('#FFb54747'),
-        #     QColor('#FFdbe220'),
-        # ]
-        self._colors = [QColor('#FFFF7F0E'),
-                        QColor('#FF1F77B4'),
-                        QColor('#Ff2CA02C'),
-                        QColor('#FFD62728'),
-                        QColor('#FF9467BD'),
-                        QColor('#FF8C564B'),
-                        QColor('#FFE377C2'),
-                        QColor('#FF7F7F7F'),
-                        QColor('#FFBCBD22'),
-                        QColor('#FF17BECF')]
-        self._color_background = self._colors[socket_type]
+        self.initAssets()
+
+    @property
+    def socket_type(self):
+        return self.socket.socket_type
+
+    def initAssets(self):
+        self._color_background = self.getSocketColor(self.socket_type)
         self._color_outline = QColor('#FF000000')
 
         self._pen = QPen(self._color_outline)
         self._pen.setWidth(self.outline_width)
         self._brush = QBrush(self._color_background)
+
+    def changeSocketType(self):
+        """Change the `Socket` Type.
+
+        Change are exclusively graphical."""
+        self._color_background = self.getSocketColor(self.socket_type)
+        self._brush = QBrush(self._color_background)
+        self.update()
+
+    def getSocketColor(self, key):
+        """Returns the ``QColor`` for this ``key``
+
+        Parameters
+        ----------
+        key : ```str``` or ```int```
+            Either a string referencing a ``QColor`` or an integer
+
+        Returns
+        -------
+        ``QColor``
+
+        """
+        if type(key) == int:
+            return SOCKET_COLOR[key]
+        elif type(key) == str:
+            return QColor(key)
+        return Qt.transparent
 
     def paint(self, painter: QPainter, option: 'QStyleOptionGraphicsItem',
               widget: typing.Optional[QWidget] = ...) -> None:

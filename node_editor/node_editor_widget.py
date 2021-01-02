@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 import os
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -15,7 +16,9 @@ from .utils import dumpException
 
 
 class NodeEditorWidget(QWidget):
-    """Widget holding the graphics view and the scene"""
+    """The ``NodeEditorWidget`` class"""
+    # Allow to specify which scene to use
+    SceneClass = Scene
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -31,7 +34,7 @@ class NodeEditorWidget(QWidget):
         self.setLayout(self.layout)
 
         # create graphics scene
-        self.scene = Scene()
+        self.scene = self.__class__.SceneClass()
 
         # create graphics view
         self.view = QNEGraphicsView(self.scene, self)
@@ -41,23 +44,8 @@ class NodeEditorWidget(QWidget):
         # self.addDebugContent()
         # TODO Call fileNew ?
 
-    def isModified(self):
-        return self.scene.isModified()
-
-    def isFilenameSet(self):
-        return self.filename is not None
-
-    def hasSelectedItems(self) -> bool:
-        return len(self.getSelectedItems()) > 0
-
     def getSelectedItems(self):
         return self.scene.getSelectedItems()
-
-    def canUndo(self):
-        return self.scene.history.canUndo()
-
-    def canRedo(self):
-        return self.scene.history.canRedo()
 
     def getUserFriendlyFilename(self):
         """
@@ -68,6 +56,27 @@ class NodeEditorWidget(QWidget):
         """
         name = os.path.basename(self.filename) if self.isFilenameSet() else "New Graph"
         return name + ("*" if self.isModified() else "")
+
+    def isModified(self):
+        return self.scene.isModified()
+
+    def isFilenameSet(self):
+        return self.filename is not None
+
+    def hasSelectedItems(self) -> bool:
+        return len(self.getSelectedItems()) > 0
+
+    def canUndo(self):
+        return self.scene.history.canUndo()
+
+    def canRedo(self):
+        return self.scene.history.canRedo()
+
+    def fileNew(self):
+        self.scene.clear()
+        self.filename = None
+        self.scene.history.clear()
+        self.scene.history.storeInitialHistoryStamp()
 
     def fileLoad(self, filename: str) -> bool:
         """
@@ -115,13 +124,6 @@ class NodeEditorWidget(QWidget):
         QApplication.restoreOverrideCursor()
         return True
 
-    def fileNew(self):
-        # TODO uses ???
-        self.scene.clear()
-        self.filename = None
-        self.scene.history.clear()
-        self.scene.history.storeInitialHistoryStamp()
-
     def addNodes(self):
         """Add nodes for debug purpose"""
         node1 = Node(self.scene, 'My Node', inputs=[INPUT_SOCKET_1] * 3, outputs=[OUTPUT_SOCKET])
@@ -133,5 +135,6 @@ class NodeEditorWidget(QWidget):
 
         edge1 = Edge(self.scene, node1.outputs[0], node2.inputs[0], edge_type=EDGE_TYPE_BEZIER)
         edge2 = Edge(self.scene, node2.outputs[0], node3.inputs[0], edge_type=EDGE_TYPE_BEZIER)
+        edge3 = Edge(self.scene, node1.outputs[0], node3.inputs[2], edge_type=EDGE_TYPE_BEZIER)
 
         self.scene.history.storeInitialHistoryStamp()

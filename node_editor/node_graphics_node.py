@@ -9,6 +9,7 @@ if TYPE_CHECKING:
 
 OUTLINE_WIDTH = 1.0
 
+
 class QNEGraphicsNode(QGraphicsItem):
     """Implement the graphics version of a node"""
 
@@ -24,15 +25,6 @@ class QNEGraphicsNode(QGraphicsItem):
         self.initSizes()
         self.initAssets()
         self.initUI()
-
-    @property
-    def title(self, ):
-        return self._title
-
-    @title.setter
-    def title(self, value):
-        self._title = value
-        self.title_item.setPlainText(self._title)
 
     def initUI(self):
         # Define the node as selectable and movable
@@ -70,7 +62,7 @@ class QNEGraphicsNode(QGraphicsItem):
         self._pen_selected = QPen(self._color_selected)
         self._pen_selected.setWidthF(OUTLINE_WIDTH)
         self._pen_hovered = QPen(self._color_hovered)
-        self._pen_hovered.setWidthF(OUTLINE_WIDTH+1)
+        self._pen_hovered.setWidthF(OUTLINE_WIDTH + 1)
 
         self._brush_title = QBrush(QColor("#FF313131"))
         self._brush_background = QBrush(QColor("#E3212121"))
@@ -92,14 +84,23 @@ class QNEGraphicsNode(QGraphicsItem):
         self.title_item.setPos(self.title_horizontal_padding, 0)
         self.title_item.setTextWidth(self.width - 2 * self.title_horizontal_padding)
 
-    def onSelected(self):
-        self.node.scene.grScene.itemSelected.emit()
+    @property
+    def title(self, ):
+        return self._title
+
+    @title.setter
+    def title(self, value):
+        self._title = value
+        self.title_item.setPlainText(self._title)
 
     def doSelect(self, new_state=True):
         self.setSelected(new_state)
         self._last_selected_state = new_state
         if new_state:
             self.onSelected()
+
+    def onSelected(self):
+        self.node.scene.grScene.itemSelected.emit()
 
     def mouseMoveEvent(self, event: 'QGraphicsSceneMouseEvent') -> None:
         # When the node move because of drag
@@ -108,7 +109,7 @@ class QNEGraphicsNode(QGraphicsItem):
 
         # TODO Optimize just update the selected node
         for node in self.scene().scene.nodes:
-            if node.grNode.isSelected():
+            if node.isSelected():
                 node.updateConnectedEdges()
         self._was_moved = True
 
@@ -121,7 +122,7 @@ class QNEGraphicsNode(QGraphicsItem):
             self.node.scene.history.storeHistory('Node moved', setModified=True)
 
             self.node.scene.resetLastSelectedStates()
-            self._last_selected_state = True
+            self.doSelect()
             # store the last selected state, because moving also select the node
             self.node.scene._last_selected_items = self.node.scene.getSelectedItems()
 
@@ -138,6 +139,10 @@ class QNEGraphicsNode(QGraphicsItem):
             # set the new state of this object only
             self._last_selected_state = self.isSelected()
             self.onSelected()
+
+    def mouseDoubleClickEvent(self, event: 'QGraphicsSceneMouseEvent') -> None:
+        """Overrides double click event. Resent to `Node::onDoubleClicked`"""
+        self.node.onDoubleClicked(event)
 
     def hoverEnterEvent(self, event: 'QGraphicsSceneHoverEvent') -> None:
         self.hovered = True
@@ -184,7 +189,7 @@ class QNEGraphicsNode(QGraphicsItem):
 
         # outline
         path_outline = QPainterPath()
-        path_outline.addRoundedRect(0, 0, self.width, self.height, self.edge_roundness, self.edge_roundness)
+        path_outline.addRoundedRect(-1, -1, self.width + 2, self.height + 2, self.edge_roundness, self.edge_roundness)
         painter.setBrush(Qt.NoBrush)
         if self.hovered:
             painter.setPen(self._pen_hovered)

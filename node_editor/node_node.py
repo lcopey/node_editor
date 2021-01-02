@@ -16,6 +16,9 @@ DEBUG = False
 
 
 class Node(Serializable):
+    GraphicsNode_class = QNEGraphicsNode
+    NodeContent_class = QNENodeContentWidget
+    Socket_class = Socket
     """Implement generic node"""
 
     def __init__(self, scene: 'Scene', title='Undefined Node', inputs=[], outputs=[]):
@@ -40,11 +43,32 @@ class Node(Serializable):
         self._is_dirty = False
         self._is_invalid = False
 
+    def __str__(self):
+        return return_simple_id(self, 'Node')
+
+    # convenience function to update and get the position of the node in the graphical scene
+    @property
+    def pos(self):
+        return self.grNode.pos()
+
+    def setPos(self, x, y):
+        self.grNode.setPos(x, y)
+
+    @property
+    def title(self, ):
+        return self._title
+
+    @title.setter
+    def title(self, value):
+        self._title = value
+        if hasattr(self, 'grNode'):
+            self.grNode.title = self._title
+
     def initInnerClasses(self):
         # Reference to the content
-        self.content = QNENodeContentWidget(self)
+        self.content = self.getNodeContentClass()(self)
         # Reference to the graphic
-        self.grNode = QNEGraphicsNode(self)
+        self.grNode = self.getGraphicsNodeClass()(self)
 
     def initSettings(self):
         self.socket_spacing = 22
@@ -52,6 +76,14 @@ class Node(Serializable):
         self.output_socket_position = RIGHT_TOP
         self.input_multi_edged = False
         self.output_multi_edged = True
+        self.socket_offsets = {
+            LEFT_BOTTOM: -1,
+            LEFT_CENTER: -1,
+            LEFT_TOP: -1,
+            RIGHT_BOTTOM: 1,
+            RIGHT_CENTER: 1,
+            RIGHT_TOP: 1,
+        }
 
     def initSockets(self, inputs, outputs, reset=True):
         """"Create sockets for inputs and outputs"""
@@ -77,38 +109,16 @@ class Node(Serializable):
                             count_on_this_node_side=len(outputs), is_input=False)
             self.outputs.append(socket)
 
-    def onEdgeConnectionChanged(self, new_edge):
-        print(f'{self.__class__.__name__}::onEdgeConnectionChanged {new_edge}')
+    def getNodeContentClass(self):
+        return self.__class__.NodeContent_class
 
-    def onInputChanged(self, new_edge):
-        print(f'{self.__class__.__name__}::onInputChanged {new_edge}')
-        self.markDirty()
-        self.markDescendantDirty()
-
-    def doSelect(self, new_state=True):
-        self.grNode.doSelect(new_state)
-
-    # convenience function to update and get the position of the node in the graphical scene
-    @property
-    def pos(self):
-        return self.grNode.pos()
-
-    def setPos(self, x, y):
-        self.grNode.setPos(x, y)
-
-    @property
-    def title(self, ):
-        return self._title
-
-    @title.setter
-    def title(self, value):
-        self._title = value
-        if hasattr(self, 'grNode'):
-            self.grNode.title = self._title
+    def getGraphicsNodeClass(self):
+        return self.__class__.GraphicsNode_class
 
     def getSocketPosition(self, index, position, num_out_of=1):
         """Compute the position  of the socket according to current caracteristics of the node"""
-        x = 0 if position in (LEFT_TOP, LEFT_CENTER, LEFT_BOTTOM) else self.grNode.width
+        x = self.socket_offsets[position] if (position in (LEFT_TOP, LEFT_CENTER, LEFT_BOTTOM)) else \
+            self.grNode.width + self.socket_offsets[position]
         if position in (LEFT_BOTTOM, RIGHT_BOTTOM):
             # start from bottom
             y = self.grNode.height - (
@@ -135,13 +145,30 @@ class Node(Serializable):
 
         return [x, y]
 
+    def isSelected(self):
+        """Returns ```True``` if current `Node` is selected"""
+        return self.grNode.isSelected()
+
+    def onEdgeConnectionChanged(self, new_edge):
+        if DEBUG: print(f'{self.__class__.__name__}::onEdgeConnectionChanged {new_edge}')
+        pass
+
+    def onInputChanged(self, new_edge):
+        if DEBUG: print(f'{self.__class__.__name__}::onInputChanged {new_edge}')
+        self.markDirty()
+        self.markDescendantDirty()
+
+    def onDoubleClicked(self, event):
+        """Event handling double click on Graphics Node in `Scene`"""
+        pass
+
+    def doSelect(self, new_state=True):
+        self.grNode.doSelect(new_state)
+
     def updateConnectedEdges(self):
         for socket in self.inputs + self.outputs:
             for edge in socket.edges:
                 edge.updatePositions()
-
-    def __str__(self):
-        return return_simple_id(self, 'Node')
 
     def remove(self):
         if DEBUG: print('> Removing Node', self)
@@ -200,7 +227,8 @@ class Node(Serializable):
     def onMarkedInvalid(self):
         pass
 
-    def eval(self):
+    def eval(self, index=0):
+        """Evaluated this `Node`. This method is supposed to be overriden."""
         self.markDirty(False)
         self.markInvalid(False)
         return 0
@@ -221,11 +249,55 @@ class Node(Serializable):
                 other_nodes.append(other_node)
         return other_nodes
 
-    def getInput(self, index=0):
+    def getInput(self, index: int = 0) -> [Socket, None]:
+        """Get the **first** `Node` connected to the Input specified by index
+
+        Parameters
+        ----------
+        index : ``int``
+            Order number of the `Input Socket`
+
+        Returns
+        -------
+        :class: `~node_editor.node_node.Node` or None
+            :class: `~node_editor.node_node.Node` which is connected to the specified `Input Socket`
+        """
         try:
-            edge = self.inputs[index].edges[0]
-            socket = edge.getOtherSocket(self.inputs[index])
-            return socket.node
+            input_socket = self.inputs[index]
+            if len(input_socket.edges) == 0: return None
+            connecting_edge = self.inputs[index].edges[0]
+            other_socket = connecting_edge.getOtherSocket(self.inputs[index])
+            return other_socket.node
+        except IndexError:
+            print(f'Exception : Trying to get input, but none is attached to {self}')
+            return None
+        except Exception as e:
+            dumpException(e)
+            return None
+
+    def getInputWithSocket(self, index: int = 0) -> [('Node', 'Socket'), (None, None)]:
+        try:
+            input_socket = self.inputs[index]
+            if len(input_socket) == 0: return None, None
+            connecting_edge = input_socket.edges[0]
+            other_socket = connecting_edge.getOtherSocket(self.inputs[index])
+            return other_socket.node, other_socket
+
+        except IndexError:
+            print(f'Exception : Trying to get input, but none is attached to {self}')
+            return None
+        except Exception as e:
+            dumpException(e)
+            return None
+
+    def getInputWithSocketIndex(self, index: int = 0) -> [('Node', 'Socket'), (None, None)]:
+        try:
+            input_socket = self.inputs[index]
+            if len(input_socket) == 0: return None, None
+            connecting_edge = input_socket.edges[0]
+            other_socket = connecting_edge.getOtherSocket(self.inputs[index])
+            return other_socket.node, other_socket.index
+
         except IndexError:
             print(f'Exception : Trying to get input, but none is attached to {self}')
             return None
@@ -285,17 +357,21 @@ class Node(Serializable):
 
         self.inputs = []
         for socket_data in data['inputs']:
-            new_socket = Socket(node=self, index=socket_data['index'], position=socket_data['position'],
-                                socket_type=socket_data['socket_type'], count_on_this_node_side=num_inputs,
-                                is_input=True)
+            new_socket = self.__class__.Socket_class(node=self, index=socket_data['index'],
+                                                     position=socket_data['position'],
+                                                     socket_type=socket_data['socket_type'],
+                                                     count_on_this_node_side=num_inputs,
+                                                     is_input=True)
             new_socket.deserialize(socket_data, hashmap, restore_id)
             self.inputs.append(new_socket)
 
         self.outputs = []
         for socket_data in data['outputs']:
-            new_socket = Socket(node=self, index=socket_data['index'], position=socket_data['position'],
-                                socket_type=socket_data['socket_type'], count_on_this_node_side=num_outputs,
-                                is_input=False)
+            new_socket = self.__class__.Socket_class(node=self, index=socket_data['index'],
+                                                     position=socket_data['position'],
+                                                     socket_type=socket_data['socket_type'],
+                                                     count_on_this_node_side=num_outputs,
+                                                     is_input=False)
             new_socket.deserialize(socket_data, hashmap, restore_id)
             self.outputs.append(new_socket)
 

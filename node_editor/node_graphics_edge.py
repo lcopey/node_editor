@@ -1,7 +1,6 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
-from .node_socket import RIGHT_BOTTOM, RIGHT_TOP, LEFT_TOP, LEFT_BOTTOM
 import math
 
 EDGE_WIDTH = 2.
@@ -150,9 +149,10 @@ class QNEGraphicsEdgeBezier(QNEGraphicsEdge):
         cpy_d = 0
 
         if self.edge.start_socket is not None:
+            ssin = self.edge.start_socket.is_input
+            ssout = self.edge.start_socket.is_output
             sspos = self.edge.start_socket.position
-            if (s[0] > d[0] and sspos in [RIGHT_BOTTOM, RIGHT_TOP]) or (
-                    s[0] < d[0] and sspos in [LEFT_TOP, LEFT_BOTTOM]):
+            if (s[0] > d[0] and ssout) or (s[0] < d[0] and ssin):
                 cpx_d *= -1
                 cpx_s *= -1
 

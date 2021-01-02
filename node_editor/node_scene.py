@@ -30,8 +30,12 @@ class Scene(Serializable):
         self.scene_height = 64000
         # self.grScene = None
 
-        self._has_been_modified = False  # flag identifying wether the current scene has been modified
+        # custom flag used to suppress triggering onItemSelected which does a bunch of stuff
+        self._silent_selection_events = False
+        # flag identifying wether the current scene has been modified
+        self._has_been_modified = False
         self._last_selected_items = []
+
         # initialize all listeners
         self._has_been_modified_listeners = []  # list of function to call when the scene is modified
         self._item_selected_listeners = []
@@ -51,10 +55,17 @@ class Scene(Serializable):
         self.grScene = QNEGraphicsScene(self)
         self.grScene.setGrScene(self.scene_width, self.scene_height)
 
+    def setSilentSelectionEvents(self, value: bool = True):
+        """Calling this can suppress onItemSelected events to be triggered. This is useful when working with clipboard"""
+        self._silent_selection_events = value
+
     def onItemSelected(self):
         """On item selected events - store history stamp
 
         When the selection changed, store the current selected items and stor history stamp"""
+        # if silent selection is True, ignore the event
+        if self._silent_selection_events: return
+
         current_selected_items = self.getSelectedItems()
         if current_selected_items != self._last_selected_items:
             self._last_selected_items = current_selected_items
@@ -62,7 +73,7 @@ class Scene(Serializable):
             for callback in self._item_selected_listeners:
                 callback()
 
-    def onItemsDeselected(self):
+    def onItemsDeselected(self, silent: bool = False):
         """On items deselected events - store history stamp
 
         Reset selected flag of every items
@@ -72,9 +83,10 @@ class Scene(Serializable):
         # on change
         if self._last_selected_items:
             self._last_selected_items = []
-            self.history.storeHistory('Deselected Everything')
-            for callback in self._items_deselected_listeners:
-                callback()
+            if not silent:
+                self.history.storeHistory('Deselected Everything')
+                for callback in self._items_deselected_listeners:
+                    callback()
 
     def isModified(self):
         return self.has_been_modified
@@ -125,6 +137,24 @@ class Scene(Serializable):
 
     def getSelectedItems(self):
         return self.grScene.selectedItems()
+
+    def doDeselectItems(self, silent: bool = False) -> None:
+        """Deselects everything in scene
+
+        Parameters
+        ----------
+        silent : ```bool```
+            If ``True`` scene's onItemsDeselected won't be called
+
+        Returns
+        -------
+
+        """
+
+        for item in self.getSelectedItems():
+            item.setSelected(False)
+        if not silent:
+            self.onItemsDeselected()
 
     def addNode(self, node):
         """Append node to the list of nodes"""

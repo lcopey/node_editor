@@ -47,17 +47,20 @@ class CalcNode(Node):
     content_label = ''
     content_label_objname = 'calc_node_bg'
 
+    GraphicsNode_class = CalcGraphicsNode
+    NodeContent_class = CalcContent
+
     def __init__(self, scene: 'Scene', inputs=[2, 2], outputs=[1]):
         super().__init__(scene, title=self.__class__.op_title, inputs=inputs, outputs=outputs)
         self.value = None
         # Nodes are dirty by default
         self.markDirty()
-
-    def initInnerClasses(self):
-        # Reference to the content
-        self.content = CalcContent(self)
-        # Reference to the graphic
-        self.grNode = CalcGraphicsNode(self)
+    #
+    # def initInnerClasses(self):
+    #     # Reference to the content
+    #     self.content = CalcContent(self)
+    #     # Reference to the graphic
+    #     self.grNode = CalcGraphicsNode(self)
 
     def initSettings(self):
         super().initSettings()
@@ -119,7 +122,7 @@ class CalcNode(Node):
             self.grNode.setToolTip(str(e))
             dumpException(e)
 
-    def onInputChanged(self, new_edge):
-        print(f'{self.__class__.__name__}::onInputChanged {new_edge}')
+    def onInputChanged(self, socket):
+        print(f'{self.__class__.__name__}::onInputChanged')
         self.markDirty()
         self.eval()

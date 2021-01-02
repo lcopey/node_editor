@@ -48,8 +48,9 @@ def print_items(item):
 
 
 def dumpException(e):
-    print('Exception:', e.__class__, e)
-    traceback.print_tb(e.__traceback__)
+    # print('Exception:', e.__class__, e)
+    # traceback.print_tb(e.__traceback__)
+    traceback.print_exc()
 
 
 def loadStylessheet(filename):
