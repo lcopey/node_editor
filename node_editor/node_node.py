@@ -150,6 +150,11 @@ class Node(Serializable):
 
         return [x, y]
 
+    def getSocketScenePosition(self, socket: 'Socket') -> '(x, y)':
+        nodepos = self.grNode.pos()
+        socketpos = self.getSocketPosition(socket.index, socket.position, socket.count_on_this_node_side)
+        return (nodepos.x() + socketpos.x(), nodepos.y() + socketpos.y())
+
     def isSelected(self):
         """Returns ```True``` if current `Node` is selected"""
         return self.grNode.isSelected()
