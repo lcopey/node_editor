@@ -183,10 +183,6 @@
             
   <div class="section" id="module-node_editor.node_editor_window">
 <span id="node-editor-node-editor-window-module"></span><h1>node_editor.node_editor_window module<a class="headerlink" href="#module-node_editor.node_editor_window" title="Permalink to this headline">¶</a></h1>
-<dl class="py class">
-<dt id="node_editor.node_editor_window.NodeEditorWindow">
-<em class="property">class </em><code class="sig-prename descclassname">node_editor.node_editor_window.</code><code class="sig-name descname">NodeEditorWindow</code><a class="headerlink" href="#node_editor.node_editor_window.NodeEditorWindow" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QMainWindow</span></code></p>
 <p>Main application window</p>
 <dl class="simple">
 <dt>Contains :</dt><dd><ul class="simple">
@@ -196,11 +192,26 @@
 </ul>
 </dd>
 </dl>
+<dl class="py class">
+<dt id="node_editor.node_editor_window.NodeEditorWindow">
+<em class="property">class </em><code class="sig-prename descclassname">node_editor.node_editor_window.</code><code class="sig-name descname">NodeEditorWindow</code><a class="headerlink" href="#node_editor.node_editor_window.NodeEditorWindow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QMainWindow</span></code></p>
+<dl class="py attribute">
+<dt id="node_editor.node_editor_window.NodeEditorWindow.NodeEditorWidget_class">
+<code class="sig-name descname">NodeEditorWidget_class</code><a class="headerlink" href="#node_editor.node_editor_window.NodeEditorWindow.NodeEditorWidget_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="node_editor.node_editor_widget.html#node_editor.node_editor_widget.NodeEditorWidget" title="node_editor.node_editor_widget.NodeEditorWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">node_editor.node_editor_widget.NodeEditorWidget</span></code></a></p>
+</dd></dl>
+
 <dl class="py method">
 <dt id="node_editor.node_editor_window.NodeEditorWindow.initUI">
 <code class="sig-name descname">initUI</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_editor_window.NodeEditorWindow.initUI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize main window UI setup</p>
 </dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_editor_window.NodeEditorWindow.sizeHint">
+<code class="sig-name descname">sizeHint</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span> &#x2192; QSize<a class="headerlink" href="#node_editor.node_editor_window.NodeEditorWindow.sizeHint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_editor_window.NodeEditorWindow.createActions">
@@ -212,6 +223,16 @@
 <code class="sig-name descname">createMenus</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_editor_window.NodeEditorWindow.createMenus" title="Permalink to this definition">¶</a></dt>
 <dd><p>Utility function, instanciate actions from the menubar</p>
 </dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_editor_window.NodeEditorWindow.createFileMenu">
+<code class="sig-name descname">createFileMenu</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_editor_window.NodeEditorWindow.createFileMenu" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_editor_window.NodeEditorWindow.createEditMenu">
+<code class="sig-name descname">createEditMenu</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_editor_window.NodeEditorWindow.createEditMenu" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_editor_window.NodeEditorWindow.createStatusBar">
@@ -243,6 +264,18 @@
 <dd class="field-even"><p><a class="reference internal" href="node_editor.node_editor_widget.html#node_editor.node_editor_widget.NodeEditorWidget" title="node_editor.node_editor_widget.NodeEditorWidget">NodeEditorWidget</a></p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_editor_window.NodeEditorWindow.getFileDialogDirectory">
+<code class="sig-name descname">getFileDialogDirectory</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_editor_window.NodeEditorWindow.getFileDialogDirectory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns starting directory for <code class="docutils literal notranslate"><span class="pre">QFileDialog</span></code> file open/save</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_editor_window.NodeEditorWindow.getFileDialogFilter">
+<code class="sig-name descname">getFileDialogFilter</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_editor_window.NodeEditorWindow.getFileDialogFilter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns <code class="docutils literal notranslate"><span class="pre">str</span></code> standard file open/save filter for <code class="docutils literal notranslate"><span class="pre">QFileDialog</span></code></p>
 </dd></dl>
 
 <dl class="py method">

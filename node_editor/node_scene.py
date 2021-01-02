@@ -34,7 +34,7 @@ class Scene(Serializable):
         self._silent_selection_events = False
         # flag identifying wether the current scene has been modified
         self._has_been_modified = False
-        self._last_selected_items = []
+        self._last_selected_items = None
 
         # initialize all listeners
         self._has_been_modified_listeners = []  # list of function to call when the scene is modified
@@ -54,6 +54,26 @@ class Scene(Serializable):
     def initUI(self):
         self.grScene = QNEGraphicsScene(self)
         self.grScene.setGrScene(self.scene_width, self.scene_height)
+
+    def getNodeByID(self, node_id: int):
+        """
+        Find node in the scene according to provided `node_id` (node.id).
+
+        Parameters
+        ----------
+        node_id : int
+            ID of the node
+
+        Returns
+        -------
+        `Node` or None
+
+        """
+        for node in self.nodes:
+            if node.id == node_id:
+                return node
+
+        return None
 
     def setSilentSelectionEvents(self, value: bool = True):
         """Calling this can suppress onItemSelected events to be triggered. This is useful when working with clipboard"""
@@ -75,14 +95,26 @@ class Scene(Serializable):
                     callback()
 
     def onItemsDeselected(self, silent: bool = False):
-        """On items deselected events - store history stamp
+        """Handle Items deselection and trigger event `Items Deselected`
 
-        Reset selected flag of every items
-        Store the history stamp"""
+        Call each callback in `items_deselected_listeners` and store a new history stamp
+
+        Parameters
+        ----------
+        silent : bool
+            if ``True`` scene's onItemsDeselected w'ont be called and history stamp not stored
+
+        Returns
+        -------
+
+        """
+        current_selected_items = self.getSelectedItems()
+        if current_selected_items == self._last_selected_items:
+            return
+
         # TODO monitor usage of this function, may be call more than once
         self.resetLastSelectedStates()
-        # on change
-        if self._last_selected_items:
+        if not current_selected_items:
             self._last_selected_items = []
             if not silent:
                 self.history.storeHistory('Deselected Everything')
@@ -129,6 +161,10 @@ class Scene(Serializable):
             node.grNode._last_selected_state = False
         for edge in self.edges:
             edge.grEdge._last_selected_state = False
+
+    def getEdgeClass(self):
+        """Returns the class representing the Edge. Override if needed"""
+        return Edge
 
     def getView(self):
         return self.grScene.views()[0]
@@ -323,5 +359,3 @@ class Scene(Serializable):
             dumpException(e)
 
         return True
-
-

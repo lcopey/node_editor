@@ -201,15 +201,21 @@
 <dd></dd></dl>
 
 <dl class="py method">
+<dt id="node_editor.node_scene.Scene.setSilentSelectionEvents">
+<code class="sig-name descname">setSilentSelectionEvents</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.setSilentSelectionEvents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calling this can suppress onItemSelected events to be triggered. This is useful when working with clipboard</p>
+</dd></dl>
+
+<dl class="py method">
 <dt id="node_editor.node_scene.Scene.onItemSelected">
-<code class="sig-name descname">onItemSelected</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.onItemSelected" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">onItemSelected</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">silent</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.onItemSelected" title="Permalink to this definition">¶</a></dt>
 <dd><p>On item selected events - store history stamp</p>
 <p>When the selection changed, store the current selected items and stor history stamp</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_scene.Scene.onItemsDeselected">
-<code class="sig-name descname">onItemsDeselected</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.onItemsDeselected" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">onItemsDeselected</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">silent</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.onItemsDeselected" title="Permalink to this definition">¶</a></dt>
 <dd><p>On items deselected events - store history stamp</p>
 <p>Reset selected flag of every items
 Store the history stamp</p>
@@ -257,6 +263,12 @@ Store the history stamp</p>
 <dd></dd></dl>
 
 <dl class="py method">
+<dt id="node_editor.node_scene.Scene.getEdgeClass">
+<code class="sig-name descname">getEdgeClass</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.getEdgeClass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the class representing the Edge. Override if needed</p>
+</dd></dl>
+
+<dl class="py method">
 <dt id="node_editor.node_scene.Scene.getView">
 <code class="sig-name descname">getView</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.getView" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -270,6 +282,17 @@ Store the history stamp</p>
 <dt id="node_editor.node_scene.Scene.getSelectedItems">
 <code class="sig-name descname">getSelectedItems</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.getSelectedItems" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_scene.Scene.doDeselectItems">
+<code class="sig-name descname">doDeselectItems</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">silent</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#node_editor.node_scene.Scene.doDeselectItems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deselects everything in scene</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>silent</strong> (<code class="docutils literal notranslate"><span class="pre">`bool`</span></code>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> scene’s onItemsDeselected won’t be called</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_scene.Scene.addNode">
@@ -325,7 +348,7 @@ Store the history stamp</p>
 <dd><p>Return corresponding Node class from data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>data</strong> (<em>OrderedDict</em>) – as return from deserialized Node</p>
+<dd class="field-odd"><p><strong>data</strong> (<code class="docutils literal notranslate"><span class="pre">OrderedDict</span></code>) – as return from deserialized Node</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p></p>
@@ -354,26 +377,7 @@ Store the history stamp</p>
 <dl class="py method">
 <dt id="node_editor.node_scene.Scene.deserialize">
 <code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">dict</span></em>, <em class="sig-param"><span class="n">hashmap</span><span class="p">:</span> <span class="n">dict</span> <span class="o">=</span> <span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">restore_id</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#node_editor.node_scene.Scene.deserialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Deserialize the scene by recursively calling deserialize function on each node and edges.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>dict</em>) – </p></li>
-<li><p><strong>hashmap</strong> (<em>dict</em>) – </p></li>
-<li><p><strong>restore_id</strong> (<em>bool default True</em>) – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p>True if deserialize is successful</p></li>
-</ul>
-</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>bool</p>
-</dd>
-</dl>
-</dd></dl>
+<dd></dd></dl>
 
 </dd></dl>
 

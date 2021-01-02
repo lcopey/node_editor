@@ -187,37 +187,23 @@
 <dt id="node_editor.node_node.Node">
 <em class="property">class </em><code class="sig-prename descclassname">node_editor.node_node.</code><code class="sig-name descname">Node</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scene</span><span class="p">:</span> <span class="n">Scene</span></em>, <em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">'Undefined Node'</span></em>, <em class="sig-param"><span class="n">inputs</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">outputs</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="node_editor.node_serializable.html#node_editor.node_serializable.Serializable" title="node_editor.node_serializable.Serializable"><code class="xref py py-class docutils literal notranslate"><span class="pre">node_editor.node_serializable.Serializable</span></code></a></p>
-<p>Implement generic node</p>
-<dl class="py method">
-<dt id="node_editor.node_node.Node.initInnerClasses">
-<code class="sig-name descname">initInnerClasses</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.initInnerClasses" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="node_editor.node_node.Node.initSettings">
-<code class="sig-name descname">initSettings</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.initSettings" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="node_editor.node_node.Node.initSockets">
-<code class="sig-name descname">initSockets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inputs</span></em>, <em class="sig-param"><span class="n">outputs</span></em>, <em class="sig-param"><span class="n">reset</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.initSockets" title="Permalink to this definition">¶</a></dt>
-<dd><p>“Create sockets for inputs and outputs</p>
+<dl class="py attribute">
+<dt id="node_editor.node_node.Node.GraphicsNode_class">
+<code class="sig-name descname">GraphicsNode_class</code><a class="headerlink" href="#node_editor.node_node.Node.GraphicsNode_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="node_editor.node_graphics_node.html#node_editor.node_graphics_node.QNEGraphicsNode" title="node_editor.node_graphics_node.QNEGraphicsNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">node_editor.node_graphics_node.QNEGraphicsNode</span></code></a></p>
 </dd></dl>
 
-<dl class="py method">
-<dt id="node_editor.node_node.Node.onEdgeConnectionChanged">
-<code class="sig-name descname">onEdgeConnectionChanged</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_edge</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.onEdgeConnectionChanged" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dl class="py attribute">
+<dt id="node_editor.node_node.Node.NodeContent_class">
+<code class="sig-name descname">NodeContent_class</code><a class="headerlink" href="#node_editor.node_node.Node.NodeContent_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="node_editor.node_content_widget.html#node_editor.node_content_widget.QNENodeContentWidget" title="node_editor.node_content_widget.QNENodeContentWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">node_editor.node_content_widget.QNENodeContentWidget</span></code></a></p>
+</dd></dl>
 
-<dl class="py method">
-<dt id="node_editor.node_node.Node.onInputChanged">
-<code class="sig-name descname">onInputChanged</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_edge</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.onInputChanged" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="node_editor.node_node.Node.doSelect">
-<code class="sig-name descname">doSelect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_state</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.doSelect" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dl class="py attribute">
+<dt id="node_editor.node_node.Node.Socket_class">
+<code class="sig-name descname">Socket_class</code><a class="headerlink" href="#node_editor.node_node.Node.Socket_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="node_editor.node_socket.html#node_editor.node_socket.Socket" title="node_editor.node_socket.Socket"><code class="xref py py-class docutils literal notranslate"><span class="pre">node_editor.node_socket.Socket</span></code></a></p>
+</dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_node.Node.pos">
@@ -235,10 +221,74 @@
 <dd></dd></dl>
 
 <dl class="py method">
+<dt id="node_editor.node_node.Node.initInnerClasses">
+<code class="sig-name descname">initInnerClasses</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.initInnerClasses" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_node.Node.initSettings">
+<code class="sig-name descname">initSettings</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.initSettings" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_node.Node.initSockets">
+<code class="sig-name descname">initSockets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inputs</span></em>, <em class="sig-param"><span class="n">outputs</span></em>, <em class="sig-param"><span class="n">reset</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.initSockets" title="Permalink to this definition">¶</a></dt>
+<dd><p>“Create sockets for inputs and outputs</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_node.Node.getNodeContentClass">
+<code class="sig-name descname">getNodeContentClass</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.getNodeContentClass" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_node.Node.getGraphicsNodeClass">
+<code class="sig-name descname">getGraphicsNodeClass</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.getGraphicsNodeClass" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
 <dt id="node_editor.node_node.Node.getSocketPosition">
 <code class="sig-name descname">getSocketPosition</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span></em>, <em class="sig-param"><span class="n">position</span></em>, <em class="sig-param"><span class="n">num_out_of</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.getSocketPosition" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the position  of the socket according to current caracteristics of the node</p>
 </dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_node.Node.getSocketScenePosition">
+<code class="sig-name descname">getSocketScenePosition</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">socket</span><span class="p">:</span> <span class="n">Socket</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.getSocketScenePosition" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_node.Node.isSelected">
+<code class="sig-name descname">isSelected</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.isSelected" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns <code class="docutils literal notranslate"><span class="pre">`True`</span></code> if current <cite>Node</cite> is selected</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_node.Node.onEdgeConnectionChanged">
+<code class="sig-name descname">onEdgeConnectionChanged</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_edge</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.onEdgeConnectionChanged" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_node.Node.onInputChanged">
+<code class="sig-name descname">onInputChanged</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_edge</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.onInputChanged" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_node.Node.onDeserialized">
+<code class="sig-name descname">onDeserialized</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">dict</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.onDeserialized" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event manually called when this n,ode was deserialized.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_node.Node.onDoubleClicked">
+<code class="sig-name descname">onDoubleClicked</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.onDoubleClicked" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event handling double click on Graphics Node in <cite>Scene</cite></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_node.Node.doSelect">
+<code class="sig-name descname">doSelect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_state</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.doSelect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_node.Node.updateConnectedEdges">
@@ -302,8 +352,9 @@
 
 <dl class="py method">
 <dt id="node_editor.node_node.Node.eval">
-<code class="sig-name descname">eval</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.eval" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname">eval</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluated this <cite>Node</cite>. This method is supposed to be overriden.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_node.Node.evalChildren">
@@ -317,7 +368,34 @@
 
 <dl class="py method">
 <dt id="node_editor.node_node.Node.getInput">
-<code class="sig-name descname">getInput</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.getInput" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">getInput</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em><span class="sig-paren">)</span> &#x2192; [&lt;class ‘node_editor.node_socket.Socket’&gt;, None]<a class="headerlink" href="#node_editor.node_node.Node.getInput" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the <strong>first</strong> <cite>Node</cite> connected to the Input specified by index</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – Order number of the <cite>Input Socket</cite></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="field-list simple">
+<dt class="field-odd">class</dt>
+<dd class="field-odd"><p><cite>~node_editor.node_node.Node</cite> which is connected to the specified <cite>Input Socket</cite></p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>class: <cite>~node_editor.node_node.Node</cite> or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_node.Node.getInputWithSocket">
+<code class="sig-name descname">getInputWithSocket</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em><span class="sig-paren">)</span> &#x2192; <span class="p">[</span><a class="reference internal" href="#node_editor.node_node.Node" title="node_editor.node_node.Node">Node</a><span class="p">, </span>Socket<span class="p">, </span>None<span class="p">, </span>None<span class="p">]</span><a class="headerlink" href="#node_editor.node_node.Node.getInputWithSocket" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_node.Node.getInputWithSocketIndex">
+<code class="sig-name descname">getInputWithSocketIndex</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em><span class="sig-paren">)</span> &#x2192; <span class="p">[</span><a class="reference internal" href="#node_editor.node_node.Node" title="node_editor.node_node.Node">Node</a><span class="p">, </span>Socket<span class="p">, </span>None<span class="p">, </span>None<span class="p">]</span><a class="headerlink" href="#node_editor.node_node.Node.getInputWithSocketIndex" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">

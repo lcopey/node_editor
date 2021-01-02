@@ -187,6 +187,7 @@
 <dt id="node_editor.node_edge.Edge">
 <em class="property">class </em><code class="sig-prename descclassname">node_editor.node_edge.</code><code class="sig-name descname">Edge</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scene</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Scene<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">start_socket</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Socket<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">end_socket</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Socket<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">edge_type</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_edge.Edge" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="node_editor.node_serializable.html#node_editor.node_serializable.Serializable" title="node_editor.node_serializable.Serializable"><code class="xref py py-class docutils literal notranslate"><span class="pre">node_editor.node_serializable.Serializable</span></code></a></p>
+<p>Class for representing <cite>Edge</cite></p>
 <dl class="py method">
 <dt id="node_editor.node_edge.Edge.start_socket">
 <em class="property">property </em><code class="sig-name descname">start_socket</code><a class="headerlink" href="#node_editor.node_edge.Edge.start_socket" title="Permalink to this definition">¶</a></dt>
@@ -203,13 +204,36 @@
 <dd></dd></dl>
 
 <dl class="py method">
+<dt id="node_editor.node_edge.Edge.determineEdgeClass">
+<code class="sig-name descname">determineEdgeClass</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">edge_type</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_edge.Edge.determineEdgeClass" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_edge.Edge.createEdgeClassInstance">
+<code class="sig-name descname">createEdgeClassInstance</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">edge_type</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_edge.Edge.createEdgeClassInstance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create instance of grEdge class</p>
+<p>Override if needed</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>edge_type</strong> (<em>int</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Instance of grEdge class representing the Graphics Edge in the grScene</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="node_editor.node_edge.Edge.getOtherSocket">
-<code class="sig-name descname">getOtherSocket</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">known_socket</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_edge.Edge.getOtherSocket" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">getOtherSocket</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">known_socket</span><span class="p">:</span> <span class="n">Socket</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_edge.Edge.getOtherSocket" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_edge.Edge.doSelect">
-<code class="sig-name descname">doSelect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_state</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_edge.Edge.doSelect" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">doSelect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_state</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_edge.Edge.doSelect" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -224,7 +248,7 @@
 
 <dl class="py method">
 <dt id="node_editor.node_edge.Edge.remove">
-<code class="sig-name descname">remove</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_edge.Edge.remove" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">remove</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">silent_for_socket</span><span class="p">:</span> <span class="n">Socket</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">silent</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_edge.Edge.remove" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">

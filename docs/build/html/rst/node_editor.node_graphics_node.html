@@ -189,9 +189,10 @@
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QGraphicsItem</span></code></p>
 <p>Implement the graphics version of a node</p>
 <dl class="py method">
-<dt id="node_editor.node_graphics_node.QNEGraphicsNode.title">
-<em class="property">property </em><code class="sig-name descname">title</code><a class="headerlink" href="#node_editor.node_graphics_node.QNEGraphicsNode.title" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="node_editor.node_graphics_node.QNEGraphicsNode.content">
+<em class="property">property </em><code class="sig-name descname">content</code><a class="headerlink" href="#node_editor.node_graphics_node.QNEGraphicsNode.content" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reference to the <cite>Node</cite> Content</p>
+</dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_graphics_node.QNEGraphicsNode.initUI">
@@ -219,13 +220,18 @@
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_node.QNEGraphicsNode.onSelected">
-<code class="sig-name descname">onSelected</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_node.QNEGraphicsNode.onSelected" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_node.QNEGraphicsNode.title">
+<em class="property">property </em><code class="sig-name descname">title</code><a class="headerlink" href="#node_editor.node_graphics_node.QNEGraphicsNode.title" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_graphics_node.QNEGraphicsNode.doSelect">
 <code class="sig-name descname">doSelect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_state</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_node.QNEGraphicsNode.doSelect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_graphics_node.QNEGraphicsNode.onSelected">
+<code class="sig-name descname">onSelected</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_node.QNEGraphicsNode.onSelected" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -237,6 +243,12 @@
 <dt id="node_editor.node_graphics_node.QNEGraphicsNode.mouseReleaseEvent">
 <code class="sig-name descname">mouseReleaseEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">QGraphicsSceneMouseEvent</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_node.QNEGraphicsNode.mouseReleaseEvent" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_graphics_node.QNEGraphicsNode.mouseDoubleClickEvent">
+<code class="sig-name descname">mouseDoubleClickEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span><span class="p">:</span> <span class="n">QGraphicsSceneMouseEvent</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#node_editor.node_graphics_node.QNEGraphicsNode.mouseDoubleClickEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overrides double click event. Resent to <cite>Node::onDoubleClicked</cite></p>
+</dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_graphics_node.QNEGraphicsNode.hoverEnterEvent">

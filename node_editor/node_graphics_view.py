@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QGraphicsView, QApplication
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from .node_scene import Scene
-from .node_edge import Edge, EDGE_TYPE_BEZIER
+from .node_edge_dragging import EdgeDragging
 from .node_graphics_socket import QNEGraphicsSocket
 from .node_graphics_edge import QNEGraphicsEdge
 from .node_graphics_cutline import QNECutLine
@@ -16,6 +16,7 @@ EDGE_DRAG_START_THRESHOLD = 50
 
 DEBUG = False
 DEBUG_MMB_SCENE_ITEMS = True
+DEBUG_MMB_LAST_SELECTIONS = False
 
 
 class QNEGraphicsView(QGraphicsView):
@@ -37,6 +38,14 @@ class QNEGraphicsView(QGraphicsView):
         self.mode = MODE_NOOP  # Control variable to handle NOOP mode, dragging mode
         self.editingFlag = False  # Control variable set to True when editing the content of a node
 
+        # edge dragging
+        self.dragging = EdgeDragging(self)
+
+        # cutLine
+        self.cutLine = QNECutLine()
+        self.rubberBandDraggingRectangle = False
+        self.grScene.addItem(self.cutLine)
+
         # Zoom parameters
         self.last_scene_mouse_position = QPoint(0, 0)
         self.zoomInFactor = 1.25
@@ -44,11 +53,6 @@ class QNEGraphicsView(QGraphicsView):
         self.zoom = 5
         self.zoomStep = 1
         self.zoomRange = [0, 10]
-
-        # cutLine
-        self.cutLine = QNECutLine()
-        self.rubberBandDraggingRectangle = False
-        self.grScene.addItem(self.cutLine)
 
         # listeners for drag and drop event
         self._drag_enter_listeners = []
@@ -67,6 +71,11 @@ class QNEGraphicsView(QGraphicsView):
         self.setDragMode(QGraphicsView.RubberBandDrag)
         # enable drag and drop
         self.setAcceptDrops(True)
+
+    def resetMode(self):
+        """Set mode to MODE_NOOP
+        """
+        self.mode = MODE_NOOP
 
     def dragEnterEvent(self, event: QDragEnterEvent) -> None:
         for callback in self._drag_enter_listeners:
@@ -107,6 +116,7 @@ class QNEGraphicsView(QGraphicsView):
     def middleMouseButtonPress(self, event: QMouseEvent):
         """Implement dragging of the scene using middle button"""
         item = self.getItemAtClick(event)
+
         # debug printout
         if DEBUG_MMB_SCENE_ITEMS:
             if isinstance(item, QNEGraphicsEdge):
@@ -120,21 +130,30 @@ class QNEGraphicsView(QGraphicsView):
                     for edge in item.socket.edges: print("\t", edge)
                 return
 
+        # if DEBUG_MMB_SCENE_ITEMS and (item is None or self.mode == MODE_EDGES_REROUTING):
+        #     print("SCENE:")
+        #     print("  Nodes:")
+        #     for node in self.grScene.scene.nodes: print("\t", node)
+        #     print("  Edges:")
+        #     for edge in self.grScene.scene.edges: print("\t", edge, "\n\t\tgrEdge:",
+        #                                                 edge.grEdge if edge.grEdge is not None else None)
+
             if event.modifiers() & Qt.CTRL:
                 print("  Graphic Items in GraphicScene:")
                 for item in self.grScene.items():
                     print('    ', item)
 
-        # Faking event
-        # release event from left click ?
+        if DEBUG_MMB_LAST_SELECTIONS and event.modifiers() & Qt.SHIFT:
+            print("scene _last_selected_items:", self.grScene.scene._last_selected_items)
+            return
+
+        # faking events for enable MMB dragging the scene
         releaseEvent = QMouseEvent(QEvent.MouseButtonRelease, event.localPos(), event.screenPos(),
                                    Qt.LeftButton, Qt.NoButton, event.modifiers())
         super().mouseReleaseEvent(releaseEvent)
-        # change to drag mode, only work when left button click is used
         self.setDragMode(QGraphicsView.ScrollHandDrag)
-        # simulate as if the left button was pressed
         fakeEvent = QMouseEvent(event.type(), event.localPos(), event.screenPos(),
-                                Qt.LeftButton, event.button() | Qt.LeftButton, event.modifiers())
+                                Qt.LeftButton, event.buttons() | Qt.LeftButton, event.modifiers())
         super().mousePressEvent(fakeEvent)
 
     def middleMouseButtonRelease(self, event: QMouseEvent):
@@ -167,12 +186,12 @@ class QNEGraphicsView(QGraphicsView):
         if isinstance(item, QNEGraphicsSocket):  # Clicking on a socket
             if self.mode == MODE_NOOP:  # when the mode is noop
                 self.mode = MODE_EDGE_DRAG  # enter dragging mode
-                self.edgeDragStart(item)
+                self.dragging.edgeDragStart(item)
 
                 return  # suppressing other lmb related event
 
         if self.mode == MODE_EDGE_DRAG:  # if we already were in edge dragging mode
-            res = self.edgeDragEnd(item)  # check if we click on another valid socket
+            res = self.dragging.edgeDragEnd(item)  # check if we click on another valid socket
             if res: return  # suppress event if we clicked on a socket
 
         if item is None:
@@ -211,7 +230,7 @@ class QNEGraphicsView(QGraphicsView):
             # otherwise the edge dragging mode is ended and returned to noop
             if self.mode == MODE_EDGE_DRAG:  # if we were dragging an edge
                 if self.distanceBetweenClickAndRelease(event):
-                    res = self.edgeDragEnd(item)
+                    res = self.dragging.edgeDragEnd(item)
                     if res: return
 
             # End of cutLine mode
@@ -253,11 +272,7 @@ class QNEGraphicsView(QGraphicsView):
     def mouseMoveEvent(self, event: QMouseEvent) -> None:
         scenepos = self.mapToScene(event.pos())
         if self.mode == MODE_EDGE_DRAG:
-            if self.drag_edge is not None and self.drag_edge.grEdge is not None:
-                self.drag_edge.grEdge.setDestination(scenepos.x(), scenepos.y())
-                self.drag_edge.grEdge.update()
-            else:
-                print("View::mouseMoveEvent Trying to update drag_edge/grEdge but None")
+            self.dragging.updateDestination(scenepos.x(), scenepos.y())
 
         if self.mode == MODE_EDGE_CUT and self.cutLine is not None:
             self.cutLine.line_points.append(scenepos)
@@ -354,70 +369,6 @@ class QNEGraphicsView(QGraphicsView):
         pos = event.pos()
         obj = self.itemAt(pos)
         return obj
-
-    def edgeDragStart(self, item):
-        try:
-            if DEBUG:
-                print('Clicked :')
-                print_items(item)
-
-            # Store previous edge and socket if existing
-            # self.previousEdge = item.socket.edges
-            self.drag_start_socket = item.socket
-            # Create a new edge
-            self.drag_edge = Edge(self.grScene.scene, item.socket, None, EDGE_TYPE_BEZIER)
-            if DEBUG:
-                print('Dragging :')
-                print_items(self.drag_edge.grEdge)
-        except Exception as e:
-            dumpException(e)
-
-    def edgeDragEnd(self, item):
-        """Return True if skip the rest of the code"""
-
-        self.mode = MODE_NOOP
-        if DEBUG: print('View:edgeDragEnd - End dragging edge')
-        # remove the edge without trigerring any event
-        self.drag_edge.remove(silent=True)
-        self.drag_edge = None
-
-        try:
-            if isinstance(item, QNEGraphicsSocket) and item.socket is not self.drag_start_socket:
-                # if we released dragging on a socket (other than beginning socket)
-                # if not multi_edges, remove all edges from the existing socket
-                for socket in (item.socket, self.drag_start_socket):
-                    if not socket.is_multi_edges:
-                        if socket.is_input:
-                            socket.removeAllEdges(silent=True)
-                        else:
-                            socket.removeAllEdges(silent=False)
-                # if not item.socket.is_multi_edges:
-                #     item.socket.removeAllEdges()
-                # if not self.drag_start_socket.is_multi_edges:
-                #     self.drag_start_socket.removeAllEdges()
-
-                # Creating new edge
-                # the edge is automatically added to the scene and the corresponding socket
-                new_edge = Edge(self.grScene.scene, self.drag_start_socket, item.socket,
-                                edge_type=EDGE_TYPE_BEZIER)
-
-                if DEBUG: print('View:edgeDragEnd - Created new edge', new_edge, 'connecting', new_edge.start_socket,
-                                '<-->', new_edge.end_socket)
-
-                for socket in [self.drag_start_socket, item.socket]:
-                    socket.node.onEdgeConnectionChanged(new_edge)
-                    if socket.is_input:
-                        socket.node.onInputChanged(socket)
-
-                self.grScene.scene.history.storeHistory('Created new edge by dragging', setModified=True)
-
-                return True
-        except Exception as e:
-            dumpException(e)
-
-        if DEBUG: print('View:edgeDragEnd - everything done')
-
-        return False
 
     def distanceBetweenClickAndRelease(self, event):
         """Measures if we are too far from the last LMB click scene position"""

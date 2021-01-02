@@ -195,7 +195,25 @@
 <dl class="py method">
 <dt id="node_editor.node_graphics_edge.QNEGraphicsEdge.initAssets">
 <code class="sig-name descname">initAssets</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_edge.QNEGraphicsEdge.initAssets" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Initialize assets <code class="docutils literal notranslate"><span class="pre">QObjects</span></code> like <code class="docutils literal notranslate"><span class="pre">QColor</span></code>, <code class="docutils literal notranslate"><span class="pre">QPen</span></code> and <code class="docutils literal notranslate"><span class="pre">QBrush</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_graphics_edge.QNEGraphicsEdge.changeColor">
+<code class="sig-name descname">changeColor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">color</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_edge.QNEGraphicsEdge.changeColor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the color of the <cite>Edge</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>color</strong> (<cite>QColor</cite> or str) – Either a valid <cite>QColor</cite> or <code class="docutils literal notranslate"><span class="pre">str</span></code> such as #001000</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_graphics_edge.QNEGraphicsEdge.setColorFromSockets">
+<code class="sig-name descname">setColorFromSockets</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#node_editor.node_graphics_edge.QNEGraphicsEdge.setColorFromSockets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change color according to connected sockets. Return <code class="docutils literal notranslate"><span class="pre">`True`</span></code> if color can be determined</p>
+</dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_graphics_edge.QNEGraphicsEdge.onSelected">

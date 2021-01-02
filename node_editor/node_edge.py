@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 *-*
 from collections import OrderedDict
 from .node_serializable import Serializable
 from .utils import return_simple_id, dumpException
@@ -16,6 +17,8 @@ if TYPE_CHECKING:
 
 
 class Edge(Serializable):
+    """Class for representing `Edge`"""
+
     def __init__(self, scene: Optional['Scene'] = None, start_socket: Optional['Socket'] = None,
                  end_socket: Optional['Socket'] = None,
                  edge_type=EDGE_TYPE_DIRECT):
@@ -79,22 +82,40 @@ class Edge(Serializable):
         if hasattr(self, 'grEdge') and self.grEdge is not None:
             self.scene.grScene.removeItem(self.grEdge)
         self._edge_type = value
-        if self.edge_type == EDGE_TYPE_DIRECT:
-            self.grEdge = QNEGraphicsEdgeDirect(self)
-        elif self.edge_type == EDGE_TYPE_BEZIER:
-            self.grEdge = QNEGraphicsEdgeBezier(self)
-        else:
-            self.grEdge = QNEGraphicsEdgeBezier(self)
-
+        self.grEdge = self.createEdgeClassInstance(self.edge_type)
         self.scene.grScene.addItem(self.grEdge)
         if self.start_socket is not None:
             self.updatePositions()
+
+    def determineEdgeClass(self, edge_type: int):
+        if edge_type == EDGE_TYPE_DIRECT:
+            return QNEGraphicsEdgeDirect
+        else:
+            return QNEGraphicsEdgeBezier
+
+    def createEdgeClassInstance(self, edge_type:int):
+        """Create instance of grEdge class
+
+
+        Override if needed
+
+        Parameters
+        ----------
+        edge_type : int
+
+        Returns
+        -------
+            Instance of grEdge class representing the Graphics Edge in the grScene
+        """
+        edgeClass = self.determineEdgeClass(edge_type)
+        edge = edgeClass(self)
+        return edge
 
     def getOtherSocket(self, known_socket: 'Socket'):
         # return the other end of the edge
         return self.start_socket if known_socket == self.end_socket else self.end_socket
 
-    def doSelect(self, new_state=True):
+    def doSelect(self, new_state: bool = True):
         self.grEdge.doSelect(new_state)
 
     def updatePositions(self):
@@ -120,20 +141,25 @@ class Edge(Serializable):
     def remove(self, silent_for_socket: 'Socket' = None, silent=False):
         old_sockets = [self.start_socket, self.end_socket]
 
-        if DEBUG: print("> Removing Edge")
-        if DEBUG: print(" - remove edge from all sockets")
+        # sometimes grEdge stay in the scene even when removed...
+        if DEBUG: print(" - hide grEdge")
+        self.grEdge.hide()
 
-        self.remove_from_sockets()
-        if DEBUG: print(" - remove grEdge")
+        if DEBUG: print(" - remove grEdge", self.grEdge)
         self.scene.grScene.removeItem(self.grEdge)
-        self.grEdge = None
+        if DEBUG: print("   grEdge:", self.grEdge)
 
+        self.scene.grScene.update()
+
+        if DEBUG: print("# Removing Edge", self)
+        if DEBUG: print(" - remove edge from all sockets")
+        self.remove_from_sockets()
         if DEBUG: print(" - remove edge from scene")
         try:
             self.scene.removeEdge(self)
         except ValueError:
             pass
-        if DEBUG: print(" - everything was done")
+        if DEBUG: print(" - everything is done.")
 
         # On change, notify that the connection and eventually the inputs changed
         try:

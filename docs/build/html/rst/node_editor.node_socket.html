@@ -187,6 +187,35 @@
 <dt id="node_editor.node_socket.Socket">
 <em class="property">class </em><code class="sig-prename descclassname">node_editor.node_socket.</code><code class="sig-name descname">Socket</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">node</span><span class="p">:</span> <span class="n">Node</span></em>, <em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">position</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">socket_type</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">multi_edges</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">count_on_this_node_side</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">is_input</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_socket.Socket" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="node_editor.node_serializable.html#node_editor.node_serializable.Serializable" title="node_editor.node_serializable.Serializable"><code class="xref py py-class docutils literal notranslate"><span class="pre">node_editor.node_serializable.Serializable</span></code></a></p>
+<dl class="py attribute">
+<dt id="node_editor.node_socket.Socket.Socket_GR_Class">
+<code class="sig-name descname">Socket_GR_Class</code><a class="headerlink" href="#node_editor.node_socket.Socket.Socket_GR_Class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="node_editor.node_graphics_socket.html#node_editor.node_graphics_socket.QNEGraphicsSocket" title="node_editor.node_graphics_socket.QNEGraphicsSocket"><code class="xref py py-class docutils literal notranslate"><span class="pre">node_editor.node_graphics_socket.QNEGraphicsSocket</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_socket.Socket.delete">
+<code class="sig-name descname">delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_socket.Socket.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete this <code class="docutils literal notranslate"><span class="pre">Socket</span></code> from graphics scene</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_socket.Socket.changeSocketType">
+<code class="sig-name descname">changeSocketType</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_socket_type</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#node_editor.node_socket.Socket.changeSocketType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the <cite>Socket</cite> type</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>new_socket_type</strong> (<em>int</em>) – new socket type</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the socket type was actually changed</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">`bool`</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt id="node_editor.node_socket.Socket.setSocketPosition">
 <code class="sig-name descname">setSocketPosition</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_socket.Socket.setSocketPosition" title="Permalink to this definition">¶</a></dt>
@@ -195,6 +224,16 @@
 <dl class="py method">
 <dt id="node_editor.node_socket.Socket.getSocketPosition">
 <code class="sig-name descname">getSocketPosition</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_socket.Socket.getSocketPosition" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_socket.Socket.hasAnyEdge">
+<code class="sig-name descname">hasAnyEdge</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#node_editor.node_socket.Socket.hasAnyEdge" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_socket.Socket.isConnected">
+<code class="sig-name descname">isConnected</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">edge</span><span class="p">:</span> <span class="n">Edge</span></em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#node_editor.node_socket.Socket.isConnected" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -209,17 +248,17 @@
 
 <dl class="py method">
 <dt id="node_editor.node_socket.Socket.removeAllEdges">
-<code class="sig-name descname">removeAllEdges</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_socket.Socket.removeAllEdges" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="node_editor.node_socket.Socket.serialize">
-<code class="sig-name descname">serialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_socket.Socket.serialize" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">removeAllEdges</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">silent</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_socket.Socket.removeAllEdges" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_socket.Socket.determineMultiedges">
 <code class="sig-name descname">determineMultiedges</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_socket.Socket.determineMultiedges" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_socket.Socket.serialize">
+<code class="sig-name descname">serialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_socket.Socket.serialize" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
