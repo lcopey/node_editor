@@ -248,7 +248,7 @@ class QNEGraphicsView(QGraphicsView):
         self.last_scene_mouse_position = scenepos
 
         # Trigger new event scenePosChanged returning the current mouse position
-        self.scenePosChanged.emit(int(self.scenepos.x()), int(self.scenepos.y()))
+        self.scenePosChanged.emit(int(scenepos.x()), int(scenepos.y()))
 
         super().mouseMoveEvent(event)
 
@@ -359,7 +359,8 @@ class QNEGraphicsView(QGraphicsView):
 
         self.mode = MODE_NOOP
         if DEBUG: print('View:edgeDragEnd - End dragging edge')
-        self.drag_edge.remove()
+        # remove the edge without trigerring any event
+        self.drag_edge.remove(silent=True)
         self.drag_edge = None
 
         try:

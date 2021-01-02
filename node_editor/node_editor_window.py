@@ -1,3 +1,11 @@
+# -*- encoding: utf-8 -*-
+"""Main application window
+
+Contains :
+    - menubar with File, Edit
+    - statusbar displaying cursor position on the scene
+    - NodeEditorWidget instance containing a graphics view and the scene
+"""
 import os
 import json
 from PyQt5.QtWidgets import QMainWindow, QAction, QFileDialog, QLabel, QApplication, QMessageBox
@@ -10,14 +18,9 @@ DEBUG = True
 
 
 class NodeEditorWindow(QMainWindow):
-    """Main application window
+    NodeEditorWidget_class = NodeEditorWidget
 
-    Contains :
-        - menubar with File, Edit
-        - statusbar displaying cursor position on the scene
-        - NodeEditorWidget instance containing a graphics view and the scene
-    """
-
+    """Class representing NodeEditor's Main Window"""
     def __init__(self):
         super().__init__()
         self.name_company = 'Michelin'
@@ -30,7 +33,7 @@ class NodeEditorWindow(QMainWindow):
         self.createMenus()  # Populate menubar with previous actions
 
         # set node editor
-        self.nodeEditor = NodeEditorWidget(self)
+        self.nodeEditor = self.__class__.NodeEditorWidget_class(self)
         self.nodeEditor.scene.addHasBeenModifiedListener(self.setTitle)
         self.setCentralWidget(self.nodeEditor)
 

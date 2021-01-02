@@ -18,7 +18,7 @@ from .utils import dumpException
 class NodeEditorWidget(QWidget):
     """The ``NodeEditorWidget`` class"""
     # Allow to specify which scene to use
-    SceneClass = Scene
+    Scene_class = Scene
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -34,7 +34,7 @@ class NodeEditorWidget(QWidget):
         self.setLayout(self.layout)
 
         # create graphics scene
-        self.scene = self.__class__.SceneClass()
+        self.scene = self.__class__.Scene_class()
 
         # create graphics view
         self.view = QNEGraphicsView(self.scene, self)

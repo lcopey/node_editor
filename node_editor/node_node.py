@@ -27,6 +27,8 @@ class Node(Serializable):
         self.scene = scene
         self.title = title
 
+        self.content = None
+        self.grNode = None
         self.initInnerClasses()
         self.initSettings()
 
@@ -66,9 +68,12 @@ class Node(Serializable):
 
     def initInnerClasses(self):
         # Reference to the content
-        self.content = self.getNodeContentClass()(self)
-        # Reference to the graphic
-        self.grNode = self.getGraphicsNodeClass()(self)
+        node_content_class = self.getNodeContentClass()
+        graphics_node_class = self.getGraphicsNodeClass()
+        if node_content_class is not None:
+            self.content = node_content_class(self)
+        if graphics_node_class is not None:
+            self.grNode = graphics_node_class(self)
 
     def initSettings(self):
         self.socket_spacing = 22
@@ -324,6 +329,7 @@ class Node(Serializable):
     def serialize(self):
         inputs = [socket.serialize() for socket in self.inputs]
         outputs = [socket.serialize() for socket in self.outputs]
+        ser_content = self.content.serialize() if isinstance(self.content, Serializable) else {}
 
         return OrderedDict([
             ('id', self.id),
@@ -332,7 +338,7 @@ class Node(Serializable):
             ('pos_y', self.grNode.scenePos().y()),
             ('inputs', inputs),
             ('outputs', outputs),
-            ('content', self.content.serialize())
+            ('content', ser_content)
         ])
 
     def deserialize(self, data: dict, hashmap: dict = {}, restore_id: bool = True):
@@ -376,6 +382,8 @@ class Node(Serializable):
             self.outputs.append(new_socket)
 
         # deserialize the content of the node
-        res = self.content.deserialize(data['content'], hashmap)
+        if isinstance(self.content, Serializable):
+            res = self.content.deserialize(data['content'], hashmap)
+            return res
 
-        return True & res
+        return True

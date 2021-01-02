@@ -16,7 +16,6 @@ class QNEGraphicsNode(QGraphicsItem):
     def __init__(self, node: 'Node', parent=None):
         super().__init__(parent=parent)
         self.node = node  # Reference to parent class Node implementing the logic
-        self.content = self.node.content  # Reference to content of the node
         # init flags
         self._was_moved = False
         self._last_selected_state = False
@@ -25,6 +24,11 @@ class QNEGraphicsNode(QGraphicsItem):
         self.initSizes()
         self.initAssets()
         self.initUI()
+
+    @property
+    def content(self):
+        """Reference to the `Node` Content"""
+        return self.node.content if self.node else None
 
     def initUI(self):
         # Define the node as selectable and movable
@@ -69,11 +73,13 @@ class QNEGraphicsNode(QGraphicsItem):
 
     def initContent(self):
         # Draw the contents
-        self.grContent = QGraphicsProxyWidget(self)  # defines the content as a proxy widget with parent self
-        self.content.setGeometry(self.edge_padding, self.title_height + self.edge_padding,
-                                 self.width - 2 * self.edge_padding,
-                                 self.height - 2 * self.edge_padding - self.title_height)
-        self.grContent.setWidget(self.content)
+        if self.content is not None:
+            self.content.setGeometry(self.edge_padding, self.title_height + self.edge_padding,
+                                     self.width - 2 * self.edge_padding,
+                                     self.height - 2 * self.edge_padding - self.title_height)
+        # self.grContent = QGraphicsProxyWidget(self)  # defines the content as a proxy widget with parent self
+        self.grContent = self.node.scene.grScene.addWidget(self.content)
+        self.grContent.setParentItem(self)
 
     def initTitle(self):
         # Draw the _title
