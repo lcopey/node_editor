@@ -19,6 +19,7 @@ class NodeEditorWidget(QWidget):
     """The ``NodeEditorWidget`` class"""
     # Allow to specify which scene to use
     Scene_class = Scene
+    GraphicsView_class = QNEGraphicsView
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -37,7 +38,7 @@ class NodeEditorWidget(QWidget):
         self.scene = self.__class__.Scene_class()
 
         # create graphics view
-        self.view = QNEGraphicsView(self.scene, self)
+        self.view = self.__class__.GraphicsView_class(self.scene, self)
         # self.view.setScene(self.grScene)
         self.layout.addWidget(self.view)
 

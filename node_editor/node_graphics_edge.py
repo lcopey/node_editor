@@ -1,10 +1,10 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
-import math
+from .node_graphics_edge_path import QNEGraphicsEdgePathBezier, QNEGraphicsEdgePathDirect
 
 EDGE_WIDTH = 3.
-EDGE_CP_ROUNDNESS = 100
+
 
 import typing
 from typing import TYPE_CHECKING
@@ -18,11 +18,16 @@ class QNEGraphicsEdge(QGraphicsPathItem):
         super().__init__(parent)
 
         self.edge = edge  # link to the Edge class implementing the logic
+
+        # instance of path class
+        self.pathCalculator = self.determineEdgePathClass()(self)
         # init flags
         self._last_selected_state = False
         self.hovered = False
-        # self.posSource = [0, 0]
-        # self.posDestination = [0, 0]
+
+        # init variables
+        self.posSource = [0, 0]
+        self.posDestination = [0, 0]
 
         self.initAssets()
         self.initUI()
@@ -51,6 +56,17 @@ class QNEGraphicsEdge(QGraphicsPathItem):
 
         self._pen_hovered = QPen(self._color_hovered)
         self._pen_hovered.setWidthF(EDGE_WIDTH + 2.)
+
+    def createEdgePathCalculator(self):
+        self.pathCalculator = self.determineEdgePathClass()(self)
+        return self.pathCalculator
+
+    def determineEdgePathClass(self):
+        from .node_edge import EDGE_TYPE_BEZIER, EDGE_TYPE_DIRECT
+        if self.edge.edge_type == EDGE_TYPE_DIRECT:
+            return QNEGraphicsEdgePathDirect
+        else:
+            return QNEGraphicsEdgePathBezier
 
     def changeColor(self, color):
         """Change the color of the `Edge`
@@ -143,7 +159,7 @@ class QNEGraphicsEdge(QGraphicsPathItem):
 
     def calcPath(self):
         """Will handle drawing QPainterPath from Paint A to B"""
-        raise NotImplemented("This method has to be overriden in a child class")
+        return self.pathCalculator.calcPath()
 
     def intersectsWith(self, p1, p2):
         cutpath = QPainterPath(p1)
@@ -152,40 +168,3 @@ class QNEGraphicsEdge(QGraphicsPathItem):
         return cutpath.intersects(path)
 
 
-class QNEGraphicsEdgeDirect(QNEGraphicsEdge):
-    def calcPath(self):
-        """Compute linear path from source to destination"""
-        path = QPainterPath(QPointF(self.posSource[0], self.posSource[1]))
-        path.lineTo(self.posDestination[0], self.posDestination[1])
-        return path
-
-
-class QNEGraphicsEdgeBezier(QNEGraphicsEdge):
-    def calcPath(self):
-        """Compute bezier curves from source to destination"""
-        s = self.posSource
-        d = self.posDestination
-
-        dist = (d[0] - s[0]) * 0.5
-
-        # Compute control point
-        cpx_s = +dist
-        cpx_d = -dist
-        cpy_s = 0
-        cpy_d = 0
-
-        if self.edge.start_socket is not None:
-            ssin = self.edge.start_socket.is_input
-            ssout = self.edge.start_socket.is_output
-            sspos = self.edge.start_socket.position
-            if (s[0] > d[0] and ssout) or (s[0] < d[0] and ssin):
-                cpx_d *= -1
-                cpx_s *= -1
-
-                cpy_d = ((s[1] - d[1]) / (math.fabs(s[1] - d[1]) + 1e-8)) * EDGE_CP_ROUNDNESS
-                cpy_s = ((d[1] - s[1]) / (math.fabs(s[1] - d[1]) + 1e-8)) * EDGE_CP_ROUNDNESS
-
-        path = QPainterPath(QPointF(self.posSource[0], self.posSource[1]))
-        path.cubicTo(s[0] + cpx_s, s[1] + cpy_s, d[0] + cpx_d, d[1] + cpy_d,
-                     self.posDestination[0], self.posDestination[1])
-        return path

@@ -275,6 +275,7 @@ class Scene(Serializable):
             - nodes
             - edges
         """
+        print("Scene holding {} items".format(len(self.grScene.items())))
         nodes = [node.serialize() for node in self.nodes]
         edges = [edge.serialize() for edge in self.edges]
         return OrderedDict([('id', self.id),
@@ -285,30 +286,10 @@ class Scene(Serializable):
                             ])
 
     def deserialize(self, data: dict, hashmap: dict = {}, restore_id: bool = True) -> bool:
+        hashmap = {}
+        if restore_id:
+            self.id = data['id']
         try:
-            # self.clear()
-            # hashmap = {}
-            #
-            # if restore_id:
-            #     self.id = data['id']
-            #
-            # if DEBUG: print('Deserializing nodes')
-            # # create nodes
-            # for node_data in data['nodes']:
-            #     new_node = self.getNodeClassFromData(node_data)(self)
-            #     new_node.deserialize(node_data, hashmap, restore_id)
-            #
-            # if DEBUG: print(' > node deserialization complete')
-            #
-            # # create edges
-            # for edge_data in data['edges']:
-            #     new_edge = Edge(self)
-            #     new_edge.deserialize(edge_data, hashmap, restore_id)
-            #
-            # if DEBUG: print(' > edge deserialization complete')
-            #
-            # return True
-
             # get list of current nodes
             all_nodes = self.nodes.copy()
 
@@ -357,6 +338,8 @@ class Scene(Serializable):
                 edge = all_edges.pop()
                 edge.remove()
                 print('Scene::deserialize Removing extra edges from scene')
+
+            print("Scene holding {} items".format(len(self.grScene.items())))
 
         except Exception as e:
             dumpException(e)

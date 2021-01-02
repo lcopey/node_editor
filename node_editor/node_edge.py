@@ -22,6 +22,19 @@ class Edge(Serializable):
     def __init__(self, scene: Optional['Scene'] = None, start_socket: Optional['Socket'] = None,
                  end_socket: Optional['Socket'] = None,
                  edge_type=EDGE_TYPE_DIRECT):
+        """
+
+        Parameters
+        ----------
+        scene
+        start_socket
+        end_socket
+        edge_type
+
+        Instance Attributes:
+            scene - reference to the :class:`~node_editor.node_scene.Scene`
+            grEdge - reference to the :class:`~node_editor.node_graphics_edge.QNEGraphicsEdge`
+        """
         super().__init__()
         self.scene = scene
         # default init
@@ -30,7 +43,10 @@ class Edge(Serializable):
 
         self.start_socket = start_socket
         self.end_socket = end_socket
-        self.edge_type = edge_type
+        self._edge_type = edge_type
+
+        # create Graphics Edge
+        self.grEdge = self.createEdgeClassInstance()
 
         self.scene.addEdge(self)
 
@@ -79,46 +95,65 @@ class Edge(Serializable):
         """Setter for the edge type.
 
         In case of change, the graphical edge is automatically set to the corresponding edge type."""
-        if hasattr(self, 'grEdge') and self.grEdge is not None:
-            self.scene.grScene.removeItem(self.grEdge)
+        # if hasattr(self, 'grEdge') and self.grEdge is not None:
+        #     self.scene.grScene.removeItem(self.grEdge)
         self._edge_type = value
-        self.grEdge = self.createEdgeClassInstance(self.edge_type)
-        self.scene.grScene.addItem(self.grEdge)
+        self.grEdge.createEdgePathCalculator()
+
         if self.start_socket is not None:
             self.updatePositions()
 
-    def determineEdgeClass(self, edge_type: int):
-        if edge_type == EDGE_TYPE_DIRECT:
-            return QNEGraphicsEdgeDirect
-        else:
-            return QNEGraphicsEdgeBezier
+    def getGraphicsEdgeClass(self):
+        """Returns the class representing the Graphics Edge. Override if needed"""
+        return QNEGraphicsEdge
 
-    def createEdgeClassInstance(self, edge_type:int):
+    def createEdgeClassInstance(self):
         """Create instance of grEdge class
 
 
         Override if needed
-
-        Parameters
-        ----------
-        edge_type : int
-
         Returns
         -------
             Instance of grEdge class representing the Graphics Edge in the grScene
         """
-        edgeClass = self.determineEdgeClass(edge_type)
-        edge = edgeClass(self)
-        return edge
+        self.grEdge = self.getGraphicsEdgeClass()(self)
+        self.scene.grScene.addItem(self.grEdge)
+        if self.start_socket is not None:
+            self.updatePositions()
+        return self.grEdge
 
     def getOtherSocket(self, known_socket: 'Socket'):
+        """Returns the opposite socket on this ``Edge``
+
+        Parameters
+        ----------
+        known_socket
+
+        Returns
+        -------
+
+        """
         # return the other end of the edge
         return self.start_socket if known_socket == self.end_socket else self.end_socket
 
     def doSelect(self, new_state: bool = True):
+        """Select or deselect of the Edge.
+
+        Triggers the onSelected event that store a new historty stamp
+        Parameters
+        ----------
+        new_state
+
+        Returns
+        -------
+
+        """
         self.grEdge.doSelect(new_state)
 
     def updatePositions(self):
+        """Updates the internal `Graphics Edge` positions according to the start and end
+        :class:`~node_editor.node_socket.Socket`.
+        This should be called if you update ``Edge`` positions."""
         source_pos = self.start_socket.getSocketPosition()
         source_pos[0] += self.start_socket.node.grNode.pos().x()
         source_pos[1] += self.start_socket.node.grNode.pos().y()
@@ -135,10 +170,28 @@ class Edge(Serializable):
         self.grEdge.update()
 
     def remove_from_sockets(self):
+        """Helper functions that set start and end
+        :class:`~node_editor.node_socket.Socket` to None"""
         self.end_socket = None
         self.start_socket = None
 
     def remove(self, silent_for_socket: 'Socket' = None, silent=False):
+        """Safely remove this Edge.
+
+        Triggers Nodes':
+
+        - :py:meth:`~node_editor.node_node.Node.onEdgeConnectionChanged`
+        - :py:meth:`~node_editor.node_node.Node.onInputChanged`
+
+        Parameters
+        ----------
+        silent_for_socket
+        silent
+
+        Returns
+        -------
+
+        """
         old_sockets = [self.start_socket, self.end_socket]
 
         # sometimes grEdge stay in the scene even when removed...
@@ -155,6 +208,7 @@ class Edge(Serializable):
         if DEBUG: print(" - remove edge from all sockets")
         self.remove_from_sockets()
         if DEBUG: print(" - remove edge from scene")
+        if DEBUG: print(old_sockets)
         try:
             self.scene.removeEdge(self)
         except ValueError:

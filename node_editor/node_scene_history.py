@@ -13,7 +13,7 @@ class SceneHistory:
         self.scene = scene
 
         self.clear()
-        self.history_limit = 50
+        self.history_limit = 32
 
         self.undo_selection_has_changed = False
 
@@ -21,6 +21,14 @@ class SceneHistory:
         self._history_modified_listeners = []
         self._history_stored_listeners = []
         self._history_restored_listeners = []
+
+    def clear(self):
+        """Clear history stack"""
+        self.history_stack = []
+        self.history_current_step = -1
+
+    def storeInitialHistoryStamp(self):
+        self.storeHistory('Initial History Stamp')
 
     def addHistoryModifiedListener(self, callback):
         self._history_modified_listeners.append(callback)
@@ -30,14 +38,6 @@ class SceneHistory:
 
     def addHistoryRestoredListener(self, callback):
         self._history_restored_listeners.append(callback)
-
-    def clear(self):
-        """Clear history stack"""
-        self.history_stack = []
-        self.history_current_step = -1
-
-    def storeInitialHistoryStamp(self):
-        self.storeHistory('Initial History Stamp')
 
     def canUndo(self):
         return self.history_current_step > 0
@@ -81,7 +81,7 @@ class SceneHistory:
                   'len {}'.format(len(self.history_stack)))
 
         # if the current step is not at the end of the history stack
-        if self.history_current_step - 1 < len(self.history_stack):
+        if self.history_current_step + 1 < len(self.history_stack):
             self.history_stack = self.history_stack[0:self.history_current_step + 1]
 
         # history is outside of the limits
@@ -90,6 +90,7 @@ class SceneHistory:
             self.history_current_step -= 1
 
         hs = self.createHistoryStamp(desc)
+
         self.history_stack.append(hs)
         self.history_current_step += 1
         if DEBUG: print(' -- setting step to: ', self.history_current_step)
@@ -109,7 +110,7 @@ class SceneHistory:
         for item in self.scene.grScene.selectedItems():
             if hasattr(item, 'node'):
                 sel_obj['nodes'].append(item.node.id)
-            elif isinstance(item, QNEGraphicsEdge):
+            elif hasattr(item, 'edge'):
                 sel_obj['edges'].append(item.edge.id)
         return sel_obj
 
@@ -131,28 +132,26 @@ class SceneHistory:
 
 
         """
-        # save selected items
-        sel_obj = self.captureCurrentSelection()
-
         # take a snapshot of current scene
         hystory_stamp = {
             'desc': desc,
             'snapshot': self.scene.serialize(),
-            'selection': sel_obj
+            'selection': self.captureCurrentSelection()
         }
         return hystory_stamp
 
     def restoreHistoryStamp(self, history_stamp):
         if DEBUG: print('RHS :', history_stamp['desc'])
 
-        self.scene.deserialize(history_stamp['snapshot'])
-
         try:
             self.undo_selection_has_changed = False
             previous_selection = self.captureCurrentSelection()
 
+            self.scene.deserialize(history_stamp['snapshot'])
+
             # restore selection
             if DEBUG: print('restoring edge selection')
+            # TODO Existing function to perform the same operation ?
             for edge in self.scene.edges:
                 edge.grEdge.setSelected(False)
             for edge_id in history_stamp['selection']['edges']:

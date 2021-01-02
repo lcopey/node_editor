@@ -17,7 +17,7 @@ class EdgeDragging:
 
     def getEdgeClass(self):
         """Helper function to get the Edge class. Using what SCene class provides"""
-        return self.grView.grScene.scene.getEdgeClass()
+        return self.grView.scene.getEdgeClass()
 
     def updateDestination(self, x: float, y: float):
         """Update the end point of our dragging edge
@@ -67,29 +67,49 @@ class EdgeDragging:
         except Exception as e:
             dumpException(e)
 
-    def edgeDragEnd(self, item):
-        """Return True if skip the rest of the code"""
+    def edgeDragEnd(self, item) -> bool:
+        """End the dragging of a dashed `Edge`.
 
-        self.grView.resetMode()
-        if DEBUG: print('View:edgeDragEnd - End dragging edge')
-        # remove the edge without trigerring any event
-        self.drag_edge.remove(silent=True)
-        self.drag_edge = None
+        Triggers Nodes':
 
+        - :py:meth:`~node_editor.node_node.Node.onEdgeConnectionChanged`
+        - :py:meth:`~node_editor.node_node.Node.onInputChanged`
+
+        Parameters
+        ----------
+        item : QNEGraphicsSocket
+            Item in the `Graphics Scene` where we ended dragging an `Edge`
+
+        Returns
+        -------
+        bool
+            True if a new Edge was successfully created
+            False otherwise
+
+        """
         try:
+            if not isinstance(item, QNEGraphicsSocket):
+                self.grView.resetMode()
+                if DEBUG: print('View:edgeDragEnd - End dragging edge')
+                # remove the edge without trigerring any event
+                self.drag_edge.remove(silent=True)
+                self.drag_edge = None
+
             if isinstance(item, QNEGraphicsSocket) and item.socket is not self.drag_start_socket:
                 # if we released dragging on a socket (other than beginning socket)
                 # if not multi_edges, remove all edges from the existing socket
+                self.grView.resetMode()
+
+                # remove the edge without trigerring any event
+                self.drag_edge.remove(silent=True)
+                self.drag_edge = None
+
                 for socket in (item.socket, self.drag_start_socket):
                     if not socket.is_multi_edges:
                         if socket.is_input:
                             socket.removeAllEdges(silent=True)
                         else:
                             socket.removeAllEdges(silent=False)
-                # if not item.socket.is_multi_edges:
-                #     item.socket.removeAllEdges()
-                # if not self.drag_start_socket.is_multi_edges:
-                #     self.drag_start_socket.removeAllEdges()
 
                 # Creating new edge
                 # the edge is automatically added to the scene and the corresponding socket

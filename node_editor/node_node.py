@@ -168,7 +168,7 @@ class Node(Serializable):
         self.markDirty()
         self.markDescendantDirty()
 
-    def onDeserialized(self, data:dict):
+    def onDeserialized(self, data: dict):
         """Event manually called when this n,ode was deserialized."""
         pass
 
@@ -358,41 +358,60 @@ class Node(Serializable):
             - node position
             - sockets
             - content"""
-        if restore_id:
-            self.id = data['id']
-        hashmap[data['id']] = self
+        try:
+            if restore_id:
+                self.id = data['id']
+            hashmap[data['id']] = self
 
-        self.setPos(data['pos_x'], data['pos_y'])
-        self.title = data['title']
-        # sort the sockets
-        data['inputs'].sort(key=lambda socket: socket['index'] + socket['position'] * 1e3)
-        data['outputs'].sort(key=lambda socket: socket['index'] + socket['position'] * 1e3)
-        num_inputs = len(data['inputs'])
-        num_outputs = len(data['outputs'])
+            self.setPos(data['pos_x'], data['pos_y'])
+            self.title = data['title']
 
-        self.inputs = []
-        for socket_data in data['inputs']:
-            new_socket = self.__class__.Socket_class(node=self, index=socket_data['index'],
-                                                     position=socket_data['position'],
-                                                     socket_type=socket_data['socket_type'],
-                                                     count_on_this_node_side=num_inputs,
-                                                     is_input=True)
-            new_socket.deserialize(socket_data, hashmap, restore_id)
-            self.inputs.append(new_socket)
+            # sort the sockets
+            data['inputs'].sort(key=lambda socket: socket['index'] + socket['position'] * 1e3)
+            data['outputs'].sort(key=lambda socket: socket['index'] + socket['position'] * 1e3)
+            num_inputs = len(data['inputs'])
+            num_outputs = len(data['outputs'])
 
-        self.outputs = []
-        for socket_data in data['outputs']:
-            new_socket = self.__class__.Socket_class(node=self, index=socket_data['index'],
-                                                     position=socket_data['position'],
-                                                     socket_type=socket_data['socket_type'],
-                                                     count_on_this_node_side=num_outputs,
-                                                     is_input=False)
-            new_socket.deserialize(socket_data, hashmap, restore_id)
-            self.outputs.append(new_socket)
+            # self.inputs = []
+            for socket_data in data['inputs']:
+                found = None
+                for socket in self.inputs:
+                    if socket.index == socket_data['index']:
+                        found = socket
+                        break
+                if found is None:
+                    found = self.__class__.Socket_class(
+                        node=self, index=socket_data['index'],
+                        position=socket_data['position'],
+                        socket_type=socket_data['socket_type'],
+                        count_on_this_node_side=num_inputs,
+                        is_input=True)
+                    self.inputs.append(found)
+                found.deserialize(socket_data, hashmap, restore_id)
 
-        # deserialize the content of the node
-        if isinstance(self.content, Serializable):
-            res = self.content.deserialize(data['content'], hashmap)
-            return res
+            # self.outputs = []
+            for socket_data in data['outputs']:
+                found = None
+                for socket in self.outputs:
+                    if socket.index == socket_data['index']:
+                        found = socket
+                        break
+                if found is None:
+                    found = self.__class__.Socket_class(
+                        node=self, index=socket_data['index'],
+                        position=socket_data['position'],
+                        socket_type=socket_data['socket_type'],
+                        count_on_this_node_side=num_outputs,
+                        is_input=False)
+                    self.outputs.append(found)
+                found.deserialize(socket_data, hashmap, restore_id)
+
+            # deserialize the content of the node
+            if isinstance(self.content, Serializable):
+                res = self.content.deserialize(data['content'], hashmap)
+                return res
+
+        except Exception as e:
+            dumpException(e)
 
         return True
