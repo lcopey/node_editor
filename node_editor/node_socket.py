@@ -101,5 +101,6 @@ class Socket(Serializable):
         if restore_id:
             self.id = data['id']
         self.is_multi_edges = self.determineMultiedges(data)
+        self.changeSocketType(data['socket_type'])
         hashmap[data['id']] = self
         return True
