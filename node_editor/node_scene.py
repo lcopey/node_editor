@@ -59,7 +59,7 @@ class Scene(Serializable):
         """Calling this can suppress onItemSelected events to be triggered. This is useful when working with clipboard"""
         self._silent_selection_events = value
 
-    def onItemSelected(self):
+    def onItemSelected(self, silent=False):
         """On item selected events - store history stamp
 
         When the selection changed, store the current selected items and stor history stamp"""
@@ -69,9 +69,10 @@ class Scene(Serializable):
         current_selected_items = self.getSelectedItems()
         if current_selected_items != self._last_selected_items:
             self._last_selected_items = current_selected_items
-            self.history.storeHistory('Selection Changed')
-            for callback in self._item_selected_listeners:
-                callback()
+            if not silent:
+                self.history.storeHistory('Selection Changed')
+                for callback in self._item_selected_listeners:
+                    callback()
 
     def onItemsDeselected(self, silent: bool = False):
         """On items deselected events - store history stamp
@@ -245,39 +246,82 @@ class Scene(Serializable):
                             ])
 
     def deserialize(self, data: dict, hashmap: dict = {}, restore_id: bool = True) -> bool:
-        """Deserialize the scene by recursively calling deserialize function on each node and edges.
+        try:
+            # self.clear()
+            # hashmap = {}
+            #
+            # if restore_id:
+            #     self.id = data['id']
+            #
+            # if DEBUG: print('Deserializing nodes')
+            # # create nodes
+            # for node_data in data['nodes']:
+            #     new_node = self.getNodeClassFromData(node_data)(self)
+            #     new_node.deserialize(node_data, hashmap, restore_id)
+            #
+            # if DEBUG: print(' > node deserialization complete')
+            #
+            # # create edges
+            # for edge_data in data['edges']:
+            #     new_edge = Edge(self)
+            #     new_edge.deserialize(edge_data, hashmap, restore_id)
+            #
+            # if DEBUG: print(' > edge deserialization complete')
+            #
+            # return True
 
-        Parameters
-        ----------
-        data : dict
-        hashmap : dict
-        restore_id : bool default True
+            # get list of current nodes
+            all_nodes = self.nodes.copy()
 
-        Returns
-        -------
-        bool
-            - True if deserialize is successful
+            # go through deserialized nodes
+            for node_data in data['nodes']:
+                # can we find this node in the scene ?
+                found = False
+                for node in all_nodes:
+                    if node.id == node_data['id']:
+                        found = node
+                        break
+                # Either create a new node or replace the old one
+                if not found:
+                    new_node = self.getNodeClassFromData(node_data)(self)
+                    new_node.deserialize(node_data, hashmap, restore_id)
+                    new_node.onDeserialized(node_data)
+                else:
+                    found.deserialize(node_data, hashmap, restore_id)
+                    found.onDeserialized(node_data)
+                    all_nodes.remove(found)
 
-        """
-        self.clear()
-        hashmap = {}
+            # remove nodes which are left in the scene but were not in the serialized data...
+            # meaning that they were not in the graph before
+            while all_nodes:
+                node = all_nodes.pop()
+                node.remove()
+                print('Scene::deserialize Removing extra nodes from scene')
 
-        if restore_id:
-            self.id = data['id']
+            all_edges = self.edges.copy()
 
-        if DEBUG: print('Deserializing nodes')
-        # create nodes
-        for node_data in data['nodes']:
-            new_node = self.getNodeClassFromData(node_data)(self)
-            new_node.deserialize(node_data, hashmap, restore_id)
+            for edge_data in data['edges']:
+                # can we find this edge in the scene ?
+                found = False
+                for edge in all_edges:
+                    if edge.id == edge_data['id']:
+                        found = edge
+                        break
+                # Either create a new node or replace the old one
+                if not found:
+                    new_edge = Edge(self).deserialize(edge_data, hashmap, restore_id)
+                else:
+                    found.deserialize(edge_data, hashmap, restore_id)
+                    all_edges.remove(found)
 
-        if DEBUG: print(' > node deserialization complete')
+            while all_edges:
+                edge = all_edges.pop()
+                edge.remove()
+                print('Scene::deserialize Removing extra edges from scene')
 
-        # create edges
-        for edge_data in data['edges']:
-            new_edge = Edge(self)
-            new_edge.deserialize(edge_data, hashmap, restore_id)
-
-        if DEBUG: print(' > edge deserialization complete')
+        except Exception as e:
+            dumpException(e)
 
         return True
+
+

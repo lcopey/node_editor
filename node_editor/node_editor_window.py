@@ -14,7 +14,7 @@ from PyQt5.QtGui import QCloseEvent
 from .node_editor_widget import NodeEditorWidget
 from .utils import dumpException
 
-DEBUG = True
+DEBUG = False
 
 
 class NodeEditorWindow(QMainWindow):

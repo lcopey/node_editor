@@ -15,6 +15,8 @@ class SceneHistory:
         self.clear()
         self.history_limit = 50
 
+        self.undo_selection_has_changed = False
+
         # listeners
         self._history_modified_listeners = []
         self._history_stored_listeners = []
@@ -99,8 +101,7 @@ class SceneHistory:
         for callback in self._history_stored_listeners:
             callback()
 
-    def createHistoryStamp(self, desc):
-        # save selected items
+    def captureCurrentSelection(self) -> dict:
         sel_obj = {
             'nodes': [],
             'edges': [],
@@ -110,6 +111,28 @@ class SceneHistory:
                 sel_obj['nodes'].append(item.node.id)
             elif isinstance(item, QNEGraphicsEdge):
                 sel_obj['edges'].append(item.edge.id)
+        return sel_obj
+
+    def createHistoryStamp(self, desc: str) -> dict:
+        """Create History Stamp
+
+        The stamp is dictionary containing 3 keys :
+            - desc : Short description of the event triggering the creation of the stamp
+            - snapshot : The result of `Scene` serialization
+            - selection : dictionary containing the id of selected items
+        Parameters
+        ----------
+        desc : str
+            Short description of the event triggering the creation of the stamp
+
+        Returns
+        -------
+        dict
+
+
+        """
+        # save selected items
+        sel_obj = self.captureCurrentSelection()
 
         # take a snapshot of current scene
         hystory_stamp = {
@@ -125,18 +148,32 @@ class SceneHistory:
         self.scene.deserialize(history_stamp['snapshot'])
 
         try:
+            self.undo_selection_has_changed = False
+            previous_selection = self.captureCurrentSelection()
+
             # restore selection
             if DEBUG: print('restoring edge selection')
+            for edge in self.scene.edges:
+                edge.grEdge.setSelected(False)
             for edge_id in history_stamp['selection']['edges']:
                 for edge in self.scene.edges:
                     if edge.id == edge_id:
                         edge.grEdge.setSelected(True)
                         break
+
             if DEBUG: print('restoring node selection')
+            for node in self.scene.nodes:
+                node.grNode.setSelected(False)
             for node_id in history_stamp['selection']['nodes']:
                 for node in self.scene.nodes:
                     if node.id == node_id:
                         node.grNode.setSelected(True)
                         break
+            current_selection = self.captureCurrentSelection()
+
+            if current_selection['nodes'] != previous_selection['nodes'] or \
+                    current_selection['edges'] != previous_selection['edges']:
+                self.undo_selection_has_changed = True
+            if DEBUG: print('Everything done')
         except Exception as e:
             dumpException(e)

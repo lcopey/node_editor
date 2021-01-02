@@ -168,6 +168,10 @@ class Node(Serializable):
         self.markDirty()
         self.markDescendantDirty()
 
+    def onDeserialized(self, data:dict):
+        """Event manually called when this n,ode was deserialized."""
+        pass
+
     def onDoubleClicked(self, event):
         """Event handling double click on Graphics Node in `Scene`"""
         pass
