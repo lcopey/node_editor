@@ -31,6 +31,8 @@ class QNEGraphicsSocket(QGraphicsItem):
         super().__init__(socket.node.grNode)
         self.socket = socket
 
+        self.isHighlighted = False
+
         self.radius = 6
         self.outline_width = 1
         self.initAssets()
@@ -42,9 +44,12 @@ class QNEGraphicsSocket(QGraphicsItem):
     def initAssets(self):
         self._color_background = self.getSocketColor(self.socket_type)
         self._color_outline = QColor('#FF000000')
+        self._color_highlight = QColor('#FF37A6FF')
 
         self._pen = QPen(self._color_outline)
         self._pen.setWidth(self.outline_width)
+        self._pen_highlight = QPen(self._color_highlight)
+        self._pen_highlight.setWidthF(2.)
         self._brush = QBrush(self._color_background)
 
     def changeSocketType(self):
@@ -78,7 +83,7 @@ class QNEGraphicsSocket(QGraphicsItem):
               widget: typing.Optional[QWidget] = ...) -> None:
         # painting circle
         painter.setBrush(self._brush)
-        painter.setPen(self._pen)
+        painter.setPen(self._pen if not self.isHighlighted else self._pen_highlight)
         painter.drawEllipse(-self.radius, -self.radius,
                             2 * self.radius, 2 * self.radius)
 
