@@ -171,6 +171,9 @@ class SceneHistory:
                         break
             current_selection = self.captureCurrentSelection()
 
+            # reset the last_selected_items - since we're comparing change to the last_selected_state
+            self.scene._last_selected_items = self.scene.getSelectedItems()
+
             if current_selection['nodes'] != previous_selection['nodes'] or \
                     current_selection['edges'] != previous_selection['edges']:
                 self.undo_selection_has_changed = True

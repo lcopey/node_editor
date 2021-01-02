@@ -108,18 +108,21 @@ class Scene(Serializable):
         -------
 
         """
-        current_selected_items = self.getSelectedItems()
-        if current_selected_items == self._last_selected_items:
-            return
+        try:
+            current_selected_items = self.getSelectedItems()
+            if current_selected_items == self._last_selected_items:
+                return
 
-        # TODO monitor usage of this function, may be call more than once
-        self.resetLastSelectedStates()
-        if not current_selected_items:
-            self._last_selected_items = []
-            if not silent:
-                self.history.storeHistory('Deselected Everything')
-                for callback in self._items_deselected_listeners:
-                    callback()
+            # TODO monitor usage of this function, may be call more than once
+            self.resetLastSelectedStates()
+            if not current_selected_items:
+                self._last_selected_items = None
+                if not silent:
+                    self.history.storeHistory('Deselected Everything')
+                    for callback in self._items_deselected_listeners:
+                        callback()
+        except Exception as e:
+            dumpException(e)
 
     def isModified(self):
         return self.has_been_modified
