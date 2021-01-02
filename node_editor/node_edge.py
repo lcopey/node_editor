@@ -31,6 +31,9 @@ class Edge(Serializable):
 
         self.scene.addEdge(self)
 
+    def __str__(self):
+        return return_simple_id(self, 'Edge')
+
     # properties and setters
     @property
     def start_socket(self):
@@ -140,9 +143,6 @@ class Edge(Serializable):
         except Exception as e:
             dumpException(e)
 
-    def __str__(self):
-        return return_simple_id(self, 'Edge')
-
     def serialize(self):
         return OrderedDict([
             ('id', self.id),
@@ -151,7 +151,7 @@ class Edge(Serializable):
             ('end', self.end_socket.id)
         ])
 
-    def deserialize(self, data, hashmap={}, restore_id=True):
+    def deserialize(self, data: dict, hashmap: dict = {}, restore_id: bool = True):
         if restore_id:
             self.id = data['id']
         self.start_socket = hashmap[data['start']]

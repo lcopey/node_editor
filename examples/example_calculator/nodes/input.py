@@ -16,7 +16,7 @@ class CalcInputContent(QNENodeContentWidget):
         res['value'] = self.edit.text()
         return res
 
-    def deserialize(self, data, hashmap={}):
+    def deserialize(self, data: dict, hashmap: dict = {}, restore_id: bool = True):
         res = super().deserialize(data, hashmap)
         try:
             value = data['value']

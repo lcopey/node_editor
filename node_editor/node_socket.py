@@ -77,7 +77,7 @@ class Socket(Serializable):
             # probably older versions of file
             return data['position'] in (RIGHT_BOTTOM, RIGHT_TOP)
 
-    def deserialize(self, data, hashmap={}, restore_id=True):
+    def deserialize(self, data: dict, hashmap: dict = {}, restore_id: bool = True):
         if restore_id:
             self.id = data['id']
         self.is_multi_edges = self.determineMultiedges(data)

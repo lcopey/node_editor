@@ -12,8 +12,8 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../../'))
 
+sys.path.insert(0, os.path.abspath('../../'))
 
 # -- Project information -----------------------------------------------------
 
@@ -21,9 +21,9 @@ project = 'Node Editor'
 copyright = '2020, Laurent Copey'
 author = 'Laurent Copey'
 
+version = '0.9.0'
 # The full version, including alpha/beta/rc tags
 release = '0.9.0'
-
 
 # -- General configuration ---------------------------------------------------
 
@@ -32,9 +32,18 @@ release = '0.9.0'
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx_rtd_theme',
+    'sphinx.ext.todo',
+    'sphinx.ext.coverage',
     'sphinx.ext.graphviz',
-    'sphinx.ext.napoleon'
+    'sphinx.ext.napoleon',
+    'recommonmark'
 ]
+
+autodoc_member_order = 'bysource'
+autoclass_content = 'both' # force sphinx to document parameter of the constructors
+
+source_suffix = ['.rst', '.md']
 # -- GraphViz configuration ----------------------------------
 graphviz_output_format = 'svg'
 
@@ -45,7 +54,6 @@ templates_path = ['_templates']
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = []
-
 
 # -- Options for HTML output -------------------------------------------------
 

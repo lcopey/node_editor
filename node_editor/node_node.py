@@ -1,7 +1,7 @@
 from collections import OrderedDict
 from .node_serializable import Serializable
 from .node_graphics_node import QNEGraphicsNode
-from .widgets.node_content_widget import QNENodeContentWidget
+from node_editor.node_content_widget import QNENodeContentWidget
 from .node_socket import Socket, LEFT_TOP, LEFT_CENTER, LEFT_BOTTOM, RIGHT_BOTTOM, RIGHT_CENTER, RIGHT_TOP
 from .utils import dumpException
 
@@ -263,7 +263,7 @@ class Node(Serializable):
             ('content', self.content.serialize())
         ])
 
-    def deserialize(self, data, hashmap={}, restore_id=True):
+    def deserialize(self, data: dict, hashmap: dict = {}, restore_id: bool = True):
         """Deserialize the node.
 
         Handle :

@@ -10,8 +10,8 @@ Welcome to Node Editor's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   graph
-   module
+   coding_standards
+   rst/node_editor
 
 Indices and tables
 ==================

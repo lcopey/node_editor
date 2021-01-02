@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QLabel, QWidget
 from PyQt5.QtGui import QImage, QPainter
 from PyQt5.QtCore import QRectF
 from node_editor.node_node import Node
-from node_editor.widgets.node_content_widget import QNENodeContentWidget
+from node_editor.node_content_widget import QNENodeContentWidget
 from node_editor.node_graphics_node import QNEGraphicsNode
 from node_editor.node_socket import LEFT_CENTER, RIGHT_CENTER
 from node_editor.utils import dumpException

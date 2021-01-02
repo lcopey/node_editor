@@ -5,5 +5,5 @@ class Serializable:
     def serialize(self):
         raise NotImplemented
 
-    def deserialize(self, data, hashmap={}):
+    def deserialize(self, data: dict, hashmap: dict = {}, restore_id: bool = True) -> bool:
         raise NotImplemented

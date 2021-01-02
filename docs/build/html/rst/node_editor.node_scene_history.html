@@ -1,0 +1,316 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>node_editor.node_scene_history module &mdash; Node Editor 0.9.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="node_editor.node_serializable module" href="node_editor.node_serializable.html" />
+    <link rel="prev" title="node_editor.node_scene_clipboard module" href="node_editor.node_scene_clipboard.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> Node Editor
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.9.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../coding_standards.html">Coding Standards</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="node_editor.html">node_editor package</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="node_editor.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="node_editor.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="node_editor.node_content_widget.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">node_content_widget</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_editor.node_edge.html">node_editor.node_edge module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_editor.node_editor_widget.html">node_editor.node_editor_widget module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_editor.node_editor_window.html">node_editor.node_editor_window module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_editor.node_graphics_cutline.html">node_editor.node_graphics_cutline module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_editor.node_graphics_edge.html">node_editor.node_graphics_edge module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_editor.node_graphics_node.html">node_editor.node_graphics_node module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_editor.node_graphics_scene.html">node_editor.node_graphics_scene module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_editor.node_graphics_socket.html">node_editor.node_graphics_socket module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_editor.node_graphics_view.html">node_editor.node_graphics_view module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_editor.node_node.html">node_editor.node_node module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_editor.node_scene.html">node_editor.node_scene module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_editor.node_scene_clipboard.html">node_editor.node_scene_clipboard module</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">node_editor.node_scene_history module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_editor.node_serializable.html">node_editor.node_serializable module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_editor.node_socket.html">node_editor.node_socket module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_editor.utils.html">node_editor.utils module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="node_editor.html#module-node_editor">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Node Editor</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="node_editor.html">node_editor package</a> &raquo;</li>
+        
+      <li>node_editor.node_scene_history module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/rst/node_editor.node_scene_history.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-node_editor.node_scene_history">
+<span id="node-editor-node-scene-history-module"></span><h1>node_editor.node_scene_history module<a class="headerlink" href="#module-node_editor.node_scene_history" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="node_editor.node_scene_history.SceneHistory">
+<em class="property">class </em><code class="sig-prename descclassname">node_editor.node_scene_history.</code><code class="sig-name descname">SceneHistory</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scene</span><span class="p">:</span> <span class="n">Scene</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene_history.SceneHistory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="node_editor.node_scene_history.SceneHistory.addHistoryModifiedListener">
+<code class="sig-name descname">addHistoryModifiedListener</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">callback</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene_history.SceneHistory.addHistoryModifiedListener" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_scene_history.SceneHistory.addHistoryStoredListener">
+<code class="sig-name descname">addHistoryStoredListener</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">callback</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene_history.SceneHistory.addHistoryStoredListener" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_scene_history.SceneHistory.addHistoryRestoredListener">
+<code class="sig-name descname">addHistoryRestoredListener</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">callback</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene_history.SceneHistory.addHistoryRestoredListener" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_scene_history.SceneHistory.clear">
+<code class="sig-name descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene_history.SceneHistory.clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear history stack</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_scene_history.SceneHistory.storeInitialHistoryStamp">
+<code class="sig-name descname">storeInitialHistoryStamp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene_history.SceneHistory.storeInitialHistoryStamp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_scene_history.SceneHistory.canUndo">
+<code class="sig-name descname">canUndo</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene_history.SceneHistory.canUndo" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_scene_history.SceneHistory.canRedo">
+<code class="sig-name descname">canRedo</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene_history.SceneHistory.canRedo" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_scene_history.SceneHistory.undo">
+<code class="sig-name descname">undo</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene_history.SceneHistory.undo" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_scene_history.SceneHistory.redo">
+<code class="sig-name descname">redo</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene_history.SceneHistory.redo" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_scene_history.SceneHistory.restoreHistory">
+<code class="sig-name descname">restoreHistory</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene_history.SceneHistory.restoreHistory" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_scene_history.SceneHistory.storeHistory">
+<code class="sig-name descname">storeHistory</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">desc</span></em>, <em class="sig-param"><span class="n">setModified</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene_history.SceneHistory.storeHistory" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_scene_history.SceneHistory.createHistoryStamp">
+<code class="sig-name descname">createHistoryStamp</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">desc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene_history.SceneHistory.createHistoryStamp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_scene_history.SceneHistory.restoreHistoryStamp">
+<code class="sig-name descname">restoreHistoryStamp</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">history_stamp</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene_history.SceneHistory.restoreHistoryStamp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="node_editor.node_serializable.html" class="btn btn-neutral float-right" title="node_editor.node_serializable module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="node_editor.node_scene_clipboard.html" class="btn btn-neutral float-left" title="node_editor.node_scene_clipboard module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Laurent Copey
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

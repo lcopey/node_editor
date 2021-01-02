@@ -187,7 +187,7 @@ class Scene(Serializable):
 
         Parameters
         ----------
-        data : OrderedDict
+        data : ``OrderedDict``
             as return from deserialized Node
 
         Returns

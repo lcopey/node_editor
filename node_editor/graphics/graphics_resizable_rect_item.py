@@ -2,12 +2,12 @@ from PyQt5.QtCore import Qt, QRectF, QPointF
 from PyQt5.QtGui import QBrush, QPainterPath, QPainter, QColor, QPen, QFont
 from PyQt5.QtWidgets import QGraphicsRectItem, QGraphicsItem, QWidget, QVBoxLayout, QGraphicsSceneMouseEvent, \
     QGraphicsSceneHoverEvent, QStyleOptionGraphicsItem, QLabel, QTextEdit, QGraphicsProxyWidget, QGraphicsTextItem
-from ..widgets import QNENodeContentWidget
+from ..node_content_widget import QNENodeContentWidget
 
 from .const import Handle, handleCursors, handleUpdate
 from typing import Optional
 
-from debug import print_func_name
+from ..utils import print_func_name
 
 DEBUG = False
 

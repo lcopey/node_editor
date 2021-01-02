@@ -1,0 +1,438 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>node_editor.node_scene module &mdash; Node Editor 0.9.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="node_editor.node_scene_clipboard module" href="node_editor.node_scene_clipboard.html" />
+    <link rel="prev" title="node_editor.node_node module" href="node_editor.node_node.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> Node Editor
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.9.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../coding_standards.html">Coding Standards</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="node_editor.html">node_editor package</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="node_editor.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="node_editor.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="node_editor.node_content_widget.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">node_content_widget</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_editor.node_edge.html">node_editor.node_edge module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_editor.node_editor_widget.html">node_editor.node_editor_widget module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_editor.node_editor_window.html">node_editor.node_editor_window module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_editor.node_graphics_cutline.html">node_editor.node_graphics_cutline module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_editor.node_graphics_edge.html">node_editor.node_graphics_edge module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_editor.node_graphics_node.html">node_editor.node_graphics_node module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_editor.node_graphics_scene.html">node_editor.node_graphics_scene module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_editor.node_graphics_socket.html">node_editor.node_graphics_socket module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_editor.node_graphics_view.html">node_editor.node_graphics_view module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_editor.node_node.html">node_editor.node_node module</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">node_editor.node_scene module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_editor.node_scene_clipboard.html">node_editor.node_scene_clipboard module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_editor.node_scene_history.html">node_editor.node_scene_history module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_editor.node_serializable.html">node_editor.node_serializable module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_editor.node_socket.html">node_editor.node_socket module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_editor.utils.html">node_editor.utils module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="node_editor.html#module-node_editor">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Node Editor</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="node_editor.html">node_editor package</a> &raquo;</li>
+        
+      <li>node_editor.node_scene module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/rst/node_editor.node_scene.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-node_editor.node_scene">
+<span id="node-editor-node-scene-module"></span><h1>node_editor.node_scene module<a class="headerlink" href="#module-node_editor.node_scene" title="Permalink to this headline">¶</a></h1>
+<dl class="py exception">
+<dt id="node_editor.node_scene.InvalidFile">
+<em class="property">exception </em><code class="sig-prename descclassname">node_editor.node_scene.</code><code class="sig-name descname">InvalidFile</code><a class="headerlink" href="#node_editor.node_scene.InvalidFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="node_editor.node_scene.Scene">
+<em class="property">class </em><code class="sig-prename descclassname">node_editor.node_scene.</code><code class="sig-name descname">Scene</code><a class="headerlink" href="#node_editor.node_scene.Scene" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="node_editor.node_serializable.html#node_editor.node_serializable.Serializable" title="node_editor.node_serializable.Serializable"><code class="xref py py-class docutils literal notranslate"><span class="pre">node_editor.node_serializable.Serializable</span></code></a></p>
+<p>Implement the logic behind the scene being displayed.</p>
+<p>Contains the nodes, the edges</p>
+<dl class="py method">
+<dt id="node_editor.node_scene.Scene.initUI">
+<code class="sig-name descname">initUI</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.initUI" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_scene.Scene.onItemSelected">
+<code class="sig-name descname">onItemSelected</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.onItemSelected" title="Permalink to this definition">¶</a></dt>
+<dd><p>On item selected events - store history stamp</p>
+<p>When the selection changed, store the current selected items and stor history stamp</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_scene.Scene.onItemsDeselected">
+<code class="sig-name descname">onItemsDeselected</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.onItemsDeselected" title="Permalink to this definition">¶</a></dt>
+<dd><p>On items deselected events - store history stamp</p>
+<p>Reset selected flag of every items
+Store the history stamp</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_scene.Scene.isModified">
+<code class="sig-name descname">isModified</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.isModified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_scene.Scene.has_been_modified">
+<em class="property">property </em><code class="sig-name descname">has_been_modified</code><a class="headerlink" href="#node_editor.node_scene.Scene.has_been_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_scene.Scene.addHasBeenModifiedListener">
+<code class="sig-name descname">addHasBeenModifiedListener</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">callback</span><span class="p">:</span> <span class="n">function</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.addHasBeenModifiedListener" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add callabck to call everytime the scene is modified</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_scene.Scene.addItemSelectedListener">
+<code class="sig-name descname">addItemSelectedListener</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">callback</span><span class="p">:</span> <span class="n">function</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.addItemSelectedListener" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_scene.Scene.addItemsDeselectedListener">
+<code class="sig-name descname">addItemsDeselectedListener</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">callbak</span><span class="p">:</span> <span class="n">function</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.addItemsDeselectedListener" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_scene.Scene.addDragEnterListener">
+<code class="sig-name descname">addDragEnterListener</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">callback</span><span class="p">:</span> <span class="n">function</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.addDragEnterListener" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_scene.Scene.addDropListener">
+<code class="sig-name descname">addDropListener</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">callback</span><span class="p">:</span> <span class="n">function</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.addDropListener" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_scene.Scene.resetLastSelectedStates">
+<code class="sig-name descname">resetLastSelectedStates</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.resetLastSelectedStates" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_scene.Scene.getView">
+<code class="sig-name descname">getView</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.getView" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_scene.Scene.getItemAt">
+<code class="sig-name descname">getItemAt</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pos</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.getItemAt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_scene.Scene.getSelectedItems">
+<code class="sig-name descname">getSelectedItems</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.getSelectedItems" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_scene.Scene.addNode">
+<code class="sig-name descname">addNode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">node</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.addNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Append node to the list of nodes</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_scene.Scene.addEdge">
+<code class="sig-name descname">addEdge</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">edge</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.addEdge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Append edge to the list of edges</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_scene.Scene.removeNode">
+<code class="sig-name descname">removeNode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">node</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.removeNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove node from the list of nodes</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_scene.Scene.removeEdge">
+<code class="sig-name descname">removeEdge</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">edge</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.removeEdge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove edge from the list of edges</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_scene.Scene.clear">
+<code class="sig-name descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear the scene by calling remove() on all the nodes</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_scene.Scene.saveToFile">
+<code class="sig-name descname">saveToFile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.saveToFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save current graph to filename</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_scene.Scene.loadFromFile">
+<code class="sig-name descname">loadFromFile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.loadFromFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load graph from filename</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_scene.Scene.setNodeClassSelector">
+<code class="sig-name descname">setNodeClassSelector</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">class_selecting_function</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.setNodeClassSelector" title="Permalink to this definition">¶</a></dt>
+<dd><p>When the function self.node_class_selector is set, we can use different Node classes</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_scene.Scene.getNodeClassFromData">
+<code class="sig-name descname">getNodeClassFromData</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.getNodeClassFromData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return corresponding Node class from data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>OrderedDict</em>) – as return from deserialized Node</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Definition of Node if self.node_class_selector is not set. Else return custom defined Node class</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_scene.Scene.serialize">
+<code class="sig-name descname">serialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.serialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serialize the scene.</p>
+<dl class="simple">
+<dt>Call serialize from each object, nodes and edges. Following parameters are serialized :</dt><dd><ul class="simple">
+<li><p>scene width</p></li>
+<li><p>scene height</p></li>
+<li><p>nodes</p></li>
+<li><p>edges</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_scene.Scene.deserialize">
+<code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">dict</span></em>, <em class="sig-param"><span class="n">hashmap</span><span class="p">:</span> <span class="n">dict</span> <span class="o">=</span> <span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">restore_id</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#node_editor.node_scene.Scene.deserialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deserialize the scene by recursively calling deserialize function on each node and edges.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>dict</em>) – </p></li>
+<li><p><strong>hashmap</strong> (<em>dict</em>) – </p></li>
+<li><p><strong>restore_id</strong> (<em>bool default True</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p>True if deserialize is successful</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="node_editor.node_scene_clipboard.html" class="btn btn-neutral float-right" title="node_editor.node_scene_clipboard module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="node_editor.node_node.html" class="btn btn-neutral float-left" title="node_editor.node_node module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Laurent Copey
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
