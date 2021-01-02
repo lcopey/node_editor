@@ -47,10 +47,24 @@ class Socket(Serializable):
         self.node.scene.grScene.removeItem(self.grSocket)
         del self.grSocket
 
-    def changeSocketType(self, new_socket_type: int):
+    def changeSocketType(self, new_socket_type: int) -> bool:
+        """Change the `Socket` type
+
+        Parameters
+        ----------
+        new_socket_type : int
+            new socket type
+
+        Returns
+        -------
+        ```bool```
+            True if the socket type was actually changed
+        """
         if self.socket_type != new_socket_type:
             self.socket_type = new_socket_type
             self.grSocket.changeSocketType()
+            return True
+        return False
 
     def setSocketPosition(self):
         self.grSocket.setPos(*self.node.getSocketPosition(self.index, self.position, self.count_on_this_node_side))

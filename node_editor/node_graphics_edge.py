@@ -3,7 +3,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 import math
 
-EDGE_WIDTH = 2.
+EDGE_WIDTH = 3.
 EDGE_CP_ROUNDNESS = 100
 
 import typing
@@ -33,8 +33,9 @@ class QNEGraphicsEdge(QGraphicsPathItem):
         self.setZValue(-1)
 
     def initAssets(self):
+        """Initialize assets ``QObjects`` like ``QColor``, ``QPen`` and ``QBrush``"""
         # Diverse parameters for drawing
-        self._color = QColor("#001000")
+        self._color = self._default_color = QColor("#001000")
         self._color_selected = QColor("#00ff00")
         self._color_hovered = QColor("#FF37A6FF")
 
@@ -50,6 +51,31 @@ class QNEGraphicsEdge(QGraphicsPathItem):
 
         self._pen_hovered = QPen(self._color_hovered)
         self._pen_hovered.setWidthF(EDGE_WIDTH + 2.)
+
+    def changeColor(self, color):
+        """Change the color of the `Edge`
+
+        Parameters
+        ----------
+        color : `QColor` or str
+            Either a valid `QColor` or ``str`` such as #001000
+        """
+        if type(color) == str:
+            self._color = QColor(color)
+        elif isinstance(color, QColor):
+            self._color = color
+        else:
+            return
+        self._pen = QPen(self._color)
+        self._pen.setWidthF(EDGE_WIDTH)
+
+    def setColorFromSockets(self) -> bool:
+        """Change color according to connected sockets. Return ```True``` if color can be determined"""
+        socket_type_start = self.edge.start_socket.socket_type
+        socket_type_end = self.edge.end_socket.socket_type
+        if socket_type_start != socket_type_end: return False
+        self.changeColor(self.edge.start_socket.grSocket.getSocketColor(socket_type_start))
+        return True
 
     def onSelected(self):
         self.edge.scene.grScene.itemSelected.emit()
