@@ -85,6 +85,9 @@ class Node(Serializable):
         self.markDirty()
         self.markDescendantDirty()
 
+    def doSelect(self, new_state=True):
+        self.grNode.doSelect(new_state)
+
     # convenience function to update and get the position of the node in the graphical scene
     @property
     def pos(self):

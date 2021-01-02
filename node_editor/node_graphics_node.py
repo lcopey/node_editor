@@ -95,6 +95,12 @@ class QNEGraphicsNode(QGraphicsItem):
     def onSelected(self):
         self.node.scene.grScene.itemSelected.emit()
 
+    def doSelect(self, new_state=True):
+        self.setSelected(new_state)
+        self._last_selected_state = new_state
+        if new_state:
+            self.onSelected()
+
     def mouseMoveEvent(self, event: 'QGraphicsSceneMouseEvent') -> None:
         # When the node move because of drag
         # update the corresponding edges0

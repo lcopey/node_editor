@@ -7,6 +7,7 @@ from .calc_node_base import *
 
 from node_editor.node_node import Node
 from node_editor.node_editor_widget import NodeEditorWidget
+from node_editor.node_graphics_view import MODE_EDGE_DRAG
 from node_editor.utils import dumpException
 
 DEBUG = False
@@ -21,11 +22,21 @@ class CalculatorSubWindow(NodeEditorWidget):
         self.setTitle()
         self.initNewNodeActions()
         self.scene.addHasBeenModifiedListener(self.setTitle)
+        self.scene.history.addHistoryRestoredListener(self.onHistoryRestored)
         self.scene.addDragEnterListener(self.onDragEnter)
         self.scene.addDropListener(self.onDrop)
         self.scene.setNodeClassSelector(self.getNodeClassFromData)
 
         self._close_event_listeners = []
+
+    def onHistoryRestored(self):
+        self.doEvalOutputs()
+
+    def doEvalOutputs(self):
+        # eval all output nodes
+        for node in self.scene.nodes:
+            if node.__class__.__name__ == 'CalcNodeOutput':
+                node.eval()
 
     def getNodeClassFromData(self, data):
         if 'op_code' not in data:
@@ -34,13 +45,9 @@ class CalculatorSubWindow(NodeEditorWidget):
 
     def fileLoad(self, filename: str) -> bool:
         if super().fileLoad(filename):
-            # eval all output nodes
-            for node in self.scene.nodes:
-                if node.__class__.__name__ == 'CalcNodeOutput':
-                    node.eval()
+            self.doEvalOutputs()
             return True
         return False
-
 
     def initNewNodeActions(self):
         self.node_actions = {}
@@ -193,3 +200,15 @@ class CalculatorSubWindow(NodeEditorWidget):
             new_calc_node = get_call_from_opcode(action.data())(self.scene)
             scene_pos = self.scene.getView().mapToScene(event.pos())
             new_calc_node.setPos(scene_pos.x(), scene_pos.y())
+
+            if self.scene.getView().mode == MODE_EDGE_DRAG:
+                # in dragging edge mode, connect the current edge to the first input
+                self.scene.getView().edgeDragEnd(new_calc_node.inputs[0].grSocket)
+
+                # select the newly create node
+                new_calc_node.doSelect(True)
+                # new_calc_node.inputs[0].edges[-1].doSelect(True)
+
+
+            else:
+                self.scene.history.storeHistory(f'Created {new_calc_node.__class__.__name__}')
