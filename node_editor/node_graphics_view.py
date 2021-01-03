@@ -17,6 +17,8 @@ MODE_EDGES_REROUTING = 4  # Mode representing when we reroute existing edge ctrl
 
 EDGE_DRAG_START_THRESHOLD = 50
 
+EDGE_REROUTING_UE = False
+
 DEBUG = False
 DEBUG_MMB_SCENE_ITEMS = True
 DEBUG_MMB_LAST_SELECTIONS = False
@@ -131,6 +133,7 @@ class QNEGraphicsView(QGraphicsView):
 
             if isinstance(item, QNEGraphicsSocket):
                 print("MMB DEBUG:", item.socket, "socket_type:", item.socket.socket_type,
+                      "input" if item.socket.is_input else "output",
                       "has edges:", "no" if item.socket.edges == [] else "")
                 if item.socket.edges:
                     for edge in item.socket.edges: print("\t", edge)
@@ -211,7 +214,7 @@ class QNEGraphicsView(QGraphicsView):
 
         if item is None:
             # Logic for the cutline (Ctrl + LMB)
-            if event.modifiers() & Qt.ControlModifier:
+            if event.modifiers() & Qt.ControlModifier and self.mode == MODE_NOOP:
                 self.mode = MODE_EDGE_CUT
                 fakeEvent = QMouseEvent(QEvent.MouseButtonRelease, event.pos(), event.screenPos(),
                                         Qt.LeftButton, Qt.NoButton, event.modifiers())
@@ -250,7 +253,18 @@ class QNEGraphicsView(QGraphicsView):
 
             if self.mode == MODE_EDGES_REROUTING:
                 # pass the socket as target if clicked on socket else None
-                self.rerouting.stopRerouting(item.socket if isinstance(item, QNEGraphicsSocket) else None)
+                if not EDGE_REROUTING_UE:
+                    # version 2
+                    if not self.rerouting.first_mb_release:
+                        # for confirmation of first mb release
+                        self.rerouting.first_mb_release = True
+                        # skip the rest of the code
+                        return
+                    self.rerouting.stopRerouting(item.socket if isinstance(item, QNEGraphicsSocket) else None)
+
+                else:
+                    self.rerouting.stopRerouting(item.socket if isinstance(item, QNEGraphicsSocket) else None)
+
                 self.mode = MODE_NOOP
 
             # End of cutLine mode

@@ -29,6 +29,23 @@ class CalculatorSubWindow(NodeEditorWidget):
 
         self._close_event_listeners = []
 
+    def initNewNodeActions(self):
+        self.node_actions = {}
+        keys = list(CALC_NODES.keys())
+        keys.sort()
+        for key in keys:
+            node = CALC_NODES[key]
+            self.node_actions[node.op_code] = QAction(QIcon(node.icon), node.op_title)
+            self.node_actions[node.op_code].setData(node.op_code)
+
+    def initNodesContextMenu(self):
+        context_menu = QMenu(self)
+        keys = list(CALC_NODES.keys())
+        keys.sort()
+        for key in keys:
+            context_menu.addAction(self.node_actions[key])
+        return context_menu
+
     def onHistoryRestored(self):
         self.doEvalOutputs()
 
@@ -48,23 +65,6 @@ class CalculatorSubWindow(NodeEditorWidget):
             self.doEvalOutputs()
             return True
         return False
-
-    def initNewNodeActions(self):
-        self.node_actions = {}
-        keys = list(CALC_NODES.keys())
-        keys.sort()
-        for key in keys:
-            node = CALC_NODES[key]
-            self.node_actions[node.op_code] = QAction(QIcon(node.icon), node.op_title)
-            self.node_actions[node.op_code].setData(node.op_code)
-
-    def initNodesContextMenu(self):
-        context_menu = QMenu(self)
-        keys = list(CALC_NODES.keys())
-        keys.sort()
-        for key in keys:
-            context_menu.addAction(self.node_actions[key])
-        return context_menu
 
     def setTitle(self):
         self.setWindowTitle(self.getUserFriendlyFilename())

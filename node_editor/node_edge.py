@@ -18,6 +18,7 @@ if TYPE_CHECKING:
 
 class Edge(Serializable):
     """Class for representing `Edge`"""
+    edge_validators = []  #: class variable containing list of registered edge validators
 
     def __init__(self, scene: Optional['Scene'] = None, start_socket: Optional['Socket'] = None,
                  end_socket: Optional['Socket'] = None,
@@ -121,6 +122,36 @@ class Edge(Serializable):
         if self.start_socket is not None:
             self.updatePositions()
         return self.grEdge
+
+    @classmethod
+    def getEdgeValidators(cls):
+        """Return the list of Edge Validator Callbacks"""
+        return cls.edge_validators
+
+    @classmethod
+    def registerEdgeValidator(cls, validator_callback: 'function'):
+        """Register Edge Validator Callback
+
+        :param validator_callback: A function handle to validate Edge
+        :type validator_callback: `function`
+        """
+        cls.edge_validators.append(validator_callback)
+
+    @classmethod
+    def validateEdge(cls, start_socket: 'Socket', end_socket: 'Socket') -> bool:
+        """Validate Edge agains all registered `Edge Validator Callbacks`
+
+        :param start_socket: Starting :class:`~nodeeditor.node_socket.Socket` of Edge to check
+        :type start_socket: :class:`~nodeeditor.node_socket.Socket`
+        :param end_socket: Target/End :class:`~nodeeditor.node_socket.Socket` of Edge to check
+        :type end_socket: :class:`~nodeeditor.node_socket.Socket`
+        :return: ``True`` if the Edge is valid or ``False`` if not
+        :rtype: ``bool``
+        """
+        for validator in cls.getEdgeValidators():
+            if not validator(start_socket, end_socket):
+                return False
+        return True
 
     def getOtherSocket(self, known_socket: 'Socket') -> 'Socket':
         """Returns the opposite socket on this `Edge`

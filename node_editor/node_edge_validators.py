@@ -19,8 +19,9 @@ application start with calling this:
 
 """
 
-DEBUG = False
+DEBUG = True
 
+# TODO finish edge validators
 
 def print_error(*args):
     """Helper method which prints to console if `DEBUG` is set to `True`"""

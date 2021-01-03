@@ -89,6 +89,7 @@ class EdgeDragging:
         """
         try:
             if not isinstance(item, QNEGraphicsSocket):
+
                 self.grView.resetMode()
                 if DEBUG: print('View:edgeDragEnd - End dragging edge')
                 # remove the edge without trigerring any event
@@ -96,6 +97,12 @@ class EdgeDragging:
                 self.drag_edge = None
 
             if isinstance(item, QNEGraphicsSocket) and item.socket is not self.drag_start_socket:
+
+                # check if edge would be valid
+                if not self.drag_edge.validateEdge(self.drag_start_socket, item.socket):
+                    print("NOT VALID EDGE")
+                    return False
+
                 # if we released dragging on a socket (other than beginning socket)
                 # if not multi_edges, remove all edges from the existing socket
                 self.grView.resetMode()
@@ -116,7 +123,8 @@ class EdgeDragging:
                 new_edge = self.getEdgeClass()(item.socket.node.scene, self.drag_start_socket, item.socket,
                                                edge_type=EDGE_TYPE_BEZIER)
 
-                if DEBUG: print('View:edgeDragEnd - Created new edge', new_edge, 'connecting', new_edge.start_socket,
+                if DEBUG: print('View:edgeDragEnd - Created new edge', new_edge, 'connecting',
+                                new_edge.routing_start_socket,
                                 '<-->', new_edge.end_socket)
 
                 for socket in [self.drag_start_socket, item.socket]:
