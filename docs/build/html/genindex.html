@@ -248,13 +248,7 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="rst/node_editor.node_graphics_edge.html#node_editor.node_graphics_edge.QNEGraphicsEdge.calcPath">calcPath() (node_editor.node_graphics_edge.QNEGraphicsEdge method)</a>
-
-      <ul>
-        <li><a href="rst/node_editor.node_graphics_edge.html#node_editor.node_graphics_edge.QNEGraphicsEdgeBezier.calcPath">(node_editor.node_graphics_edge.QNEGraphicsEdgeBezier method)</a>
 </li>
-        <li><a href="rst/node_editor.node_graphics_edge.html#node_editor.node_graphics_edge.QNEGraphicsEdgeDirect.calcPath">(node_editor.node_graphics_edge.QNEGraphicsEdgeDirect method)</a>
-</li>
-      </ul></li>
       <li><a href="rst/node_editor.node_editor_widget.html#node_editor.node_editor_widget.NodeEditorWidget.canRedo">canRedo() (node_editor.node_editor_widget.NodeEditorWidget method)</a>
 
       <ul>
@@ -277,14 +271,14 @@
         <li><a href="rst/node_editor.node_socket.html#node_editor.node_socket.Socket.changeSocketType">(node_editor.node_socket.Socket method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="rst/node_editor.node_scene.html#node_editor.node_scene.Scene.clear">clear() (node_editor.node_scene.Scene method)</a>
 
       <ul>
         <li><a href="rst/node_editor.node_scene_history.html#node_editor.node_scene_history.SceneHistory.clear">(node_editor.node_scene_history.SceneHistory method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="rst/node_editor.node_editor_window.html#node_editor.node_editor_window.NodeEditorWindow.closeEvent">closeEvent() (node_editor.node_editor_window.NodeEditorWindow method)</a>
 </li>
       <li><a href="rst/node_editor.node_graphics_node.html#node_editor.node_graphics_node.QNEGraphicsNode.content">content() (node_editor.node_graphics_node.QNEGraphicsNode property)</a>
@@ -292,6 +286,8 @@
       <li><a href="rst/node_editor.node_editor_window.html#node_editor.node_editor_window.NodeEditorWindow.createActions">createActions() (node_editor.node_editor_window.NodeEditorWindow method)</a>
 </li>
       <li><a href="rst/node_editor.node_edge.html#node_editor.node_edge.Edge.createEdgeClassInstance">createEdgeClassInstance() (node_editor.node_edge.Edge method)</a>
+</li>
+      <li><a href="rst/node_editor.node_graphics_edge.html#node_editor.node_graphics_edge.QNEGraphicsEdge.createEdgePathCalculator">createEdgePathCalculator() (node_editor.node_graphics_edge.QNEGraphicsEdge method)</a>
 </li>
       <li><a href="rst/node_editor.node_editor_window.html#node_editor.node_editor_window.NodeEditorWindow.createEditMenu">createEditMenu() (node_editor.node_editor_window.NodeEditorWindow method)</a>
 </li>
@@ -333,7 +329,7 @@
       </ul></li>
       <li><a href="rst/node_editor.node_scene_clipboard.html#node_editor.node_scene_clipboard.SceneClipboard.deserializeFromClipboard">deserializeFromClipboard() (node_editor.node_scene_clipboard.SceneClipboard method)</a>
 </li>
-      <li><a href="rst/node_editor.node_edge.html#node_editor.node_edge.Edge.determineEdgeClass">determineEdgeClass() (node_editor.node_edge.Edge method)</a>
+      <li><a href="rst/node_editor.node_graphics_edge.html#node_editor.node_graphics_edge.QNEGraphicsEdge.determineEdgePathClass">determineEdgePathClass() (node_editor.node_graphics_edge.QNEGraphicsEdge method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -415,6 +411,8 @@
 </li>
       <li><a href="rst/node_editor.node_editor_window.html#node_editor.node_editor_window.NodeEditorWindow.getFileDialogFilter">getFileDialogFilter() (node_editor.node_editor_window.NodeEditorWindow method)</a>
 </li>
+      <li><a href="rst/node_editor.node_edge.html#node_editor.node_edge.Edge.getGraphicsEdgeClass">getGraphicsEdgeClass() (node_editor.node_edge.Edge method)</a>
+</li>
       <li><a href="rst/node_editor.node_node.html#node_editor.node_node.Node.getGraphicsNodeClass">getGraphicsNodeClass() (node_editor.node_node.Node method)</a>
 </li>
       <li><a href="rst/node_editor.node_node.html#node_editor.node_node.Node.getInput">getInput() (node_editor.node_node.Node method)</a>
@@ -428,6 +426,8 @@
       <li><a href="rst/node_editor.node_scene.html#node_editor.node_scene.Scene.getItemAt">getItemAt() (node_editor.node_scene.Scene method)</a>
 </li>
       <li><a href="rst/node_editor.node_graphics_view.html#node_editor.node_graphics_view.QNEGraphicsView.getItemAtClick">getItemAtClick() (node_editor.node_graphics_view.QNEGraphicsView method)</a>
+</li>
+      <li><a href="rst/node_editor.node_scene.html#node_editor.node_scene.Scene.getNodeByID">getNodeByID() (node_editor.node_scene.Scene method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -460,6 +460,8 @@
       <li><a href="rst/node_editor.node_scene.html#node_editor.node_scene.Scene.getView">getView() (node_editor.node_scene.Scene method)</a>
 </li>
       <li><a href="rst/node_editor.node_node.html#node_editor.node_node.Node.GraphicsNode_class">GraphicsNode_class (node_editor.node_node.Node attribute)</a>
+</li>
+      <li><a href="rst/node_editor.node_editor_widget.html#node_editor.node_editor_widget.NodeEditorWidget.GraphicsView_class">GraphicsView_class (node_editor.node_editor_widget.NodeEditorWidget attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -963,14 +965,10 @@
 </li>
       <li><a href="rst/node_editor.node_graphics_edge.html#node_editor.node_graphics_edge.QNEGraphicsEdge">QNEGraphicsEdge (class in node_editor.node_graphics_edge)</a>
 </li>
-      <li><a href="rst/node_editor.node_graphics_edge.html#node_editor.node_graphics_edge.QNEGraphicsEdgeBezier">QNEGraphicsEdgeBezier (class in node_editor.node_graphics_edge)</a>
-</li>
-      <li><a href="rst/node_editor.node_graphics_edge.html#node_editor.node_graphics_edge.QNEGraphicsEdgeDirect">QNEGraphicsEdgeDirect (class in node_editor.node_graphics_edge)</a>
+      <li><a href="rst/node_editor.node_graphics_node.html#node_editor.node_graphics_node.QNEGraphicsNode">QNEGraphicsNode (class in node_editor.node_graphics_node)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="rst/node_editor.node_graphics_node.html#node_editor.node_graphics_node.QNEGraphicsNode">QNEGraphicsNode (class in node_editor.node_graphics_node)</a>
-</li>
       <li><a href="rst/node_editor.node_graphics_scene.html#node_editor.node_graphics_scene.QNEGraphicsScene">QNEGraphicsScene (class in node_editor.node_graphics_scene)</a>
 </li>
       <li><a href="rst/node_editor.node_graphics_socket.html#node_editor.node_graphics_socket.QNEGraphicsSocket">QNEGraphicsSocket (class in node_editor.node_graphics_socket)</a>

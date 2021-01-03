@@ -121,6 +121,7 @@ class SceneHistory:
             - desc : Short description of the event triggering the creation of the stamp
             - snapshot : The result of `Scene` serialization
             - selection : dictionary containing the id of selected items
+
         Parameters
         ----------
         desc : str

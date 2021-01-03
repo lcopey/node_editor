@@ -1,3 +1,5 @@
+# -*- encoding: utf-8 -*-
+"""Module containing the representation of the NodeEditor's Scene"""
 import json
 import os
 from collections import OrderedDict
@@ -18,11 +20,18 @@ class InvalidFile(Exception): pass
 
 
 class Scene(Serializable):
-    """Implement the logic behind the scene being displayed.
-
-    Contains the nodes, the edges"""
+    """Class representing NodeEditor's Scene"""
 
     def __init__(self):
+        """
+        Instance Attributes
+         - **nodes** - list of `Nodes` in thi `Scene`
+         - **edges** - list of `Edges` in this `Scene`
+         - **history** - Instance of :class:`~node_editor.node_scene_history.SceneHistory`
+         - **clipboard** - Instance of :class:`~node_editor.node_scene_clipboard.SceneClipboard`
+         - **scene_width** - `Scene` width in pixels
+         - **scene_height** - `Scene` height in pixels
+        """
         super().__init__()
         self.nodes = []
         self.edges = []
@@ -51,29 +60,36 @@ class Scene(Serializable):
         self.grScene.itemSelected.connect(self.onItemSelected)
         self.grScene.itemsDeselected.connect(self.onItemsDeselected)
 
-    def initUI(self):
-        self.grScene = QNEGraphicsScene(self)
-        self.grScene.setGrScene(self.scene_width, self.scene_height)
+    @property
+    def has_been_modified(self):
+        """Has this `Scene` been modified
 
-    def getNodeByID(self, node_id: int):
-        """
-        Find node in the scene according to provided `node_id` (node.id).
-
-        Parameters
-        ----------
-        node_id : int
-            ID of the node
+        - Setter: set new state. Triggers `Has Been Modified` event.
 
         Returns
         -------
-        `Node` or None
+        bool
+            ``True`` : when the `Scene` has been modified and not saved, ``False`` otherwise
 
         """
-        for node in self.nodes:
-            if node.id == node_id:
-                return node
+        return self._has_been_modified
 
-        return None
+    def isModified(self):
+        return self.has_been_modified
+
+    @has_been_modified.setter
+    def has_been_modified(self, value):
+        if not self._has_been_modified and value:
+            self._has_been_modified = value
+            # call all registered listeners
+            for callback in self._has_been_modified_listeners:
+                callback()
+
+        self._has_been_modified = value
+
+    def initUI(self):
+        self.grScene = QNEGraphicsScene(self)
+        self.grScene.setGrScene(self.scene_width, self.scene_height)
 
     def setSilentSelectionEvents(self, value: bool = True):
         """Calling this can suppress onItemSelected events to be triggered. This is useful when working with clipboard"""
@@ -124,35 +140,41 @@ class Scene(Serializable):
         except Exception as e:
             dumpException(e)
 
-    def isModified(self):
-        return self.has_been_modified
-
-    @property
-    def has_been_modified(self):
-        return self._has_been_modified
-
-    @has_been_modified.setter
-    def has_been_modified(self, value):
-        if not self._has_been_modified and value:
-            self._has_been_modified = value
-            # call all registered listeners
-            for callback in self._has_been_modified_listeners:
-                callback()
-
-        self._has_been_modified = value
-
     # helper listener function
     def addHasBeenModifiedListener(self, callback: 'function'):
-        """Add callabck to call everytime the scene is modified"""
+        """Register `callback` to `Has Been Modified` event
+
+        Parameters
+        ----------
+        callback : functino
+        """
         self._has_been_modified_listeners.append(callback)
 
     def addItemSelectedListener(self, callback: 'function'):
+        """Register `callback` to `Item Selected` event
+
+        Parameters
+        ----------
+        callback : functino
+        """
         self._item_selected_listeners.append(callback)
 
     def addItemsDeselectedListener(self, callbak: 'function'):
+        """Register `callback` to `Items Deselected` event
+
+        Parameters
+        ----------
+        callback : functino
+        """
         self._items_deselected_listeners.append(callbak)
 
     def addDragEnterListener(self, callback: 'function'):
+        """Register `callback` to `Drag Enter` event
+
+        Parameters
+        ----------
+        callback : functino
+        """
         self.getView().addDragEnterListener(callback)
 
     def addDropListener(self, callback: 'function'):
@@ -169,6 +191,24 @@ class Scene(Serializable):
         """Returns the class representing the Edge. Override if needed"""
         return Edge
 
+    def setNodeClassSelector(self, class_selecting_function):
+        """When the function self.node_class_selector is set, we can use different Node classes"""
+        self.node_class_selector = class_selecting_function
+
+    def getNodeClassFromData(self, data):
+        """Return corresponding Node class from data.
+
+        Parameters
+        ----------
+        data : ``OrderedDict``
+            as return from deserialized Node
+
+        Returns
+        -------
+            Definition of Node if self.node_class_selector is not set. Else return custom defined Node class
+        """
+        return Node if self.node_class_selector is None else self.node_class_selector(data)
+
     def getView(self):
         return self.grScene.views()[0]
 
@@ -177,6 +217,26 @@ class Scene(Serializable):
 
     def getSelectedItems(self):
         return self.grScene.selectedItems()
+
+    def getNodeByID(self, node_id: int):
+        """
+        Find node in the scene according to provided `node_id` (node.id).
+
+        Parameters
+        ----------
+        node_id : int
+            ID of the node
+
+        Returns
+        -------
+        `Node` or None
+
+        """
+        for node in self.nodes:
+            if node.id == node_id:
+                return node
+
+        return None
 
     def doDeselectItems(self, silent: bool = False) -> None:
         """Deselects everything in scene
@@ -247,24 +307,6 @@ class Scene(Serializable):
                 raise InvalidFile(f'{os.path.basename(filename)} is not a valid JSON file')
             except Exception as e:
                 dumpException(e)
-
-    def setNodeClassSelector(self, class_selecting_function):
-        """When the function self.node_class_selector is set, we can use different Node classes"""
-        self.node_class_selector = class_selecting_function
-
-    def getNodeClassFromData(self, data):
-        """Return corresponding Node class from data.
-
-        Parameters
-        ----------
-        data : ``OrderedDict``
-            as return from deserialized Node
-
-        Returns
-        -------
-            Definition of Node if self.node_class_selector is not set. Else return custom defined Node class
-        """
-        return Node if self.node_class_selector is None else self.node_class_selector(data)
 
     def serialize(self):
         """Serialize the scene.
