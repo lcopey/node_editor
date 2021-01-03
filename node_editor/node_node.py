@@ -3,7 +3,7 @@ from .node_serializable import Serializable
 from .node_graphics_node import QNEGraphicsNode
 from node_editor.node_content_widget import QNENodeContentWidget
 from .node_socket import Socket, LEFT_TOP, LEFT_CENTER, LEFT_BOTTOM, RIGHT_BOTTOM, RIGHT_CENTER, RIGHT_TOP
-from .utils import dumpException
+from .utils import dumpException, print_func_name
 
 from typing import TYPE_CHECKING
 
@@ -120,7 +120,7 @@ class Node(Serializable):
     def getGraphicsNodeClass(self):
         return self.__class__.GraphicsNode_class
 
-    def getSocketPosition(self, index, position, num_out_of=1):
+    def getSocketPosition(self, index, position, num_out_of=1) -> '(x, y)':
         """Compute the position  of the socket according to current caracteristics of the node"""
         x = self.socket_offsets[position] if (position in (LEFT_TOP, LEFT_CENTER, LEFT_BOTTOM)) else \
             self.grNode.width + self.socket_offsets[position]
@@ -153,7 +153,7 @@ class Node(Serializable):
     def getSocketScenePosition(self, socket: 'Socket') -> '(x, y)':
         nodepos = self.grNode.pos()
         socketpos = self.getSocketPosition(socket.index, socket.position, socket.count_on_this_node_side)
-        return (nodepos.x() + socketpos.x(), nodepos.y() + socketpos.y())
+        return (nodepos.x() + socketpos[0], nodepos.y() + socketpos[1])
 
     def isSelected(self):
         """Returns ```True``` if current `Node` is selected"""
@@ -163,8 +163,8 @@ class Node(Serializable):
         if DEBUG: print(f'{self.__class__.__name__}::onEdgeConnectionChanged {new_edge}')
         pass
 
-    def onInputChanged(self, new_edge):
-        if DEBUG: print(f'{self.__class__.__name__}::onInputChanged {new_edge}')
+    def onInputChanged(self, socket: 'Socket'):
+        if DEBUG: print(f'{self.__class__.__name__}::onInputChanged {socket}')
         self.markDirty()
         self.markDescendantDirty()
 

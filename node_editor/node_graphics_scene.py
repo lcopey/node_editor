@@ -18,6 +18,18 @@ class QNEGraphicsScene(QGraphicsScene):
         super().__init__(parent=parent)
 
         self.scene = scene
+
+        # There is an issue when reconnecting edges -> mouseMove and trying to delete/remove them
+        # the edges stayed in the scene in Qt, however python side was deleted
+        # this caused a lot of troubles...
+        #
+        # I've spend months to find this sh*t!!
+        #
+        # https://bugreports.qt.io/browse/QTBUG-18021
+        # https://bugreports.qt.io/browse/QTBUG-50691
+        # Affected versions: 4.7.1, 4.7.2, 4.8.0, 5.5.1, 5.7.0 - LOL!
+        self.setItemIndexMethod(QGraphicsScene.NoIndex)
+
         # settings
         # create background
         self.gridSize = 20

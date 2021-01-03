@@ -122,7 +122,7 @@ class CalcNode(Node):
             self.grNode.setToolTip(str(e))
             dumpException(e)
 
-    def onInputChanged(self, socket):
+    def onInputChanged(self, socket: 'Socket'):
         print(f'{self.__class__.__name__}::onInputChanged')
         self.markDirty()
         self.eval()

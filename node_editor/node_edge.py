@@ -122,8 +122,8 @@ class Edge(Serializable):
             self.updatePositions()
         return self.grEdge
 
-    def getOtherSocket(self, known_socket: 'Socket'):
-        """Returns the opposite socket on this ``Edge``
+    def getOtherSocket(self, known_socket: 'Socket') -> 'Socket':
+        """Returns the opposite socket on this `Edge`
 
         Parameters
         ----------
@@ -131,7 +131,8 @@ class Edge(Serializable):
 
         Returns
         -------
-
+        `Socket`
+            Returns the opposite socket on this `Edge`
         """
         # return the other end of the edge
         return self.start_socket if known_socket == self.end_socket else self.end_socket
