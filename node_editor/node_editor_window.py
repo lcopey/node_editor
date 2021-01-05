@@ -18,9 +18,10 @@ DEBUG = False
 
 
 class NodeEditorWindow(QMainWindow):
-    NodeEditorWidget_class = NodeEditorWidget
+    NodeEditorWidget_class = NodeEditorWidget  # Static variable to subclass the NodeEditorWidget
 
     """Class representing NodeEditor's Main Window"""
+
     def __init__(self):
         super().__init__()
         self.name_company = 'Michelin'

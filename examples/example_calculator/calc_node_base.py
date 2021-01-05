@@ -4,7 +4,7 @@ from PyQt5.QtCore import QRectF
 from node_editor.node_node import Node
 from node_editor.node_content_widget import QNENodeContentWidget
 from node_editor.node_graphics_node import QNEGraphicsNode
-from node_editor.node_socket import LEFT_CENTER, RIGHT_CENTER
+from node_editor.node_socket import SocketPosition
 from node_editor.utils import dumpException
 
 
@@ -55,6 +55,7 @@ class CalcNode(Node):
         self.value = None
         # Nodes are dirty by default
         self.markDirty()
+
     #
     # def initInnerClasses(self):
     #     # Reference to the content
@@ -64,8 +65,8 @@ class CalcNode(Node):
 
     def initSettings(self):
         super().initSettings()
-        self.input_socket_position = LEFT_CENTER
-        self.output_socket_position = RIGHT_CENTER
+        self.input_socket_position = SocketPosition.LEFT_CENTER
+        self.output_socket_position = SocketPosition.RIGHT_CENTER
 
     def serialize(self):
         res = super().serialize()

@@ -62,6 +62,13 @@ def loadStylessheet(filename):
 
 
 def loadStylessheets(*args):
+    """Helper function - Load stylesheets in the current application and merge them.
+
+    Parameters
+    ----------
+    args : str or list of str
+        path to filename.qss
+    """
     res = ''
     for arg in args:
         file = QFile(arg)

@@ -184,8 +184,50 @@
   <div class="section" id="module-node_editor.node_socket">
 <span id="node-editor-node-socket-module"></span><h1>node_editor.node_socket module<a class="headerlink" href="#module-node_editor.node_socket" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
+<dt id="node_editor.node_socket.SocketPosition">
+<em class="property">class </em><code class="sig-prename descclassname">node_editor.node_socket.</code><code class="sig-name descname">SocketPosition</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_socket.SocketPosition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>Enumeration of possible position of sockets in the <cite>Node</cite></p>
+<dl class="py attribute">
+<dt id="node_editor.node_socket.SocketPosition.LEFT_TOP">
+<code class="sig-name descname">LEFT_TOP</code><em class="property"> = 1</em><a class="headerlink" href="#node_editor.node_socket.SocketPosition.LEFT_TOP" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="node_editor.node_socket.SocketPosition.LEFT_CENTER">
+<code class="sig-name descname">LEFT_CENTER</code><em class="property"> = 2</em><a class="headerlink" href="#node_editor.node_socket.SocketPosition.LEFT_CENTER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="node_editor.node_socket.SocketPosition.LEFT_BOTTOM">
+<code class="sig-name descname">LEFT_BOTTOM</code><em class="property"> = 3</em><a class="headerlink" href="#node_editor.node_socket.SocketPosition.LEFT_BOTTOM" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="node_editor.node_socket.SocketPosition.RIGHT_TOP">
+<code class="sig-name descname">RIGHT_TOP</code><em class="property"> = 4</em><a class="headerlink" href="#node_editor.node_socket.SocketPosition.RIGHT_TOP" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="node_editor.node_socket.SocketPosition.RIGHT_CENTER">
+<code class="sig-name descname">RIGHT_CENTER</code><em class="property"> = 5</em><a class="headerlink" href="#node_editor.node_socket.SocketPosition.RIGHT_CENTER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="node_editor.node_socket.SocketPosition.RIGHT_BOTTOM">
+<code class="sig-name descname">RIGHT_BOTTOM</code><em class="property"> = 6</em><a class="headerlink" href="#node_editor.node_socket.SocketPosition.RIGHT_BOTTOM" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="node_editor.node_socket.SocketPosition.LEFT">
+<code class="sig-name descname">LEFT</code><em class="property"> = (1, 2, 3)</em><a class="headerlink" href="#node_editor.node_socket.SocketPosition.LEFT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt id="node_editor.node_socket.Socket">
-<em class="property">class </em><code class="sig-prename descclassname">node_editor.node_socket.</code><code class="sig-name descname">Socket</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">node</span><span class="p">:</span> <span class="n">Node</span></em>, <em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">position</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">socket_type</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">multi_edges</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">count_on_this_node_side</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">is_input</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_socket.Socket" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">node_editor.node_socket.</code><code class="sig-name descname">Socket</code><span class="sig-paren">(</span><em class="sig-param">node: Node</em>, <em class="sig-param">index=0</em>, <em class="sig-param">position=&lt;SocketPosition.LEFT_TOP: 1&gt;</em>, <em class="sig-param">socket_type=1</em>, <em class="sig-param">multi_edges=True</em>, <em class="sig-param">count_on_this_node_side=1</em>, <em class="sig-param">is_input=False</em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_socket.Socket" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="node_editor.node_serializable.html#node_editor.node_serializable.Serializable" title="node_editor.node_serializable.Serializable"><code class="xref py py-class docutils literal notranslate"><span class="pre">node_editor.node_serializable.Serializable</span></code></a></p>
 <dl class="py attribute">
 <dt id="node_editor.node_socket.Socket.Socket_GR_Class">
@@ -211,7 +253,7 @@
 <dd class="field-even"><p>True if the socket type was actually changed</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">`bool`</span></code></p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -238,23 +280,35 @@
 
 <dl class="py method">
 <dt id="node_editor.node_socket.Socket.addEdge">
-<code class="sig-name descname">addEdge</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">edge</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_socket.Socket.addEdge" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">addEdge</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">edge</span><span class="p">:</span> <span class="n">Edge</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_socket.Socket.addEdge" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_socket.Socket.removeEdge">
-<code class="sig-name descname">removeEdge</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">edge</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_socket.Socket.removeEdge" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">removeEdge</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">edge</span><span class="p">:</span> <span class="n">Edge</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_socket.Socket.removeEdge" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_socket.Socket.removeAllEdges">
-<code class="sig-name descname">removeAllEdges</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">silent</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_socket.Socket.removeAllEdges" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">removeAllEdges</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">silent</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_socket.Socket.removeAllEdges" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_socket.Socket.determineMultiedges">
-<code class="sig-name descname">determineMultiedges</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_socket.Socket.determineMultiedges" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname">determineMultiedges</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">dict</span></em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#node_editor.node_socket.Socket.determineMultiedges" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dictinary containing ‘multi_edges’ as key. As is return by serialisation of <cite>Socket</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>dict</em>) – Dictinary containing ‘multi_edges’ as key. As is return by serialisation of <cite>Socket</cite></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">`True`</span></code> : if the current Socket support multiple edges otherwise <code class="docutils literal notranslate"><span class="pre">`False`</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_socket.Socket.serialize">

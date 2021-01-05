@@ -200,6 +200,12 @@ grEdge - reference to the <a class="reference internal" href="node_editor.node_g
 </ul>
 </dd>
 </dl>
+<dl class="py attribute">
+<dt id="node_editor.node_edge.Edge.edge_validators">
+<code class="sig-name descname">edge_validators</code><em class="property"> = []</em><a class="headerlink" href="#node_editor.node_edge.Edge.edge_validators" title="Permalink to this definition">¶</a></dt>
+<dd><p>class variable containing list of registered edge validators</p>
+</dd></dl>
+
 <dl class="py method">
 <dt id="node_editor.node_edge.Edge.start_socket">
 <em class="property">property </em><code class="sig-name descname">start_socket</code><a class="headerlink" href="#node_editor.node_edge.Edge.start_socket" title="Permalink to this definition">¶</a></dt>
@@ -231,12 +237,55 @@ grEdge - reference to the <a class="reference internal" href="node_editor.node_g
 </dd></dl>
 
 <dl class="py method">
+<dt id="node_editor.node_edge.Edge.getEdgeValidators">
+<em class="property">classmethod </em><code class="sig-name descname">getEdgeValidators</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_edge.Edge.getEdgeValidators" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the list of Edge Validator Callbacks</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_edge.Edge.registerEdgeValidator">
+<em class="property">classmethod </em><code class="sig-name descname">registerEdgeValidator</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">validator_callback</span><span class="p">:</span> <span class="n">function</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_edge.Edge.registerEdgeValidator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register Edge Validator Callback</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>validator_callback</strong> (<cite>function</cite>) – A function handle to validate Edge</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_edge.Edge.validateEdge">
+<em class="property">classmethod </em><code class="sig-name descname">validateEdge</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">start_socket</span><span class="p">:</span> <span class="n">Socket</span></em>, <em class="sig-param"><span class="n">end_socket</span><span class="p">:</span> <span class="n">Socket</span></em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#node_editor.node_edge.Edge.validateEdge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validate Edge agains all registered <cite>Edge Validator Callbacks</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>start_socket</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Socket</span></code>) – Starting <code class="xref py py-class docutils literal notranslate"><span class="pre">Socket</span></code> of Edge to check</p></li>
+<li><p><strong>end_socket</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Socket</span></code>) – Target/End <code class="xref py py-class docutils literal notranslate"><span class="pre">Socket</span></code> of Edge to check</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the Edge is valid or <code class="docutils literal notranslate"><span class="pre">False</span></code> if not</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="node_editor.node_edge.Edge.getOtherSocket">
-<code class="sig-name descname">getOtherSocket</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">known_socket</span><span class="p">:</span> <span class="n">Socket</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_edge.Edge.getOtherSocket" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the opposite socket on this <code class="docutils literal notranslate"><span class="pre">Edge</span></code></p>
+<code class="sig-name descname">getOtherSocket</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">known_socket</span><span class="p">:</span> <span class="n">Socket</span></em><span class="sig-paren">)</span> &#x2192; Socket<a class="headerlink" href="#node_editor.node_edge.Edge.getOtherSocket" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the opposite socket on this <cite>Edge</cite></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>known_socket</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Returns the opposite socket on this <cite>Edge</cite></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>Socket</cite></p>
 </dd>
 </dl>
 </dd></dl>

@@ -1,7 +1,3 @@
-# -*- encoding: utf-8 -*-
-"""
-Module implementing the MainWindow to the calculator example
-"""
 import os
 from PyQt5.QtWidgets import QMdiArea, QWidget, QListWidget, QDockWidget, QAction, QMessageBox, QFileDialog
 from PyQt5.QtGui import *
@@ -10,9 +6,9 @@ from node_editor.utils import loadStylessheets
 from node_editor.node_editor_window import NodeEditorWindow
 from node_editor.node_editor_widget import NodeEditorWidget
 from node_editor.utils import dumpException, pp
-from .calc_sub_window import CalculatorSubWindow
-from .calc_drag_listbox import QNEDragListbox
-from .calc_conf import CALC_NODES
+# from .calc_sub_window import CalculatorSubWindow
+# from .calc_drag_listbox import QNEDragListbox
+# from .calc_conf import CALC_NODES
 
 from node_editor.node_edge import Edge
 from node_editor.node_edge_validators import *
@@ -26,21 +22,13 @@ import examples.example_calculator.qss.nodeeditor_dark_resources
 DEBUG = False
 
 
-class CalculatorWindow(NodeEditorWindow):
-    """Class representing the MainWindow of the application.
-
-    Instance Attributes:
-        name_company and name_product - used to register the settings
-    """
+class DataWindow(NodeEditorWindow):
 
     def initUI(self):
-        """UI is composed with """
-
-        # variable for QSettings
         self.name_company = 'Michelin'
         self.name_product = 'Calculator NodeEditor'
 
-        # Load filesheets
+        # load filesheets in the application
         self.stylesheet_filename = os.path.join(os.path.dirname(__file__), 'qss/nodeeditor.qss')
         loadStylessheets(os.path.join(os.path.dirname(__file__), 'qss/nodeeditor-dark.qss'),
                          self.stylesheet_filename)
@@ -51,7 +39,6 @@ class CalculatorWindow(NodeEditorWindow):
             print('Registered Node')
             pp(CALC_NODES)
 
-        # Instantiate the MultiDocument Area
         self.mdiArea = QMdiArea()
         self.mdiArea.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         self.mdiArea.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
@@ -59,14 +46,10 @@ class CalculatorWindow(NodeEditorWindow):
         self.mdiArea.setTabsClosable(True)
         self.setCentralWidget(self.mdiArea)
 
-        # Connect subWindowActivate to updateMenu
-        # Activate the items on the file_menu and the edit_menu
         self.mdiArea.subWindowActivated.connect(self.updateMenus)
-        # from mdi example...
         self.windowMapper = QSignalMapper(self)
         self.windowMapper.mapped[QWidget].connect(self.setActiveSubWindow)
 
-        # instantiate various elements
         self.createNodesDock()
         self.createActions()
         self.createMenus()
@@ -79,11 +62,6 @@ class CalculatorWindow(NodeEditorWindow):
         self.setWindowTitle("Calculator NodeEditor Example")
 
     def createActions(self):
-        """Instantiate various `QAction` for the main toolbar.
-
-        File and Edit menu actions are instantiated in the :classs:~`node_editor.node_editor_widget.NodeEditorWidget`
-        Window and Help actions are specific to the :class:~`examples.calc_window.CalcWindow`
-        """
         super().createActions()
         self.actClose = QAction("Cl&ose", self, statusTip="Close the active window",
                                 triggered=self.mdiArea.closeActiveSubWindow)
@@ -105,7 +83,6 @@ class CalculatorWindow(NodeEditorWindow):
         self.actAbout = QAction("&About", self, statusTip="Show the application's About box", triggered=self.about)
 
     def createMenus(self):
-        """Populate File, Edit, Window and Help with `QAction`"""
         super().createMenus()
 
         self.windowMenu = self.menuBar().addMenu("&Window")
@@ -121,7 +98,6 @@ class CalculatorWindow(NodeEditorWindow):
         self.editMenu.aboutToShow.connect(self.updateEditMenu)
 
     def onWindowNodesToolbar(self):
-        """Event handling the visibility of the `Nodes Dock`"""
         if self.nodesDock.isVisible():
             self.nodesDock.hide()
         else:
@@ -131,10 +107,6 @@ class CalculatorWindow(NodeEditorWindow):
         pass
 
     def createNodesDock(self):
-        """Create `Nodes Dock` and populates it with the list of `Nodes`
-
-        The `Nodes` are automatically detected via the :class:~`examples.calc_drag_listbox.QNEDragListBox`
-        """
         self.nodeListWidget = QNEDragListbox()
 
         self.nodesDock = QDockWidget("Nodes")

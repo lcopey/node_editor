@@ -2,15 +2,13 @@ from collections import OrderedDict
 from .node_serializable import Serializable
 from .node_graphics_node import QNEGraphicsNode
 from node_editor.node_content_widget import QNENodeContentWidget
-from .node_socket import Socket, LEFT_TOP, LEFT_CENTER, LEFT_BOTTOM, RIGHT_BOTTOM, RIGHT_CENTER, RIGHT_TOP
-from .utils import dumpException, print_func_name
+from .node_socket import Socket, SocketPosition
+from .utils import dumpException, print_func_name, return_simple_id
 
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .node_scene import Scene
-
-from .utils import return_simple_id
 
 DEBUG = False
 
@@ -19,9 +17,24 @@ class Node(Serializable):
     GraphicsNode_class = QNEGraphicsNode
     NodeContent_class = QNENodeContentWidget
     Socket_class = Socket
-    """Implement generic node"""
+    """Class representing the `Node`"""
 
     def __init__(self, scene: 'Scene', title='Undefined Node', inputs=[], outputs=[]):
+        """Instantiate a new `Node` and add it to the `Graphical Scene`
+
+        Instance Attributes:
+            scene - reference to the :class:`~node_editor.node_scene.Scene`
+            grNode - reference to the :class:`~node_editor.node_graphics_node.QNEGraphicsNode`
+
+        Parameters
+        ----------
+        scene : :class:`~node_editor.node_scene.Scene`
+            Reference to the :class:`~node_editor.node_scene.Scene`
+        title : str
+            Name of the node displayed on the upper side of the `Node`
+        inputs : list of :class:`~node_editor.node_socket.Socket`
+        outputs : list of :class:`~node_editor.node_socket.Socket`
+        """
         super().__init__()
         # reference to the actual scene
         self.scene = scene
@@ -67,6 +80,14 @@ class Node(Serializable):
             self.grNode.title = self._title
 
     def initInnerClasses(self):
+        """
+        Instantiate innerclasses :
+        - node_content_class : by default :class:`~node_editor.node_content_widget.QNENodeContentWidget`
+        - graphics_node_class : by default :class:`~node_editor.node_graphics_node.QNEGraphicsNode`
+
+        Uses internal methodes `getNodeContentClass` and `getGraphicsNodeClass` to obtain the definition
+         of the above two classes
+        """
         # Reference to the content
         node_content_class = self.getNodeContentClass()
         graphics_node_class = self.getGraphicsNodeClass()
@@ -77,17 +98,17 @@ class Node(Serializable):
 
     def initSettings(self):
         self.socket_spacing = 22
-        self.input_socket_position = LEFT_BOTTOM
-        self.output_socket_position = RIGHT_TOP
+        self.input_socket_position = SocketPosition.LEFT_BOTTOM
+        self.output_socket_position = SocketPosition.RIGHT_TOP
         self.input_multi_edged = False
         self.output_multi_edged = True
         self.socket_offsets = {
-            LEFT_BOTTOM: -1,
-            LEFT_CENTER: -1,
-            LEFT_TOP: -1,
-            RIGHT_BOTTOM: 1,
-            RIGHT_CENTER: 1,
-            RIGHT_TOP: 1,
+            SocketPosition.LEFT_BOTTOM: -1,
+            SocketPosition.LEFT_CENTER: -1,
+            SocketPosition.LEFT_TOP: -1,
+            SocketPosition.RIGHT_BOTTOM: 1,
+            SocketPosition.RIGHT_CENTER: 1,
+            SocketPosition.RIGHT_TOP: 1,
         }
 
     def initSockets(self, inputs, outputs, reset=True):
@@ -120,15 +141,33 @@ class Node(Serializable):
     def getGraphicsNodeClass(self):
         return self.__class__.GraphicsNode_class
 
-    def getSocketPosition(self, index, position, num_out_of=1) -> '(x, y)':
-        """Compute the position  of the socket according to current caracteristics of the node"""
-        x = self.socket_offsets[position] if (position in (LEFT_TOP, LEFT_CENTER, LEFT_BOTTOM)) else \
-            self.grNode.width + self.socket_offsets[position]
-        if position in (LEFT_BOTTOM, RIGHT_BOTTOM):
+    def getSocketPosition(self, index: int, position: SocketPosition, num_out_of: int = 1) -> '(x, y)':
+        """Helper function - returns the position of a socket in pixels relative to the node
+
+        Parameters
+        ----------
+        index : ```int```
+            Index of the socket in the list
+        position : SocketPosition
+            One of enumeration
+        num_out_of : ```int```
+            total number of `Socket` on this position
+
+        Returns
+        -------
+        ```list```
+            x, y position relative to the node
+        """
+        if position in (SocketPosition.LEFT_TOP, SocketPosition.LEFT_CENTER, SocketPosition.LEFT_BOTTOM):
+            x = self.socket_offsets[position]
+        else:
+            x = self.grNode.width + self.socket_offsets[position]
+
+        if position in (SocketPosition.LEFT_BOTTOM, SocketPosition.RIGHT_BOTTOM):
             # start from bottom
             y = self.grNode.height - (
                     index * self.socket_spacing + self.grNode.title_vertical_padding + self.grNode.edge_roundness)
-        elif position in (LEFT_CENTER, RIGHT_CENTER):
+        elif position in (SocketPosition.LEFT_CENTER, SocketPosition.RIGHT_CENTER):
             num_sockets = num_out_of
             node_height = self.grNode.height
             top_offset = self.grNode.title_height + 2 * self.grNode.title_vertical_padding + self.grNode.edge_padding
@@ -142,7 +181,7 @@ class Node(Serializable):
             y = top_offset + available_height / 2. + (index - 0.5) * self.socket_spacing - \
                 (num_sockets - 1) * self.socket_spacing / 2
 
-        elif position in (LEFT_TOP, RIGHT_TOP):
+        elif position in (SocketPosition.LEFT_TOP, SocketPosition.RIGHT_TOP):
             # start from top
             y = index * self.socket_spacing + self.grNode.title_height + self.grNode.title_vertical_padding + self.grNode.edge_roundness
         else:
@@ -169,7 +208,7 @@ class Node(Serializable):
         self.markDescendantDirty()
 
     def onDeserialized(self, data: dict):
-        """Event manually called when this n,ode was deserialized."""
+        """Event manually called when this node was deserialized."""
         pass
 
     def onDoubleClicked(self, event):

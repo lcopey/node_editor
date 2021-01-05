@@ -128,6 +128,7 @@ class EdgeDragging:
                                 '<-->', new_edge.end_socket)
 
                 for socket in [self.drag_start_socket, item.socket]:
+                    # Notify Edge Connection Changed
                     socket.node.onEdgeConnectionChanged(new_edge)
                     if socket.is_input:
                         socket.node.onInputChanged(socket)
