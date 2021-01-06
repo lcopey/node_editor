@@ -1,3 +1,7 @@
+# -*- encoding: utf-8 -*-
+"""
+Module implementing the MainWindow to the calculator example
+"""
 import os
 from PyQt5.QtWidgets import QMdiArea, QWidget, QListWidget, QDockWidget, QAction, QMessageBox, QFileDialog
 from PyQt5.QtGui import *
@@ -6,9 +10,9 @@ from node_editor.utils import loadStylessheets
 from node_editor.node_editor_window import NodeEditorWindow
 from node_editor.node_editor_widget import NodeEditorWidget
 from node_editor.utils import dumpException, pp
-# from .calc_sub_window import CalculatorSubWindow
-# from .calc_drag_listbox import QNEDragListbox
-# from .calc_conf import CALC_NODES
+from .data_subwindow import DataSubWindow
+from .data_drag_listbox import QNEDragListbox
+from .data_conf import DATA_NODES
 
 from node_editor.node_edge import Edge
 from node_editor.node_edge_validators import *
@@ -23,12 +27,20 @@ DEBUG = False
 
 
 class DataWindow(NodeEditorWindow):
+    """Class representing the MainWindow of the application.
+
+    Instance Attributes:
+        name_company and name_product - used to register the settings
+    """
 
     def initUI(self):
+        """UI is composed with """
+
+        # variable for QSettings
         self.name_company = 'Michelin'
         self.name_product = 'Calculator NodeEditor'
 
-        # load filesheets in the application
+        # Load filesheets
         self.stylesheet_filename = os.path.join(os.path.dirname(__file__), 'qss/nodeeditor.qss')
         loadStylessheets(os.path.join(os.path.dirname(__file__), 'qss/nodeeditor-dark.qss'),
                          self.stylesheet_filename)
@@ -37,8 +49,9 @@ class DataWindow(NodeEditorWindow):
 
         if DEBUG:
             print('Registered Node')
-            pp(CALC_NODES)
+            pp(DATA_NODES)
 
+        # Instantiate the MultiDocument Area
         self.mdiArea = QMdiArea()
         self.mdiArea.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         self.mdiArea.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
@@ -46,10 +59,14 @@ class DataWindow(NodeEditorWindow):
         self.mdiArea.setTabsClosable(True)
         self.setCentralWidget(self.mdiArea)
 
+        # Connect subWindowActivate to updateMenu
+        # Activate the items on the file_menu and the edit_menu
         self.mdiArea.subWindowActivated.connect(self.updateMenus)
+        # from mdi example...
         self.windowMapper = QSignalMapper(self)
         self.windowMapper.mapped[QWidget].connect(self.setActiveSubWindow)
 
+        # instantiate various elements
         self.createNodesDock()
         self.createActions()
         self.createMenus()
@@ -62,6 +79,11 @@ class DataWindow(NodeEditorWindow):
         self.setWindowTitle("Calculator NodeEditor Example")
 
     def createActions(self):
+        """Instantiate various `QAction` for the main toolbar.
+
+        File and Edit menu actions are instantiated in the :classs:~`node_editor.node_editor_widget.NodeEditorWidget`
+        Window and Help actions are specific to the :class:~`examples.calc_window.CalcWindow`
+        """
         super().createActions()
         self.actClose = QAction("Cl&ose", self, statusTip="Close the active window",
                                 triggered=self.mdiArea.closeActiveSubWindow)
@@ -83,6 +105,7 @@ class DataWindow(NodeEditorWindow):
         self.actAbout = QAction("&About", self, statusTip="Show the application's About box", triggered=self.about)
 
     def createMenus(self):
+        """Populate File, Edit, Window and Help with `QAction`"""
         super().createMenus()
 
         self.windowMenu = self.menuBar().addMenu("&Window")
@@ -98,6 +121,7 @@ class DataWindow(NodeEditorWindow):
         self.editMenu.aboutToShow.connect(self.updateEditMenu)
 
     def onWindowNodesToolbar(self):
+        """Event handling the visibility of the `Nodes Dock`"""
         if self.nodesDock.isVisible():
             self.nodesDock.hide()
         else:
@@ -107,6 +131,10 @@ class DataWindow(NodeEditorWindow):
         pass
 
     def createNodesDock(self):
+        """Create `Nodes Dock` and populates it with the list of `Nodes`
+
+        The `Nodes` are automatically detected via the :class:~`examples.calc_drag_listbox.QNEDragListBox`
+        """
         self.nodeListWidget = QNEDragListbox()
 
         self.nodesDock = QDockWidget("Nodes")
@@ -225,7 +253,7 @@ class DataWindow(NodeEditorWindow):
                     else:
                         # do not use createMdiChild as a new node editor to call the fileLoad method
                         # Create new subwindow and open file
-                        nodeeditor = CalculatorSubWindow()
+                        nodeeditor = DataSubWindow()
                         if nodeeditor.fileLoad(fname):
                             self.statusBar().showMessage(f'File {fname} loaded', 5000)
                             nodeeditor.setTitle()
@@ -256,7 +284,7 @@ class DataWindow(NodeEditorWindow):
             dumpException(e)
 
     def createMdiChild(self, child_widget=None):
-        nodeeditor = child_widget if child_widget is not None else CalculatorSubWindow()
+        nodeeditor = child_widget if child_widget is not None else DataSubWindow()
         subwnd = self.mdiArea.addSubWindow(nodeeditor, )
         subwnd.setWindowIcon(self.empty_icon)
         # nodeeditor.scene.addItemSelectedListener(self.updateEditMenu)
@@ -265,7 +293,7 @@ class DataWindow(NodeEditorWindow):
         nodeeditor.addCloseEventListener(self.onSubWndClose)
         return subwnd
 
-    def onSubWndClose(self, widget: CalculatorSubWindow, event: QCloseEvent):
+    def onSubWndClose(self, widget: DataSubWindow, event: QCloseEvent):
         # close event from the nodeeditor works by asking the active widget
         # if modification occurs on the active widget, ask to save or not.
         # Therefore when closing a subwindow, select the corresponding subwindow

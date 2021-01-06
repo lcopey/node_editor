@@ -8,7 +8,7 @@ from node_editor.node_socket import SocketPosition
 from node_editor.utils import dumpException
 
 
-class CalcGraphicsNode(GraphicsNode):
+class DataGraphicsNode(GraphicsNode):
     def initSizes(self):
         super().initSizes()
         self.width = 160
@@ -47,7 +47,7 @@ class CalcNode(Node):
     content_label = ''
     content_label_objname = 'calc_node_bg'
 
-    GraphicsNode_class = CalcGraphicsNode
+    GraphicsNode_class = DataGraphicsNode
     NodeContent_class = CalcContent
 
     def __init__(self, scene: 'Scene', inputs=[2, 2], outputs=[1]):

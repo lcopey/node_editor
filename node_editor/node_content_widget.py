@@ -5,6 +5,7 @@ from collections import OrderedDict
 from node_editor.node_serializable import Serializable
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QKeyEvent, QFocusEvent
+from .utils import dumpException
 
 
 class QNENodeContentWidget(QWidget, Serializable):
@@ -75,9 +76,15 @@ class QNENodeContentWidget(QWidget, Serializable):
 
 class QNETextEdit(QTextEdit):
     def focusInEvent(self, event: QFocusEvent):
-        self.parentWidget().setEditingFlag(True)
-        super().focusInEvent(event)
+        try:
+            self.parentWidget().setEditingFlag(True)
+            super().focusInEvent(event)
+        except Exception as e:
+            dumpException(e)
 
     def focusOutEvent(self, event: QFocusEvent):
-        self.parentWidget().setEditingFlag(False)
-        super().focusOutEvent(event)
+        try:
+            self.parentWidget().setEditingFlag(False)
+            super().focusOutEvent(event)
+        except Exception as e:
+            dumpException(e)

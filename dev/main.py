@@ -1,9 +1,11 @@
 import sys
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPixmap, QPainter
-from PyQt5.QtWidgets import QApplication, QGraphicsView, QGraphicsScene
-# from handle_rect import GraphicsRectItem
-from node_editor.graphics import QGraphicsResizableRectItem
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
+from typing import Optional
+
+
+from graphics import QGraphicsResizableRectItem
 
 
 def main():
@@ -20,9 +22,8 @@ def main():
     grview.setScene(scene)
 
     item = QGraphicsResizableRectItem(100, 100, 0, 0, 180, 240)
-    # item = GraphicsRectItem()
-    scene.addItem(item)
 
+    scene.addItem(item)
     grview.fitInView(scene.sceneRect(), Qt.KeepAspectRatio)
     grview.show()
     sys.exit(app.exec_())

@@ -1,1 +1,0 @@
-from .graphics_resizable_rect_item import QGraphicsResizableRectItem

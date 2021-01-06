@@ -274,10 +274,15 @@ class NodeEditorWindow(QMainWindow):
         """Copy callback"""
         current_nodeeditor = self.getCurrentNodeEditorWidget()
         if current_nodeeditor:
-            data = current_nodeeditor.scene.clipboard.serializeSelected(delete=False)
-            str_data = json.dumps(data, indent=4)
-            if DEBUG: print('Copy :', str_data)
-            QApplication.instance().clipboard().setText(str_data)
+            try:
+                data = current_nodeeditor.scene.clipboard.serializeSelected(delete=False)
+
+                str_data = json.dumps(data, indent=4)
+                if DEBUG: print('Copy :', str_data)
+                QApplication.instance().clipboard().setText(str_data)
+
+            except Exception as e:
+                dumpException(e)
 
     def onEditPaste(self):
         """Paste callback"""

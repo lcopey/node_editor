@@ -27,10 +27,10 @@ class CalcInputContent(QNENodeContentWidget):
         return res
 
 
-@register_node(OP_NODE_INPUT)
+@register_node(NodeType.OP_NODE_INPUT)
 class CalcNode_Input(CalcNode):
     icon = 'icons/in.png'
-    op_code = OP_NODE_INPUT
+    op_code = NodeType.OP_NODE_INPUT
     op_title = 'Input'
     content_label = ''
     content_label_objname = 'calc_node_input'

@@ -1,0 +1,1 @@
+from .node_graphics_node_resizeable import QGraphicsResizableRectItem

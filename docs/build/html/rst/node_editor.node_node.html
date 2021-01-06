@@ -190,7 +190,7 @@
 <p>Instantiate a new <cite>Node</cite> and add it to the <cite>Graphical Scene</cite></p>
 <dl class="simple">
 <dt>Instance Attributes:</dt><dd><p>scene - reference to the <a class="reference internal" href="node_editor.node_scene.html#node_editor.node_scene.Scene" title="node_editor.node_scene.Scene"><code class="xref py py-class docutils literal notranslate"><span class="pre">Scene</span></code></a>
-grNode - reference to the <a class="reference internal" href="node_editor.node_graphics_node.html#node_editor.node_graphics_node.QNEGraphicsNode" title="node_editor.node_graphics_node.QNEGraphicsNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">QNEGraphicsNode</span></code></a></p>
+grNode - reference to the <a class="reference internal" href="node_editor.node_graphics_node.html#node_editor.node_graphics_node.GraphicsNode" title="node_editor.node_graphics_node.GraphicsNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">GraphicsNode</span></code></a></p>
 </dd>
 </dl>
 <dl class="field-list simple">
@@ -206,7 +206,7 @@ grNode - reference to the <a class="reference internal" href="node_editor.node_g
 <dl class="py attribute">
 <dt id="node_editor.node_node.Node.GraphicsNode_class">
 <code class="sig-name descname">GraphicsNode_class</code><a class="headerlink" href="#node_editor.node_node.Node.GraphicsNode_class" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <a class="reference internal" href="node_editor.node_graphics_node.html#node_editor.node_graphics_node.QNEGraphicsNode" title="node_editor.node_graphics_node.QNEGraphicsNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">node_editor.node_graphics_node.QNEGraphicsNode</span></code></a></p>
+<dd><p>alias of <a class="reference internal" href="node_editor.node_graphics_node.html#node_editor.node_graphics_node.GraphicsNode" title="node_editor.node_graphics_node.GraphicsNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">node_editor.node_graphics_node.GraphicsNode</span></code></a></p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -241,7 +241,7 @@ grNode - reference to the <a class="reference internal" href="node_editor.node_g
 <code class="sig-name descname">initInnerClasses</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.initInnerClasses" title="Permalink to this definition">¶</a></dt>
 <dd><p>Instantiate innerclasses :
 - node_content_class : by default <a class="reference internal" href="node_editor.node_content_widget.html#node_editor.node_content_widget.QNENodeContentWidget" title="node_editor.node_content_widget.QNENodeContentWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">QNENodeContentWidget</span></code></a>
-- graphics_node_class : by default <a class="reference internal" href="node_editor.node_graphics_node.html#node_editor.node_graphics_node.QNEGraphicsNode" title="node_editor.node_graphics_node.QNEGraphicsNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">QNEGraphicsNode</span></code></a></p>
+- graphics_node_class : by default <a class="reference internal" href="node_editor.node_graphics_node.html#node_editor.node_graphics_node.GraphicsNode" title="node_editor.node_graphics_node.GraphicsNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">GraphicsNode</span></code></a></p>
 <dl class="simple">
 <dt>Uses internal methodes <cite>getNodeContentClass</cite> and <cite>getGraphicsNodeClass</cite> to obtain the definition</dt><dd><p>of the above two classes</p>
 </dd>
@@ -271,21 +271,21 @@ grNode - reference to the <a class="reference internal" href="node_editor.node_g
 
 <dl class="py method">
 <dt id="node_editor.node_node.Node.getSocketPosition">
-<code class="sig-name descname">getSocketPosition</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span></em>, <em class="sig-param"><span class="n">position</span></em>, <em class="sig-param"><span class="n">num_out_of</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.getSocketPosition" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">getSocketPosition</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">position</span><span class="p">:</span> <span class="n"><a class="reference internal" href="node_editor.node_socket.html#node_editor.node_socket.SocketPosition" title="node_editor.node_socket.SocketPosition">node_editor.node_socket.SocketPosition</a></span></em>, <em class="sig-param"><span class="n">num_out_of</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.getSocketPosition" title="Permalink to this definition">¶</a></dt>
 <dd><p>Helper function - returns the position of a socket in pixels relative to the node</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>index</strong> (<em>int</em>) – Index of the socket in the list</p></li>
-<li><p><strong>position</strong> (<em>int</em>) – One of enumeration</p></li>
-<li><p><strong>num_out_of</strong> (<em>int</em>) – total number of <cite>Socket</cite> on this position</p></li>
+<li><p><strong>index</strong> (<code class="docutils literal notranslate"><span class="pre">`int`</span></code>) – Index of the socket in the list</p></li>
+<li><p><strong>position</strong> (<a class="reference internal" href="node_editor.node_socket.html#node_editor.node_socket.SocketPosition" title="node_editor.node_socket.SocketPosition"><em>SocketPosition</em></a>) – One of enumeration</p></li>
+<li><p><strong>num_out_of</strong> (<code class="docutils literal notranslate"><span class="pre">`int`</span></code>) – total number of <cite>Socket</cite> on this position</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>x, y position relative to the node</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>list</p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">`list`</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -314,7 +314,7 @@ grNode - reference to the <a class="reference internal" href="node_editor.node_g
 <dl class="py method">
 <dt id="node_editor.node_node.Node.onDeserialized">
 <code class="sig-name descname">onDeserialized</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">dict</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.onDeserialized" title="Permalink to this definition">¶</a></dt>
-<dd><p>Event manually called when this n,ode was deserialized.</p>
+<dd><p>Event manually called when this node was deserialized.</p>
 </dd></dl>
 
 <dl class="py method">

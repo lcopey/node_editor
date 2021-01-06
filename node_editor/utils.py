@@ -38,7 +38,7 @@ def print_items(item):
         print('SOCKET :', item.socket)
         print('  Edges :', item.socket.edges)
 
-    elif 'QNEGraphicsNode' in item.__str__():
+    elif 'GraphicsNode' in item.__str__():
         print('NODE :', item.node)
         print('  Input socket :', *item.node.inputs)
         print('  Output socket :', *item.node.outputs)

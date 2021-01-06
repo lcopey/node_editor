@@ -11,7 +11,10 @@ if TYPE_CHECKING:
     from .node_edge import Edge
 
 
-class SocketPosition(enum.Enum):
+# TODO Add support through enumeration to socket type
+
+
+class SocketPosition(enum.IntEnum):
     """Enumeration of possible position of sockets in the `Node`"""
     LEFT_TOP = 1
     LEFT_CENTER = 2
@@ -19,6 +22,10 @@ class SocketPosition(enum.Enum):
     RIGHT_TOP = 4
     RIGHT_CENTER = 5
     RIGHT_BOTTOM = 6
+
+    @classmethod
+    def has_value(cls, value):
+        return value in cls._value2member_map_
 
 
 class Socket(Serializable):
@@ -31,7 +38,10 @@ class Socket(Serializable):
         super().__init__()
         self.node = node
         self.index = index
+
+        assert SocketPosition.has_value(position)
         self.position = position
+
         self.socket_type = socket_type
         self.is_multi_edges = multi_edges
         self.count_on_this_node_side = count_on_this_node_side
@@ -120,11 +130,12 @@ class Socket(Serializable):
             return data['position'] in (SocketPosition.RIGHT_BOTTOM, SocketPosition.RIGHT_TOP)
 
     def serialize(self):
+        # Convert int to enum
         return OrderedDict([
             ('id', self.id),
             ('index', self.index),
             ('multi_edges', self.is_multi_edges),
-            ('position', self.position),
+            ('position', self.position.value),
             ('socket_type', self.socket_type),
         ])
 

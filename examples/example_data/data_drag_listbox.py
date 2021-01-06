@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from node_editor.utils import dumpException
-from .calc_conf import *
+from .data_conf import *
 
 
 class QNEDragListbox(QListWidget):
@@ -18,7 +18,7 @@ class QNEDragListbox(QListWidget):
         self.addMyItems()
 
     def addMyItems(self):
-        keys = list(CALC_NODES.keys())
+        keys = list(DATA_NODES.keys())
         keys.sort()
         for key in keys:
             node = get_call_from_opcode(key)
@@ -41,7 +41,7 @@ class QNEDragListbox(QListWidget):
         None
 
         """
-        # initialize QListWidgetItem and add to parent self
+        # initialize QListWidgetItem
         item = QListWidgetItem(name, self)
         pixmap = QPixmap(icon if icon is not None else '.')
         item.setIcon(QIcon(pixmap))

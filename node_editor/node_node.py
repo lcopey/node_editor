@@ -1,6 +1,6 @@
 from collections import OrderedDict
 from .node_serializable import Serializable
-from .node_graphics_node import QNEGraphicsNode
+from .node_graphics_node import GraphicsNode
 from node_editor.node_content_widget import QNENodeContentWidget
 from .node_socket import Socket, SocketPosition
 from .utils import dumpException, print_func_name, return_simple_id
@@ -14,7 +14,7 @@ DEBUG = False
 
 
 class Node(Serializable):
-    GraphicsNode_class = QNEGraphicsNode
+    GraphicsNode_class = GraphicsNode
     NodeContent_class = QNENodeContentWidget
     Socket_class = Socket
     """Class representing the `Node`"""
@@ -24,7 +24,7 @@ class Node(Serializable):
 
         Instance Attributes:
             scene - reference to the :class:`~node_editor.node_scene.Scene`
-            grNode - reference to the :class:`~node_editor.node_graphics_node.QNEGraphicsNode`
+            grNode - reference to the :class:`~node_editor.node_graphics_node.GraphicsNode`
 
         Parameters
         ----------
@@ -83,7 +83,7 @@ class Node(Serializable):
         """
         Instantiate innerclasses :
         - node_content_class : by default :class:`~node_editor.node_content_widget.QNENodeContentWidget`
-        - graphics_node_class : by default :class:`~node_editor.node_graphics_node.QNEGraphicsNode`
+        - graphics_node_class : by default :class:`~node_editor.node_graphics_node.GraphicsNode`
 
         Uses internal methodes `getNodeContentClass` and `getGraphicsNodeClass` to obtain the definition
          of the above two classes
@@ -384,6 +384,9 @@ class Node(Serializable):
             ('title', self.title),
             ('pos_x', self.grNode.scenePos().x()),
             ('pos_y', self.grNode.scenePos().y()),
+            # ('width', self.grNode.width),
+            # ('height', self.grNode.height),
+            # ('resizeable', self.grNode.resizeable),
             ('inputs', inputs),
             ('outputs', outputs),
             ('content', ser_content)
@@ -421,7 +424,7 @@ class Node(Serializable):
                 if found is None:
                     found = self.__class__.Socket_class(
                         node=self, index=socket_data['index'],
-                        position=socket_data['position'],
+                        position=SocketPosition(socket_data['position']),
                         socket_type=socket_data['socket_type'],
                         count_on_this_node_side=num_inputs,
                         is_input=True)
@@ -438,7 +441,7 @@ class Node(Serializable):
                 if found is None:
                     found = self.__class__.Socket_class(
                         node=self, index=socket_data['index'],
-                        position=socket_data['position'],
+                        position=SocketPosition(socket_data['position']),
                         socket_type=socket_data['socket_type'],
                         count_on_this_node_side=num_outputs,
                         is_input=False)

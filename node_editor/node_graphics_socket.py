@@ -8,11 +8,11 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .node_socket import Socket
 
-OUTPUT_SOCKET = 0
-INPUT_SOCKET_1 = 1
-INPUT_SOCKET_2 = 2
-INPUT_SOCKET_3 = 3
-INPUT_SOCKET_4 = 4
+OUTPUT_SOCKET = 1
+INPUT_SOCKET_1 = 2
+INPUT_SOCKET_2 = 3
+INPUT_SOCKET_3 = 4
+INPUT_SOCKET_4 = 5
 
 SOCKET_COLOR = [QColor('#FFFF7F0E'),
                 QColor('#FF1F77B4'),

@@ -2,8 +2,8 @@ from PyQt5.QtCore import Qt, QIODevice, QDataStream
 from PyQt5.QtGui import QCloseEvent, QDropEvent, QDragEnterEvent, QPixmap, QContextMenuEvent, QIcon
 from PyQt5.QtWidgets import QGraphicsProxyWidget, QMenu, QAction
 from node_editor.node_edge import EDGE_TYPE_BEZIER, EDGE_TYPE_DIRECT
-# from .calc_conf import *
-# from .calc_node_base import *
+from .data_conf import *
+from .data_node_base import *
 
 from node_editor.node_node import Node
 from node_editor.node_editor_widget import NodeEditorWidget
@@ -14,7 +14,7 @@ DEBUG = False
 DEBUG_CONTEXT = False
 
 
-class CalculatorSubWindow(NodeEditorWidget):
+class DataSubWindow(NodeEditorWidget):
     def __init__(self):
         super().__init__()
         # self.setAttribute(Qt.WA_DeleteOnClose)
@@ -31,16 +31,16 @@ class CalculatorSubWindow(NodeEditorWidget):
 
     def initNewNodeActions(self):
         self.node_actions = {}
-        keys = list(CALC_NODES.keys())
+        keys = list(DATA_NODES.keys())
         keys.sort()
         for key in keys:
-            node = CALC_NODES[key]
+            node = DATA_NODES[key]
             self.node_actions[node.op_code] = QAction(QIcon(node.icon), node.op_title)
             self.node_actions[node.op_code].setData(node.op_code)
 
     def initNodesContextMenu(self):
         context_menu = QMenu(self)
-        keys = list(CALC_NODES.keys())
+        keys = list(DATA_NODES.keys())
         keys.sort()
         for key in keys:
             context_menu.addAction(self.node_actions[key])

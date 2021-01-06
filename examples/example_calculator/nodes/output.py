@@ -11,10 +11,10 @@ class CalcOutputContent(QNENodeContentWidget):
         self.lbl.setObjectName(self.node.content_label_objname)
 
 
-@register_node(OP_NODE_OUTPUT)
+@register_node(NodeType.OP_NODE_OUTPUT)
 class CalcNodeOutput(CalcNode):
     icon = 'icons/out.png'
-    op_code = OP_NODE_OUTPUT
+    op_code = NodeType.OP_NODE_OUTPUT
     op_title = 'Output'
     content_label = ''
     content_label_objname = 'calc_node_output'

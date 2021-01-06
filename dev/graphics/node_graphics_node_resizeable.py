@@ -2,55 +2,82 @@ from PyQt5.QtCore import Qt, QRectF, QPointF
 from PyQt5.QtGui import QBrush, QPainterPath, QPainter, QColor, QPen, QFont
 from PyQt5.QtWidgets import QGraphicsRectItem, QGraphicsItem, QWidget, QVBoxLayout, QGraphicsSceneMouseEvent, \
     QGraphicsSceneHoverEvent, QStyleOptionGraphicsItem, QLabel, QTextEdit, QGraphicsProxyWidget, QGraphicsTextItem
-from ..node_content_widget import QNENodeContentWidget
+from node_editor.node_content_widget import QNENodeContentWidget
 
 from .const import Handle, handleCursors, handleUpdate
 from typing import Optional
 
-from ..utils import print_func_name
+from node_editor.utils import print_func_name
 
 DEBUG = False
+
+OUTLINE_WIDTH = 1.0
 
 
 class QGraphicsResizableRectItem(QGraphicsRectItem):
     def __init__(self, min_height, min_width, *args):
         super().__init__(*args)
         # Diverse parameters for drawing
-        self.handleSize = 10
-        self.edge_size = 15.
-        self._border_size = 1.
-
-        self._pen_default = QPen(QColor("#7F00000"), self._border_size)
-        self._pen_selected = QPen(QColor("#FFFFA637"), self._border_size)
-
-        self._brush_title = QBrush(QColor("#FF313131"))
-        self._brush_background = QBrush(QColor("#E3212121"))
 
         self.handleSelected = None
         self.handles = {}
         self.min_width = min_width
         self.min_height = min_height
+        self.initSizes()
+        self.initContent()
+        self.initAssets()
+        self.initUI()
+        self.initTitle()
 
+    def initUI(self):
         # set flags
         self.setAcceptHoverEvents(True)
         self.setFlag(QGraphicsItem.ItemSendsGeometryChanges, True)
         self.setFlag(QGraphicsItem.ItemIsFocusable, True)
         self.updateHandles()
-        self.initUI()
-        self.initTitle()
-
-        self.initContent()
-
-    def initUI(self):
         self.setFlag(QGraphicsItem.ItemIsMovable, True)
         self.setFlag(QGraphicsItem.ItemIsSelectable, True)
 
     def initContent(self):
         self.content = QNENodeContentWidget(None)
         self.grContent = QGraphicsProxyWidget(self)
-        self.content.setGeometry(self.edge_size, self.title_height + self.edge_size,
-                                 self.width - 2 * self.edge_size, self.height - 2 * self.edge_size - self.title_height)
+        self.setContentGeometry()
         self.grContent.setWidget(self.content)
+
+    def initAssets(self):
+        self._title_color = Qt.white
+        self._title_font = QFont('Ubuntu', 8)
+
+        self._color = QColor("#7F00000")
+        self._color_selected = QColor("#FFFFA637")
+        self._color_hovered = QColor("#FF37A6FF")
+
+        self._pen_default = QPen(self._color)
+        self._pen_default.setWidthF(OUTLINE_WIDTH)
+        self._pen_selected = QPen(self._color_selected)
+        self._pen_selected.setWidthF(OUTLINE_WIDTH)
+        self._pen_hovered = QPen(self._color_hovered)
+        self._pen_hovered.setWidthF(OUTLINE_WIDTH + 1)
+
+        self._brush_title = QBrush(QColor("#FF313131"))
+        self._brush_background = QBrush(QColor("#E3212121"))
+
+    def initSizes(self):
+        # self.width = 180
+        # self.height = 240
+
+        # Diverse parameters for drawing
+        self.handleSize = 5
+        self.edge_roundness = 15.
+        self.edge_padding = 10.
+        self.title_height = 24
+        self.title_horizontal_padding = 5.
+        self.title_vertical_padding = 4.
+
+    def setContentGeometry(self):
+        self.content.setGeometry(self.edge_roundness, self.title_height + self.edge_roundness,
+                                 self.width - 2 * self.edge_roundness,
+                                 self.height - 2 * self.edge_roundness - self.title_height)
 
     def initTitle(self):
         # Draw the _title
@@ -64,6 +91,7 @@ class QGraphicsResizableRectItem(QGraphicsRectItem):
         self.title_item.setFont(self._title_font)
         self.title_item.setPos(self._padding, 0)
         self.title_item.setTextWidth(self.width - 2 * self._padding)
+        self.title_item.setPlainText('Resizeable node')
 
     @property
     def height(self):
@@ -116,13 +144,17 @@ class QGraphicsResizableRectItem(QGraphicsRectItem):
         """
         Executed when the mouse is pressed on the item.
         """
-        self.handleSelected = self.handleAt(event.pos())
-        if self.handleSelected:
-            # record the position where the mouse was pressed
-            self.currentPos = event.pos()
-            # current rectangle at mouse pressed
-            self.currentRect = self.boundingRect()
-        super().mousePressEvent(event)
+        try:
+            self.handleSelected = self.handleAt(event.pos())
+            if self.handleSelected:
+                # record the position where the mouse was pressed
+                self.currentPos = event.pos()
+                # current rectangle at mouse pressed
+                self.currentRect = self.boundingRect()
+
+            super().mousePressEvent(event)
+        except Exception as e:
+            print(e)
 
     def mouseReleaseEvent(self, event: 'QGraphicsSceneMouseEvent') -> None:
         """
@@ -185,6 +217,7 @@ class QGraphicsResizableRectItem(QGraphicsRectItem):
 
         self.setRect(rect)
         self.updateHandles()
+        self.setContentGeometry()
 
     def shape(self):
         """
@@ -200,7 +233,7 @@ class QGraphicsResizableRectItem(QGraphicsRectItem):
         rect = self.rect()
         path_content = QPainterPath()
         path_content.setFillRule(Qt.WindingFill)
-        path_content.addRoundedRect(rect, self.edge_size, self.edge_size)
+        path_content.addRoundedRect(rect, self.edge_roundness, self.edge_roundness)
 
         painter.setPen(Qt.NoPen)
         painter.setBrush(self._brush_background)
@@ -208,7 +241,14 @@ class QGraphicsResizableRectItem(QGraphicsRectItem):
 
         # outline
         path_outline = QPainterPath()
-        path_outline.addRoundedRect(rect, self.edge_size, self.edge_size)
+        path_outline.addRoundedRect(rect, self.edge_roundness, self.edge_roundness)
         painter.setPen(self._pen_default if not self.isSelected() else self._pen_selected)
         painter.setBrush(Qt.NoBrush)
         painter.drawPath(path_outline.simplified())
+
+        for handle in self.handles.values():
+
+            path_handle = QPainterPath()
+            path_handle.addRect(handle)
+            painter.drawPath(path_handle)
+
