@@ -77,7 +77,7 @@ class Edge(Serializable):
 
     @end_socket.setter
     def end_socket(self, value):
-        # If we wer assigne to some socket before, delte us from the socket
+        # If we were assigne to some socket before, delte us from the socket
         if self._end_socket is not None:
             self._end_socket.removeEdge(self)
 
@@ -224,6 +224,7 @@ class Edge(Serializable):
         -------
 
         """
+        # Save sockets for triggering later events
         old_sockets = [self.start_socket, self.end_socket]
 
         # sometimes grEdge stay in the scene even when removed...
