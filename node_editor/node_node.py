@@ -70,6 +70,30 @@ class Node(Serializable):
         self.grNode.setPos(x, y)
 
     @property
+    def width(self):
+        return self.grNode.width
+
+    @width.setter
+    def width(self, value):
+        self.grNode.width = value
+
+    @property
+    def height(self):
+        return self.grNode.height
+
+    @height.setter
+    def height(self, value):
+        self.grNode.height = value
+
+    @property
+    def resizeable(self):
+        return self.grNode.resizeable
+
+    @resizeable.setter
+    def resizeable(self, value):
+        self.grNode.resizeable = value
+
+    @property
     def title(self, ):
         return self._title
 
@@ -384,43 +408,43 @@ class Node(Serializable):
             ('title', self.title),
             ('pos_x', self.grNode.scenePos().x()),
             ('pos_y', self.grNode.scenePos().y()),
-            # ('width', self.grNode.width),
-            # ('height', self.grNode.height),
-            # ('resizeable', self.grNode.resizeable),
+            ('width', self.grNode.width),
+            ('height', self.grNode.height),
+            ('resizeable', self.grNode.resizeable),
             ('inputs', inputs),
             ('outputs', outputs),
             ('content', ser_content)
         ])
 
     def deserialize(self, data: dict, hashmap: dict = {}, restore_id: bool = True):
-        """Deserialize the node.
-
-        Handle :
-            - id
-            - node position
-            - sockets
-            - content"""
         try:
             if restore_id:
                 self.id = data['id']
             hashmap[data['id']] = self
 
-            self.setPos(data['pos_x'], data['pos_y'])
-            self.title = data['title']
+            self.setPos(data['pos_x'], data['pos_y'])  # Restore the position of the node
+            self.title = data['title']  # Restore the title
+            if 'width' in data:
+                self.width = data['width']
+            if 'height' in data:
+                self.height = data['height']
+            if 'resizeable' in data:
+                self.resizeable = data['resizeable']
 
-            # sort the sockets
+            # Deserialize the Sockets
             data['inputs'].sort(key=lambda socket: socket['index'] + socket['position'] * 1e3)
             data['outputs'].sort(key=lambda socket: socket['index'] + socket['position'] * 1e3)
             num_inputs = len(data['inputs'])
             num_outputs = len(data['outputs'])
 
-            # self.inputs = []
+            # Restore the Socket, either instantiate a new Socket or update existing one when found
             for socket_data in data['inputs']:
                 found = None
                 for socket in self.inputs:
                     if socket.index == socket_data['index']:
                         found = socket
                         break
+
                 if found is None:
                     found = self.__class__.Socket_class(
                         node=self, index=socket_data['index'],
@@ -431,7 +455,6 @@ class Node(Serializable):
                     self.inputs.append(found)
                 found.deserialize(socket_data, hashmap, restore_id)
 
-            # self.outputs = []
             for socket_data in data['outputs']:
                 found = None
                 for socket in self.outputs:

@@ -12,7 +12,11 @@ class CalcGraphicsNode(GraphicsNode):
     def initSizes(self):
         super().initSizes()
         self.width = 160
+        self.min_width = 160
         self.height = 74
+        self.min_height = 74
+
+        self.resizeable = False
 
         # Diverse parameters for drawing
         self.edge_roundness = 6.

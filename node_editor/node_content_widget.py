@@ -50,7 +50,6 @@ class QNENodeContentWidget(QWidget, Serializable):
 
         """
         return OrderedDict([
-
         ])
 
     def deserialize(self, data: dict, hashmap: dict = {}, restore_id: bool = True) -> bool:

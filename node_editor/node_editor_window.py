@@ -24,7 +24,7 @@ class NodeEditorWindow(QMainWindow):
 
     def __init__(self):
         super().__init__()
-        self.name_company = 'Michelin'
+        self.name_company = 'Copey'
         self.name_product = 'NodeEditor'
         self.initUI()
 
