@@ -1,7 +1,7 @@
-QNENodeContentWidget {
-  background: transparent;
+QGraphicsTextItem {
+  font-size: 12px;
 }
-QNENodeContentWidget QFrame {
+QNENodeContentWidget {
   background: transparent;
 }
 QNENodeContentWidget QTextEdit,
@@ -11,6 +11,20 @@ QNENodeContentWidget QLineEdit {
 }
 QNENodeContentWidget QLabel {
   color: #e0e0e0;
+}
+QNENodeContentWidget QTableView {
+  background-color: #fff;
+}
+QNENodeContentWidget QTableView::item {
+  background-color: rgba(242,242,242,0);
+  selection-background-color: rgba(13,129,220,0);
+  selection-color: #f1f9ff;
+}
+QNENodeContentWidget QHeaderView {
+  background-color: rgba(240,240,240,0);
+}
+QNENodeContentWidget QHeaderView::section {
+  background-color: rgba(242,242,242,0);
 }
 QNENodeContentWidget QLabel#calc_node_output {
   min-width: 150px;

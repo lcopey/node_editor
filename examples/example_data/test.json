@@ -1,0 +1,29 @@
+{
+    "id": 1892911597120,
+    "scene_width": 64000,
+    "scene_height": 64000,
+    "nodes": [
+        {
+            "id": 1892911706992,
+            "title": "Table",
+            "pos_x": -104.0,
+            "pos_y": -248.0,
+            "width": 160.0,
+            "height": 160.0,
+            "resizeable": true,
+            "inputs": [],
+            "outputs": [
+                {
+                    "id": 1892968097920,
+                    "index": 0,
+                    "multi_edges": true,
+                    "position": 5,
+                    "socket_type": 3
+                }
+            ],
+            "content": {},
+            "op_code": 1
+        }
+    ],
+    "edges": []
+}

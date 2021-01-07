@@ -1,11 +1,15 @@
+import enum
+
 LISTBOX_MIMETYPE = "application/x-item"
 
-OP_NODE_INPUT = 1
-OP_NODE_OUTPUT = 2
-OP_NODE_ADD = 3
-OP_NODE_SUB = 4
-OP_NODE_MUL = 5
-OP_NODE_DIV = 6
+
+class NodeType(enum.IntEnum):
+    OP_NODE_TABLE = 1
+    OP_NODE_OUTPUT = 2
+    OP_NODE_ADD = 3
+    OP_NODE_SUB = 4
+    OP_NODE_MUL = 5
+    OP_NODE_DIV = 6
 
 DATA_NODES = {}
 

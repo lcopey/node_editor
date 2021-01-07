@@ -86,6 +86,22 @@ class Node(Serializable):
         self.grNode.height = value
 
     @property
+    def min_width(self):
+        return self.grNode.min_width
+
+    @min_width.setter
+    def min_width(self, value):
+        self.grNode.min_width = value
+
+    @property
+    def min_height(self):
+        return self.grNode.min_height
+
+    @min_height.setter
+    def min_height(self, value):
+        self.grNode.min_height = value
+
+    @property
     def resizeable(self):
         return self.grNode.resizeable
 
@@ -251,7 +267,7 @@ class Node(Serializable):
         if DEBUG: print('> Removing Node', self)
         if DEBUG: print(' - remove all edges from sockets', self)
         for socket in (self.inputs + self.outputs):
-            # if socket.hasEdge():
+            # TODO revisit the remove edge method ???
             for edge in socket.edges.copy():
                 if DEBUG: print('   - removing edge ', edge, ' from socket ', socket)
                 edge.remove()
@@ -430,6 +446,7 @@ class Node(Serializable):
                 self.height = data['height']
             if 'resizeable' in data:
                 self.resizeable = data['resizeable']
+            self.grNode.updateLayout()
 
             # Deserialize the Sockets
             data['inputs'].sort(key=lambda socket: socket['index'] + socket['position'] * 1e3)

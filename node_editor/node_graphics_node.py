@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 OUTLINE_WIDTH = 1.0
 DEBUG = False
-DEBUG_HANDLE = True
+DEBUG_HANDLE = False
 
 
 class Handle(Enum):
@@ -95,14 +95,12 @@ class GraphicsNode(QGraphicsRectItem):
         currentRect = self.rect()
         currentRect.setHeight(value)
         self.setRect(currentRect)
-        # self.updateHandles()
 
     @width.setter
     def width(self, value):
         currentRect = self.rect()
         currentRect.setWidth(value)
         self.setRect(currentRect)
-        # self.updateHandles()
 
     @property
     def title(self, ):
@@ -121,16 +119,17 @@ class GraphicsNode(QGraphicsRectItem):
         if self.resizeable:
             self.setFlag(QGraphicsItem.ItemSendsGeometryChanges, True)
             self.setFlag(QGraphicsItem.ItemIsFocusable, True)
-        self.updateHandles()
+        # self.updateHandles()
 
         # init _title
         self.initTitle()
         self.title = self.node.title
         # init content
         self.initContent()
+        self.updateLayout()
 
     def initSizes(self):
-        self.handleSize = 6
+        self.handleSize = 8
         # Diverse parameters for drawing
         self.edge_roundness = 15.
         self.edge_padding = 10.
@@ -397,28 +396,11 @@ class GraphicsNode(QGraphicsRectItem):
                 rect.setRight(boundingRect.right())
 
             self.setRect(rect)
+            self.updateLayout()
             # self.updateConnected()
             # self.updateHandles()
             # self.setContentGeometry()
             self.update()
-
-    def setRect(self, rect: QRectF) -> None:
-        """Overrides QGraphics setRect method
-
-        Triggers :
-            updateConnected which updates the `Sockets` position and the `Graphical Edges`
-        Parameters
-        ----------
-        rect: QRectF
-
-        Returns
-        -------
-
-        """
-        super().setRect(rect)
-        self.updateConnected()
-        self.updateHandles()
-        self.setContentGeometry()
 
     def updateConnected(self):
         """Update the `Socket` position and the `Graphical Edges` when available"""
@@ -434,6 +416,19 @@ class GraphicsNode(QGraphicsRectItem):
             for node in self.scene().scene.nodes:
                 if node.isSelected():
                     node.updateConnectedEdges()
+
+    def updateLayout(self):
+        """Updates the layout.
+
+        Updates :
+        - Socket position
+        - Edges connected to the node
+        - Position of the handle to resize
+        - Size of the content
+        """
+        self.updateConnected()
+        self.updateHandles()
+        self.setContentGeometry()
 
     def boundingRect(self):
         # Return rectangle for selection detection

@@ -28,7 +28,7 @@ class QNENodeContentWidget(QWidget, Serializable):
     def initUI(self):
         """Setting up layout"""
         self.layout = QVBoxLayout()
-        self.layout.setContentsMargins(0, 0, 0, 0)
+        self.layout.setContentsMargins(5, 5, 5, 5)
         self.setLayout(self.layout)
 
         self.wdg_label = QLabel("Some _title")

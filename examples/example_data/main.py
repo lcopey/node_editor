@@ -15,4 +15,5 @@ if __name__ == '__main__':
     app.setStyle('Fusion')
     wnd = DataWindow()
     wnd.show()
+    wnd.onFileNew()
     sys.exit(app.exec_())

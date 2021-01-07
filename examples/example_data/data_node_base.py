@@ -10,15 +10,20 @@ from node_editor.utils import dumpException
 
 class DataGraphicsNode(GraphicsNode):
     def initSizes(self):
-        super().initSizes()
-        self.width = 160
-        self.height = 74
-
         # Diverse parameters for drawing
+        super().initSizes()
         self.edge_roundness = 6.
         self.edge_padding = 0
         self.title_horizontal_padding = 8.
         self.title_vertical_padding = 10
+
+        self.min_width = 160
+        self.min_height = 74
+        self.width = 160
+        self.height = 74
+
+
+
 
     def initAssets(self):
         super().initAssets()
@@ -26,6 +31,8 @@ class DataGraphicsNode(GraphicsNode):
 
     def paint(self, painter: QPainter, option: 'QStyleOptionGraphicsItem', widget: QWidget = None) -> None:
         super().paint(painter, option, widget)
+        # paint the status of the node
+        # TODO implement in node_graphics_node
         offset = 24.0
         if self.node.isDirty(): offset = 0.
         if self.node.isInvalid(): offset = 48.
@@ -55,13 +62,6 @@ class CalcNode(Node):
         self.value = None
         # Nodes are dirty by default
         self.markDirty()
-
-    #
-    # def initInnerClasses(self):
-    #     # Reference to the content
-    #     self.content = CalcContent(self)
-    #     # Reference to the graphic
-    #     self.grNode = CalcGraphicsNode(self)
 
     def initSettings(self):
         super().initSettings()

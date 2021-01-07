@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .node_scene import Scene
 
-DEBUG = True
+DEBUG = False
 
 
 class SceneHistory:
