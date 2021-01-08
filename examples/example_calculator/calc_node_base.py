@@ -69,8 +69,8 @@ class CalcNode(Node):
 
     def initSettings(self):
         super().initSettings()
-        self.input_socket_position = SocketPosition.LEFT_CENTER
-        self.output_socket_position = SocketPosition.RIGHT_CENTER
+        self.input_socket_position = SocketPosition.MiddleLeft
+        self.output_socket_position = SocketPosition.MiddleRight
 
     def serialize(self):
         res = super().serialize()

@@ -10,7 +10,7 @@ from node_editor.node_editor_widget import NodeEditorWidget
 from node_editor.node_graphics_view import MODE_EDGE_DRAG
 from node_editor.utils import dumpException
 
-DEBUG = False
+DEBUG = True
 DEBUG_CONTEXT = False
 
 
@@ -78,6 +78,7 @@ class DataSubWindow(NodeEditorWidget):
 
     def onDragEnter(self, event: QDragEnterEvent):
         if event.mimeData().hasFormat(LISTBOX_MIMETYPE):
+            if DEBUG: print('drag enter accepted')
             event.acceptProposedAction()
         else:
             if DEBUG: print('... denied drag enter event')
@@ -104,10 +105,12 @@ class DataSubWindow(NodeEditorWidget):
                 node = get_call_from_opcode(op_code)(self.scene)
                 node.setPos(scene_pos.x(), scene_pos.y())
                 self.scene.history.storeHistory('Create node {}'.format(node.__class__.__name__))
+
+                event.setDropAction(Qt.MoveAction)
+                event.accept()
+
             except Exception as e:
                 dumpException(e)
-            event.setDropAction(Qt.MoveAction)
-            event.accept()
         else:
             if DEBUG: print(' ... drop ignored, not requested format ', LISTBOX_MIMETYPE)
             event.ignore()

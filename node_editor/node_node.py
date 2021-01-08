@@ -3,6 +3,7 @@ from .node_serializable import Serializable
 from .node_graphics_node import GraphicsNode
 from node_editor.node_content_widget import QNENodeContentWidget
 from .node_socket import Socket, SocketPosition
+from .node_handle import HandlePosition
 from .utils import dumpException, print_func_name, return_simple_id
 
 from typing import TYPE_CHECKING
@@ -138,20 +139,20 @@ class Node(Serializable):
 
     def initSettings(self):
         self.socket_spacing = 22
-        self.input_socket_position = SocketPosition.LEFT_BOTTOM
-        self.output_socket_position = SocketPosition.RIGHT_TOP
+        self.input_socket_position = SocketPosition.BottomLeft
+        self.output_socket_position = SocketPosition.TopRight
         self.input_multi_edged = False
         self.output_multi_edged = True
         self.socket_offsets = {
-            SocketPosition.LEFT_BOTTOM: -1,
-            SocketPosition.LEFT_CENTER: -1,
-            SocketPosition.LEFT_TOP: -1,
-            SocketPosition.RIGHT_BOTTOM: 1,
-            SocketPosition.RIGHT_CENTER: 1,
-            SocketPosition.RIGHT_TOP: 1,
+            SocketPosition.BottomLeft: -1,
+            SocketPosition.MiddleLeft: -1,
+            SocketPosition.TopLeft: -1,
+            SocketPosition.BottomRight: 1,
+            SocketPosition.MiddleRight: 1,
+            SocketPosition.TopRight: 1,
         }
 
-    def initSockets(self, inputs, outputs, reset=True):
+    def initSockets(self, inputs: list, outputs: list, reset=True):
         """"Create sockets for inputs and outputs"""
 
         if reset:
@@ -181,6 +182,7 @@ class Node(Serializable):
     def getGraphicsNodeClass(self):
         return self.__class__.GraphicsNode_class
 
+    # TODO implement in node_socket
     def getSocketPosition(self, index: int, position: SocketPosition, num_out_of: int = 1) -> '(x, y)':
         """Helper function - returns the position of a socket in pixels relative to the node
 
@@ -198,16 +200,16 @@ class Node(Serializable):
         ```list```
             x, y position relative to the node
         """
-        if position in (SocketPosition.LEFT_TOP, SocketPosition.LEFT_CENTER, SocketPosition.LEFT_BOTTOM):
+        if position in (SocketPosition.TopLeft, SocketPosition.MiddleLeft, SocketPosition.BottomLeft):
             x = self.socket_offsets[position]
         else:
             x = self.grNode.width + self.socket_offsets[position]
 
-        if position in (SocketPosition.LEFT_BOTTOM, SocketPosition.RIGHT_BOTTOM):
+        if position in (SocketPosition.BottomLeft, SocketPosition.BottomRight):
             # start from bottom
             y = self.grNode.height - (
                     index * self.socket_spacing + self.grNode.title_vertical_padding + self.grNode.edge_roundness)
-        elif position in (SocketPosition.LEFT_CENTER, SocketPosition.RIGHT_CENTER):
+        elif position in (SocketPosition.MiddleLeft, SocketPosition.MiddleRight):
             num_sockets = num_out_of
             node_height = self.grNode.height
             top_offset = self.grNode.title_height + 2 * self.grNode.title_vertical_padding + self.grNode.edge_padding
@@ -221,7 +223,7 @@ class Node(Serializable):
             y = top_offset + available_height / 2. + (index - 0.5) * self.socket_spacing - \
                 (num_sockets - 1) * self.socket_spacing / 2
 
-        elif position in (SocketPosition.LEFT_TOP, SocketPosition.RIGHT_TOP):
+        elif position in (SocketPosition.TopLeft, SocketPosition.TopRight):
             # start from top
             y = index * self.socket_spacing + self.grNode.title_height + self.grNode.title_vertical_padding + self.grNode.edge_roundness
         else:

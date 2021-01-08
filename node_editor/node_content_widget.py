@@ -36,7 +36,7 @@ class QNENodeContentWidget(QWidget, Serializable):
         self.layout.addWidget(QNETextEdit("foo"))
 
     def setEditingFlag(self, value: bool):
-        # TODO refaire avec une fonction dans QNEGraphicsView
+        """Set the editing flag from the GraphicalView"""
         self.node.scene.getView().editingFlag = value
 
     def serialize(self) -> OrderedDict:

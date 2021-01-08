@@ -7,6 +7,7 @@ from node_editor.node_graphics_node import GraphicsNode
 from node_editor.node_socket import SocketPosition
 from node_editor.utils import dumpException
 
+DEBUG = True
 
 class DataGraphicsNode(GraphicsNode):
     def initSizes(self):
@@ -21,9 +22,6 @@ class DataGraphicsNode(GraphicsNode):
         self.min_height = 74
         self.width = 160
         self.height = 74
-
-
-
 
     def initAssets(self):
         super().initAssets()
@@ -47,7 +45,7 @@ class CalcContent(QNENodeContentWidget):
         lbl.setObjectName(self.node.content_label_objname)
 
 
-class CalcNode(Node):
+class DataNode(Node):
     icon = ""
     op_code = 0
     op_title = 'Undefined'
@@ -63,47 +61,54 @@ class CalcNode(Node):
         # Nodes are dirty by default
         self.markDirty()
 
+    def print(self, *args):
+        if DEBUG: print('>DataNode', *args)
+
     def initSettings(self):
         super().initSettings()
-        self.input_socket_position = SocketPosition.LEFT_CENTER
-        self.output_socket_position = SocketPosition.RIGHT_CENTER
+        self.input_socket_position = SocketPosition.MiddleLeft
+        self.output_socket_position = SocketPosition.MiddleRight
 
     def serialize(self):
         res = super().serialize()
         res['op_code'] = self.__class__.op_code
+        self.print('serialize')
         return res
 
     def deserialize(self, data, hashmap={}, restore_id=True):
         res = super().deserialize(data, hashmap, restore_id)
-        print("Deserialize CalcNode {}: res : {}".format(self.__class__.__name__, res))
+        print("Deserialize DataNode {}: res : {}".format(self.__class__.__name__, res))
         return res
 
     def evalOperation(self, i1, i2):
         return 123
 
     def evalImplementation(self):
-        self.markInvalid(False)
-        self.markDirty(False)
-        i1 = self.getInput(0)
-        i2 = self.getInput(1)
-
-        if i1 is None or i2 is None:
-            self.markInvalid()
-            self.markDescendantDirty()
-            self.grNode.setToolTip('Connect all inputs')
-            return None
-        else:
-            val = self.evalOperation(i1.eval(), i2.eval())
-            self.value = val
-            self.markDirty(False)
+        try:
             self.markInvalid(False)
-            self.grNode.setToolTip('')
+            self.markDirty(False)
+            i1 = self.getInput(0)
+            i2 = self.getInput(1)
 
-            self.markDescendantDirty()
+            if i1 is None or i2 is None:
+                self.markInvalid()
+                self.markDescendantDirty()
+                self.grNode.setToolTip('Connect all inputs')
+                return None
+            else:
+                val = self.evalOperation(i1.eval(), i2.eval())
+                self.value = val
+                self.markDirty(False)
+                self.markInvalid(False)
+                self.grNode.setToolTip('')
 
-            self.evalChildren()
+                self.markDescendantDirty()
 
-            return self.value
+                self.evalChildren()
+
+                return self.value
+        except Exception as e:
+            dumpException(e)
 
     def eval(self):
         if not self.isDirty() and not self.isInvalid():
@@ -118,6 +123,7 @@ class CalcNode(Node):
             self.markInvalid()
             self.grNode.setToolTip(str(e))
             self.markDescendantDirty()
+
         except Exception as e:
             self.markInvalid()
             self.grNode.setToolTip(str(e))

@@ -35,6 +35,8 @@ class QNEGraphicsSocket(QGraphicsItem):
 
         self.radius = 6
         self.outline_width = 1
+        # Set to True to desactivate hover event on parent (useful for resizing the nodes)
+        self.setAcceptHoverEvents(True)
         self.initAssets()
 
     @property

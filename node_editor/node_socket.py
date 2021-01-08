@@ -16,12 +16,12 @@ if TYPE_CHECKING:
 
 class SocketPosition(enum.IntEnum):
     """Enumeration of possible position of sockets in the `Node`"""
-    LEFT_TOP = 1
-    LEFT_CENTER = 2
-    LEFT_BOTTOM = 3
-    RIGHT_TOP = 4
-    RIGHT_CENTER = 5
-    RIGHT_BOTTOM = 6
+    TopLeft = 1
+    MiddleLeft = 2
+    BottomLeft = 3
+    TopRight = 4
+    MiddleRight = 5
+    BottomRight = 6
 
     @classmethod
     def has_value(cls, value):
@@ -33,7 +33,7 @@ class Socket(Serializable):
 
     """Class representing Socket"""
 
-    def __init__(self, node: 'Node', index=0, position=SocketPosition.LEFT_TOP, socket_type=1, multi_edges=True,
+    def __init__(self, node: 'Node', index=0, position=SocketPosition.TopLeft, socket_type=1, multi_edges=True,
                  count_on_this_node_side=1, is_input=False):
         super().__init__()
         self.node = node
@@ -127,7 +127,7 @@ class Socket(Serializable):
             return data['multi_edges']
         else:
             # probably older versions of file
-            return data['position'] in (SocketPosition.RIGHT_BOTTOM, SocketPosition.RIGHT_TOP)
+            return data['position'] in (SocketPosition.BottomRight, SocketPosition.TopRight)
 
     def serialize(self):
         # Convert int to enum

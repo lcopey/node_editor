@@ -2,6 +2,7 @@
 """Module containing the representation of the NodeEditor's Scene"""
 import json
 import os
+from PyQt5.QtCore import QPointF, QPoint
 from collections import OrderedDict
 from .utils import dumpException
 from .node_serializable import Serializable
@@ -213,6 +214,8 @@ class Scene(Serializable):
         return self.grScene.views()[0]
 
     def getItemAt(self, pos):
+        if isinstance(pos, QPointF):
+            pos = QPoint(pos.x(), pos.y())
         return self.getView().itemAt(pos)
 
     def getSelectedItems(self):
@@ -317,7 +320,7 @@ class Scene(Serializable):
             - nodes
             - edges
         """
-        print("Scene holding {} items".format(len(self.grScene.items())))
+        if DEBUG: print("Scene holding {} items".format(len(self.grScene.items())))
         nodes = [node.serialize() for node in self.nodes]
         edges = [edge.serialize() for edge in self.edges]
         return OrderedDict([('id', self.id),

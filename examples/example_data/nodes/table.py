@@ -6,6 +6,8 @@ from ..table import DataframeView
 from node_editor.utils import dumpException
 import pandas as pd
 
+DEBUG = True
+
 
 class DataTableContent(QNENodeContentWidget):
     def initUI(self):
@@ -20,10 +22,12 @@ class DataTableContent(QNENodeContentWidget):
         self.layout.addWidget(self.view)
         self.view.setObjectName(self.node.content_label_objname)
 
-    # def serialize(self):
-    #     res = super().serialize()
-    #     res['value'] = self.edit.text()
-    #     return res
+    def print(self, *args):
+        print('>DataTableContent :', *args)
+
+    def serialize(self):
+        self.print('serialize')
+        return 0
     #
     # def deserialize(self, data: dict, hashmap: dict = {}, restore_id: bool = True):
     #     res = super().deserialize(data, hashmap)
@@ -37,7 +41,7 @@ class DataTableContent(QNENodeContentWidget):
 
 
 @register_node(NodeType.OP_NODE_TABLE)
-class DataNode_Table(CalcNode):
+class DataNode_Table(DataNode):
     icon = 'icons/in.png'
     op_code = NodeType.OP_NODE_TABLE
     op_title = 'Table'
@@ -45,18 +49,22 @@ class DataNode_Table(CalcNode):
     content_label_objname = 'data_node_table'
 
     def __init__(self, scene):
-        super().__init__(scene, inputs=[], outputs=[3])
+        super().__init__(scene, inputs=[1], outputs=[3])
         self.eval()
         self.min_height = 160
-        self.height = 160
+        self.height = 200
         self.min_width = 280
-        self.width = 280
+        self.width = 320
         self.grNode.updateLayout()
 
     def initInnerClasses(self):
         self.content = DataTableContent(self)
         self.grNode = DataGraphicsNode(self)
+        self.print('initInnerClasses done')
         # self.content.edit.textChanged.connect(self.onInputChanged)
+
+    def print(self, *args):
+        if DEBUG: print('>DataNode_Table : ', *args)
     #
     # def evalImplementation(self):
     #     u_value = self.content.edit.text()

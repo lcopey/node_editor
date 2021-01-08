@@ -350,6 +350,7 @@ class QNEGraphicsView(QGraphicsView):
         #             print(ix, ' - ', item['desc'])
         #
         # else:
+
         super().keyPressEvent(event)
 
     def cutIntersectingEdges(self):
@@ -407,6 +408,7 @@ class QNEGraphicsView(QGraphicsView):
         self.setTransformationAnchor(QGraphicsView.AnchorUnderMouse)
 
     def getItemAtClick(self, event):
+        # TODO merge with getItemAt from node_scene
         """Return the object on which we clicked"""
         pos = event.pos()
         obj = self.itemAt(pos)

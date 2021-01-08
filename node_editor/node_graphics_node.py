@@ -1,9 +1,9 @@
 from PyQt5.QtWidgets import QGraphicsItem, QGraphicsProxyWidget, QGraphicsTextItem, QWidget, \
-    QGraphicsRectItem, QStyleOptionGraphicsItem, QGraphicsSceneMouseEvent
+    QGraphicsRectItem, QStyleOptionGraphicsItem, QGraphicsSceneMouseEvent, QGraphicsDropShadowEffect
 from PyQt5.QtGui import QFont, QPen, QColor, QBrush, QPainter, QPainterPath
 from PyQt5.QtCore import Qt, QRectF, QPointF
 from .utils import dumpException, print_func_name
-from enum import Enum
+from .node_handle import HandlePosition, Handle
 from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
@@ -11,41 +11,10 @@ if TYPE_CHECKING:
 
 OUTLINE_WIDTH = 1.0
 DEBUG = False
-DEBUG_HANDLE = False
+DEBUG_HANDLE = True
 
 
-class Handle(Enum):
-    # TopLeft = 1
-    # TopMiddle = 2
-    # TopRight = 3
-    # MiddleLeft = 4
-    MiddleRight = 5
-    # BottomLeft = 6
-    BottomMiddle = 7
-    BottomRight = 8
-
-
-handleCursors = {
-    # Handle.TopLeft: Qt.SizeFDiagCursor,
-    # Handle.TopMiddle: Qt.SizeVerCursor,
-    # Handle.TopRight: Qt.SizeBDiagCursor,
-    # Handle.MiddleLeft: Qt.SizeHorCursor,
-    Handle.MiddleRight: Qt.SizeHorCursor,
-    # Handle.BottomLeft: Qt.SizeBDiagCursor,
-    Handle.BottomMiddle: Qt.SizeVerCursor,
-    Handle.BottomRight: Qt.SizeFDiagCursor,
-}
-
-handleUpdate = {
-    # Handle.TopLeft: (True, True, False, False),
-    # Handle.TopMiddle: (False, True, False, False),
-    # Handle.TopRight: (False, True, True, False),
-    # Handle.MiddleLeft: (True, False, False, False),
-    Handle.MiddleRight: (False, False, True, False),
-    # Handle.BottomLeft: (True, False, False, True),
-    Handle.BottomMiddle: (False, False, False, True),
-    Handle.BottomRight: (False, False, True, True),
-}
+# TODO IMplement Handle as a subclass of QGraphicsItem
 
 
 class GraphicsNode(QGraphicsRectItem):
@@ -65,7 +34,6 @@ class GraphicsNode(QGraphicsRectItem):
         self.min_width = min_width
 
         try:
-            self.handleSelected = None
             self.handles = {}
             self._currentRect = None
             self._currentPos = None
@@ -119,7 +87,7 @@ class GraphicsNode(QGraphicsRectItem):
         if self.resizeable:
             self.setFlag(QGraphicsItem.ItemSendsGeometryChanges, True)
             self.setFlag(QGraphicsItem.ItemIsFocusable, True)
-        # self.updateHandles()
+            self.initHandles()
 
         # init _title
         self.initTitle()
@@ -129,7 +97,6 @@ class GraphicsNode(QGraphicsRectItem):
         self.updateLayout()
 
     def initSizes(self):
-        self.handleSize = 8
         # Diverse parameters for drawing
         self.edge_roundness = 15.
         self.edge_padding = 10.
@@ -137,6 +104,7 @@ class GraphicsNode(QGraphicsRectItem):
         self.title_horizontal_padding = 5.
         self.title_vertical_padding = 4.
 
+        # TODO min and size at the same place
         self.width = 180
         self.height = 240
 
@@ -158,13 +126,14 @@ class GraphicsNode(QGraphicsRectItem):
         self._brush_title = QBrush(QColor("#FF313131"))
         self._brush_background = QBrush(QColor("#E3212121"))
 
+    def initHandles(self):
+        for position in (HandlePosition.MiddleRight, HandlePosition.BottomMiddle, HandlePosition.BottomRight):
+            self.handles[position] = Handle(self, position)
+
     def initContent(self):
         """Add the `Content` of the `Node` to the `Graphical Scene`
         """
         # Draw the contents
-        # if self.content is not None:
-        #     self.setContentGeometry()
-
         # self.grContent = QGraphicsProxyWidget(self)  # defines the content as a proxy widget with parent self
         self.grContent = self.node.scene.grScene.addWidget(self.content)
         self.grContent.setParentItem(self)
@@ -192,45 +161,6 @@ class GraphicsNode(QGraphicsRectItem):
                                  self.width - 2 * self.edge_padding,
                                  self.height - 2 * self.edge_padding - self.title_height)
 
-    def updateHandles(self):
-        """Update the position of the handles outlying the node.
-
-        This method should be called when resizing the node
-        """
-        rect = self.boundingRect()
-        left, width, top, height = rect.left(), rect.width(), rect.top(), rect.height()
-
-        offset = self.handleSize
-        # self.handles[Handle.TopLeft] = QRectF(left, top, offset, offset)
-        # self.handles[Handle.TopMiddle] = QRectF(left + offset, top, width - 2 * offset, offset)
-        # self.handles[Handle.TopRight] = QRectF(left + width - offset, top, offset, offset)
-        # self.handles[Handle.BottomLeft] = QRectF(left, top + height - offset, offset, offset)
-        # self.handles[Handle.MiddleLeft] = QRectF(left, top + offset, offset, height - 2 * offset)
-        self.handles[Handle.BottomRight] = QRectF(left + width - offset, top + height - offset, offset, offset)
-        self.handles[Handle.MiddleRight] = QRectF(left + width - offset, top + offset, offset, height - 2 * offset)
-        self.handles[Handle.BottomMiddle] = QRectF(left + offset, top + height - offset, width - 2 * offset, offset)
-
-    def getHandleAt(self, point: QPointF):
-        """
-
-        Parameters
-        ----------
-        point : QPointF
-            Position to test
-
-        Returns
-        -------
-        Handle
-            `Handle` beneath to point
-
-        """
-        for handle, rect in self.handles.items():
-            if rect.contains(point):
-                if DEBUG: print(handle, rect)
-                return handle
-        else:
-            return None
-
     def doSelect(self, new_state=True):
         self.setSelected(new_state)
         self._last_selected_state = new_state
@@ -252,12 +182,12 @@ class GraphicsNode(QGraphicsRectItem):
             current event
         """
         try:
-            self.handleSelected = self.getHandleAt(event.pos())
-            if self.handleSelected:
-                # record the position where the mouse was pressed
-                self._currentPos = event.pos()
-                # # current rectangle at mouse pressed
-                self._currentRect = self.boundingRect()
+            # self.handleSelected = self.getHandleAt(event.pos())
+            # if self.handleSelected:
+            #     # record the position where the mouse was pressed
+            #     self._currentPos = event.pos()
+            #     # # current rectangle at mouse pressed
+            #     self._currentRect = self.boundingRect()
 
             super().mousePressEvent(event)
         except Exception as e:
@@ -279,12 +209,12 @@ class GraphicsNode(QGraphicsRectItem):
 
         # self.node.updateConnectedEdges()  # only work in the case one node is selected
         # TODO trigger event when resizing
-        if self.resizeable and self.handleSelected is not None:
-            self.resize(event.pos())
-            return
-        else:
-            self.updateConnected()
-            self._was_moved = True
+        # if self.resizeable and self.handleSelected is not None:
+        #     self.resize(event.pos())
+        #     return
+        # else:
+        self.updateSocketAndEdges()
+        self._was_moved = True
         super().mouseMoveEvent(event)
 
     def mouseReleaseEvent(self, event: 'QGraphicsSceneMouseEvent'):
@@ -334,75 +264,24 @@ class GraphicsNode(QGraphicsRectItem):
     def hoverEnterEvent(self, event: 'QGraphicsSceneHoverEvent') -> None:
         self.hovered = True
         self.update()
-
-    def hoverMoveEvent(self, event: 'QGraphicsSceneHoverEvent') -> None:
-        # if self.isSelected():
-        if self.resizeable:
-            handle = self.getHandleAt(event.pos())
-            if handle is not None:
-                self.setCursor(handleCursors[handle])
-            else:
-                self.setCursor(Qt.ArrowCursor)
-        super().hoverMoveEvent(event)
+        super().hoverEnterEvent(event)
 
     def hoverLeaveEvent(self, event: 'QGraphicsSceneHoverEvent') -> None:
         self.hovered = False
-        if self.resizeable:
-            self.setCursor(Qt.ArrowCursor)
         self.update()
         super().hoverLeaveEvent(event)
 
-    def resize(self, pos):
+    def resize(self, rect: QRectF):
         """Update rectangle and bounding rectangle"""
-        rect = self.rect()
-        boundingRect = self.boundingRect()
-        from_left = self._currentRect.left()
-        from_right = self._currentRect.right()
-        from_top = self._currentRect.top()
-        from_bottom = self._currentRect.bottom()
-        to_left = from_left + pos.x() - self._currentPos.x()
-        to_right = from_right + pos.x() - self._currentPos.x()
-        to_top = from_top + pos.y() - self._currentPos.y()
-        to_bottom = from_bottom + pos.y() - self._currentPos.y()
+        if rect.width() < self.min_width:
+            rect.setWidth(self.min_width)
+        if rect.height() < self.min_height:
+            rect.setHeight(self.min_height)
+        self.setRect(rect)
+        self.updateSocketAndEdges()
+        self.setContentGeometry()
 
-        if to_left != 0 or to_right != 0 or to_top != 0 or to_bottom != 0:
-            self._resized = True
-            self.prepareGeometryChange()
-            update_left, update_top, update_right, update_bottom = handleUpdate[self.handleSelected]
-            if update_left:
-                if from_right - to_left <= self.min_width:
-                    boundingRect.setLeft(from_right - self.min_width)
-                else:
-                    boundingRect.setLeft(to_left)
-                rect.setLeft(boundingRect.left())
-            if update_top:
-                if from_bottom - to_top <= self.min_height:
-                    boundingRect.setTop(from_bottom - self.min_height)
-                else:
-                    boundingRect.setTop(to_top)
-                rect.setTop(boundingRect.top())
-
-            if update_bottom:
-                if to_bottom - from_top <= self.min_height:
-                    boundingRect.setBottom(from_top + self.min_height)
-                else:
-                    boundingRect.setBottom(to_bottom)
-                rect.setBottom(boundingRect.bottom())
-            if update_right:
-                if to_right - from_left <= self.min_width:
-                    boundingRect.setRight(from_left + self.min_width)
-                else:
-                    boundingRect.setRight(to_right)
-                rect.setRight(boundingRect.right())
-
-            self.setRect(rect)
-            self.updateLayout()
-            # self.updateConnected()
-            # self.updateHandles()
-            # self.setContentGeometry()
-            self.update()
-
-    def updateConnected(self):
+    def updateSocketAndEdges(self):
         """Update the `Socket` position and the `Graphical Edges` when available"""
         # As this method can
         if self.resizeable:
@@ -417,6 +296,10 @@ class GraphicsNode(QGraphicsRectItem):
                 if node.isSelected():
                     node.updateConnectedEdges()
 
+    def updateHandles(self):
+        for handle in self.handles.values():
+            handle.setHandlePosition()
+
     def updateLayout(self):
         """Updates the layout.
 
@@ -426,62 +309,70 @@ class GraphicsNode(QGraphicsRectItem):
         - Position of the handle to resize
         - Size of the content
         """
-        self.updateConnected()
+        self.updateSocketAndEdges()
         self.updateHandles()
         self.setContentGeometry()
 
     def boundingRect(self):
         # Return rectangle for selection detection
-        return QRectF(0, 0, self.width, self.height). \
-            adjusted(-self.handleSize // 2, -self.handleSize // 2, self.handleSize // 2, self.handleSize // 2)
-        # return self.rect().adjusted(-self.handleSize // 2, -self.handleSize // 2, self.handleSize // 2,
-        #                             self.handleSize // 2)
+        rect = self.rect()
+        x, y = rect.left(), rect.top()
+        return QRectF(x, y, self.width, self.height)
 
     def paint(self, painter: QPainter, option: 'QStyleOptionGraphicsItem',
               widget: Optional[QWidget] = ...) -> None:
-        # _title
-        path_title = QPainterPath()
-        path_title.setFillRule(Qt.WindingFill)
-        path_title.addRoundedRect(0, 0, self.width, self.title_height, self.edge_roundness, self.edge_roundness)
-        path_title.addRect(0, self.title_height - self.edge_roundness, self.edge_roundness, self.edge_roundness)
-        path_title.addRect(self.width - self.edge_roundness, self.title_height - self.edge_roundness,
-                           self.edge_roundness,
-                           self.edge_roundness)
-        painter.setPen(Qt.NoPen)
-        painter.setBrush(self._brush_title)
-        painter.drawPath(path_title.simplified())
+        try:
+            # TO implement
+            # rect = self.rect()
+            # x, y = rect.left(), rect.top()
+            x = y = 0
+            # shadow_path = QPainterPath()
+            # shadow_path.setFillRule(Qt.WindingFill)
+            # offset = 3
+            # shadow_path.addRoundedRect(x + offset, y + offset, self.width + offset, self.height + offset,
+            #                            self.edge_roundness, self.edge_roundness)
+            # painter.setPen(Qt.NoPen)
+            # painter.setBrush(self._brush_title)
+            # painter.drawPath(shadow_path.simplified())
 
-        # content
-        path_content = QPainterPath()
-        path_content.setFillRule(Qt.WindingFill)
-        path_content.addRoundedRect(0, self.title_height, self.width, self.height - self.title_height,
-                                    self.edge_roundness,
-                                    self.edge_roundness)
-        path_content.addRect(0, self.title_height, self.edge_roundness, self.edge_roundness)
-        path_content.addRect(self.width - self.edge_roundness, self.title_height, self.edge_roundness,
-                             self.edge_roundness)
-        painter.setPen(Qt.NoPen)
-        painter.setBrush(self._brush_background)
-        painter.drawPath(path_content.simplified())
+            path_title = QPainterPath()
+            path_title.setFillRule(Qt.WindingFill)
+            # Rectangle for title
+            path_title.addRoundedRect(x, y, self.width, self.title_height, self.edge_roundness, self.edge_roundness)
+            path_title.addRect(x, y + self.title_height - self.edge_roundness, self.edge_roundness, self.edge_roundness)
+            path_title.addRect(x + self.width - self.edge_roundness, y + self.title_height - self.edge_roundness,
+                               self.edge_roundness, self.edge_roundness)
+            painter.setPen(Qt.NoPen)
+            painter.setBrush(self._brush_title)
+            painter.drawPath(path_title.simplified())
 
-        # outline
-        path_outline = QPainterPath()
-        path_outline.addRoundedRect(-1, -1, self.width + 2, self.height + 2, self.edge_roundness, self.edge_roundness)
-        painter.setBrush(Qt.NoBrush)
-        if self.hovered:
-            painter.setPen(self._pen_hovered)
-            painter.drawPath(path_outline.simplified())
-            painter.setPen(self._pen_default)
-            painter.drawPath(path_outline.simplified())
-        else:
-            painter.setPen(self._pen_default if not self.isSelected() else self._pen_selected)
-            painter.drawPath(path_outline.simplified())
+            # content
+            path_content = QPainterPath()
+            path_content.setFillRule(Qt.WindingFill)
+            path_content.addRoundedRect(x, y + self.title_height,
+                                        self.width, self.height - self.title_height,
+                                        self.edge_roundness, self.edge_roundness)
+            path_content.addRect(x, y + self.title_height,
+                                 self.edge_roundness, self.edge_roundness)
+            path_content.addRect(x + self.width - self.edge_roundness, y + self.title_height,
+                                 self.edge_roundness, self.edge_roundness)
+            painter.setPen(Qt.NoPen)
+            painter.setBrush(self._brush_background)
+            painter.drawPath(path_content.simplified())
 
-        if DEBUG_HANDLE:
-            for handle in self.handles.values():
-                try:
-                    path_handle = QPainterPath()
-                    path_handle.addRect(handle)
-                    painter.drawPath(path_handle)
-                except Exception as e:
-                    dumpException(e)
+            # outline
+            path_outline = QPainterPath()
+            path_outline.addRoundedRect(x - 1, y - 1,
+                                        self.width + 2, self.height + 2,
+                                        self.edge_roundness, self.edge_roundness)
+            painter.setBrush(Qt.NoBrush)
+            if self.hovered:
+                painter.setPen(self._pen_hovered)
+                painter.drawPath(path_outline.simplified())
+                painter.setPen(self._pen_default)
+                painter.drawPath(path_outline.simplified())
+            else:
+                painter.setPen(self._pen_default if not self.isSelected() else self._pen_selected)
+                painter.drawPath(path_outline.simplified())
+        except Exception as e:
+            dumpException(e)
