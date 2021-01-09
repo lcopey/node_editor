@@ -14,8 +14,7 @@ DEBUG = False
 DEBUG_HANDLE = True
 
 
-# TODO IMplement Handle as a subclass of QGraphicsItem
-
+# TODO Review the init arguments
 
 class GraphicsNode(QGraphicsRectItem):
     """Implement the graphics version of a node"""

@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QLabel, QWidget
+from PyQt5.QtWidgets import QLabel, QWidget, QStyleOptionGraphicsItem
 from PyQt5.QtGui import QImage, QPainter
 from PyQt5.QtCore import QRectF
 from node_editor.node_node import Node
@@ -6,10 +6,19 @@ from node_editor.node_content_widget import QNENodeContentWidget
 from node_editor.node_graphics_node import GraphicsNode
 from node_editor.node_socket import SocketPosition
 from node_editor.utils import dumpException
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from node_editor.node_socket import Socket
+    from node_editor.node_scene import Scene
 
 DEBUG = True
 
+
 class DataGraphicsNode(GraphicsNode):
+    def __init__(self, node: 'Node', parent=None, resizeable=True, min_height=240, min_width=180):
+        super().__init__(node=node, parent=parent, resizeable=True, min_height=min_height, min_width=min_width)
+
     def initSizes(self):
         # Diverse parameters for drawing
         super().initSizes()
@@ -18,10 +27,8 @@ class DataGraphicsNode(GraphicsNode):
         self.title_horizontal_padding = 8.
         self.title_vertical_padding = 10
 
-        self.min_width = 160
-        self.min_height = 74
-        self.width = 160
-        self.height = 74
+        self.min_width = self.width = 160
+        self.min_height = self.height = 74
 
     def initAssets(self):
         super().initAssets()
@@ -38,13 +45,20 @@ class DataGraphicsNode(GraphicsNode):
                           self.icons,
                           QRectF(offset, 0, 24., 24.))
 
+class VizGraphicsNode(GraphicsNode):
+    def __init__(self, node: 'Node', parent=None, resizeable=True, min_height=240, min_width=180):
+        super().__init__(node=node, parent=parent, resizeable=True, min_height=min_height, min_width=min_width)
+        # TODO subclass paint as a circle
+        # TODO subclass getSocketPosition
 
+# TODO not necessary
 class CalcContent(QNENodeContentWidget):
     def initUI(self):
         lbl = QLabel(self.node.content_label, self)
         lbl.setObjectName(self.node.content_label_objname)
 
 
+# TODO Remove and displace in node_node or as part of node_editor api
 class DataNode(Node):
     icon = ""
     op_code = 0

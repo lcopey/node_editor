@@ -10,7 +10,7 @@ from node_editor.node_editor_widget import NodeEditorWidget
 from node_editor.node_graphics_view import MODE_EDGE_DRAG
 from node_editor.utils import dumpException
 
-DEBUG = True
+DEBUG = False
 DEBUG_CONTEXT = False
 
 

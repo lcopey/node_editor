@@ -6,7 +6,7 @@ from ..table import DataframeView
 from node_editor.utils import dumpException
 import pandas as pd
 
-DEBUG = True
+DEBUG = False
 
 
 class DataTableContent(QNENodeContentWidget):
@@ -49,7 +49,7 @@ class DataNode_Table(DataNode):
     content_label_objname = 'data_node_table'
 
     def __init__(self, scene):
-        super().__init__(scene, inputs=[1], outputs=[3])
+        super().__init__(scene, inputs=[1], outputs=[])
         self.eval()
         self.min_height = 160
         self.height = 200
