@@ -1,5 +1,5 @@
 from collections import OrderedDict
-from .node_graphics_edge import QNEGraphicsEdge
+from .node_graphics_edge import GraphicsEdge
 from .node_node import Node
 from .node_edge import Edge
 
@@ -22,7 +22,7 @@ class SceneClipboard:
                 # TODO replace by a property getting all sockets ?
                 for socket in (item.node.inputs + item.node.outputs):
                     sel_sockets[socket.id] = socket
-            elif isinstance(item, QNEGraphicsEdge):
+            elif isinstance(item, GraphicsEdge):
                 sel_edges.append(item.edge)
 
         # debug

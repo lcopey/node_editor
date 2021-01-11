@@ -28,13 +28,13 @@ def print_scene(scene):
 
 
 def print_items(item):
-    if 'QNEGraphicsEdge' in item.__str__():
+    if 'GraphicsEdge' in item.__str__():
         print(item)
         print('EDGE : ', item.edge)
         print('  Start socket : ', item.edge.start_socket)
         print('  End socket : ', item.edge.end_socket)
 
-    elif 'QNEGraphicsSocket' in item.__str__():
+    elif 'GraphicsSocket' in item.__str__():
         print('SOCKET :', item.socket)
         print('  Edges :', item.socket.edges)
 

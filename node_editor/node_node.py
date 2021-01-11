@@ -1,7 +1,7 @@
 from collections import OrderedDict
 from .node_serializable import Serializable
 from .node_graphics_node import GraphicsNode
-from node_editor.node_content_widget import QNENodeContentWidget
+from node_editor.node_content_widget import NodeContentWidget
 from .node_socket import Socket, SocketPosition
 from .node_handle import HandlePosition
 from .utils import dumpException, print_func_name, return_simple_id
@@ -16,7 +16,7 @@ DEBUG = False
 
 class Node(Serializable):
     GraphicsNode_class = GraphicsNode
-    NodeContent_class = QNENodeContentWidget
+    NodeContent_class = NodeContentWidget
     Socket_class = Socket
     """Class representing the `Node`"""
 
@@ -123,7 +123,7 @@ class Node(Serializable):
     def initInnerClasses(self):
         """
         Instantiate innerclasses :
-        - node_content_class : by default :class:`~node_editor.node_content_widget.QNENodeContentWidget`
+        - node_content_class : by default :class:`~node_editor.node_content_widget.NodeContentWidget`
         - graphics_node_class : by default :class:`~node_editor.node_graphics_node.GraphicsNode`
 
         Uses internal methodes `getNodeContentClass` and `getGraphicsNodeClass` to obtain the definition

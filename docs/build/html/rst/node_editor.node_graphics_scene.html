@@ -184,35 +184,35 @@
   <div class="section" id="module-node_editor.node_graphics_scene">
 <span id="node-editor-node-graphics-scene-module"></span><h1>node_editor.node_graphics_scene module<a class="headerlink" href="#module-node_editor.node_graphics_scene" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
-<dt id="node_editor.node_graphics_scene.QNEGraphicsScene">
-<em class="property">class </em><code class="sig-prename descclassname">node_editor.node_graphics_scene.</code><code class="sig-name descname">QNEGraphicsScene</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scene</span><span class="p">:</span> <span class="n">Scene</span></em>, <em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_scene.QNEGraphicsScene" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_scene.GraphicsScene">
+<em class="property">class </em><code class="sig-prename descclassname">node_editor.node_graphics_scene.</code><code class="sig-name descname">GraphicsScene</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scene</span><span class="p">:</span> <span class="n">Scene</span></em>, <em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_scene.GraphicsScene" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QGraphicsScene</span></code></p>
 <p>Implement the scene containing the backgroung</p>
 <dl class="py attribute">
-<dt id="node_editor.node_graphics_scene.QNEGraphicsScene.itemSelected">
-<code class="sig-name descname">itemSelected</code><a class="headerlink" href="#node_editor.node_graphics_scene.QNEGraphicsScene.itemSelected" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_scene.GraphicsScene.itemSelected">
+<code class="sig-name descname">itemSelected</code><a class="headerlink" href="#node_editor.node_graphics_scene.GraphicsScene.itemSelected" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="node_editor.node_graphics_scene.QNEGraphicsScene.itemsDeselected">
-<code class="sig-name descname">itemsDeselected</code><a class="headerlink" href="#node_editor.node_graphics_scene.QNEGraphicsScene.itemsDeselected" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_scene.GraphicsScene.itemsDeselected">
+<code class="sig-name descname">itemsDeselected</code><a class="headerlink" href="#node_editor.node_graphics_scene.GraphicsScene.itemsDeselected" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_scene.QNEGraphicsScene.setGrScene">
-<code class="sig-name descname">setGrScene</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">width</span></em>, <em class="sig-param"><span class="n">height</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_scene.QNEGraphicsScene.setGrScene" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_scene.GraphicsScene.setGrScene">
+<code class="sig-name descname">setGrScene</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">width</span></em>, <em class="sig-param"><span class="n">height</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_scene.GraphicsScene.setGrScene" title="Permalink to this definition">¶</a></dt>
 <dd><p>Define the size of the graphical scene</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_scene.QNEGraphicsScene.drawBackground">
-<code class="sig-name descname">drawBackground</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">painter</span><span class="p">:</span> <span class="n">PyQt5.QtGui.QPainter</span></em>, <em class="sig-param"><span class="n">rect</span><span class="p">:</span> <span class="n">PyQt5.QtCore.QRectF</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_scene.QNEGraphicsScene.drawBackground" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_scene.GraphicsScene.drawBackground">
+<code class="sig-name descname">drawBackground</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">painter</span><span class="p">:</span> <span class="n">PyQt5.QtGui.QPainter</span></em>, <em class="sig-param"><span class="n">rect</span><span class="p">:</span> <span class="n">PyQt5.QtCore.QRectF</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_scene.GraphicsScene.drawBackground" title="Permalink to this definition">¶</a></dt>
 <dd><p>Draw background of the graphical scene</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_scene.QNEGraphicsScene.dragMoveEvent">
-<code class="sig-name descname">dragMoveEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">QGraphicsSceneDragDropEvent</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_scene.QNEGraphicsScene.dragMoveEvent" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_scene.GraphicsScene.dragMoveEvent">
+<code class="sig-name descname">dragMoveEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">QGraphicsSceneDragDropEvent</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_scene.GraphicsScene.dragMoveEvent" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

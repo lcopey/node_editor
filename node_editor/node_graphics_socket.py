@@ -26,7 +26,7 @@ SOCKET_COLOR = [QColor('#FFFF7F0E'),
                 QColor('#FF17BECF')]
 
 
-class QNEGraphicsSocket(QGraphicsItem):
+class GraphicsSocket(QGraphicsItem):
     def __init__(self, socket: 'Socket'):
         super().__init__(socket.node.grNode)
         self.socket = socket

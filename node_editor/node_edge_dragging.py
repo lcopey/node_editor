@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QGraphicsView
 from .node_edge import EDGE_TYPE_BEZIER, EDGE_TYPE_DIRECT, Edge
-from .node_graphics_socket import QNEGraphicsSocket
+from .node_graphics_socket import GraphicsSocket
 from .utils import print_items, dumpException
 
 from typing import TYPE_CHECKING, Optional
@@ -47,7 +47,7 @@ class EdgeDragging:
 
         Parameters
         ----------
-        item : QNEGraphicsSocket
+        item : GraphicsSocket
             grSocket where the click initiated the dragging mode
 
         """
@@ -77,7 +77,7 @@ class EdgeDragging:
 
         Parameters
         ----------
-        item : QNEGraphicsSocket
+        item : GraphicsSocket
             Item in the `Graphics Scene` where we ended dragging an `Edge`
 
         Returns
@@ -88,7 +88,7 @@ class EdgeDragging:
 
         """
         try:
-            if not isinstance(item, QNEGraphicsSocket):
+            if not isinstance(item, GraphicsSocket):
 
                 self.grView.resetMode()
                 if DEBUG: print('View:edgeDragEnd - End dragging edge')
@@ -96,7 +96,7 @@ class EdgeDragging:
                 self.drag_edge.remove(silent=True)
                 self.drag_edge = None
 
-            if isinstance(item, QNEGraphicsSocket) and item.socket is not self.drag_start_socket:
+            if isinstance(item, GraphicsSocket) and item.socket is not self.drag_start_socket:
 
                 # check if edge would be valid
                 if not self.drag_edge.validateEdge(self.drag_start_socket, item.socket):

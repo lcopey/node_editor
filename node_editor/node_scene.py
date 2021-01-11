@@ -6,7 +6,7 @@ from PyQt5.QtCore import QPointF, QPoint
 from collections import OrderedDict
 from .utils import dumpException
 from .node_serializable import Serializable
-from .node_graphics_scene import QNEGraphicsScene
+from .node_graphics_scene import GraphicsScene
 from .node_node import Node
 from .node_edge import Edge
 from .node_scene_history import SceneHistory
@@ -89,7 +89,7 @@ class Scene(Serializable):
         self._has_been_modified = value
 
     def initUI(self):
-        self.grScene = QNEGraphicsScene(self)
+        self.grScene = GraphicsScene(self)
         self.grScene.setGrScene(self.scene_width, self.scene_height)
 
     def setSilentSelectionEvents(self, value: bool = True):

@@ -8,7 +8,7 @@ EDGE_CP_ROUNDNESS = 100
 class GraphicsEdgePathBase:
     """Base class for calculating the graphics pathh to draw for a graphics Edge"""
 
-    def __init__(self, owner: 'QNEGraphicsEdge'):
+    def __init__(self, owner: 'GraphicsEdge'):
         # keep the reference to owner GraphicsEdge class
         self.owner = owner
 

@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     from .node_edge import Edge
 
 
-class QNEGraphicsEdge(QGraphicsPathItem):
+class GraphicsEdge(QGraphicsPathItem):
     def __init__(self, edge: 'Edge', parent=None):
         super().__init__(parent)
 

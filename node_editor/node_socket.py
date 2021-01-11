@@ -1,7 +1,7 @@
 from collections import OrderedDict
 import enum
 from .node_serializable import Serializable
-from .node_graphics_socket import QNEGraphicsSocket
+from .node_graphics_socket import GraphicsSocket
 from .utils import return_simple_id
 
 from typing import TYPE_CHECKING
@@ -29,7 +29,7 @@ class SocketPosition(enum.IntEnum):
 
 
 class Socket(Serializable):
-    Socket_GR_Class = QNEGraphicsSocket
+    Socket_GR_Class = GraphicsSocket
 
     """Class representing Socket"""
 

@@ -1,18 +1,18 @@
-QNENodeContentWidget {
+NodeContentWidget {
   background: transparent;
 }
-QNENodeContentWidget QFrame {
+NodeContentWidget QFrame {
   background: transparent;
 }
-QNENodeContentWidget QTextEdit,
-QNENodeContentWidget QLineEdit {
+NodeContentWidget QTextEdit,
+NodeContentWidget QLineEdit {
   background: #666;
   color: #e0e0e0;
 }
-QNENodeContentWidget QLabel {
+NodeContentWidget QLabel {
   color: #e0e0e0;
 }
-QNENodeContentWidget QLabel#calc_node_output {
+NodeContentWidget QLabel#calc_node_output {
   min-width: 150px;
   max-width: 150px;
   min-height: 45px;
@@ -21,16 +21,16 @@ QNENodeContentWidget QLabel#calc_node_output {
   margin-top: 5px;
   font-size: 28px;
 }
-QNENodeContentWidget QLineEdit#calc_node_input {
+NodeContentWidget QLineEdit#calc_node_input {
   width: 140px;
   height: 36px;
   margin-top: 5px;
   maring-left: 5px;
   font-size: 28px;
 }
-QNENodeContentWidget QLabel#calc_node_bg,
-QNENodeContentWidget QLabel#calc_node_mul,
-QNENodeContentWidget QLabel#calc_node_div {
+NodeContentWidget QLabel#calc_node_bg,
+NodeContentWidget QLabel#calc_node_mul,
+NodeContentWidget QLabel#calc_node_div {
   background: transparent;
   height: 0px;
   color: #373737;
@@ -39,8 +39,8 @@ QNENodeContentWidget QLabel#calc_node_div {
   min-height: 49px;
   padding-left: 94px;
 }
-QNENodeContentWidget QLabel#calc_node_mul,
-QNENodeContentWidget QLabel#calc_node_div {
+NodeContentWidget QLabel#calc_node_mul,
+NodeContentWidget QLabel#calc_node_div {
   padding-top: 12px;
 }
 QGraphicsView {

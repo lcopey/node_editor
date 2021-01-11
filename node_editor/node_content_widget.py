@@ -8,7 +8,7 @@ from PyQt5.QtGui import QKeyEvent, QFocusEvent
 from .utils import dumpException
 
 
-class QNENodeContentWidget(QWidget, Serializable):
+class NodeContentWidget(QWidget, Serializable):
     """Class docs"""
 
     def __init__(self, node: 'Node', parent: QWidget = None):

@@ -1,4 +1,4 @@
-from .node_graphics_edge import QNEGraphicsEdge
+from .node_graphics_edge import GraphicsEdge
 from .utils import dumpException
 from typing import TYPE_CHECKING
 

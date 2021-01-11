@@ -3,9 +3,9 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from .node_scene import Scene
 from .node_edge_dragging import EdgeDragging
-from .node_graphics_socket import QNEGraphicsSocket
-from .node_graphics_edge import QNEGraphicsEdge
-from .node_graphics_cutline import QNECutLine
+from .node_graphics_socket import GraphicsSocket
+from .node_graphics_edge import GraphicsEdge
+from .node_graphics_cutline import CutLine
 from .node_edge_rerouting import EdgeRerouting
 from .utils import print_func_name, print_scene, print_items, dumpException
 
@@ -50,7 +50,7 @@ class QNEGraphicsView(QGraphicsView):
         self.rerouting = EdgeRerouting(self)
 
         # cutLine
-        self.cutLine = QNECutLine()
+        self.cutLine = CutLine()
         self.rubberBandDraggingRectangle = False
         self.grScene.addItem(self.cutLine)
 
@@ -127,11 +127,11 @@ class QNEGraphicsView(QGraphicsView):
 
         # debug printout
         if DEBUG_MMB_SCENE_ITEMS:
-            if isinstance(item, QNEGraphicsEdge):
+            if isinstance(item, GraphicsEdge):
                 print("MMB DEBUG:", item.edge, "\n\t", item.edge.grEdge if item.edge.grEdge is not None else None)
                 return
 
-            if isinstance(item, QNEGraphicsSocket):
+            if isinstance(item, GraphicsSocket):
                 print("MMB DEBUG:", item.socket, "socket_type:", item.socket.socket_type,
                       "input" if item.socket.is_input else "output",
                       "has edges:", "no" if item.socket.edges == [] else "")
@@ -182,7 +182,7 @@ class QNEGraphicsView(QGraphicsView):
         # logic for multiple selection using shift
         if DEBUG: print('LMB on ', item, self.debug_modifiers(event))
 
-        if hasattr(item, 'node') or isinstance(item, QNEGraphicsEdge) or item is None:
+        if hasattr(item, 'node') or isinstance(item, GraphicsEdge) or item is None:
             if event.modifiers() & Qt.ShiftModifier:
                 event.ignore()
                 fakeEvent = QMouseEvent(QEvent.MouseButtonPress, event.localPos(), event.screenPos(),
@@ -193,7 +193,7 @@ class QNEGraphicsView(QGraphicsView):
 
         # Click on a socket
         # logic for starting dragging an edge
-        if isinstance(item, QNEGraphicsSocket):  # Clicking on a socket
+        if isinstance(item, GraphicsSocket):  # Clicking on a socket
             # Ctrl + click : rerouting mode
             if self.mode == MODE_NOOP and event.modifiers() & Qt.ControlModifier:
                 socket = item.socket
@@ -234,7 +234,7 @@ class QNEGraphicsView(QGraphicsView):
 
             if DEBUG: print('Mouse released at ', item)
             # logic for multiple selection using shift
-            if hasattr(item, 'node') or isinstance(item, QNEGraphicsEdge) or item is None:
+            if hasattr(item, 'node') or isinstance(item, GraphicsEdge) or item is None:
                 if event.modifiers() & Qt.ShiftModifier:
                     event.ignore()
                     fakeEvent = QMouseEvent(event.type(), event.localPos(), event.screenPos(),
@@ -260,10 +260,10 @@ class QNEGraphicsView(QGraphicsView):
                         self.rerouting.first_mb_release = True
                         # skip the rest of the code
                         return
-                    self.rerouting.stopRerouting(item.socket if isinstance(item, QNEGraphicsSocket) else None)
+                    self.rerouting.stopRerouting(item.socket if isinstance(item, GraphicsSocket) else None)
 
                 else:
-                    self.rerouting.stopRerouting(item.socket if isinstance(item, QNEGraphicsSocket) else None)
+                    self.rerouting.stopRerouting(item.socket if isinstance(item, GraphicsSocket) else None)
 
                 self.mode = MODE_NOOP
 
@@ -366,7 +366,7 @@ class QNEGraphicsView(QGraphicsView):
 
     def deleteSelected(self):
         for item in self.grScene.selectedItems():
-            if isinstance(item, QNEGraphicsEdge):
+            if isinstance(item, GraphicsEdge):
                 if DEBUG: print('View:deleteSelected - removing edge ', item)
                 item.edge.remove()
 

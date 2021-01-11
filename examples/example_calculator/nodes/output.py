@@ -4,7 +4,7 @@ from ..calc_node_base import *
 from node_editor.utils import dumpException
 
 
-class CalcOutputContent(QNENodeContentWidget):
+class CalcOutputContent(NodeContentWidget):
     def initUI(self):
         self.lbl = QLabel("42", self)
         self.lbl.setAlignment(Qt.AlignLeft)

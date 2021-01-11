@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QLabel, QWidget, QStyleOptionGraphicsItem
 from PyQt5.QtGui import QImage, QPainter
 from PyQt5.QtCore import QRectF
 from node_editor.node_node import Node
-from node_editor.node_content_widget import QNENodeContentWidget
+from node_editor.node_content_widget import NodeContentWidget
 from node_editor.node_graphics_node import GraphicsNode
 from node_editor.node_socket import SocketPosition
 from node_editor.utils import dumpException
@@ -52,7 +52,7 @@ class VizGraphicsNode(GraphicsNode):
         # TODO subclass getSocketPosition
 
 # TODO not necessary
-class CalcContent(QNENodeContentWidget):
+class CalcContent(NodeContentWidget):
     def initUI(self):
         lbl = QLabel(self.node.content_label, self)
         lbl.setObjectName(self.node.content_label_objname)

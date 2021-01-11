@@ -5,7 +5,7 @@ from ..calc_node_base import *
 from node_editor.utils import dumpException
 
 
-class CalcInputContent(QNENodeContentWidget):
+class CalcInputContent(NodeContentWidget):
     def initUI(self):
         self.edit = QLineEdit("1", self)
         self.edit.setAlignment(Qt.AlignRight)

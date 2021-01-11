@@ -184,29 +184,29 @@
   <div class="section" id="module-node_editor.node_graphics_socket">
 <span id="node-editor-node-graphics-socket-module"></span><h1>node_editor.node_graphics_socket module<a class="headerlink" href="#module-node_editor.node_graphics_socket" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
-<dt id="node_editor.node_graphics_socket.QNEGraphicsSocket">
-<em class="property">class </em><code class="sig-prename descclassname">node_editor.node_graphics_socket.</code><code class="sig-name descname">QNEGraphicsSocket</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">socket</span><span class="p">:</span> <span class="n">Socket</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_socket.QNEGraphicsSocket" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_socket.GraphicsSocket">
+<em class="property">class </em><code class="sig-prename descclassname">node_editor.node_graphics_socket.</code><code class="sig-name descname">GraphicsSocket</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">socket</span><span class="p">:</span> <span class="n">Socket</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_socket.GraphicsSocket" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QGraphicsItem</span></code></p>
 <dl class="py method">
-<dt id="node_editor.node_graphics_socket.QNEGraphicsSocket.socket_type">
-<em class="property">property </em><code class="sig-name descname">socket_type</code><a class="headerlink" href="#node_editor.node_graphics_socket.QNEGraphicsSocket.socket_type" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_socket.GraphicsSocket.socket_type">
+<em class="property">property </em><code class="sig-name descname">socket_type</code><a class="headerlink" href="#node_editor.node_graphics_socket.GraphicsSocket.socket_type" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_socket.QNEGraphicsSocket.initAssets">
-<code class="sig-name descname">initAssets</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_socket.QNEGraphicsSocket.initAssets" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_socket.GraphicsSocket.initAssets">
+<code class="sig-name descname">initAssets</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_socket.GraphicsSocket.initAssets" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_socket.QNEGraphicsSocket.changeSocketType">
-<code class="sig-name descname">changeSocketType</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_socket.QNEGraphicsSocket.changeSocketType" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_socket.GraphicsSocket.changeSocketType">
+<code class="sig-name descname">changeSocketType</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_socket.GraphicsSocket.changeSocketType" title="Permalink to this definition">¶</a></dt>
 <dd><p>Change the <cite>Socket</cite> Type.</p>
 <p>Change are exclusively graphical.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_socket.QNEGraphicsSocket.getSocketColor">
-<code class="sig-name descname">getSocketColor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_socket.QNEGraphicsSocket.getSocketColor" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_socket.GraphicsSocket.getSocketColor">
+<code class="sig-name descname">getSocketColor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_socket.GraphicsSocket.getSocketColor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the <code class="docutils literal notranslate"><span class="pre">QColor</span></code> for this <code class="docutils literal notranslate"><span class="pre">key</span></code></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -222,13 +222,13 @@
 </dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_socket.QNEGraphicsSocket.paint">
-<code class="sig-name descname">paint</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">QPainter</span></em>, <em class="sig-param"><span class="n">QStyleOptionGraphicsItem</span></em>, <em class="sig-param"><span class="n">widget</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_socket.QNEGraphicsSocket.paint" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_socket.GraphicsSocket.paint">
+<code class="sig-name descname">paint</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">QPainter</span></em>, <em class="sig-param"><span class="n">QStyleOptionGraphicsItem</span></em>, <em class="sig-param"><span class="n">widget</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_socket.GraphicsSocket.paint" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_socket.QNEGraphicsSocket.boundingRect">
-<code class="sig-name descname">boundingRect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span> &#x2192; QRectF<a class="headerlink" href="#node_editor.node_graphics_socket.QNEGraphicsSocket.boundingRect" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_socket.GraphicsSocket.boundingRect">
+<code class="sig-name descname">boundingRect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span> &#x2192; QRectF<a class="headerlink" href="#node_editor.node_graphics_socket.GraphicsSocket.boundingRect" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

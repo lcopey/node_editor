@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QGraphicsItem, QStyleOptionGraphicsItem, QWidget
 from PyQt5.QtCore import Qt, QRectF, QPointF, QPoint
 from PyQt5.QtGui import QFont, QPen, QColor, QBrush, QPainter, QPainterPath
-from .node_graphics_socket import QNEGraphicsSocket
+from .node_graphics_socket import GraphicsSocket
 from .utils import dumpException
 from enum import Enum
 from typing import TYPE_CHECKING, Optional

@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from .node_scene import Scene
 
 
-class QNEGraphicsScene(QGraphicsScene):
+class GraphicsScene(QGraphicsScene):
     """Implement the scene containing the backgroung"""
     # TODO why in the grScene instead of the scene ?
     itemSelected = pyqtSignal()

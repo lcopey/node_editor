@@ -184,33 +184,33 @@
   <div class="section" id="module-node_editor.node_graphics_edge">
 <span id="node-editor-node-graphics-edge-module"></span><h1>node_editor.node_graphics_edge module<a class="headerlink" href="#module-node_editor.node_graphics_edge" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
-<dt id="node_editor.node_graphics_edge.QNEGraphicsEdge">
-<em class="property">class </em><code class="sig-prename descclassname">node_editor.node_graphics_edge.</code><code class="sig-name descname">QNEGraphicsEdge</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">edge</span><span class="p">:</span> <span class="n">Edge</span></em>, <em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_edge.QNEGraphicsEdge" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_edge.GraphicsEdge">
+<em class="property">class </em><code class="sig-prename descclassname">node_editor.node_graphics_edge.</code><code class="sig-name descname">GraphicsEdge</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">edge</span><span class="p">:</span> <span class="n">Edge</span></em>, <em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_edge.GraphicsEdge" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QGraphicsPathItem</span></code></p>
 <dl class="py method">
-<dt id="node_editor.node_graphics_edge.QNEGraphicsEdge.initUI">
-<code class="sig-name descname">initUI</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_edge.QNEGraphicsEdge.initUI" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_edge.GraphicsEdge.initUI">
+<code class="sig-name descname">initUI</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_edge.GraphicsEdge.initUI" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_edge.QNEGraphicsEdge.initAssets">
-<code class="sig-name descname">initAssets</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_edge.QNEGraphicsEdge.initAssets" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_edge.GraphicsEdge.initAssets">
+<code class="sig-name descname">initAssets</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_edge.GraphicsEdge.initAssets" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize assets <code class="docutils literal notranslate"><span class="pre">QObjects</span></code> like <code class="docutils literal notranslate"><span class="pre">QColor</span></code>, <code class="docutils literal notranslate"><span class="pre">QPen</span></code> and <code class="docutils literal notranslate"><span class="pre">QBrush</span></code></p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_edge.QNEGraphicsEdge.createEdgePathCalculator">
-<code class="sig-name descname">createEdgePathCalculator</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_edge.QNEGraphicsEdge.createEdgePathCalculator" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_edge.GraphicsEdge.createEdgePathCalculator">
+<code class="sig-name descname">createEdgePathCalculator</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_edge.GraphicsEdge.createEdgePathCalculator" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_edge.QNEGraphicsEdge.determineEdgePathClass">
-<code class="sig-name descname">determineEdgePathClass</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_edge.QNEGraphicsEdge.determineEdgePathClass" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_edge.GraphicsEdge.determineEdgePathClass">
+<code class="sig-name descname">determineEdgePathClass</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_edge.GraphicsEdge.determineEdgePathClass" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_edge.QNEGraphicsEdge.changeColor">
-<code class="sig-name descname">changeColor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">color</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_edge.QNEGraphicsEdge.changeColor" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_edge.GraphicsEdge.changeColor">
+<code class="sig-name descname">changeColor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">color</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_edge.GraphicsEdge.changeColor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Change the color of the <cite>Edge</cite></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -220,61 +220,61 @@
 </dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_edge.QNEGraphicsEdge.setColorFromSockets">
-<code class="sig-name descname">setColorFromSockets</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#node_editor.node_graphics_edge.QNEGraphicsEdge.setColorFromSockets" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_edge.GraphicsEdge.setColorFromSockets">
+<code class="sig-name descname">setColorFromSockets</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#node_editor.node_graphics_edge.GraphicsEdge.setColorFromSockets" title="Permalink to this definition">¶</a></dt>
 <dd><p>Change color according to connected sockets. Return <code class="docutils literal notranslate"><span class="pre">`True`</span></code> if color can be determined</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_edge.QNEGraphicsEdge.onSelected">
-<code class="sig-name descname">onSelected</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_edge.QNEGraphicsEdge.onSelected" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_edge.GraphicsEdge.onSelected">
+<code class="sig-name descname">onSelected</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_edge.GraphicsEdge.onSelected" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_edge.QNEGraphicsEdge.doSelect">
-<code class="sig-name descname">doSelect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_state</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_edge.QNEGraphicsEdge.doSelect" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_edge.GraphicsEdge.doSelect">
+<code class="sig-name descname">doSelect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_state</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_edge.GraphicsEdge.doSelect" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_edge.QNEGraphicsEdge.mouseReleaseEvent">
-<code class="sig-name descname">mouseReleaseEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">QGraphicsSceneMouseEvent</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_edge.QNEGraphicsEdge.mouseReleaseEvent" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_edge.GraphicsEdge.mouseReleaseEvent">
+<code class="sig-name descname">mouseReleaseEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">QGraphicsSceneMouseEvent</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_edge.GraphicsEdge.mouseReleaseEvent" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_edge.QNEGraphicsEdge.hoverEnterEvent">
-<code class="sig-name descname">hoverEnterEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">QGraphicsSceneHoverEvent</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_edge.QNEGraphicsEdge.hoverEnterEvent" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_edge.GraphicsEdge.hoverEnterEvent">
+<code class="sig-name descname">hoverEnterEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">QGraphicsSceneHoverEvent</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_edge.GraphicsEdge.hoverEnterEvent" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_edge.QNEGraphicsEdge.hoverLeaveEvent">
-<code class="sig-name descname">hoverLeaveEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">QGraphicsSceneHoverEvent</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_edge.QNEGraphicsEdge.hoverLeaveEvent" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_edge.GraphicsEdge.hoverLeaveEvent">
+<code class="sig-name descname">hoverLeaveEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">QGraphicsSceneHoverEvent</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_edge.GraphicsEdge.hoverLeaveEvent" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_edge.QNEGraphicsEdge.setSource">
-<code class="sig-name descname">setSource</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_edge.QNEGraphicsEdge.setSource" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_edge.GraphicsEdge.setSource">
+<code class="sig-name descname">setSource</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_edge.GraphicsEdge.setSource" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set itinial position of the edge to x, y</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_edge.QNEGraphicsEdge.setDestination">
-<code class="sig-name descname">setDestination</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_edge.QNEGraphicsEdge.setDestination" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_edge.GraphicsEdge.setDestination">
+<code class="sig-name descname">setDestination</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_edge.GraphicsEdge.setDestination" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set end position of the edge to x, y</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_edge.QNEGraphicsEdge.boundingRect">
-<code class="sig-name descname">boundingRect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span> &#x2192; QRectF<a class="headerlink" href="#node_editor.node_graphics_edge.QNEGraphicsEdge.boundingRect" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_edge.GraphicsEdge.boundingRect">
+<code class="sig-name descname">boundingRect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span> &#x2192; QRectF<a class="headerlink" href="#node_editor.node_graphics_edge.GraphicsEdge.boundingRect" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_edge.QNEGraphicsEdge.shape">
-<code class="sig-name descname">shape</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span> &#x2192; QPainterPath<a class="headerlink" href="#node_editor.node_graphics_edge.QNEGraphicsEdge.shape" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_edge.GraphicsEdge.shape">
+<code class="sig-name descname">shape</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span> &#x2192; QPainterPath<a class="headerlink" href="#node_editor.node_graphics_edge.GraphicsEdge.shape" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_edge.QNEGraphicsEdge.paint">
-<code class="sig-name descname">paint</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">painter</span><span class="p">:</span> <span class="n">PyQt5.QtGui.QPainter</span></em>, <em class="sig-param"><span class="n">option</span><span class="p">:</span> <span class="n">PyQt5.QtWidgets.QStyleOptionGraphicsItem</span></em>, <em class="sig-param"><span class="n">widget</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>PyQt5.QtWidgets.QWidget<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">Ellipsis</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#node_editor.node_graphics_edge.QNEGraphicsEdge.paint" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_edge.GraphicsEdge.paint">
+<code class="sig-name descname">paint</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">painter</span><span class="p">:</span> <span class="n">PyQt5.QtGui.QPainter</span></em>, <em class="sig-param"><span class="n">option</span><span class="p">:</span> <span class="n">PyQt5.QtWidgets.QStyleOptionGraphicsItem</span></em>, <em class="sig-param"><span class="n">widget</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>PyQt5.QtWidgets.QWidget<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">Ellipsis</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#node_editor.node_graphics_edge.GraphicsEdge.paint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Overrides default paint method if QGraphicsItem.</p>
 <dl class="simple">
 <dt>Compute path of the edge, select pen depending on :</dt><dd><p>are we in dragging mode
@@ -284,14 +284,14 @@ is the edge selected or not</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_edge.QNEGraphicsEdge.calcPath">
-<code class="sig-name descname">calcPath</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_edge.QNEGraphicsEdge.calcPath" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_edge.GraphicsEdge.calcPath">
+<code class="sig-name descname">calcPath</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_edge.GraphicsEdge.calcPath" title="Permalink to this definition">¶</a></dt>
 <dd><p>Will handle drawing QPainterPath from Paint A to B</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_edge.QNEGraphicsEdge.intersectsWith">
-<code class="sig-name descname">intersectsWith</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p1</span></em>, <em class="sig-param"><span class="n">p2</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_edge.QNEGraphicsEdge.intersectsWith" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_edge.GraphicsEdge.intersectsWith">
+<code class="sig-name descname">intersectsWith</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p1</span></em>, <em class="sig-param"><span class="n">p2</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_edge.GraphicsEdge.intersectsWith" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

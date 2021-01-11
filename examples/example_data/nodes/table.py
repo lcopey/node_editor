@@ -9,7 +9,7 @@ import pandas as pd
 DEBUG = False
 
 
-class DataTableContent(QNENodeContentWidget):
+class DataTableContent(NodeContentWidget):
     def initUI(self):
         df = pd.DataFrame({'a': ['Mary', 'Jim', 'John'],
                            'b': [100, 200, 300],

@@ -2,7 +2,7 @@ from PyQt5.QtCore import Qt, QRectF, QPointF
 from PyQt5.QtGui import QBrush, QPainterPath, QPainter, QColor, QPen, QFont
 from PyQt5.QtWidgets import QGraphicsRectItem, QGraphicsItem, QWidget, QVBoxLayout, QGraphicsSceneMouseEvent, \
     QGraphicsSceneHoverEvent, QStyleOptionGraphicsItem, QLabel, QTextEdit, QGraphicsProxyWidget, QGraphicsTextItem
-from node_editor.node_content_widget import QNENodeContentWidget
+from node_editor.node_content_widget import NodeContentWidget
 
 from .const import Handle, handleCursors, handleUpdate
 from typing import Optional
@@ -39,7 +39,7 @@ class QGraphicsResizableRectItem(QGraphicsRectItem):
         self.setFlag(QGraphicsItem.ItemIsSelectable, True)
 
     def initContent(self):
-        self.content = QNENodeContentWidget(None)
+        self.content = NodeContentWidget(None)
         self.grContent = QGraphicsProxyWidget(self)
         self.setContentGeometry()
         self.grContent.setWidget(self.content)

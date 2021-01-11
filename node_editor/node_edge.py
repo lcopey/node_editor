@@ -34,7 +34,7 @@ class Edge(Serializable):
 
         Instance Attributes:
             scene - reference to the :class:`~node_editor.node_scene.Scene`
-            grEdge - reference to the :class:`~node_editor.node_graphics_edge.QNEGraphicsEdge`
+            grEdge - reference to the :class:`~node_editor.node_graphics_edge.GraphicsEdge`
         """
         super().__init__()
         self.scene = scene
@@ -106,7 +106,7 @@ class Edge(Serializable):
 
     def getGraphicsEdgeClass(self):
         """Returns the class representing the Graphics Edge. Override if needed"""
-        return QNEGraphicsEdge
+        return GraphicsEdge
 
     def createEdgeClassInstance(self):
         """Create instance of grEdge class
