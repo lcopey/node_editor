@@ -2,14 +2,19 @@ import enum
 
 LISTBOX_MIMETYPE = "application/x-item"
 
+# TODO Create a node factory
 
 class NodeType(enum.IntEnum):
     OP_NODE_TABLE = 1
-    OP_NODE_OUTPUT = 2
-    OP_NODE_ADD = 3
-    OP_NODE_SUB = 4
-    OP_NODE_MUL = 5
-    OP_NODE_DIV = 6
+    OP_NODE_FILE_READ = 2
+    # OP_NODE_ADD = 3
+    # OP_NODE_SUB = 4
+    # OP_NODE_MUL = 5
+    # OP_NODE_DIV = 6
+    @classmethod
+    def register(cls, op_code_name, op_code):
+        setattr(cls, op_code_name, op_code)
+
 
 DATA_NODES = {}
 
@@ -43,6 +48,7 @@ def get_call_from_opcode(op_code):
     if op_code not in DATA_NODES:
         raise OpCodeNotRegistered('OpCode {} is not registered'.format(op_code))
     return DATA_NODES[op_code]
+
 
 # import all nodes register them
 from .nodes import *

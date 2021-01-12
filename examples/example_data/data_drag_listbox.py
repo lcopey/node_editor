@@ -5,7 +5,7 @@ from node_editor.utils import dumpException
 from .data_conf import *
 
 
-class QNEDragListbox(QListWidget):
+class DragListBox(QListWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.initUI()

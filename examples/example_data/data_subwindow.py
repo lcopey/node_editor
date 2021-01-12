@@ -7,7 +7,7 @@ from .data_node_base import *
 
 from node_editor.node_node import Node
 from node_editor.node_editor_widget import NodeEditorWidget
-from node_editor.node_graphics_view import MODE_EDGE_DRAG
+# from node_editor.node_graphics_view import MODE_EDGE_DRAG
 from node_editor.utils import dumpException
 
 DEBUG = False
@@ -39,6 +39,7 @@ class DataSubWindow(NodeEditorWidget):
             self.node_actions[node.op_code].setData(node.op_code)
 
     def initNodesContextMenu(self):
+        # TODO Implement hierarchical menu
         context_menu = QMenu(self)
         keys = list(DATA_NODES.keys())
         keys.sort()

@@ -45,17 +45,23 @@ class DataGraphicsNode(GraphicsNode):
                           self.icons,
                           QRectF(offset, 0, 24., 24.))
 
+
 class VizGraphicsNode(GraphicsNode):
     def __init__(self, node: 'Node', parent=None, resizeable=True, min_height=240, min_width=180):
         super().__init__(node=node, parent=parent, resizeable=True, min_height=min_height, min_width=min_width)
         # TODO subclass paint as a circle
         # TODO subclass getSocketPosition
 
-# TODO not necessary
-class CalcContent(NodeContentWidget):
-    def initUI(self):
-        lbl = QLabel(self.node.content_label, self)
-        lbl.setObjectName(self.node.content_label_objname)
+    def initSizes(self):
+        # Diverse parameters for drawing
+        super().initSizes()
+        self.edge_roundness = 6.
+        self.edge_padding = 0
+        self.title_horizontal_padding = 8.
+        self.title_vertical_padding = 10
+
+        self.min_width = self.width = 100
+        self.min_height = self.height = 54
 
 
 # TODO Remove and displace in node_node or as part of node_editor api
@@ -67,7 +73,8 @@ class DataNode(Node):
     content_label_objname = 'calc_node_bg'
 
     GraphicsNode_class = DataGraphicsNode
-    NodeContent_class = CalcContent
+
+    # NodeContent_class = CalcContent
 
     def __init__(self, scene: 'Scene', inputs=[2, 2], outputs=[1]):
         super().__init__(scene, title=self.__class__.op_title, inputs=inputs, outputs=outputs)

@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QGraphicsView, QApplication
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
+import enum
 from .node_scene import Scene
 from .node_edge_dragging import EdgeDragging
 from .node_graphics_socket import GraphicsSocket
@@ -9,11 +10,14 @@ from .node_graphics_cutline import CutLine
 from .node_edge_rerouting import EdgeRerouting
 from .utils import print_func_name, print_scene, print_items, dumpException
 
-# TODO replace with python  enumerator
-MODE_NOOP = 1
-MODE_EDGE_DRAG = 2
-MODE_EDGE_CUT = 3
-MODE_EDGES_REROUTING = 4  # Mode representing when we reroute existing edge ctrl + click
+
+class ViewMode(enum.IntEnum):
+    """Mode representing when we reroute existing edge ctrl + click"""
+    NOOP = 1
+    EDGE_DRAG = 2
+    EDGE_CUT = 3
+    EDGES_REROUTING = 4
+
 
 EDGE_DRAG_START_THRESHOLD = 50
 
@@ -40,7 +44,7 @@ class QNEGraphicsView(QGraphicsView):
         self.initUI()  # initialize render settings
         self.setScene(self.grScene)  # set the rendered scene to grScene
 
-        self.mode = MODE_NOOP  # Control variable to handle NOOP mode, dragging mode
+        self.mode = ViewMode.NOOP  # Control variable to handle NOOP mode, dragging mode
         self.editingFlag = False  # Control variable set to True when editing the content of a node
 
         # edge dragging
@@ -83,7 +87,19 @@ class QNEGraphicsView(QGraphicsView):
     def resetMode(self):
         """Set mode to MODE_NOOP
         """
-        self.mode = MODE_NOOP
+        self.mode = ViewMode.NOOP
+
+    def isInNoOpMode(self):
+        return self.mode == ViewMode.NOOP
+
+    def isEdgeCutting(self):
+        return self.mode == ViewMode.EDGE_CUT
+
+    def isEdgeDragging(self):
+        return self.mode == ViewMode.EDGE_DRAG
+
+    def isEdgeRerouting(self):
+        return self.mode == ViewMode.EDGES_REROUTING
 
     def dragEnterEvent(self, event: QDragEnterEvent) -> None:
         for callback in self._drag_enter_listeners:
@@ -195,27 +211,27 @@ class QNEGraphicsView(QGraphicsView):
         # logic for starting dragging an edge
         if isinstance(item, GraphicsSocket):  # Clicking on a socket
             # Ctrl + click : rerouting mode
-            if self.mode == MODE_NOOP and event.modifiers() & Qt.ControlModifier:
+            if self.mode == ViewMode.NOOP and event.modifiers() & Qt.ControlModifier:
                 socket = item.socket
                 if socket.hasAnyEdge():
-                    self.mode = MODE_EDGES_REROUTING
+                    self.mode = ViewMode.EDGES_REROUTING
                     self.rerouting.startRerouting(socket)
                     return  # suppressing other lmb related event
 
-            if self.mode == MODE_NOOP:  # when the mode is noop
-                self.mode = MODE_EDGE_DRAG  # enter dragging mode
+            if self.mode == ViewMode.NOOP:  # when the mode is noop
+                self.mode = ViewMode.EDGE_DRAG  # enter dragging mode
                 self.dragging.edgeDragStart(item)
 
                 return  # suppressing other lmb related event
 
-        if self.mode == MODE_EDGE_DRAG:  # if we already were in edge dragging mode
+        if self.mode == ViewMode.EDGE_DRAG:  # if we already were in edge dragging mode
             res = self.dragging.edgeDragEnd(item)  # check if we click on another valid socket
             if res: return  # suppress event if we clicked on a socket
 
         if item is None:
             # Logic for the cutline (Ctrl + LMB)
-            if event.modifiers() & Qt.ControlModifier and self.mode == MODE_NOOP:
-                self.mode = MODE_EDGE_CUT
+            if event.modifiers() & Qt.ControlModifier and self.mode == ViewMode.NOOP:
+                self.mode = ViewMode.EDGE_CUT
                 fakeEvent = QMouseEvent(QEvent.MouseButtonRelease, event.pos(), event.screenPos(),
                                         Qt.LeftButton, Qt.NoButton, event.modifiers())
                 super().mouseReleaseEvent(fakeEvent)
@@ -246,12 +262,12 @@ class QNEGraphicsView(QGraphicsView):
             # check the distance between the last click and the release
             # if we were basically on the socket we clicked, we keep the edge dragging mode and suppress other events
             # otherwise the edge dragging mode is ended and returned to noop
-            if self.mode == MODE_EDGE_DRAG:  # if we were dragging an edge
+            if self.mode == ViewMode.EDGE_DRAG:  # if we were dragging an edge
                 if self.distanceBetweenClickAndRelease(event):
                     res = self.dragging.edgeDragEnd(item)
                     if res: return
 
-            if self.mode == MODE_EDGES_REROUTING:
+            if self.mode == ViewMode.EDGES_REROUTING:
                 # pass the socket as target if clicked on socket else None
                 if not EDGE_REROUTING_UE:
                     # version 2
@@ -265,15 +281,15 @@ class QNEGraphicsView(QGraphicsView):
                 else:
                     self.rerouting.stopRerouting(item.socket if isinstance(item, GraphicsSocket) else None)
 
-                self.mode = MODE_NOOP
+                self.mode = ViewMode.NOOP
 
             # End of cutLine mode
-            if self.mode == MODE_EDGE_CUT:
+            if self.mode == ViewMode.EDGE_CUT:
                 self.cutIntersectingEdges()
                 self.cutLine.line_points = []
                 self.cutLine.update()
                 QApplication.setOverrideCursor(Qt.ArrowCursor)
-                self.mode = MODE_NOOP
+                self.mode = ViewMode.NOOP
                 return
 
             # Dragging rectangle selection
@@ -308,14 +324,14 @@ class QNEGraphicsView(QGraphicsView):
         scenepos = self.mapToScene(event.pos())
 
         try:
-            if self.mode == MODE_EDGE_DRAG:
+            if self.mode == ViewMode.EDGE_DRAG:
                 self.dragging.updateDestination(scenepos.x(), scenepos.y())
 
-            if self.mode == MODE_EDGE_CUT and self.cutLine is not None:
+            if self.mode == ViewMode.EDGE_CUT and self.cutLine is not None:
                 self.cutLine.line_points.append(scenepos)
                 self.cutLine.update()
 
-            if self.mode == MODE_EDGES_REROUTING:
+            if self.mode == ViewMode.EDGES_REROUTING:
                 self.rerouting.updateScenePos(scenepos.x(), scenepos.y())
         except Exception as e:
             dumpException(e)

@@ -89,6 +89,7 @@ class GraphicsNode(QGraphicsRectItem):
             self.initHandles()
 
         # init _title
+        self.title_item = None
         self.initTitle()
         self.title = self.node.title
         # init content
@@ -150,15 +151,16 @@ class GraphicsNode(QGraphicsRectItem):
         self.title_item.setDefaultTextColor(self._title_color)
         self.title_item.setFont(self._title_font)
         self.title_item.setPos(self.title_horizontal_padding, 0)
-        # TODO update with resize ?
-        self.title_item.setTextWidth(self.width - 2 * self.title_horizontal_padding)
 
     def setContentGeometry(self):
         """Set Content geometry to fit the space available in the `Graphical Node`
         """
-        self.content.setGeometry(self.edge_padding, self.title_height + self.edge_padding,
-                                 self.width - 2 * self.edge_padding,
-                                 self.height - 2 * self.edge_padding - self.title_height)
+        if self.title_item:
+            self.title_item.setTextWidth(self.width - 2 * self.title_horizontal_padding)
+        if self.content is not None:
+            self.content.setGeometry(self.edge_padding, self.title_height + self.edge_padding,
+                                     self.width - 2 * self.edge_padding,
+                                     self.height - 2 * self.edge_padding - self.title_height)
 
     def doSelect(self, new_state=True):
         self.setSelected(new_state)

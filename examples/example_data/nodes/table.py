@@ -1,10 +1,11 @@
 from PyQt5.QtWidgets import QLineEdit, QLabel, QVBoxLayout
 from PyQt5.QtCore import Qt
+import pandas as pd
 from ..data_conf import *
 from ..data_node_base import *
 from ..table import DataframeView
 from node_editor.utils import dumpException
-import pandas as pd
+
 
 DEBUG = False
 

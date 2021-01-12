@@ -11,7 +11,7 @@ from node_editor.node_editor_window import NodeEditorWindow
 from node_editor.node_editor_widget import NodeEditorWidget
 from node_editor.utils import dumpException, pp
 from .data_subwindow import DataSubWindow
-from .data_drag_listbox import QNEDragListbox
+from .data_drag_listbox import DragListBox
 from .data_conf import DATA_NODES
 
 from node_editor.node_edge import Edge
@@ -135,7 +135,7 @@ class DataWindow(NodeEditorWindow):
 
         The `Nodes` are automatically detected via the :class:~`examples.calc_drag_listbox.QNEDragListBox`
         """
-        self.nodeListWidget = QNEDragListbox()
+        self.nodeListWidget = DragListBox()
 
         self.nodesDock = QDockWidget("Nodes")
         self.nodesDock.setWidget(self.nodeListWidget)
@@ -251,7 +251,7 @@ class DataWindow(NodeEditorWindow):
                     if existing:
                         self.mdiArea.setActiveSubWindow(existing)
                     else:
-                        # do not use createMdiChild as a new node editor to call the fileLoad method
+                        # Do not use createMdiChild as a new node editor to call the fileLoad method
                         # Create new subwindow and open file
                         nodeeditor = DataSubWindow()
                         if nodeeditor.fileLoad(fname):

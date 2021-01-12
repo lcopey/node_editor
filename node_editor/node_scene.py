@@ -11,8 +11,11 @@ from .node_node import Node
 from .node_edge import Edge
 from .node_scene_history import SceneHistory
 from .node_scene_clipboard import SceneClipboard
-
 from .utils import print_func_name
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .node_graphics_view import QNEGraphicsView
 
 DEBUG = False
 
@@ -210,7 +213,7 @@ class Scene(Serializable):
         """
         return Node if self.node_class_selector is None else self.node_class_selector(data)
 
-    def getView(self):
+    def getView(self) -> 'QNEGraphicsView':
         return self.grScene.views()[0]
 
     def getItemAt(self, pos):
