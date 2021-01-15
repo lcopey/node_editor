@@ -7,8 +7,12 @@ from .data_node_base import *
 
 from node_editor.node_node import Node
 from node_editor.node_editor_widget import NodeEditorWidget
-# from node_editor.node_graphics_view import MODE_EDGE_DRAG
 from node_editor.utils import dumpException
+
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .data_window import DataWindow
 
 DEBUG = False
 DEBUG_CONTEXT = False
@@ -30,6 +34,7 @@ class DataSubWindow(NodeEditorWidget):
         self._close_event_listeners = []
 
     def initNewNodeActions(self):
+        """Instantiates """
         self.node_actions = {}
         keys = list(DATA_NODES.keys())
         keys.sort()
@@ -46,6 +51,12 @@ class DataSubWindow(NodeEditorWidget):
         for key in keys:
             context_menu.addAction(self.node_actions[key])
         return context_menu
+
+    def getMainWindowReference(self) -> 'DataWindow':
+        """Returns a reference to the MainWindow currently holding the instance."""
+        # self - QMdiSubWindow - QWidget - QMdiArea - MainWindow
+        return self.parent().parent().parent().parent()
+
 
     def onHistoryRestored(self):
         self.doEvalOutputs()

@@ -17,13 +17,18 @@ from .data_conf import DATA_NODES
 from node_editor.node_edge import Edge
 from node_editor.node_edge_validators import *
 
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from node_editor.node_graphics_node import GraphicsNode
+
 Edge.registerEdgeValidator(edge_validator_debug)
 Edge.registerEdgeValidator(edge_cannot_connect_two_outputs_or_two_inputs)
 Edge.registerEdgeValidator(edge_cannot_connect_input_and_output_of_same_node)
 # images for the dark skin
 import examples.example_calculator.qss.nodeeditor_dark_resources
 
-DEBUG = False
+DEBUG = True
 
 
 class DataWindow(NodeEditorWindow):
@@ -148,6 +153,7 @@ class DataWindow(NodeEditorWindow):
 
         The `Nodes` are automatically detected via the :class:~`examples.calc_drag_listbox.QNEDragListBox`
         """
+        # populates the nodes dock with automatically discovered nodes in DragListBox
         self.nodeListWidget = DragListBox()
 
         self.nodesDock = QDockWidget("Nodes")
@@ -334,3 +340,21 @@ class DataWindow(NodeEditorWindow):
     def setActiveSubWindow(self, window):
         if window:
             self.mdiArea.setActiveSubWindow(window)
+
+    def setDockPropertiesWidget(self, owner: 'GraphicsNode'):
+        self.print(owner)
+        grScene = owner.node.scene.grScene
+        selectedItems = grScene.selectedItems()
+        if len(selectedItems) == 1:
+            self.print('Only owner selected', selectedItems)
+        else:
+            self.print('Many items selected', selectedItems)
+
+
+
+    def print(self, *args):
+        if DEBUG:
+            print('> Main Window', *args)
+
+    def __str__(self):
+        return 'Main Window'

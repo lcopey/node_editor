@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QGraphicsView, QApplication
+from PyQt5.QtWidgets import QGraphicsView, QApplication, QGraphicsProxyWidget
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 import enum
@@ -24,8 +24,8 @@ EDGE_DRAG_START_THRESHOLD = 50
 EDGE_REROUTING_UE = False
 
 DEBUG = False
-DEBUG_MMB_SCENE_ITEMS = True
-DEBUG_MMB_LAST_SELECTIONS = False
+DEBUG_MRB_SCENE_ITEMS = True
+DEBUG_MRB_LAST_SELECTIONS = True
 
 
 class QNEGraphicsView(QGraphicsView):
@@ -136,58 +136,6 @@ class QNEGraphicsView(QGraphicsView):
             self.rightMouseButtonRelease(event)
         else:
             super().mouseReleaseEvent(event)
-
-    def middleMouseButtonPress(self, event: QMouseEvent):
-        """Implement dragging of the scene using middle button"""
-        item = self.getItemAtClick(event)
-
-        # debug printout
-        if DEBUG_MMB_SCENE_ITEMS:
-            if isinstance(item, GraphicsEdge):
-                print("MMB DEBUG:", item.edge, "\n\t", item.edge.grEdge if item.edge.grEdge is not None else None)
-                return
-
-            if isinstance(item, GraphicsSocket):
-                print("MMB DEBUG:", item.socket, "socket_type:", item.socket.socket_type,
-                      "input" if item.socket.is_input else "output",
-                      "has edges:", "no" if item.socket.edges == [] else "")
-                if item.socket.edges:
-                    for edge in item.socket.edges: print("\t", edge)
-                return
-
-            # if DEBUG_MMB_SCENE_ITEMS and (item is None or self.mode == MODE_EDGES_REROUTING):
-            #     print("SCENE:")
-            #     print("  Nodes:")
-            #     for node in self.grScene.scene.nodes: print("\t", node)
-            #     print("  Edges:")
-            #     for edge in self.grScene.scene.edges: print("\t", edge, "\n\t\tgrEdge:",
-            #                                                 edge.grEdge if edge.grEdge is not None else None)
-
-            if event.modifiers() & Qt.CTRL:
-                print("  Graphic Items in GraphicScene:")
-                for item in self.grScene.items():
-                    print('    ', item)
-
-        if DEBUG_MMB_LAST_SELECTIONS and event.modifiers() & Qt.SHIFT:
-            print("scene _last_selected_items:", self.grScene.scene._last_selected_items)
-            return
-
-        # faking events for enable MMB dragging the scene
-        releaseEvent = QMouseEvent(QEvent.MouseButtonRelease, event.localPos(), event.screenPos(),
-                                   Qt.LeftButton, Qt.NoButton, event.modifiers())
-        super().mouseReleaseEvent(releaseEvent)
-        self.setDragMode(QGraphicsView.ScrollHandDrag)
-        fakeEvent = QMouseEvent(event.type(), event.localPos(), event.screenPos(),
-                                Qt.LeftButton, event.buttons() | Qt.LeftButton, event.modifiers())
-        super().mousePressEvent(fakeEvent)
-
-    def middleMouseButtonRelease(self, event: QMouseEvent):
-        """Implement dragging of the scene using middle button"""
-        # when releasing the middle button, release the left button instead and reset the drag mode
-        fakeEvent = QMouseEvent(event.type(), event.localPos(), event.screenPos(),
-                                Qt.LeftButton, event.buttons() & ~Qt.LeftButton, event.modifiers())
-        super().mouseReleaseEvent(fakeEvent)
-        self.setDragMode(QGraphicsView.RubberBandDrag)
 
     def leftMouseButtonPress(self, event):
         # get the item we clicked on
@@ -314,7 +262,72 @@ class QNEGraphicsView(QGraphicsView):
 
         super().mouseReleaseEvent(event)
 
+    def middleMouseButtonPress(self, event: QMouseEvent):
+        """Implement dragging of the scene using middle button"""
+        item = self.getItemAtClick(event)
+
+        # faking events for enable MMB dragging the scene
+        releaseEvent = QMouseEvent(QEvent.MouseButtonRelease, event.localPos(), event.screenPos(),
+                                   Qt.LeftButton, Qt.NoButton, event.modifiers())
+        super().mouseReleaseEvent(releaseEvent)
+        self.setDragMode(QGraphicsView.ScrollHandDrag)
+        fakeEvent = QMouseEvent(event.type(), event.localPos(), event.screenPos(),
+                                Qt.LeftButton, event.buttons() | Qt.LeftButton, event.modifiers())
+        super().mousePressEvent(fakeEvent)
+
+    def middleMouseButtonRelease(self, event: QMouseEvent):
+        """Implement dragging of the scene using middle button"""
+        # when releasing the middle button, release the left button instead and reset the drag mode
+        fakeEvent = QMouseEvent(event.type(), event.localPos(), event.screenPos(),
+                                Qt.LeftButton, event.buttons() & ~Qt.LeftButton, event.modifiers())
+        super().mouseReleaseEvent(fakeEvent)
+        self.setDragMode(QGraphicsView.RubberBandDrag)
+
     def rightMouseButtonPress(self, event):
+        # TODO Node Content Widget prevent some node selection...
+        item = self.getItemAtClick(event)
+        # debug printout
+        if DEBUG_MRB_SCENE_ITEMS:
+            if isinstance(item, GraphicsEdge):
+                print("MRB DEBUG:", item.edge, "\n\t", item.edge.grEdge if item.edge.grEdge is not None else None)
+                return
+
+            if isinstance(item, GraphicsSocket):
+                print("MRB DEBUG:", item.socket, "socket_type:", item.socket.socket_type,
+                      "input" if item.socket.is_input else "output",
+                      "has edges:", "no" if item.socket.edges == [] else "")
+                if item.socket.edges:
+                    for edge in item.socket.edges: print("\t", edge)
+                return
+
+            if hasattr(item, 'node'):
+                print('MRB DEBUG:', item)
+                return
+
+            if isinstance(item, QGraphicsProxyWidget):
+                print('MRB DEBUG', item)
+                print(item.widget())
+
+            if DEBUG_MRB_SCENE_ITEMS and (item is None or self.mode == ViewMode.EDGES_REROUTING):
+                print("SCENE:")
+                print("  Nodes:")
+                for node in self.grScene.scene.nodes: print("\t", node)
+                print("  Edges:")
+                for edge in self.grScene.scene.edges: print("\t", edge, "\n\t\tgrEdge:",
+                                                            edge.grEdge if edge.grEdge is not None else None)
+                return
+
+            if event.modifiers() & Qt.CTRL:
+                print("  Graphic Items in GraphicScene:")
+                for item in self.grScene.items():
+                    print('    ', item)
+
+                return
+
+        if DEBUG_MRB_LAST_SELECTIONS and event.modifiers() & Qt.SHIFT:
+            print("scene _last_selected_items:", self.grScene.scene._last_selected_items)
+            return
+
         super().mousePressEvent(event)
 
     def rightMouseButtonRelease(self, event):

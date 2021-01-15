@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QLabel, QWidget, QStyleOptionGraphicsItem
+from PyQt5.QtWidgets import QApplication, QLabel, QWidget, QStyleOptionGraphicsItem
 from PyQt5.QtGui import QImage, QPainter
 from PyQt5.QtCore import QRectF
 from node_editor.node_node import Node
@@ -63,8 +63,15 @@ class VizGraphicsNode(GraphicsNode):
         self.min_width = self.width = 100
         self.min_height = self.height = 54
 
+    def onSelected(self):
+        super().onSelected()
+        print('Selected')
+        # Get subwindow
+        # TODO Change the call to selection change
+        subwnd = self.node.scene.getView().parentWidget()
+        mainwnd = subwnd.getMainWindowReference()
+        mainwnd.setDockPropertiesWidget(self)
 
-# TODO Remove and displace in node_node or as part of node_editor api
 class DataNode(Node):
     icon = ""
     op_code = 0

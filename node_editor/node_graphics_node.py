@@ -177,7 +177,6 @@ class GraphicsNode(QGraphicsRectItem):
     def mousePressEvent(self, event: 'QGraphicsSceneMouseEvent') -> None:
         """When clicking on the node
 
-
         When the mouse is pressed on the `Graphical Node`, stores the current position and retangle
         to prepare for resizing event.
         Parameters
