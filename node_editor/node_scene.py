@@ -106,6 +106,7 @@ class Scene(Serializable):
         # if silent selection is True, ignore the event
         if self._silent_selection_events: return
 
+        # TODO call onDeselected event on items
         current_selected_items = self.getSelectedItems()
         if current_selected_items != self._last_selected_items:
             self._last_selected_items = current_selected_items

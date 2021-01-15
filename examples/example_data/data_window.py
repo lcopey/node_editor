@@ -68,6 +68,7 @@ class DataWindow(NodeEditorWindow):
 
         # instantiate various elements
         self.createNodesDock()
+        self.createPropertiesDock()
         self.createActions()
         self.createMenus()
         self.createToolBars()
@@ -127,8 +128,20 @@ class DataWindow(NodeEditorWindow):
         else:
             self.nodesDock.show()
 
+    def onPropertiesNodesToolbar(self):
+        """Event handling the visibility of the `Nodes Dock`"""
+        if self.propertiesDock.isVisible():
+            self.propertiesDock.hide()
+        else:
+            self.propertiesDock.show()
+
     def createToolBars(self):
         pass
+
+    def createPropertiesDock(self):
+        self.propertiesDock = QDockWidget('Properties')
+        self.propertiesDock.setFloating(False)
+        self.addDockWidget(Qt.LeftDockWidgetArea, self.propertiesDock)
 
     def createNodesDock(self):
         """Create `Nodes Dock` and populates it with the list of `Nodes`
@@ -187,6 +200,12 @@ class DataWindow(NodeEditorWindow):
         toolbar_nodes.setCheckable(True)
         toolbar_nodes.triggered.connect(self.onWindowNodesToolbar)
         toolbar_nodes.setChecked(self.nodesDock.isVisible())
+
+        toolbar_properties = self.windowMenu.addAction('Properties toolbar')
+        toolbar_properties.setCheckable(True)
+        toolbar_properties.triggered.connect(self.onPropertiesNodesToolbar)
+        toolbar_properties.setChecked(self.propertiesDock.isVisible())
+
         self.windowMenu.addSeparator()
 
         self.windowMenu.addAction(self.actClose)

@@ -5,6 +5,7 @@ from ..data_conf import NodeType, register_node
 
 DEBUG = True
 
+
 @register_node(NodeType.OP_NODE_FILE_READ)
 class DataNode_ReadFile(DataNode):
     icon = 'icons/in.png'
@@ -23,6 +24,9 @@ class DataNode_ReadFile(DataNode):
         self.grNode = VizGraphicsNode(self)
         self.print('initInnerClasses done')
         # self.content.edit.textChanged.connect(self.onInputChanged)
+
+    def onSelected(self):
+        super().onSelected()
 
     def print(self, *args):
         if DEBUG: print('>DataNode_File : ', *args)

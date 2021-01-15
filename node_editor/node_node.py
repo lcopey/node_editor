@@ -11,7 +11,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .node_scene import Scene
 
-DEBUG = False
+DEBUG = True
 
 
 class Node(Serializable):
@@ -257,6 +257,13 @@ class Node(Serializable):
         """Event handling double click on Graphics Node in `Scene`"""
         pass
 
+    def onSelected(self):
+        """onSelected event"""
+        self.print('on Selected event')
+
+    def onDelected(self):
+        self.print('on deSelected event')
+
     def doSelect(self, new_state=True):
         self.grNode.doSelect(new_state)
 
@@ -413,6 +420,10 @@ class Node(Serializable):
             other_socket = edge.getOtherSocket(self.outputs[index])
             outs.append(other_socket.node)
         return outs
+
+    def print(self, *args):
+        if DEBUG:
+            print('>Node :', *args)
 
     # serialization function
 

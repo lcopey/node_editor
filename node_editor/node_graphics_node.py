@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     from .node_node import Node
 
 OUTLINE_WIDTH = 1.0
-DEBUG = False
+DEBUG = True
 DEBUG_HANDLE = True
 
 
@@ -169,6 +169,9 @@ class GraphicsNode(QGraphicsRectItem):
             self.onSelected()
 
     def onSelected(self):
+        """onSelected event"""
+        # TODO insert callback ?
+        self.print('On selected event', self.node)
         self.node.scene.grScene.itemSelected.emit()
 
     def mousePressEvent(self, event: 'QGraphicsSceneMouseEvent') -> None:
@@ -192,7 +195,7 @@ class GraphicsNode(QGraphicsRectItem):
 
             super().mousePressEvent(event)
         except Exception as e:
-            print(e)
+            dumpException(e)
 
     def mouseMoveEvent(self, event: 'QGraphicsSceneMouseEvent') -> None:
         """Mouse move event
@@ -222,11 +225,13 @@ class GraphicsNode(QGraphicsRectItem):
         """Mouse Release Event
 
         On release, if moved, trigger storeHistory from :class:`~node_editor.node_scene_history.SceneHistory`.
+        Also handles selection of the node and triggers onSelected event.
         Parameters
         ----------
         event : QGraphicsSceneMouseEvent
             event triggering the mouseReleaseEvent
         """
+        # TODO onDeselected
         super().mouseReleaseEvent(event)
 
         if self.resizeable:
@@ -313,6 +318,10 @@ class GraphicsNode(QGraphicsRectItem):
         self.updateSocketAndEdges()
         self.updateHandles()
         self.setContentGeometry()
+
+    def print(self, *args):
+        if DEBUG:
+            print('>GraphicsNode : ', *args)
 
     def boundingRect(self):
         # Return rectangle for selection detection

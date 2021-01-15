@@ -7,7 +7,7 @@ from ..table import DataframeView
 from node_editor.utils import dumpException
 
 
-DEBUG = False
+DEBUG = True
 
 
 class DataTableContent(NodeContentWidget):
@@ -24,7 +24,8 @@ class DataTableContent(NodeContentWidget):
         self.view.setObjectName(self.node.content_label_objname)
 
     def print(self, *args):
-        print('>DataTableContent :', *args)
+        if DEBUG:
+            print('>DataTableContent :', *args)
 
     def serialize(self):
         self.print('serialize')

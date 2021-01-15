@@ -221,7 +221,7 @@ class DataSubWindow(NodeEditorWidget):
             scene_pos = self.scene.getView().mapToScene(event.pos())
             new_calc_node.setPos(scene_pos.x(), scene_pos.y())
 
-            if self.scene.getView().mode == MODE_EDGE_DRAG:
+            if self.scene.getView().isEdgeDragging():
                 # in dragging edge mode, connect the current edge to the first input
                 target_socket = self.determine_target_socket_of_node(
                     self.scene.getView().dragging.drag_start_socket.is_output,
