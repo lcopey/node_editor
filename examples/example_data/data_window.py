@@ -3,9 +3,12 @@
 Module implementing the MainWindow to the calculator example
 """
 import os
-from PyQt5.QtWidgets import QMdiArea, QWidget, QListWidget, QDockWidget, QAction, QMessageBox, QFileDialog
+# from PyQt5.QtWidgets import QMdiArea, QWidget, QListWidget, QDockWidget, QLabel, QAction, QMessageBox, QFileDialog, \
+#     QVBoxLayout, QBoxLayout, QHBoxLayout
+from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import QSignalMapper, Qt, QFileInfo
+
 from node_editor.utils import loadStylessheets
 from node_editor.node_editor_window import NodeEditorWindow
 from node_editor.node_editor_widget import NodeEditorWidget
@@ -17,12 +20,12 @@ from .data_conf import DATA_NODES
 from node_editor.node_edge import Edge
 from node_editor.node_edge_validators import *
 
-
 from typing import TYPE_CHECKING
+
 if TYPE_CHECKING:
     from node_editor.node_graphics_node import GraphicsNode
 
-Edge.registerEdgeValidator(edge_validator_debug)
+# Edge.registerEdgeValidator(edge_validator_debug)
 Edge.registerEdgeValidator(edge_cannot_connect_two_outputs_or_two_inputs)
 Edge.registerEdgeValidator(edge_cannot_connect_input_and_output_of_same_node)
 # images for the dark skin
@@ -126,27 +129,26 @@ class DataWindow(NodeEditorWindow):
         # Any time the edit menu is about to be shown, update it
         self.editMenu.aboutToShow.connect(self.updateEditMenu)
 
-    def onWindowNodesToolbar(self):
-        """Event handling the visibility of the `Nodes Dock`"""
-        if self.nodesDock.isVisible():
-            self.nodesDock.hide()
-        else:
-            self.nodesDock.show()
-
-    def onPropertiesNodesToolbar(self):
-        """Event handling the visibility of the `Nodes Dock`"""
-        if self.propertiesDock.isVisible():
-            self.propertiesDock.hide()
-        else:
-            self.propertiesDock.show()
-
     def createToolBars(self):
         pass
 
     def createPropertiesDock(self):
-        self.propertiesDock = QDockWidget('Properties')
-        self.propertiesDock.setFloating(False)
-        self.addDockWidget(Qt.LeftDockWidgetArea, self.propertiesDock)
+        self.propDock = QDockWidget('Properties')
+        self.propDock.setFloating(False)
+        self.propDock.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+
+        # layout of node properties will be set to propDockWdg
+        self.propDockWdg = QWidget()
+        self.propDockWdg.setLayout(QBoxLayout(2))
+
+        self.propDockLbl = QLabel('')
+        self.propDockLbl.setWordWrap(True)
+        self.propDockLbl.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+
+        self.propDockWdg.layout().addWidget(self.propDockLbl)
+        self.propDock.setWidget(self.propDockWdg)
+
+        self.addDockWidget(Qt.LeftDockWidgetArea, self.propDock)
 
     def createNodesDock(self):
         """Create `Nodes Dock` and populates it with the list of `Nodes`
@@ -165,6 +167,68 @@ class DataWindow(NodeEditorWindow):
     def createStatusBar(self):
         self.statusBar().showMessage("Ready", )
 
+    def onFileNew(self):
+        """Create a new mdi Child"""
+        try:
+            subwnd = self.createMdiChild()
+            subwnd.widget().fileNew()
+            subwnd.show()
+        except Exception as e:
+            dumpException(e)
+
+    def onFileOpen(self):
+        """Open OpenFileDialog"""
+        # OpenFile dialog
+        fnames, filter = QFileDialog.getOpenFileNames(self, 'Open graph from file', self.getFileDialogDirectory(),
+                                                      self.getFileDialogFilter())
+
+        try:
+            for fname in fnames:
+                if fname:
+                    existing = self.findMdiChild(fname)
+                    if existing:
+                        self.mdiArea.setActiveSubWindow(existing)
+                    else:
+                        # Do not use createMdiChild as a new node editor to call the fileLoad method
+                        # Create new subwindow and open file
+                        nodeeditor = DataSubWindow()
+                        if nodeeditor.fileLoad(fname):
+                            self.statusBar().showMessage(f'File {fname} loaded', 5000)
+                            nodeeditor.setTitle()
+                            subwnd = self.createMdiChild(nodeeditor)
+                            subwnd.show()
+                        else:
+                            nodeeditor.close()
+        except Exception as e:
+            dumpException(e)
+
+    def onSubWndClose(self, widget: DataSubWindow, event: QCloseEvent):
+        # close event from the nodeeditor works by asking the active widget
+        # if modification occurs on the active widget, ask to save or not.
+        # Therefore when closing a subwindow, select the corresponding subwindow
+        existing = self.findMdiChild(widget.filename)
+        self.mdiArea.setActiveSubWindow(existing)
+
+        # Does the active widget need to be saved ?
+        if self.maybeSave():
+            event.accept()
+        else:
+            event.ignore()
+
+    def onWindowNodesToolbar(self):
+        """Event handling the visibility of the `Nodes Dock`"""
+        if self.nodesDock.isVisible():
+            self.nodesDock.hide()
+        else:
+            self.nodesDock.show()
+
+    def onPropertiesNodesToolbar(self):
+        """Event handling the visibility of the `Nodes Dock`"""
+        if self.propDock.isVisible():
+            self.propDock.hide()
+        else:
+            self.propDock.show()
+
     def updateMenus(self):
         active = self.getCurrentNodeEditorWidget()
         hasMdiChild = (active is not None)
@@ -182,7 +246,9 @@ class DataWindow(NodeEditorWindow):
         self.updateEditMenu()
 
     def updateEditMenu(self):
-        if DEBUG: print('updateEditMenu')
+        """Gray the properties of the editMenu in function of the active subwindow
+        """
+        if DEBUG: self.print('updateEditMenu')
         try:
             active = self.getCurrentNodeEditorWidget()
             hasMdiChild = (active is not None)
@@ -200,17 +266,20 @@ class DataWindow(NodeEditorWindow):
             dumpException(e)
 
     def updateWindowMenu(self):
+        """Gray the properties of the editMenu in function of the active subwindow"""
         self.windowMenu.clear()
 
+        # Window menu
         toolbar_nodes = self.windowMenu.addAction('Nodes toolbar')
         toolbar_nodes.setCheckable(True)
         toolbar_nodes.triggered.connect(self.onWindowNodesToolbar)
         toolbar_nodes.setChecked(self.nodesDock.isVisible())
 
+        # Properties toolbar
         toolbar_properties = self.windowMenu.addAction('Properties toolbar')
         toolbar_properties.setCheckable(True)
         toolbar_properties.triggered.connect(self.onPropertiesNodesToolbar)
-        toolbar_properties.setChecked(self.propertiesDock.isVisible())
+        toolbar_properties.setChecked(self.propDock.isVisible())
 
         self.windowMenu.addSeparator()
 
@@ -255,40 +324,6 @@ class DataWindow(NodeEditorWindow):
             return activeSubWindow.widget()
         return None
 
-    def onFileNew(self):
-        try:
-            subwnd = self.createMdiChild()
-            subwnd.widget().fileNew()
-            subwnd.show()
-        except Exception as e:
-            dumpException(e)
-
-    def onFileOpen(self):
-        """Open OpenFileDialog"""
-        # OpenFile dialog
-        fnames, filter = QFileDialog.getOpenFileNames(self, 'Open graph from file', self.getFileDialogDirectory(),
-                                                      self.getFileDialogFilter())
-
-        try:
-            for fname in fnames:
-                if fname:
-                    existing = self.findMdiChild(fname)
-                    if existing:
-                        self.mdiArea.setActiveSubWindow(existing)
-                    else:
-                        # Do not use createMdiChild as a new node editor to call the fileLoad method
-                        # Create new subwindow and open file
-                        nodeeditor = DataSubWindow()
-                        if nodeeditor.fileLoad(fname):
-                            self.statusBar().showMessage(f'File {fname} loaded', 5000)
-                            nodeeditor.setTitle()
-                            subwnd = self.createMdiChild(nodeeditor)
-                            subwnd.show()
-                        else:
-                            nodeeditor.close()
-        except Exception as e:
-            dumpException(e)
-
     def about(self):
         QMessageBox.about(self, "About Calculator NodeEditor Example",
                           "The <b>Calculator NodeEditor</b> example demonstrates how to write multiple "
@@ -312,24 +347,15 @@ class DataWindow(NodeEditorWindow):
         nodeeditor = child_widget if child_widget is not None else DataSubWindow()
         subwnd = self.mdiArea.addSubWindow(nodeeditor, )
         subwnd.setWindowIcon(self.empty_icon)
-        # nodeeditor.scene.addItemSelectedListener(self.updateEditMenu)
-        # nodeeditor.scene.addItemsDeselectedListener(self.updateEditMenu)
+
+        # refresh the dock properties when selecting or deselecting items
+        # nodeeditor.scene.addItemSelectedListener(self.refreshPropertiesDock)
+        # nodeeditor.scene.addItemsDeselectedListener(self.refreshPropertiesDock)
+        #
         nodeeditor.scene.history.addHistoryModifiedListener(self.updateEditMenu)
+        nodeeditor.scene.history.addHistoryModifiedListener(self.refreshPropertiesDock)
         nodeeditor.addCloseEventListener(self.onSubWndClose)
         return subwnd
-
-    def onSubWndClose(self, widget: DataSubWindow, event: QCloseEvent):
-        # close event from the nodeeditor works by asking the active widget
-        # if modification occurs on the active widget, ask to save or not.
-        # Therefore when closing a subwindow, select the corresponding subwindow
-        existing = self.findMdiChild(widget.filename)
-        self.mdiArea.setActiveSubWindow(existing)
-
-        # Does the active widget need to be saved ?
-        if self.maybeSave():
-            event.accept()
-        else:
-            event.ignore()
 
     def findMdiChild(self, fileName):
         for window in self.mdiArea.subWindowList():
@@ -341,20 +367,37 @@ class DataWindow(NodeEditorWindow):
         if window:
             self.mdiArea.setActiveSubWindow(window)
 
-    def setDockPropertiesWidget(self, owner: 'GraphicsNode'):
-        self.print(owner)
-        grScene = owner.node.scene.grScene
-        selectedItems = grScene.selectedItems()
-        if len(selectedItems) == 1:
-            self.print('Only owner selected', selectedItems)
-        else:
-            self.print('Many items selected', selectedItems)
+    def refreshPropertiesDock(self):
+        self.print('Dock properties')
+        # get DataSubWindow
+        if hasattr(self.mdiArea.activeSubWindow(), 'widget'):
+            actSubWnd = self.mdiArea.activeSubWindow().widget()
+            try:
+                # reset layout
+                itemsSelected = actSubWnd.scene.getSelectedItems()
+                if len(itemsSelected) > 1:
+                    self.propDock.setWidget(self.propDockWdg)
+                    self.propDockLbl.setText('{} items selected'.format(len(itemsSelected)))
 
+                elif len(itemsSelected) == 1:
+                    itemSelected = itemsSelected[0]
+                    if hasattr(itemSelected, 'node') and hasattr(itemSelected.node, 'getPropertiesToolbar'):
+                        self.propDock.setWidget(itemSelected.node.getPropertiesToolbar())
 
+                    else:
+                        self.propDock.setWidget(self.propDockWdg)
+                        self.propDockLbl.setText('Selected items : {}'.format(itemSelected))
+
+                else:
+                    self.propDock.setWidget(self.propDockWdg)
+                    self.propDockLbl.setText('No selection')
+
+            except Exception as e:
+                dumpException(e)
 
     def print(self, *args):
         if DEBUG:
-            print('> Main Window', *args)
+            print(f'> {self.__class__.__name__}', *args)
 
     def __str__(self):
         return 'Main Window'

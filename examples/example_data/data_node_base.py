@@ -63,14 +63,6 @@ class VizGraphicsNode(GraphicsNode):
         self.min_width = self.width = 100
         self.min_height = self.height = 54
 
-    def onSelected(self):
-        super().onSelected()
-        print('Selected')
-        # Get subwindow
-        # TODO Change the call to selection change
-        subwnd = self.node.scene.getView().parentWidget()
-        mainwnd = subwnd.getMainWindowReference()
-        mainwnd.setDockPropertiesWidget(self)
 
 class DataNode(Node):
     icon = ""
@@ -80,8 +72,7 @@ class DataNode(Node):
     content_label_objname = 'calc_node_bg'
 
     GraphicsNode_class = DataGraphicsNode
-
-    # NodeContent_class = CalcContent
+    NodeContent_class = None
 
     def __init__(self, scene: 'Scene', inputs=[2, 2], outputs=[1]):
         super().__init__(scene, title=self.__class__.op_title, inputs=inputs, outputs=outputs)
@@ -90,7 +81,7 @@ class DataNode(Node):
         self.markDirty()
 
     def print(self, *args):
-        if DEBUG: print('>DataNode', *args)
+        if DEBUG: print(f'> {self.__class__.__name__}', *args)
 
     def initSettings(self):
         super().initSettings()
@@ -108,35 +99,36 @@ class DataNode(Node):
         print("Deserialize DataNode {}: res : {}".format(self.__class__.__name__, res))
         return res
 
-    def evalOperation(self, i1, i2):
-        return 123
+    # def evalOperation(self, i1, i2):
+    #     return 123
 
     def evalImplementation(self):
-        try:
-            self.markInvalid(False)
-            self.markDirty(False)
-            i1 = self.getInput(0)
-            i2 = self.getInput(1)
-
-            if i1 is None or i2 is None:
-                self.markInvalid()
-                self.markDescendantDirty()
-                self.grNode.setToolTip('Connect all inputs')
-                return None
-            else:
-                val = self.evalOperation(i1.eval(), i2.eval())
-                self.value = val
-                self.markDirty(False)
-                self.markInvalid(False)
-                self.grNode.setToolTip('')
-
-                self.markDescendantDirty()
-
-                self.evalChildren()
-
-                return self.value
-        except Exception as e:
-            dumpException(e)
+        raise NotImplementedError
+    #     try:
+    #         self.markInvalid(False)
+    #         self.markDirty(False)
+    #         i1 = self.getInput(0)
+    #         i2 = self.getInput(1)
+    #
+    #         if i1 is None or i2 is None:
+    #             self.markInvalid()
+    #             self.markDescendantDirty()
+    #             self.grNode.setToolTip('Connect all inputs')
+    #             return None
+    #         else:
+    #             val = self.evalOperation(i1.eval(), i2.eval())
+    #             self.value = val
+    #             self.markDirty(False)
+    #             self.markInvalid(False)
+    #             self.grNode.setToolTip('')
+    #
+    #             self.markDescendantDirty()
+    #
+    #             self.evalChildren()
+    #
+    #             return self.value
+    #     except Exception as e:
+    #         dumpException(e)
 
     def eval(self):
         if not self.isDirty() and not self.isInvalid():
@@ -145,6 +137,7 @@ class DataNode(Node):
 
         try:
             val = self.evalImplementation()
+            # TODO store val as self.value ?
             return val
 
         except ValueError as e:

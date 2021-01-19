@@ -6,8 +6,7 @@ from ..data_node_base import *
 from ..table import DataframeView
 from node_editor.utils import dumpException
 
-
-DEBUG = True
+DEBUG = False
 
 
 class DataTableContent(NodeContentWidget):
@@ -27,6 +26,9 @@ class DataTableContent(NodeContentWidget):
         if DEBUG:
             print('>DataTableContent :', *args)
 
+    def setDataFrame(self, dataframe: pd.DataFrame):
+        self.view.setDataFrame(dataframe)
+
     def serialize(self):
         self.print('serialize')
         return 0
@@ -44,7 +46,7 @@ class DataTableContent(NodeContentWidget):
 
 @register_node(NodeType.OP_NODE_TABLE)
 class DataNode_Table(DataNode):
-    icon = 'icons/in.png'
+    icon = 'icons/table.svg'
     op_code = NodeType.OP_NODE_TABLE
     op_title = 'Table'
     content_label = ''
@@ -65,22 +67,26 @@ class DataNode_Table(DataNode):
         self.print('initInnerClasses done')
         # self.content.edit.textChanged.connect(self.onInputChanged)
 
-    def print(self, *args):
-        if DEBUG: print('>DataNode_Table : ', *args)
-    #
-    # def evalImplementation(self):
-    #     u_value = self.content.edit.text()
-    #     s_value = int(u_value)
-    #     self.value = s_value
-    #
-    #     self.markDirty(False)
-    #     self.markInvalid(False)
-    #
-    #     self.markDescendantInvalid(False)
-    #     self.markDescendantDirty()
-    #
-    #     self.grNode.setToolTip("")
-    #
-    #     self.evalChildren()
-    #
-    #     return self.value
+    def evalImplementation(self):
+        self.print('evalImplementation')
+        # get first input
+        input_node = self.getInput(0)
+        if not input_node:
+            self.grNode.setToolTip('Input is not connected')
+            self.markInvalid()
+            return
+
+        # get value from input node
+        val = input_node.eval()
+        if val is None:
+            self.grNode.setToolTip('Input is NaN')
+            self.markInvalid()
+            return
+
+        # else set flag and tooltip
+        self.markDirty(False)
+        self.markInvalid(False)
+        self.grNode.setToolTip('')
+        self.content.setDataFrame(val)
+
+        return val

@@ -19,7 +19,7 @@ application start with calling this:
 
 """
 
-DEBUG = True
+DEBUG = False
 
 
 def print_error(*args):

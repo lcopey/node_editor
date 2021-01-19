@@ -30,7 +30,6 @@ class DataSubWindow(NodeEditorWidget):
         self.scene.addDragEnterListener(self.onDragEnter)
         self.scene.addDropListener(self.onDrop)
         self.scene.setNodeClassSelector(self.getNodeClassFromData)
-
         self._close_event_listeners = []
 
     def initNewNodeActions(self):
@@ -52,11 +51,10 @@ class DataSubWindow(NodeEditorWidget):
             context_menu.addAction(self.node_actions[key])
         return context_menu
 
-    def getMainWindowReference(self) -> 'DataWindow':
-        """Returns a reference to the MainWindow currently holding the instance."""
-        # self - QMdiSubWindow - QWidget - QMdiArea - MainWindow
+    def getMainWindow(self):
+        """Return the main window reference holding the subwindow"""
+        # QMdiSubWindow - > QWidget -> QMdiArea -> MainWindow
         return self.parent().parent().parent().parent()
-
 
     def onHistoryRestored(self):
         self.doEvalOutputs()

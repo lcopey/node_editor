@@ -38,6 +38,8 @@ class DataframeModel(QAbstractTableModel):
         if index.isValid():
             value = self._data.iloc[index.row(), index.column()]
             if role == Qt.DisplayRole:
+                if pd.isna(value):
+                    return ''
                 return str(value)
             elif role == Qt.TextAlignmentRole:
                 return _align(value)
@@ -70,6 +72,7 @@ class DataframeModel(QAbstractTableModel):
 
 class DataframeView(QTableView):
     """Class representing a view of a :class:`~DataFrameModel`"""
+
     def __init__(self, parent=None, dataframe: pd.DataFrame = None):
         super(DataframeView, self).__init__(parent)
         # header = MyHeader()
