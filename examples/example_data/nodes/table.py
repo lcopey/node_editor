@@ -6,7 +6,7 @@ from ..data_node_base import *
 from ..table import DataframeView
 from node_editor.utils import dumpException
 
-DEBUG = False
+DEBUG = True
 
 
 class DataTableContent(NodeContentWidget):
@@ -53,7 +53,7 @@ class DataNode_Table(DataNode):
     content_label_objname = 'data_node_table'
 
     def __init__(self, scene):
-        super().__init__(scene, inputs=[1], outputs=[])
+        super().__init__(scene, inputs=[1], outputs=[1])
         self.eval()
         self.min_height = 160
         self.height = 200
@@ -87,6 +87,7 @@ class DataNode_Table(DataNode):
         self.markDirty(False)
         self.markInvalid(False)
         self.grNode.setToolTip('')
-        self.content.setDataFrame(val)
+        self.value = val
+        self.content.setDataFrame(self.value)
 
         return val

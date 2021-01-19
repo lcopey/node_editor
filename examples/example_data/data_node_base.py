@@ -104,6 +104,7 @@ class DataNode(Node):
 
     def evalImplementation(self):
         raise NotImplementedError
+
     #     try:
     #         self.markInvalid(False)
     #         self.markDirty(False)
@@ -132,7 +133,8 @@ class DataNode(Node):
 
     def eval(self):
         if not self.isDirty() and not self.isInvalid():
-            print(f" _> return cached {self.__class__.__name__} value {self.value}")
+            self.print('Dirty : ', self.isDirty(), 'Invalid : ', self.isInvalid())
+            self.print(f" _> return cached {self.__class__.__name__} value {self.value}")
             return self.value
 
         try:
