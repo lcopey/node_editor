@@ -60,13 +60,6 @@ class CalcNode(Node):
         # Nodes are dirty by default
         self.markDirty()
 
-    #
-    # def initInnerClasses(self):
-    #     # Reference to the content
-    #     self.content = CalcContent(self)
-    #     # Reference to the graphic
-    #     self.grNode = CalcGraphicsNode(self)
-
     def initSettings(self):
         super().initSettings()
         self.input_socket_position = SocketPosition.MiddleLeft

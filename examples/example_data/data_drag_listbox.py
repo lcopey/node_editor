@@ -18,13 +18,15 @@ class DragListBox(QListWidget):
         self.addMyItems()
 
     def addMyItems(self):
-        keys = list(DATA_NODES.keys())
+        """Add itmes from DATA_NODES in the current QListWidget"""
+        keys = NodeFactory.get_nodes()
         keys.sort()
-        for key in keys:
-            node = get_call_from_opcode(key)
-            self.addMyItem(node.op_title, node.icon, node.op_code)
 
-    def addMyItem(self, name: str, icon: str = None, op_code: int = 0):
+        for key in keys:
+            node = NodeFactory.from_op_code(key)
+            self.addMyItem(node.op_title, node.icon, node.getOpCode())
+
+    def addMyItem(self, name: str, icon: str = None, op_code: str = ''):
         """Helper function adding item to the current ListWidget
 
         Parameters
@@ -67,7 +69,7 @@ class DragListBox(QListWidget):
             itemData = QByteArray()
             dataStream = QDataStream(itemData, QIODevice.WriteOnly)
             dataStream << pixmap
-            dataStream.writeInt(op_code)
+            dataStream.writeQString(op_code)
             dataStream.writeQString(item.text())
 
             mimeData = QMimeData()

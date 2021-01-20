@@ -51,7 +51,7 @@ class OpGraphicsNode(GraphicsNode):
 
 class DataNode(Node):
     icon = ""
-    op_code = 0
+    # op_code = 0
     op_title = 'Undefined'
     content_label = ''
     content_label_objname = 'calc_node_bg'
@@ -65,6 +65,14 @@ class DataNode(Node):
         # Nodes are dirty by default
         self.markDirty()
 
+    @classmethod
+    def getOpCode(cls):
+        """Return the op_code of the node.
+
+        Corresponds to the class name definition as it should be unique.
+        Helper function to work with NodeFactory class"""
+        return cls.__name__
+
     def print(self, *args):
         if DEBUG: print(f'> {self.__class__.__name__}', *args)
 
@@ -75,7 +83,7 @@ class DataNode(Node):
 
     def serialize(self):
         res = super().serialize()
-        res['op_code'] = self.__class__.op_code
+        res['op_code'] = self.__class__.getOpCode()
         self.print('serialize')
         return res
 
@@ -99,14 +107,14 @@ class DataNode(Node):
     #         if i1 is None or i2 is None:
     #             self.markInvalid()
     #             self.markDescendantDirty()
-    #             self.grNode.setToolTip('Connect all inputs')
+    #             self.setToolTip('Connect all inputs')
     #             return None
     #         else:
     #             val = self.evalOperation(i1.eval(), i2.eval())
     #             self.value = val
     #             self.markDirty(False)
     #             self.markInvalid(False)
-    #             self.grNode.setToolTip('')
+    #             self.setToolTip('')
     #
     #             self.markDescendantDirty()
     #
@@ -116,25 +124,24 @@ class DataNode(Node):
     #     except Exception as e:
     #         dumpException(e)
 
-    def eval(self):
-        if not self.isDirty() and not self.isInvalid():
-            self.print('Dirty : ', self.isDirty(), 'Invalid : ', self.isInvalid())
+    def eval(self, force=False):
+        if not self.isDirty() and not self.isInvalid() and not force:
+            self.print('Dirty : ', self.isDirty(), 'Invalid : ', self.isInvalid(), 'Force : ', force)
             self.print(f" _> return cached {self.__class__.__name__} value {self.value}")
             return self.value
 
         try:
             val = self.evalImplementation()
-            # TODO store val as self.value ?
             return val
 
         except ValueError as e:
             self.markInvalid()
-            self.grNode.setToolTip(str(e))
+            self.setToolTip(str(e))
             self.markDescendantDirty()
 
         except Exception as e:
             self.markInvalid()
-            self.grNode.setToolTip(str(e))
+            self.setToolTip(str(e))
             dumpException(e)
 
     def onInputChanged(self, socket: 'Socket'):

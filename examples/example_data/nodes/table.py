@@ -28,6 +28,7 @@ class DataTableContent(NodeContentWidget):
         self.view.setDataFrame(dataframe)
 
     def serialize(self):
+        # must return a value otherwise crash on deserialize
         self.print('serialize')
         return 0
     #
@@ -42,10 +43,10 @@ class DataTableContent(NodeContentWidget):
     #     return res
 
 
-@register_node(NodeType.OP_NODE_TABLE)
+@NodeFactory.register()
 class DataNode_Table(DataNode):
     icon = 'icons/table-64.svg'
-    op_code = NodeType.OP_NODE_TABLE
+    # op_code = NodeType.OP_NODE_TABLE
     op_title = 'Table'
     content_label = ''
     content_label_objname = 'data_node_table'
@@ -67,21 +68,21 @@ class DataNode_Table(DataNode):
         # get first input
         input_node = self.getInput(0)
         if not input_node:
-            self.grNode.setToolTip('Input is not connected')
+            self.setToolTip('Input is not connected')
             self.markInvalid()
             return
 
         # get value from input node
         val = input_node.eval()
         if val is None:
-            self.grNode.setToolTip('Input is NaN')
+            self.setToolTip('Input is NaN')
             self.markInvalid()
             return
 
         # else set flag and tooltip
         self.markDirty(False)
         self.markInvalid(False)
-        self.grNode.setToolTip('')
+        self.setToolTip('')
         self.value = val
         self.content.setDataFrame(self.value)
 

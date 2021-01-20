@@ -238,6 +238,7 @@ class Node(Serializable):
         return (nodepos.x() + socketpos[0], nodepos.y() + socketpos[1])
 
     def getSockets(self):
+        """Return the list of sockets for this `Node`"""
         return self.inputs + self.outputs
 
     def isSelected(self):
@@ -333,7 +334,7 @@ class Node(Serializable):
     def onMarkedInvalid(self):
         pass
 
-    def eval(self, index=0):
+    def eval(self, force=False):
         """Evaluated this `Node`. This method is supposed to be overriden."""
         self.markDirty(False)
         self.markInvalid(False)
@@ -412,6 +413,7 @@ class Node(Serializable):
             return None
 
     def getInputs(self, index=0):
+        """Get the list of `Nodes` connected to the input `Socket` `Node`"""
         ins = []
         for edge in self.inputs[index].edges:
             other_socket = edge.getOtherSocket(self.inputs[index])
@@ -419,11 +421,15 @@ class Node(Serializable):
         return ins
 
     def getOutputs(self, index=0):
+        """Get the list of `Nodes` connected to the output `Socket` `Node`"""
         outs = []
         for edge in self.outputs[index].edges:
             other_socket = edge.getOtherSocket(self.outputs[index])
             outs.append(other_socket.node)
         return outs
+
+    def setToolTip(self, text):
+        self.grNode.setToolTip(text)
 
     def print(self, *args):
         if DEBUG:

@@ -15,7 +15,7 @@ from node_editor.node_editor_widget import NodeEditorWidget
 from node_editor.utils import dumpException, pp
 from .data_subwindow import DataSubWindow
 from .data_drag_listbox import DragListBox
-from .data_conf import DATA_NODES
+from .data_conf import NodeFactory
 
 from node_editor.node_edge import Edge
 from node_editor.node_edge_validators import *
@@ -57,7 +57,7 @@ class DataWindow(NodeEditorWindow):
 
         if DEBUG:
             print('Registered Node')
-            pp(DATA_NODES)
+            pp(NodeFactory.get_nodes())
 
         # Instantiate the MultiDocument Area
         self.mdiArea = QMdiArea()

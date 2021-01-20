@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QFormLayout, QLabel, QTextEdit, QPushButton, QLineEdit, \
-    QFileDialog
+    QFileDialog, QComboBox, QFrame
+import os
 import pandas as pd
 import csv
 
@@ -7,15 +8,15 @@ import csv
 # TODO Automatic discover for different modules ?
 from node_editor.utils import dumpException
 from ..data_node_base import DataNode, OpGraphicsNode
-from ..data_conf import NodeType, register_node
+from ..data_conf import *
 
 DEBUG = True
 
 
-@register_node(NodeType.OP_NODE_FILE_READ)
-class DataNode_ReadFile(DataNode):
+@NodeFactory.register()
+class OpNode_ReadCSVFile(DataNode):
     icon = 'icons/computer-folder-open-64.svg'
-    op_code = NodeType.OP_NODE_FILE_READ
+    # op_code = NodeType.OP_NODE_FILE_READ
     op_title = 'FileRead'
     content_label = ''
     content_label_objname = 'data_node_file_read'
@@ -25,28 +26,34 @@ class DataNode_ReadFile(DataNode):
     def __init__(self, scene):
         super().__init__(scene, inputs=[], outputs=[1])
         self.initPropertiesToolbar()
-        self.eval()
-        self.grNode.updateLayout()
-
         self.filepath = ''
+        self.file_last_modified = None
+        self.grNode.updateLayout()
 
     def initPropertiesToolbar(self):
         self.properties_toolbar = QWidget()
 
-        topLayout = QFormLayout()
-        topLayout.addRow(QLabel('Read csv file : '))
-
-        optionsLayout = QHBoxLayout()
+        fileLayout = QHBoxLayout()
         self._path_text = QLineEdit()
+        self._path_text.setReadOnly(True)  # set to read only, it is modified only by selecting a path
         self._open_file_button = QPushButton()
         self._open_file_button.clicked.connect(self.openFileDialog)
-        optionsLayout.addWidget(self._path_text)
-        optionsLayout.addWidget(self._open_file_button)
+        fileLayout.addWidget(QLabel('File : '))
+        fileLayout.addWidget(self._path_text)
+        fileLayout.addWidget(self._open_file_button)
+
+        encodingLayout = QHBoxLayout()
+        encodingLayout.addWidget(QLabel('Encoding :'))
+        self._comboEncoding = QComboBox()
+        self._comboEncoding.addItem('utf-8')
+        self._comboEncoding.addItem('latin-1')
+        self._comboEncoding.currentIndexChanged.connect(self.forcedEval)
+        encodingLayout.addWidget(self._comboEncoding)
 
         outerLayout = QVBoxLayout()
         outerLayout.addStretch()
-        outerLayout.addLayout(topLayout)
-        outerLayout.addLayout(optionsLayout, stretch=1)
+        outerLayout.addLayout(fileLayout, stretch=1)
+        outerLayout.addLayout(encodingLayout)
         outerLayout.addStretch()
         self.properties_toolbar.setLayout(outerLayout)
 
@@ -63,28 +70,53 @@ class DataNode_ReadFile(DataNode):
         self.print('Filename selected :', fname)
         if fname == '' and self._path_text.text() != '':
             return
-        self._path_text.setText(fname)
-        # if connected, evaluate the node
-        # TODO add validate button ?
-        # TODO bug when multiple nodes are connected, evaluate only the first children
+        self.filepath = fname
+        self._path_text.setText(self.filepath)
+
         # TODO Probably trigger history stamp event
-        if self.getOutputs(0):
-            self.evalChildren()
+        # force the evaluation of the node
+        self.forcedEval()
+
+    def forcedEval(self):
+        self.eval(force=True)
 
     def evalImplementation(self):
         self.print('evalImplementation')
-        # get filename from
-        file_path = self._path_text.text()
+        # TODO if the file has not changed, do not evaluate restore previous value stored in self.value
 
-        data_frame = None
-        if file_path != '':
-            with open(file_path) as f:
+        if self.filepath != '':
+            # store the last modified time of the file
+            if not self.file_last_modified:
+                self.file_last_modified = os.path.getmtime(self.filepath)
+
+            elif self.file_last_modified == os.path.getmtime(self.filepath):
+                # the file has already been loaded, simply return the values stored
+                return self.value
+
+            with open(self.filepath) as f:
                 # automatically detect delimiters
                 dialect = csv.Sniffer().sniff(f.read(4096), delimiters=';, \t')
-                encoding = f.encoding
-            data_frame = pd.read_csv(file_path, dialect=dialect, encoding=encoding)
+                # TODO support encoding for latin-1 file
+                # encoding = f.encoding
+                encoding = self._comboEncoding.currentText()
+                print(encoding)
 
-        return data_frame
+            # load csv file
+            data_frame = pd.read_csv(self.filepath, dialect=dialect, encoding=encoding)
+            data_frame = data_frame.apply(pd.to_numeric, errors='ignore')
+            self.value = data_frame
+
+            self.markDirty(False)
+            self.markInvalid(False)
+
+            self.markDescendantInvalid(False)
+            self.markDescendantDirty()
+
+            self.setToolTip('')
+
+            self.evalChildren()
+
+        return self.value
 
     def serialize(self):
         # Additionally store the file path
@@ -93,6 +125,7 @@ class DataNode_ReadFile(DataNode):
         return result
 
     def deserialize(self, data, hashmap={}, restore_id=True):
+        """Restore node including the file path"""
         result = super().deserialize(data, hashmap, restore_id)
         self._path_text.setText(data['file_path'])
         return result

@@ -14,7 +14,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .data_window import DataWindow
 
-DEBUG = False
+DEBUG = True
 DEBUG_CONTEXT = False
 
 
@@ -35,17 +35,18 @@ class DataSubWindow(NodeEditorWidget):
     def initNewNodeActions(self):
         """Instantiates """
         self.node_actions = {}
-        keys = list(DATA_NODES.keys())
+        keys = NodeFactory.get_nodes()
         keys.sort()
         for key in keys:
-            node = DATA_NODES[key]
-            self.node_actions[node.op_code] = QAction(QIcon(node.icon), node.op_title)
-            self.node_actions[node.op_code].setData(node.op_code)
+            node = NodeFactory.from_op_code(key)
+            op_code = node.getOpCode()
+            self.node_actions[op_code] = QAction(QIcon(node.icon), node.op_title)
+            self.node_actions[op_code].setData(op_code)
 
     def initNodesContextMenu(self):
         # TODO Implement hierarchical menu
         context_menu = QMenu(self)
-        keys = list(DATA_NODES.keys())
+        keys = NodeFactory.get_nodes()
         keys.sort()
         for key in keys:
             context_menu.addAction(self.node_actions[key])
@@ -68,7 +69,7 @@ class DataSubWindow(NodeEditorWidget):
     def getNodeClassFromData(self, data):
         if 'op_code' not in data:
             return Node
-        return get_call_from_opcode(data['op_code'])
+        return NodeFactory.from_op_code(data['op_code'])
 
     def fileLoad(self, filename: str) -> bool:
         if super().fileLoad(filename):
@@ -103,7 +104,7 @@ class DataSubWindow(NodeEditorWidget):
             dataStream = QDataStream(eventData, QIODevice.ReadOnly)
             pixmap = QPixmap()
             dataStream >> pixmap
-            op_code = dataStream.readInt()
+            op_code = dataStream.readQString()
             text = dataStream.readQString()
 
             mouse_pos = event.pos()
@@ -112,7 +113,7 @@ class DataSubWindow(NodeEditorWidget):
             if DEBUG: print(f'DROP: {op_code} {text} at {scene_pos}')
 
             try:
-                node = get_call_from_opcode(op_code)(self.scene)
+                node = NodeFactory.from_op_code(op_code)(self.scene)
                 node.setPos(scene_pos.x(), scene_pos.y())
                 self.scene.history.storeHistory('Create node {}'.format(node.__class__.__name__))
 
