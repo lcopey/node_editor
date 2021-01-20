@@ -6,7 +6,7 @@ import csv
 # TODO implement read_csv file
 # TODO Automatic discover for different modules ?
 from node_editor.utils import dumpException
-from ..data_node_base import DataNode, VizGraphicsNode
+from ..data_node_base import DataNode, OpGraphicsNode
 from ..data_conf import NodeType, register_node
 
 DEBUG = True
@@ -14,11 +14,13 @@ DEBUG = True
 
 @register_node(NodeType.OP_NODE_FILE_READ)
 class DataNode_ReadFile(DataNode):
-    icon = 'icons/computer-folder-open.svg'
+    icon = 'icons/computer-folder-open-64.svg'
     op_code = NodeType.OP_NODE_FILE_READ
     op_title = 'FileRead'
     content_label = ''
     content_label_objname = 'data_node_file_read'
+
+    GraphicsNode_class = OpGraphicsNode
 
     def __init__(self, scene):
         super().__init__(scene, inputs=[], outputs=[1])
@@ -63,14 +65,11 @@ class DataNode_ReadFile(DataNode):
             return
         self._path_text.setText(fname)
         # if connected, evaluate the node
-        # TODO add validate button
+        # TODO add validate button ?
+        # TODO bug when multiple nodes are connected, evaluate only the first children
+        # TODO Probably trigger history stamp event
         if self.getOutputs(0):
             self.evalChildren()
-
-    def initInnerClasses(self):
-        # self.content = DataTableContent(self)
-        self.grNode = VizGraphicsNode(self)
-        self.print('initInnerClasses done')
 
     def evalImplementation(self):
         self.print('evalImplementation')
@@ -82,6 +81,18 @@ class DataNode_ReadFile(DataNode):
             with open(file_path) as f:
                 # automatically detect delimiters
                 dialect = csv.Sniffer().sniff(f.read(4096), delimiters=';, \t')
-            data_frame = pd.read_csv(file_path, dialect=dialect)
+                encoding = f.encoding
+            data_frame = pd.read_csv(file_path, dialect=dialect, encoding=encoding)
 
         return data_frame
+
+    def serialize(self):
+        # Additionally store the file path
+        result = super().serialize()
+        result['file_path'] = self._path_text.text()
+        return result
+
+    def deserialize(self, data, hashmap={}, restore_id=True):
+        result = super().deserialize(data, hashmap, restore_id)
+        self._path_text.setText(data['file_path'])
+        return result

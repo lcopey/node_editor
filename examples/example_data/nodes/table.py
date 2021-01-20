@@ -3,7 +3,7 @@ from PyQt5.QtCore import Qt
 import pandas as pd
 from ..data_conf import *
 from ..data_node_base import *
-from ..table import DataframeView
+from ..table_model import DataframeView
 from node_editor.utils import dumpException
 
 DEBUG = True
@@ -11,9 +11,7 @@ DEBUG = True
 
 class DataTableContent(NodeContentWidget):
     def initUI(self):
-        df = pd.DataFrame({'a': ['Mary', 'Jim', 'John'],
-                           'b': [100, 200, 300],
-                           'c': ['a', 'ba', 'c']})
+        df = pd.DataFrame()
 
         self.layout = QVBoxLayout()
         self.layout.setContentsMargins(5, 5, 5, 5)
@@ -46,11 +44,14 @@ class DataTableContent(NodeContentWidget):
 
 @register_node(NodeType.OP_NODE_TABLE)
 class DataNode_Table(DataNode):
-    icon = 'icons/table.svg'
+    icon = 'icons/table-64.svg'
     op_code = NodeType.OP_NODE_TABLE
     op_title = 'Table'
     content_label = ''
     content_label_objname = 'data_node_table'
+
+    NodeContent_class = DataTableContent
+    GraphicsNode_class = VizGraphicsNode
 
     def __init__(self, scene):
         super().__init__(scene, inputs=[1], outputs=[1])
@@ -60,12 +61,6 @@ class DataNode_Table(DataNode):
         self.min_width = 280
         self.width = 320
         self.grNode.updateLayout()
-
-    def initInnerClasses(self):
-        self.content = DataTableContent(self)
-        self.grNode = DataGraphicsNode(self)
-        self.print('initInnerClasses done')
-        # self.content.edit.textChanged.connect(self.onInputChanged)
 
     def evalImplementation(self):
         self.print('evalImplementation')

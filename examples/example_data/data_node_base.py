@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 DEBUG = True
 
 
-class DataGraphicsNode(GraphicsNode):
+class VizGraphicsNode(GraphicsNode):
     def __init__(self, node: 'Node', parent=None, resizeable=True, min_height=240, min_width=180):
         super().__init__(node=node, parent=parent, resizeable=True, min_height=min_height, min_width=min_width)
 
@@ -30,25 +30,10 @@ class DataGraphicsNode(GraphicsNode):
         self.min_width = self.width = 160
         self.min_height = self.height = 74
 
-    def initAssets(self):
-        super().initAssets()
-        self.icons = QImage('icons/status_icons.png')
 
-    def paint(self, painter: QPainter, option: 'QStyleOptionGraphicsItem', widget: QWidget = None) -> None:
-        super().paint(painter, option, widget)
-        # paint the status of the node
-        # TODO implement in node_graphics_node
-        offset = 24.0
-        if self.node.isDirty(): offset = 0.
-        if self.node.isInvalid(): offset = 48.
-        painter.drawImage(QRectF(-10., -10., 24., 24.),
-                          self.icons,
-                          QRectF(offset, 0, 24., 24.))
-
-
-class VizGraphicsNode(GraphicsNode):
+class OpGraphicsNode(GraphicsNode):
     def __init__(self, node: 'Node', parent=None, resizeable=True, min_height=240, min_width=180):
-        super().__init__(node=node, parent=parent, resizeable=True, min_height=min_height, min_width=min_width)
+        super().__init__(node=node, parent=parent, resizeable=False, min_height=min_height, min_width=min_width)
         # TODO subclass paint as a circle
         # TODO subclass getSocketPosition
 
@@ -71,7 +56,7 @@ class DataNode(Node):
     content_label = ''
     content_label_objname = 'calc_node_bg'
 
-    GraphicsNode_class = DataGraphicsNode
+    GraphicsNode_class = VizGraphicsNode
     NodeContent_class = None
 
     def __init__(self, scene: 'Scene', inputs=[2, 2], outputs=[1]):

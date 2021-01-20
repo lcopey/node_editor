@@ -182,10 +182,11 @@ class Node(Serializable):
     def getGraphicsNodeClass(self):
         return self.__class__.GraphicsNode_class
 
-    # TODO implement in node_socket
     def getSocketPosition(self, index: int, position: SocketPosition, num_out_of: int = 1) -> '(x, y)':
         """Helper function - returns the position of a socket in pixels relative to the node
 
+
+        TODO implement in node_socket ?
         Parameters
         ----------
         index : ```int```
@@ -235,6 +236,9 @@ class Node(Serializable):
         nodepos = self.grNode.pos()
         socketpos = self.getSocketPosition(socket.index, socket.position, socket.count_on_this_node_side)
         return (nodepos.x() + socketpos[0], nodepos.y() + socketpos[1])
+
+    def getSockets(self):
+        return self.inputs + self.outputs
 
     def isSelected(self):
         """Returns ```True``` if current `Node` is selected"""
@@ -430,9 +434,8 @@ class Node(Serializable):
     def serialize(self):
         inputs = [socket.serialize() for socket in self.inputs]
         outputs = [socket.serialize() for socket in self.outputs]
-        ser_content = self.content.serialize() if isinstance(self.content, Serializable) else {}
 
-        return OrderedDict([
+        result = OrderedDict([
             ('id', self.id),
             ('title', self.title),
             ('pos_x', self.grNode.scenePos().x()),
@@ -442,8 +445,12 @@ class Node(Serializable):
             ('resizeable', self.grNode.resizeable),
             ('inputs', inputs),
             ('outputs', outputs),
-            ('content', ser_content)
         ])
+        if self.content is not None:
+            ser_content = self.content.serialize() if isinstance(self.content, Serializable) else {}
+            result['content'] = ser_content
+
+        return result
 
     def deserialize(self, data: dict, hashmap: dict = {}, restore_id: bool = True):
         try:
@@ -502,7 +509,7 @@ class Node(Serializable):
                 found.deserialize(socket_data, hashmap, restore_id)
 
             # deserialize the content of the node
-            if isinstance(self.content, Serializable):
+            if self.content is not None and isinstance(self.content, Serializable):
                 res = self.content.deserialize(data['content'], hashmap)
                 return res
 

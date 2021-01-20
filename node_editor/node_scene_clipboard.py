@@ -20,7 +20,7 @@ class SceneClipboard:
             if hasattr(item, 'node'):
                 sel_nodes.append(item.node.serialize())
                 # TODO replace by a property getting all sockets ?
-                for socket in (item.node.inputs + item.node.outputs):
+                for socket in item.node.getSockets():
                     sel_sockets[socket.id] = socket
             elif isinstance(item, GraphicsEdge):
                 sel_edges.append(item.edge)

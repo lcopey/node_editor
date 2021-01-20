@@ -386,7 +386,7 @@ class DataWindow(NodeEditorWindow):
 
                     else:
                         self.propDock.setWidget(self.propDockWdg)
-                        self.propDockLbl.setText('Selected items : {}'.format(itemSelected))
+                        self.propDockLbl.setText('{} items selected'.format(len(itemsSelected)))
 
                 else:
                     self.propDock.setWidget(self.propDockWdg)

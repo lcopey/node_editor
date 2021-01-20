@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QGraphicsItem, QGraphicsProxyWidget, QGraphicsTextItem, QWidget, \
     QGraphicsRectItem, QStyleOptionGraphicsItem, QGraphicsSceneMouseEvent, QGraphicsDropShadowEffect
-from PyQt5.QtGui import QFont, QPen, QColor, QBrush, QPainter, QPainterPath
+from PyQt5.QtGui import QFont, QPen, QColor, QBrush, QPainter, QPainterPath, QImage
 from PyQt5.QtCore import Qt, QRectF, QPointF
 from .utils import dumpException, print_func_name
 from .node_handle import HandlePosition, Handle
@@ -125,6 +125,8 @@ class GraphicsNode(QGraphicsRectItem):
 
         self._brush_title = QBrush(QColor("#FF313131"))
         self._brush_background = QBrush(QColor("#E3212121"))
+
+        self.icons = QImage('../../node_editor/icons/status_icons.png')
 
     def initHandles(self):
         for position in (HandlePosition.MiddleRight, HandlePosition.BottomMiddle, HandlePosition.BottomRight):
@@ -292,7 +294,7 @@ class GraphicsNode(QGraphicsRectItem):
         if self.resizeable:
             # update the socket position
             if hasattr(self.node, 'inputs') and hasattr(self.node, 'outputs'):
-                for socket in self.node.inputs + self.node.outputs:
+                for socket in self.node.getSockets():
                     socket.setSocketPosition()
 
         # in any case
@@ -383,5 +385,14 @@ class GraphicsNode(QGraphicsRectItem):
             else:
                 painter.setPen(self._pen_default if not self.isSelected() else self._pen_selected)
                 painter.drawPath(path_outline.simplified())
+
+            # status
+            offset = 24.0
+            if self.node.isDirty(): offset = 0.
+            if self.node.isInvalid(): offset = 48.
+            painter.drawImage(QRectF(-10., -10., 24., 24.),
+                              self.icons,
+                              QRectF(offset, 0, 24., 24.))
+
         except Exception as e:
             dumpException(e)
