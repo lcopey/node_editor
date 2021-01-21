@@ -227,7 +227,7 @@ class DataSubWindow(NodeEditorWidget):
         action = context_menu.exec_(self.mapToGlobal(event.pos()))  # draw to scene and get the selected action
 
         if action is not None:
-            new_calc_node = get_call_from_opcode(action.data())(self.scene)
+            new_calc_node = NodeFactory.from_op_code(action.data())(self.scene)
             scene_pos = self.scene.getView().mapToScene(event.pos())
             new_calc_node.setPos(scene_pos.x(), scene_pos.y())
 
