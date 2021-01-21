@@ -17,7 +17,7 @@ DEBUG = True
 class OpNode_ReadCSVFile(DataNode):
     icon = 'icons/computer-folder-open-64.svg'
     # op_code = NodeType.OP_NODE_FILE_READ
-    op_title = 'FileRead'
+    op_title = 'Read CSV file'
     content_label = ''
     content_label_objname = 'data_node_file_read'
 
