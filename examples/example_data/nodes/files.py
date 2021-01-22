@@ -28,7 +28,7 @@ class OpNode_ReadCSVFile(DataNode):
         self.initPropertiesToolbar()
         self.filepath = ''
         self.file_last_modified = None
-        self.grNode.updateLayout()
+        # self.grNode.updateLayout()
 
     def initPropertiesToolbar(self):
         self.properties_toolbar = QWidget()

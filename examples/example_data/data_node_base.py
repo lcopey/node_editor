@@ -98,32 +98,6 @@ class DataNode(Node):
     def evalImplementation(self):
         raise NotImplementedError
 
-    #     try:
-    #         self.markInvalid(False)
-    #         self.markDirty(False)
-    #         i1 = self.getInput(0)
-    #         i2 = self.getInput(1)
-    #
-    #         if i1 is None or i2 is None:
-    #             self.markInvalid()
-    #             self.markDescendantDirty()
-    #             self.setToolTip('Connect all inputs')
-    #             return None
-    #         else:
-    #             val = self.evalOperation(i1.eval(), i2.eval())
-    #             self.value = val
-    #             self.markDirty(False)
-    #             self.markInvalid(False)
-    #             self.setToolTip('')
-    #
-    #             self.markDescendantDirty()
-    #
-    #             self.evalChildren()
-    #
-    #             return self.value
-    #     except Exception as e:
-    #         dumpException(e)
-
     def eval(self, force=False):
         if not self.isDirty() and not self.isInvalid() and not force:
             self.print('Dirty : ', self.isDirty(), 'Invalid : ', self.isInvalid(), 'Force : ', force)
