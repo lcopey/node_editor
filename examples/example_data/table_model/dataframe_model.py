@@ -91,6 +91,7 @@ class DataframeModel(QAbstractTableModel):
 class DataframeView(QTableView):
     """Class representing a view of a :class:`~DataFrameModel`"""
 
+    # TODO define item delegate
     def __init__(self, parent=None, dataframe: pd.DataFrame = None, editable=False):
         super(DataframeView, self).__init__(parent)
         # header = MyHeader()

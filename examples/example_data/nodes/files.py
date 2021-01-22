@@ -7,7 +7,8 @@ import csv
 # TODO implement read_csv file
 # TODO Automatic discover for different modules ?
 from node_editor.utils import dumpException
-from ..data_node_base import DataNode, OpGraphicsNode
+from ..data_node_base import DataNode
+from ..data_node_graphics_base import OpGraphicsNode
 from ..data_conf import *
 
 DEBUG = True

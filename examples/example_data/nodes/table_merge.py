@@ -1,4 +1,5 @@
-from ..data_node_base import DataNode, OpGraphicsNode
+from ..data_node_base import DataNode
+from ..data_node_graphics_base import OpGraphicsNode
 from ..data_conf import NodeFactory
 
 
