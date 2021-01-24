@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from node_editor.node_socket import Socket
     from node_editor.node_scene import Scene
 
-DEBUG = True
+DEBUG = False
 
 
 class DataNode(Node):

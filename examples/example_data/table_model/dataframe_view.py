@@ -4,6 +4,7 @@ import pandas as pd
 from node_editor.utils import dumpException
 from .dataframe_model import DataframeModel
 from .item_delegate import EditDelegate
+from .filter_header import FilterHeader
 
 
 class DataframeView(QTableView):
@@ -11,22 +12,28 @@ class DataframeView(QTableView):
 
     def __init__(self, parent=None, dataframe: pd.DataFrame = None, editable=False):
         super(DataframeView, self).__init__(parent)
-        # header = MyHeader()
-        # self.setHorizontalHeader(QHeaderView(Qt.Horizontal))
-        self.horizontalHeader().setSectionsMovable(True)
-        self.verticalHeader().setSectionsMovable(True)
+        # Define filter header as horizontal header
+        self.header = FilterHeader(self)
+        self.setHorizontalHeader(self.header)
+        self.header.setSectionsMovable(True)
         # Add sort support
-        self.horizontalHeader().setSortIndicatorShown(True)
+        self.header.setSortIndicatorShown(True)
         self.setSortingEnabled(True)
+        self.header.setSectionsClickable(True)
+        # add support for filter
+        self.header.filterActivated.connect(self.filterDataFrame)
         # strech last header
         # self.horizontalHeader().setStretchLastSection(True)
+
+        # Vertical header
+        self.verticalHeader().setSectionsMovable(True)
         self.editable = editable
 
         if self.editable:
             # Edit delegate to control the inputs in the cell
             self.setItemDelegate(EditDelegate())
             # On header double click, trigger changeHeader
-            self.horizontalHeader().sectionDoubleClicked.connect(self.changeHorizontalHeader)
+            self.sectionDoubleClicked.connect(self.changeHorizontalHeader)
 
         if dataframe is not None:
             self.setDataFrame(dataframe, editable=self.editable)
@@ -54,7 +61,9 @@ class DataframeView(QTableView):
         editable : bool
             flag setting the `DataframeModel` as editable
         """
-        dataframe_model = DataframeModel(dataframe=dataframe, editable=editable)
+        dataframe_model = DataframeModel(view=self, dataframe=dataframe, editable=editable)
+        self.header.setFilterBoxes(dataframe_model.columnCount())
+        # Connect filter from model to event in FilterHeader
         super().setModel(dataframe_model)
 
     def getDataFrame(self):
@@ -66,3 +75,10 @@ class DataframeView(QTableView):
             dataframe currently hold in the `DataframeModel`
         """
         return self.model().dataframe
+
+    def filterDataFrame(self):
+        self.model().filter()
+
+
+
+

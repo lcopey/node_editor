@@ -48,6 +48,8 @@ handleCursors = {
     HandlePosition.BottomRight: Qt.SizeFDiagCursor,
 }
 
+DEBUG = False
+
 
 class Handle(QGraphicsItem):
     def __init__(self, grNode: 'GraphicsNode', position: HandlePosition):
@@ -164,9 +166,9 @@ class Handle(QGraphicsItem):
         return QRectF(0, 0, self.width, self.height).normalized()
 
     def paint(self, painter: QPainter, option: 'QStyleOptionGraphicsItem', widget: Optional[QWidget] = ...) -> None:
-        painter.setPen(self._pen_hovered if self.mode == HandleMode.DRAG else self._pen_default)
-        painter.setBrush(Qt.NoBrush)
-        path = QPainterPath()
-        path.addRect(0, 0, self.width, self.height)
-        painter.drawPath(path)
-        pass
+        if DEBUG:
+            painter.setPen(self._pen_hovered if self.mode == HandleMode.DRAG else self._pen_default)
+            painter.setBrush(Qt.NoBrush)
+            path = QPainterPath()
+            path.addRect(0, 0, self.width, self.height)
+            painter.drawPath(path)
