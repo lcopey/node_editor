@@ -1,3 +1,4 @@
-from .dataframe_model import DataframeView, DataframeModel
+from .dataframe_model import DataframeModel
+from .dataframe_view import DataframeView
 
-__all__ = ['DataframeView', 'DataframeModel']
+__all__ = ['DataframeModel', 'DataframeView']

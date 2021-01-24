@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QVBoxLayout
 import pandas as pd
 from node_editor.node_content_widget import NodeContentWidget
-from .dataframe_model import DataframeView
+from .dataframe_view import DataframeView
 
 DEBUG = False
 
@@ -13,7 +13,7 @@ class DataTableContent(NodeContentWidget):
 
     def initUI(self):
         df = pd.DataFrame()
-
+        # Define layout including the DataFrameView
         self.layout = QVBoxLayout()
         self.layout.setContentsMargins(5, 5, 5, 5)
         self.setLayout(self.layout)

@@ -1,10 +1,21 @@
 import pandas as pd
 from PyQt5.QtCore import QAbstractTableModel, Qt, QModelIndex
-from PyQt5.QtWidgets import QTableView, QHeaderView
+from node_editor.utils import dumpException
 from typing import Any
 
 
-def _align(value):
+def _align(value: Any) -> Qt.AlignmentFlag:
+    """Align values in the `DataframeModel` according to their type
+
+    Parameters
+    ----------
+    value: Any
+        value to align
+
+    Returns
+    -------
+    Qt.AlignmentFlag
+    """
     if pd.api.types.is_numeric_dtype(value):
         return Qt.AlignVCenter + Qt.AlignRight
     else:
@@ -18,6 +29,12 @@ class DataframeModel(QAbstractTableModel):
         QAbstractTableModel.__init__(self)
         self._data = dataframe
         self.editable = editable
+
+    def flags(self, index):
+        flags = Qt.ItemIsSelectable | Qt.ItemIsEnabled
+        if self.editable:
+            flags |= Qt.ItemIsEditable
+        return flags
 
     def rowCount(self, parent=None):
         return self._data.shape[0]
@@ -49,12 +66,6 @@ class DataframeModel(QAbstractTableModel):
 
         return None
 
-    def flags(self, index):
-        flags = Qt.ItemIsSelectable | Qt.ItemIsEnabled
-        if self.editable:
-            flags |= Qt.ItemIsEditable
-        return flags
-
     def setData(self, index: QModelIndex, value: Any, role: int = ...) -> bool:
         # Set value in case of editable
         if role == Qt.EditRole:
@@ -82,45 +93,28 @@ class DataframeModel(QAbstractTableModel):
         """
         if role == Qt.DisplayRole:
             if orientation == Qt.Horizontal:
-                return self._data.columns[p_int]
+                return str(self._data.columns[p_int])
             if orientation == Qt.Vertical:
-                return self._data.index[p_int]
+                return str(self._data.index[p_int])
+
         return None
 
+    def setHeaderValue(self, section: int, orientation: Qt.Orientation, value: Any):
+        if orientation == Qt.Horizontal:
+            columns = self._data.columns.values.copy()
+            columns[section] = value
+            self._data.columns = columns
 
-class DataframeView(QTableView):
-    """Class representing a view of a :class:`~DataFrameModel`"""
+        if orientation == Qt.Vertical:
+            index = self._data.index.values.copy()
+            index[section] = value
+            self._data.index = index
 
-    # TODO define item delegate
-    def __init__(self, parent=None, dataframe: pd.DataFrame = None, editable=False):
-        super(DataframeView, self).__init__(parent)
-        # header = MyHeader()
-        # self.setHorizontalHeader(QHeaderView(Qt.Horizontal))
-        self.horizontalHeader().setSectionsMovable(True)
-        self.verticalHeader().setSectionsMovable(True)
-        self.editable = editable
-        if dataframe is not None:
-            self.setDataFrame(dataframe, editable=self.editable)
+    def sort(self, column: int, order: Qt.SortOrder = ...) -> None:
+        try:
+            self.layoutAboutToBeChanged.emit()
+            self._data = self._data.sort_values(self._data.columns[column], ascending=not order)
+            self.layoutChanged.emit()
 
-    def setDataFrame(self, dataframe: pd.DataFrame, editable=False):
-        """Define the dataframe through a new `DataframeModel`
-
-        Parameters
-        ----------
-        dataframe : pd.DataFrame
-            dataframe holding the data
-        editable : bool
-            flag setting the `DataframeModel` as editable
-        """
-        dataframe_model = DataframeModel(dataframe=dataframe, editable=editable)
-        super().setModel(dataframe_model)
-
-    def getDataFrame(self):
-        """Returns dataframe currently hold in the `DataframeModel`
-
-        Returns
-        -------
-        pd.DataFrame
-            dataframe currently hold in the `DataframeModel`
-        """
-        return self.model().dataframe
+        except Exception as e:
+            dumpException(e)

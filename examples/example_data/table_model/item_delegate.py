@@ -22,15 +22,15 @@ class EditDelegate(QItemDelegate):
         edit = QLineEdit(parent)
 
         # define cell validator - Double in this case
-        validator = QDoubleValidator()
-        # Define local numeric format
-        # TODO detect from system
-        local = QLocale(QLocale.French, QLocale.France)
-        validator.setLocale(local)  # pour Excel français avec virgule
-        validator.setNotation(QDoubleValidator.StandardNotation)  # pour flottants sans exposant
-        validator.setRange(+0.0, +100.0, 2)  # pour saisi de % avec 2 chiffres après la virgule
-
-        edit.setValidator(validator)
+        # validator = QDoubleValidator()
+        # # Define local numeric format
+        # # TODO detect from system
+        # local = QLocale(QLocale.French, QLocale.France)
+        # validator.setLocale(local)  # pour Excel français avec virgule
+        # validator.setNotation(QDoubleValidator.StandardNotation)  # pour flottants sans exposant
+        # validator.setRange(+0.0, +100.0, 2)  # pour saisi de % avec 2 chiffres après la virgule
+        #
+        # edit.setValidator(validator)
         return edit
 
         # ========================================================================

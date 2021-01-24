@@ -3,8 +3,7 @@ from .node_serializable import Serializable
 from .node_graphics_node import GraphicsNode
 from node_editor.node_content_widget import NodeContentWidget
 from .node_socket import Socket, SocketPosition
-from .node_handle import HandlePosition
-from .utils import dumpException, print_func_name, return_simple_id
+from .utils import dumpException, return_simple_id
 
 from typing import TYPE_CHECKING
 
@@ -20,7 +19,7 @@ class Node(Serializable):
     Socket_class = Socket
     """Class representing the `Node`"""
 
-    def __init__(self, scene: 'Scene', title='Undefined Node', inputs=[], outputs=[]):
+    def __init__(self, scene: 'Scene', title='Undefined Node', inputs=None, outputs=None):
         """Instantiate a new `Node` and add it to the `Graphical Scene`
 
         Instance Attributes:
@@ -37,6 +36,12 @@ class Node(Serializable):
         outputs : list of :class:`~node_editor.node_socket.Socket`
         """
         super().__init__()
+
+        if inputs is None:
+            inputs = []
+        if outputs is None:
+            outputs = []
+
         # reference to the actual scene
         self.scene = scene
         self.title = title
@@ -458,7 +463,9 @@ class Node(Serializable):
 
         return result
 
-    def deserialize(self, data: dict, hashmap: dict = {}, restore_id: bool = True):
+    def deserialize(self, data: dict, hashmap=None, restore_id: bool = True):
+        if hashmap is None:
+            hashmap = {}
         try:
             if restore_id:
                 self.id = data['id']

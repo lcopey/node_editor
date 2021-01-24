@@ -21,10 +21,15 @@ class DataNode(Node):
     GraphicsNode_class = VizGraphicsNode
     NodeContent_class = None
 
-    def __init__(self, scene: 'Scene', inputs=[2, 2], outputs=[1]):
+    def __init__(self, scene: 'Scene', inputs=None, outputs=None):
+        if outputs is None:
+            outputs = [1]
+        if inputs is None:
+            inputs = [2, 2]
         super().__init__(scene, title=self.__class__.op_title, inputs=inputs, outputs=outputs)
-        self.value = None
+
         # Nodes are dirty by default
+        self.value = None
         self.markDirty()
 
     @classmethod
@@ -49,7 +54,9 @@ class DataNode(Node):
         self.print('serialize')
         return res
 
-    def deserialize(self, data, hashmap={}, restore_id=True):
+    def deserialize(self, data, hashmap=None, restore_id=True):
+        if hashmap is None:
+            hashmap = {}
         res = super().deserialize(data, hashmap, restore_id)
         print("Deserialize DataNode {}: res : {}".format(self.__class__.__name__, res))
         return res
