@@ -62,6 +62,8 @@ class DataSubWindow(NodeEditorWidget):
 
     def doEvalOutputs(self):
         # eval all output nodes
+        # TODO Fix eval output
+        # TODO implement NetWorkX
         for node in self.scene.nodes:
             if node.__class__.__name__ == 'CalcNodeOutput':
                 node.eval()

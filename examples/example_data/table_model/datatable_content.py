@@ -1,4 +1,5 @@
-from PyQt5.QtWidgets import QVBoxLayout
+import sys
+from PyQt5.QtWidgets import QVBoxLayout, QApplication, QMainWindow
 import pandas as pd
 from node_editor.node_content_widget import NodeContentWidget
 from .dataframe_view import DataframeView
@@ -7,8 +8,9 @@ DEBUG = False
 
 
 class DataTableContent(NodeContentWidget):
-    def __init__(self, node: 'Node', parent: 'QWidget' = None, editable=False):
+    def __init__(self, node: 'Node', parent: 'QWidget' = None, editable=False, filterable=True):
         self.editable = editable
+        self.filterable = filterable
         super().__init__(node, parent)
 
     def initUI(self):
@@ -17,7 +19,8 @@ class DataTableContent(NodeContentWidget):
         self.layout = QVBoxLayout()
         self.layout.setContentsMargins(5, 5, 5, 5)
         self.setLayout(self.layout)
-        self.view = DataframeView(dataframe=df, parent=self, editable=self.editable)
+
+        self.view = DataframeView(dataframe=df, parent=self, editable=self.editable, filterable=self.filterable)
         self.layout.addWidget(self.view)
         self.view.setObjectName(self.node.content_label_objname)
 
@@ -49,4 +52,4 @@ class DataTableContent(NodeContentWidget):
 
 class DataEditableTableContent(DataTableContent):
     def __init__(self, node: 'Node', parent: 'QWidget' = None):
-        super().__init__(node, parent, editable=True)
+        super().__init__(node, parent, editable=True, filterable=True)

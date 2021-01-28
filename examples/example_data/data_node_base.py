@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from node_editor.node_socket import Socket
     from node_editor.node_scene import Scene
 
-DEBUG = False
+DEBUG = True
 
 
 class DataNode(Node):
@@ -28,9 +28,14 @@ class DataNode(Node):
             inputs = [2, 2]
         super().__init__(scene, title=self.__class__.op_title, inputs=inputs, outputs=outputs)
 
+        # initPropertiesToolbar in case it exists
+        self.initPropertiesToolbar()
         # Nodes are dirty by default
         self.value = None
         self.markDirty()
+
+    def initPropertiesToolbar(self):
+        pass
 
     @classmethod
     def getOpCode(cls):
@@ -65,6 +70,26 @@ class DataNode(Node):
     #     return 123
 
     def evalImplementation(self):
+        """Evaluation implementation of the current `DataNode`.
+
+
+        Evaluation of the node usually implements the following steps :
+            - reset the states of the Node : Dirty and Invalid
+            - get values of the inputs
+            - handle errors :
+                - mark invalid and DescendantDirty
+                - set tooltip with error message
+            - reset the states of the Node : un-Dirty and Valid
+            - store the current evaluation in self.value
+            - reset tooltip
+            - markDescendantDirty(True) markDescendantInvalid(False)
+            - evaluate the children of the `Node`
+            - return current evaluation
+
+        Returns
+        -------
+
+        """
         raise NotImplementedError
 
     def eval(self, force=False):
@@ -88,6 +113,6 @@ class DataNode(Node):
             dumpException(e)
 
     def onInputChanged(self, socket: 'Socket'):
-        print(f'{self.__class__.__name__}::onInputChanged')
+        self.print(f'{self.__class__.__name__}::onInputChanged')
         self.markDirty()
         self.eval()

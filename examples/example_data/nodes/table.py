@@ -1,7 +1,10 @@
-from PyQt5.QtWidgets import QVBoxLayout
+from PyQt5.QtWidgets import QVBoxLayout, QDialog
+from PyQt5.QtCore import Qt
 import pandas as pd
+from ..table_model.dataframe_view import DataframeView
 from ..data_conf import *
 from ..data_node_base import *
+from ..data_node_graphics_base import VizGraphicsNode
 from ..table_model.datatable_content import DataTableContent, DataEditableTableContent
 from node_editor.utils import dumpException
 from typing import TYPE_CHECKING
@@ -33,6 +36,8 @@ class DataNode_Table(DataNode):
 
     def evalImplementation(self):
         self.print('evalImplementation')
+        self.markDirty(False)
+        self.markInvalid(False)
         # get first input
         input_node = self.getInput(0)
         if not input_node:
@@ -47,15 +52,36 @@ class DataNode_Table(DataNode):
             self.markInvalid()
             return
 
+        self.value = val
+        self.content.setDataFrame(self.value)
         # else set flag and tooltip
         self.markDirty(False)
         self.markInvalid(False)
+
+        self.markDescendantInvalid(False)
+        self.markDescendantDirty()
+
         self.setToolTip('')
-        self.value = val
-        self.content.setDataFrame(self.value)
+
+        self.evalChildren()
 
         # output of the node
-        return self.content.getDataFrame()
+        return self.value
+
+    def onDoubleClicked(self, event):
+        """Event handling double click on Graphics Node in `Scene`"""
+        try:
+            flags = Qt.WindowMaximizeButtonHint
+            flags |= Qt.WindowCloseButtonHint
+            # flags |= Qt.WindowMinimizeButtonHint
+
+            wnd = QDialog(flags=flags)
+            layout = QVBoxLayout()
+            layout.addWidget(self.content.view.copy())
+            wnd.setLayout(layout)
+            wnd.exec_()
+        except Exception as e:
+            dumpException(e)
 
 
 @NodeFactory.register()

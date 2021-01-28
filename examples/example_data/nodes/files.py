@@ -26,12 +26,13 @@ class OpNode_ReadCSVFile(DataNode):
 
     def __init__(self, scene):
         super().__init__(scene, inputs=[], outputs=[1])
-        self.initPropertiesToolbar()
+        # self.initPropertiesToolbar()
         self.filepath = ''
         self.file_last_modified = None
         # self.grNode.updateLayout()
 
     def initPropertiesToolbar(self):
+        """Initialize the layout of properties DockWidget"""
         self.properties_toolbar = QWidget()
 
         fileLayout = QHBoxLayout()
@@ -83,7 +84,6 @@ class OpNode_ReadCSVFile(DataNode):
 
     def evalImplementation(self):
         self.print('evalImplementation')
-        # TODO if the file has not changed, do not evaluate restore previous value stored in self.value
 
         if self.filepath != '':
             # store the last modified time of the file
@@ -99,8 +99,8 @@ class OpNode_ReadCSVFile(DataNode):
                 dialect = csv.Sniffer().sniff(f.read(4096), delimiters=';, \t')
                 # TODO support encoding for latin-1 file
                 # encoding = f.encoding
+                # get encoding of the file
                 encoding = self._comboEncoding.currentText()
-                print(encoding)
 
             # load csv file
             data_frame = pd.read_csv(self.filepath, dialect=dialect, encoding=encoding)

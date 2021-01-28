@@ -265,7 +265,7 @@ class Node(Serializable):
 
     def onDoubleClicked(self, event):
         """Event handling double click on Graphics Node in `Scene`"""
-        pass
+        raise NotImplementedError
 
     def onSelected(self):
         """onSelected event"""
@@ -302,41 +302,85 @@ class Node(Serializable):
     def isDirty(self):
         return self._is_dirty
 
+    def isInvalid(self):
+        return self._is_invalid
+
     def markDirty(self, new_value=True):
+        """Mark this `Node` as `Dirty`. See :ref:`evaluation` for more
+
+        Parameters
+        ----------
+        new_value : bool
+            ``True`` if this `Node` should be `Dirty`. ``False`` if you want to un-dirty this `Node`
+        """
         self._is_dirty = new_value
         if self._is_dirty:
             self.onMarkedDirty()
 
     def markChildrenDirty(self, new_value=True):
+        """Mark all first level children of this `Node` to be `Dirty`. Not this `Node` it self. Not other descendants
+
+        Parameters
+        ----------
+        new_value : bool
+            ``True`` if children should be `Dirty`. ``False`` if you want to un-dirty children
+        """
         for other_node in self.getChildrenNodes():
             other_node.markDirty(new_value)
 
     def markDescendantDirty(self, new_value=True):
+        """Mark all children and descendants of this `Node` to be `Invalid`. Not this `Node` it self
+
+        Parameters
+        ----------
+        new_value : bool
+            ``True`` if children and descendants should be `Invalid`. ``False`` if you want to make children and descendants valid
+        """
         for other_node in self.getChildrenNodes():
             other_node.markDirty(new_value)
-            other_node.markChildrenDirty(new_value)
-
-    def isInvalid(self):
-        return self._is_invalid
+            other_node.markDescendantDirty(new_value)
 
     def markInvalid(self, new_value=True):
+        """Mark this `Node` as `Invalid`. See :ref:`evaluation` for more
+
+        Parameters
+        ----------
+        new_value : bool
+            ``True`` if this `Node` should be `Invalid`. ``False`` if you want to make this `Node` valid
+        """
         self._is_invalid = new_value
         if self._is_invalid:
             self.onMarkedInvalid()
 
     def markChildrenInvalid(self, new_value=True):
+        """Mark all first level children of this `Node` to be `Invalid`. Not this `Node` it self. Not other descendants
+
+        Parameters
+        ----------
+        new_value : bool
+            ``True`` if children should be `Invalid`. ``False`` if you want to make children valid
+        """
         for other_node in self.getChildrenNodes():
             other_node.markInvalid(new_value)
 
     def markDescendantInvalid(self, new_value=True):
+        """Mark all children and descendants of this `Node` to be `Invalid`. Not this `Node` it self
+
+        Parameters
+        ----------
+        new_value : bool
+            ``True`` if children and descendants should be `Invalid`. ``False`` if you want to make children and descendants valid
+        """
         for other_node in self.getChildrenNodes():
             other_node.markInvalid(new_value)
-            other_node.markChildrenInvalid(new_value)
+            other_node.markDescendantInvalid(new_value)
 
     def onMarkedDirty(self):
+        """Called when this `Node` has been marked as `Dirty`. This method is supposed to be overridden"""
         pass
 
     def onMarkedInvalid(self):
+        """Called when this `Node` has been marked as `Invalid`. This method is supposed to be overridden"""
         pass
 
     def eval(self, force=False):
@@ -348,10 +392,19 @@ class Node(Serializable):
     # traversing nodes functions
 
     def evalChildren(self):
+        """Evaluate all children of this `Node`"""
         for node in self.getChildrenNodes():
             node.eval()
 
     def getChildrenNodes(self):
+        """Retrieve all first-level children connected to this `Node` `Outputs`
+
+        Returns
+        -------
+        List[:class:`~nodeeditor.node_node.Node`]
+            list of `Nodes` connected to this `Node` from all `Outputs`
+
+        """
         if not self.outputs:
             return []
         other_nodes = []

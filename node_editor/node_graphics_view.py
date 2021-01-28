@@ -411,6 +411,13 @@ class QNEGraphicsView(QGraphicsView):
         return out
 
     def wheelEvent(self, event: QWheelEvent) -> None:
+        # TODO fix wheelevent when the node implement wheel event ?
+        try:
+            item = self.getItemAtClick(event)
+            print(item)
+        except Exception as e:
+            dumpException(e)
+
         # calculate zoom factor
         zoomOutFactor = 1 / self.zoomInFactor
 

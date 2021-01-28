@@ -1,9 +1,10 @@
 import sys
-from PyQt5 import QtGui
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QHeaderView, QWidget, QLineEdit, QApplication, QTableView, QVBoxLayout, QLineEdit, QComboBox
-from PyQt5.QtCore import pyqtSignal, QSize
+from PyQt5.QtGui import QStandardItem, QStandardItemModel
+from PyQt5.QtWidgets import QHeaderView, QWidget, QApplication, QTableView, QVBoxLayout, QLineEdit, QComboBox
+from PyQt5.QtCore import pyqtSignal, QSize, Qt, QEvent
 
+
+# TODO Change to combobox with first line as QLineEdit
 
 class FilterHeader(QHeaderView):
     filterActivated = pyqtSignal()
@@ -11,7 +12,7 @@ class FilterHeader(QHeaderView):
     def __init__(self, parent):
         super().__init__(Qt.Horizontal, parent)
         self._editors = []
-        self._padding = 4
+        self._padding = 8
         # self.setStretchLastSection(True)
         # self.setResizeMode(QHeaderView.Stretch)
         self.setDefaultAlignment(Qt.AlignLeft | Qt.AlignVCenter)
@@ -34,11 +35,25 @@ class FilterHeader(QHeaderView):
 
         # Create new widgets according to current count of columns
         for index in range(column_count):
+
             # Define QLineEdit
             editor = QLineEdit(self)
-            editor.setPlaceholderText('Filter')
+            if hasattr(editor, 'setPlaceholderText'):
+                editor.setPlaceholderText('Filter')
             # On pressing enter, emit a new filterActivated event
-            editor.returnPressed.connect(self.filterActivated.emit)
+            # editor.returnPressed.connect(self.filterActivated.emit)
+            editor.textEdited.connect(self.filterActivated.emit)
+
+            # Define QComboBox using LineEdit
+            # editor = QComboBox(self)
+            # line_edit = QLineEdit(self)
+            # editor.setLineEdit(line_edit)
+            #
+            # dataframe = self.model().dataframe
+            # if dataframe.shape[0] > 0:
+            #     items = dataframe[dataframe.columns[index]].unique()
+            #     editor.addItems(items)
+
             if not editor.isVisible():
                 editor.show()
             self._editors.append(editor)
@@ -46,8 +61,7 @@ class FilterHeader(QHeaderView):
         self.adjustPositions()
 
     def adjustPositions(self):
-        """Adjust position of the Widgets in the header
-        """
+        """Adjust position of the Widgets in the header"""
         for index, editor in enumerate(self._editors):
             height = editor.sizeHint().height()
             editor.move(self.sectionPosition(index) - self.offset() + 2, height + (self._padding // 2))
@@ -58,7 +72,7 @@ class FilterHeader(QHeaderView):
 
         Returns
         -------
-
+        QSize
         """
         size = super().sizeHint()
         if self._editors:
@@ -118,16 +132,17 @@ class FilterHeader(QHeaderView):
             editor.clear()
 
 
-class Window(QWidget):
+class _Window(QWidget):
     def __init__(self):
-        super(Window, self).__init__()
+        super(_Window, self).__init__()
         self.view = QTableView()
         layout = QVBoxLayout(self)
         layout.addWidget(self.view)
         header = FilterHeader(self.view)
         self.view.setHorizontalHeader(header)
-        model = QtGui.QStandardItemModel(self.view)
+        model = QStandardItemModel(self.view)
         model.setHorizontalHeaderLabels('One Two Three Four Five'.split())
+        model.appendRow(QStandardItem([1, 2, 3, 4, 5]))
         self.view.setModel(model)
         header.setFilterBoxes(model.columnCount())
         header.filterActivated.connect(self.handleFilterActivated)
@@ -140,7 +155,7 @@ class Window(QWidget):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    window = Window()
+    window = _Window()
     window.setGeometry(600, 100, 600, 300)
     window.show()
     sys.exit(app.exec_())

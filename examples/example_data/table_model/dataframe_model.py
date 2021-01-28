@@ -174,7 +174,7 @@ class DataframeModel(QAbstractTableModel):
                 text = header.getFilterTextAtIndex(i)
                 column = self._source_data.columns[i]
                 if text != '':
-                    if mask:
+                    if mask is not None:
                         mask &= self._source_data[column].str.contains(text, na=False)
                     else:
                         mask = self._source_data[column].str.contains(text, na=False)
