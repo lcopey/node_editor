@@ -14,6 +14,8 @@ class DataframeView(QTableView):
         super(DataframeView, self).__init__(parent)
         self.filterable = filterable
         self.editable = editable
+        if dataframe is None:
+            dataframe = pd.DataFrame()
 
         if self.filterable:
             # Define filter header as horizontal header
@@ -38,8 +40,10 @@ class DataframeView(QTableView):
             # On header double click, trigger changeHeader
             self.horizontalHeader().sectionDoubleClicked.connect(self.changeHorizontalHeader)
 
-        if dataframe is not None:
-            self.setDataFrame(dataframe, editable=self.editable)
+        # if dataframe is not None:
+        model = DataframeModel(self, dataframe, self.editable)
+        self.setModel(model)
+        # self.setDataFrame(dataframe, editable=self.editable)
 
     def getParams(self):
         params = {'parent': self.parent(),
@@ -65,7 +69,7 @@ class DataframeView(QTableView):
         except Exception as e:
             dumpException(e)
 
-    def setDataFrame(self, dataframe: pd.DataFrame, editable=False):
+    def setDataFrame(self, dataframe: pd.DataFrame):
         """Define the dataframe through a new `DataframeModel`
 
         Parameters
@@ -75,10 +79,15 @@ class DataframeView(QTableView):
         editable : bool
             flag setting the `DataframeModel` as editable
         """
-        dataframe_model = DataframeModel(view=self, dataframe=dataframe, editable=editable)
-        self.header.setFilterBoxes(dataframe_model.columnCount())
-        # Connect filter from model to event in FilterHeader
-        super().setModel(dataframe_model)
+        try:
+            # dataframe_model = DataframeModel(view=self, dataframe=dataframe, editable=editable)
+            # self.header.setFilterBoxes(dataframe_model.columnCount())
+            self.model().setSourceData(dataframe)
+            self.header.setFilterBoxes(dataframe.shape[1])
+            # Connect filter from model to event in FilterHeader
+            # super().setModel(dataframe_model)
+        except Exception as e:
+            dumpException(e)
 
     def getDataFrame(self):
         """Returns dataframe currently hold in the `DataframeModel`

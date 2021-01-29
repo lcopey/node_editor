@@ -93,6 +93,7 @@ class DataNode(Node):
         raise NotImplementedError
 
     def eval(self, force=False):
+        # TODO replace force with dedicated function doing markDirty + eval
         if not self.isDirty() and not self.isInvalid() and not force:
             self.print('Dirty : ', self.isDirty(), 'Invalid : ', self.isInvalid(), 'Force : ', force)
             self.print(f" _> return cached {self.__class__.__name__} value {self.value}")

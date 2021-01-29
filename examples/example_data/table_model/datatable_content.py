@@ -29,7 +29,7 @@ class DataTableContent(NodeContentWidget):
             print('>DataTableContent :', *args)
 
     def setDataFrame(self, dataframe: pd.DataFrame):
-        self.view.setDataFrame(dataframe, editable=self.editable)
+        self.view.setDataFrame(dataframe,)
 
     def getDataFrame(self):
         return self.view.getDataFrame()
@@ -51,5 +51,6 @@ class DataTableContent(NodeContentWidget):
 
 
 class DataEditableTableContent(DataTableContent):
+    # TODO Customize
     def __init__(self, node: 'Node', parent: 'QWidget' = None):
         super().__init__(node, parent, editable=True, filterable=True)

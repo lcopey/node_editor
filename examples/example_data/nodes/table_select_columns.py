@@ -1,4 +1,5 @@
-from PyQt5.QtWidgets import QGridLayout, QVBoxLayout, QDialog, QListWidget, QListWidgetItem, QScrollArea, QWidget
+from PyQt5.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QDialog, QListWidget, QListWidgetItem, QScrollArea, \
+    QWidget, QPushButton
 from PyQt5.QtCore import Qt
 import pandas as pd
 from ..table_model.dataframe_view import DataframeView
@@ -40,8 +41,31 @@ class DataNode_SelectColumns(DataNode):
         self.fillListWidget()
 
         layout = QVBoxLayout()
+        button_layout = QHBoxLayout()
+
+        select_all = QPushButton('Select All')
+        select_all.clicked.connect(self.selectAll)
+
+        select_none = QPushButton('Select None')
+        select_none.clicked.connect(self.selectNone)
+
+        button_layout.addWidget(select_all)
+        button_layout.addWidget(select_none)
+        layout.addLayout(button_layout)
         layout.addWidget(self.listWidget)
         self.properties_toolbar.setLayout(layout)
+
+    def selectAll(self):
+        for n in range(self.listWidget.count()):
+            item = self.listWidget.item(n)
+            item.setCheckState(Qt.Checked)
+        self.onItemClicked()
+
+    def selectNone(self):
+        for n in range(self.listWidget.count()):
+            item = self.listWidget.item(n)
+            item.setCheckState(Qt.Unchecked)
+        self.onItemClicked()
 
     def fillListWidget(self):
         self.listWidget.clear()
@@ -54,6 +78,7 @@ class DataNode_SelectColumns(DataNode):
                 self.listWidget.addItem(item)
 
     def getColumnSelection(self) -> list[str]:
+        # TODO Handle index type
         """Returns a list of checked columns
 
         Returns
@@ -73,10 +98,20 @@ class DataNode_SelectColumns(DataNode):
         return self.properties_toolbar
 
     def onItemClicked(self):
-        self.value = self.input_val[self.getColumnSelection()]
-        if self.getOutputs():
-            self.markChildrenDirty()
-            self.evalChildren()
+        # Store the table with only the selected columns
+        self.getSelectedDataframe()
+
+        # if self.getOutputs():
+        self.markChildrenDirty()
+        self.evalChildren()
+
+    def getSelectedDataframe(self):
+        # Store the table with only the selected columns
+        column_selection = self.getColumnSelection()
+        if column_selection:
+            self.value = self.input_val[column_selection]
+        else:
+            self.value = pd.DataFrame()
 
     def evalImplementation(self):
         self.print('evalImplementation')
@@ -111,7 +146,7 @@ class DataNode_SelectColumns(DataNode):
             return
 
         # Store the table with only the selected columns
-        self.value = self.input_val[self.getColumnSelection()]
+        self.getSelectedDataframe()
 
         # else set flag and tooltip
         self.markDirty(False)

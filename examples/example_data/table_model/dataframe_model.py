@@ -29,7 +29,7 @@ class DataframeModel(QAbstractTableModel):
     """Class representing a pandas DataFrame in a Qt context"""
 
     def __init__(self, view: 'QTableView', dataframe: pd.DataFrame, editable=False):
-        """
+        """Initiate a new `DataframeModel`, base class for representing the data.
 
         Parameters
         ----------
@@ -41,9 +41,7 @@ class DataframeModel(QAbstractTableModel):
         QAbstractTableModel.__init__(self)
         # Reference to initial dataframe
         self.view = view
-        self._source_data = dataframe
-        # Copy of the dataframe to handle filtering
-        self._data = self._source_data
+        self.dataframe = dataframe
         self.editable = editable
 
     def flags(self, index):
@@ -83,6 +81,23 @@ class DataframeModel(QAbstractTableModel):
         return None
 
     def setData(self, index: QModelIndex, value: Any, role: int = ...) -> bool:
+        """Assign value to the cell index of the table
+
+        Parameters
+        ----------
+        index : QModelIndex
+            index (row, column) of the table to change
+        value : Any
+            New to assign to index
+        role : int
+            Qt Role, usually Qt.EditRole
+
+        Returns
+        -------
+        ``bool``
+            ``True```in case of succes
+
+        """
         # Set value in case of editable
         if role == Qt.EditRole:
             self._source_data.iloc[index.row(), index.column()] = value
@@ -91,6 +106,23 @@ class DataframeModel(QAbstractTableModel):
     @property
     def dataframe(self):
         return self._data
+
+    def setSourceData(self, value):
+        self.beginResetModel()
+        self.dataframe = value
+        self.endResetModel()
+
+    @dataframe.setter
+    def dataframe(self, value):
+        """Assign a new dataframe
+
+        Parameters
+        ----------
+        value : pd.DataFrame
+        """
+        self._source_data = value
+        # Copy of the dataframe to handle filtering
+        self._data = self._source_data
 
     def headerData(self, p_int: int, orientation: Qt.Orientation, role: Qt.ItemDataRole = None):
         """Internal method to QAbstractTableModel overridden to supply information on the header
