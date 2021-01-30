@@ -6,7 +6,7 @@ from ..data_conf import NodeFactory
 @NodeFactory.register()
 class OpNode_MergeTable(DataNode):
     icon = 'icons/table-merge-64.svg'
-    op_title = 'Merge Tables'
+    op_title = 'Merge'
     content_label = ''
     content_label_objname = 'data_node_merge_tables'
 

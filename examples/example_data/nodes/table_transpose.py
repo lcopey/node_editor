@@ -5,16 +5,16 @@ import pandas as pd
 
 
 @NodeFactory.register()
-class OpNode_ConcatTable(DataNode):
-    icon = 'icons/table-concat-64.png'
-    op_title = 'Concatenate'
+class OpNode_TransposeTable(DataNode):
+    icon = 'icons/table-transpose-64.svg'
+    op_title = 'Transpose'
     content_label = ''
-    content_label_objname = 'data_node_concatenates_tables'
+    content_label_objname = 'data_node_transpose_tables'
 
     GraphicsNode_class = OpGraphicsNode
 
     def __init__(self, scene):
-        super().__init__(scene, inputs=[1, 1], outputs=[1])
+        super().__init__(scene, inputs=[1], outputs=[1])
 
     def evalImplementation(self):
         self.print('evalImplementation')
@@ -24,26 +24,19 @@ class OpNode_ConcatTable(DataNode):
 
         # get first input
         i1 = self.getInput(0)
-        i2 = self.getInput(1)
-        if not i1 or not i2:
+        if not i1:
             self.setToolTip('Input is not connected')
             self.markInvalid()
             return
 
         # get value from input node
         df1 = i1.eval()
-        df2 = i2.eval()
         if df1 is None:
             self.setToolTip('First input is NaN')
             self.markInvalid()
             return
-        elif df2 is None:
-            self.setToolTip('Second input is NaN')
-            self.markInvalid()
-            return
 
-
-        self.value = pd.concat([df1, df2])
+        self.value = df1.T
 
         # else set flag and tooltip
         self.markDirty(False)

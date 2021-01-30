@@ -6,7 +6,7 @@ from ..data_conf import NodeFactory
 @NodeFactory.register()
 class OpNode_MeltTable(DataNode):
     icon = 'icons/table-melt-64.svg'
-    op_title = 'Unpivot Table'
+    op_title = 'Unpivot'
     content_label = ''
     content_label_objname = 'data_node_melt_table'
 
