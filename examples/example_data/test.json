@@ -1,29 +1,218 @@
 {
-    "id": 1892911597120,
+    "id": 2423302925136,
     "scene_width": 64000,
     "scene_height": 64000,
     "nodes": [
         {
-            "id": 1892911706992,
-            "title": "Table",
-            "pos_x": -104.0,
-            "pos_y": -248.0,
-            "width": 160.0,
-            "height": 160.0,
-            "resizeable": true,
+            "id": 2423304768336,
+            "title": "Read CSV file",
+            "pos_x": 80.0,
+            "pos_y": -33.0,
+            "width": 100.0,
+            "height": 54.0,
+            "resizeable": false,
             "inputs": [],
             "outputs": [
                 {
-                    "id": 1892968097920,
+                    "id": 2423304834448,
                     "index": 0,
                     "multi_edges": true,
                     "position": 5,
-                    "socket_type": 3
+                    "socket_type": 1
                 }
             ],
-            "content": {},
-            "op_code": 1
+            "op_code": "OpNode_ReadCSVFile",
+            "file_path": "F:/Python/Standard_Comparaison/Silane.csv"
+        },
+        {
+            "id": 2423304909056,
+            "title": "Select Columns",
+            "pos_x": 315.0,
+            "pos_y": -70.0,
+            "width": 100.0,
+            "height": 54.0,
+            "resizeable": false,
+            "inputs": [
+                {
+                    "id": 2423304909200,
+                    "index": 0,
+                    "multi_edges": false,
+                    "position": 2,
+                    "socket_type": 1
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 2423304909248,
+                    "index": 0,
+                    "multi_edges": true,
+                    "position": 5,
+                    "socket_type": 1
+                }
+            ],
+            "op_code": "DataNode_SelectColumns",
+            "state": {
+                "NGS": true,
+                "MatCode": false,
+                "Synchro code": false,
+                "Material name": false,
+                "Creation date": false,
+                "Material Type": true,
+                "Product Class": true,
+                "Product Categoy": true,
+                "Product Type": true,
+                "Supplier": false,
+                "Synchro NIP": false,
+                "MPE": false,
+                "Density": false,
+                "Silan's feet": false,
+                "Silan's sulfur": false,
+                "Additiv molar mass": false,
+                "Functionality": false,
+                "Purity": false,
+                "Melting point": false,
+                "Decomposition temperature": false,
+                "Filler amount": false,
+                "Filler type": false,
+                "Commentaire": false
+            }
+        },
+        {
+            "id": 2423304909008,
+            "title": "Select Columns",
+            "pos_x": 285.0,
+            "pos_y": 198.0,
+            "width": 100.0,
+            "height": 54.0,
+            "resizeable": false,
+            "inputs": [
+                {
+                    "id": 2423304909344,
+                    "index": 0,
+                    "multi_edges": false,
+                    "position": 2,
+                    "socket_type": 1
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 2423304909392,
+                    "index": 0,
+                    "multi_edges": true,
+                    "position": 5,
+                    "socket_type": 1
+                }
+            ],
+            "op_code": "DataNode_SelectColumns",
+            "state": {
+                "NGS": true,
+                "MatCode": true,
+                "Synchro code": false,
+                "Material name": false,
+                "Creation date": false,
+                "Material Type": false,
+                "Product Class": false,
+                "Product Categoy": false,
+                "Product Type": false,
+                "Supplier": false,
+                "Synchro NIP": false,
+                "MPE": true,
+                "Density": false,
+                "Silan's feet": false,
+                "Silan's sulfur": false,
+                "Additiv molar mass": false,
+                "Functionality": false,
+                "Purity": false,
+                "Melting point": false,
+                "Decomposition temperature": false,
+                "Filler amount": false,
+                "Filler type": false,
+                "Commentaire": false
+            }
+        },
+        {
+            "id": 2423366338304,
+            "title": "Table",
+            "pos_x": 492.0,
+            "pos_y": -174.0,
+            "width": 336.0,
+            "height": 307.0,
+            "resizeable": true,
+            "inputs": [
+                {
+                    "id": 2423387307312,
+                    "index": 0,
+                    "multi_edges": false,
+                    "position": 2,
+                    "socket_type": 1
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 2423415966352,
+                    "index": 0,
+                    "multi_edges": true,
+                    "position": 5,
+                    "socket_type": 1
+                }
+            ],
+            "content": 0,
+            "op_code": "DataNode_Table"
+        },
+        {
+            "id": 2423415966688,
+            "title": "Table",
+            "pos_x": 490.0,
+            "pos_y": 192.0,
+            "width": 344.0,
+            "height": 303.0,
+            "resizeable": true,
+            "inputs": [
+                {
+                    "id": 2423415967648,
+                    "index": 0,
+                    "multi_edges": false,
+                    "position": 2,
+                    "socket_type": 1
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 2423415967072,
+                    "index": 0,
+                    "multi_edges": true,
+                    "position": 5,
+                    "socket_type": 1
+                }
+            ],
+            "content": 0,
+            "op_code": "DataNode_Table"
         }
     ],
-    "edges": []
+    "edges": [
+        {
+            "id": 2423304909536,
+            "edge_type": 2,
+            "start": 2423304909344,
+            "end": 2423304834448
+        },
+        {
+            "id": 2423304909872,
+            "edge_type": 2,
+            "start": 2423304909200,
+            "end": 2423304834448
+        },
+        {
+            "id": 2423415966448,
+            "edge_type": 2,
+            "start": 2423387307312,
+            "end": 2423304909248
+        },
+        {
+            "id": 2423415967600,
+            "edge_type": 2,
+            "start": 2423415967648,
+            "end": 2423304909392
+        }
+    ]
 }

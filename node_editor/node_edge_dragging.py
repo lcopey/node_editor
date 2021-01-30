@@ -6,13 +6,13 @@ from .utils import print_items, dumpException
 from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
-    from .node_graphics_view import QNEGraphicsView
+    from .node_graphics_view import NodeGraphicsView
 
 DEBUG = False
 
 
 class EdgeDragging:
-    def __init__(self, grView: 'QNEGraphicsView'):
+    def __init__(self, grView: 'NodeGraphicsView'):
         self.grView = grView
 
     def getEdgeClass(self):

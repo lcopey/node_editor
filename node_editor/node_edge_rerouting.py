@@ -2,13 +2,13 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .node_socket import Socket
-    from .node_graphics_view import QNEGraphicsView
+    from .node_graphics_view import NodeGraphicsView
 
 DEBUG_REROUTING = True
 
 
 class EdgeRerouting:
-    def __init__(self, grView: 'QNEGraphicsView'):
+    def __init__(self, grView: 'NodeGraphicsView'):
         self.grView = grView
         self.routing_start_socket = None  # stores where we started re-routing the edges
         self.rerouting_edges = []  # edges representing the rerouting (dashed edges)

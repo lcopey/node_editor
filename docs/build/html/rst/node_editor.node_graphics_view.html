@@ -184,131 +184,131 @@
   <div class="section" id="module-node_editor.node_graphics_view">
 <span id="node-editor-node-graphics-view-module"></span><h1>node_editor.node_graphics_view module<a class="headerlink" href="#module-node_editor.node_graphics_view" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
-<dt id="node_editor.node_graphics_view.QNEGraphicsView">
-<em class="property">class </em><code class="sig-prename descclassname">node_editor.node_graphics_view.</code><code class="sig-name descname">QNEGraphicsView</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scene</span><span class="p">:</span> <span class="n"><a class="reference internal" href="node_editor.node_scene.html#node_editor.node_scene.Scene" title="node_editor.node_scene.Scene">node_editor.node_scene.Scene</a></span></em>, <em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_view.QNEGraphicsView" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_view.NodeGraphicsView">
+<em class="property">class </em><code class="sig-prename descclassname">node_editor.node_graphics_view.</code><code class="sig-name descname">NodeGraphicsView</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scene</span><span class="p">:</span> <span class="n"><a class="reference internal" href="node_editor.node_scene.html#node_editor.node_scene.Scene" title="node_editor.node_scene.Scene">node_editor.node_scene.Scene</a></span></em>, <em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_view.NodeGraphicsView" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QGraphicsView</span></code></p>
 <p>Implement custom graphics view that holds the scene containing a background and the nodes.</p>
 <p>The logic and mouse events are implemented here</p>
 <dl class="py attribute">
-<dt id="node_editor.node_graphics_view.QNEGraphicsView.scenePosChanged">
-<code class="sig-name descname">scenePosChanged</code><a class="headerlink" href="#node_editor.node_graphics_view.QNEGraphicsView.scenePosChanged" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_view.NodeGraphicsView.scenePosChanged">
+<code class="sig-name descname">scenePosChanged</code><a class="headerlink" href="#node_editor.node_graphics_view.NodeGraphicsView.scenePosChanged" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_view.QNEGraphicsView.initUI">
-<code class="sig-name descname">initUI</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_view.QNEGraphicsView.initUI" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_view.NodeGraphicsView.initUI">
+<code class="sig-name descname">initUI</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_view.NodeGraphicsView.initUI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Define render settings</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_view.QNEGraphicsView.resetMode">
-<code class="sig-name descname">resetMode</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_view.QNEGraphicsView.resetMode" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_view.NodeGraphicsView.resetMode">
+<code class="sig-name descname">resetMode</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_view.NodeGraphicsView.resetMode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set mode to MODE_NOOP</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_view.QNEGraphicsView.dragEnterEvent">
-<code class="sig-name descname">dragEnterEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">QDragEnterEvent</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_view.QNEGraphicsView.dragEnterEvent" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_view.NodeGraphicsView.dragEnterEvent">
+<code class="sig-name descname">dragEnterEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">QDragEnterEvent</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_view.NodeGraphicsView.dragEnterEvent" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_view.QNEGraphicsView.dropEvent">
-<code class="sig-name descname">dropEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">QDropEvent</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_view.QNEGraphicsView.dropEvent" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_view.NodeGraphicsView.dropEvent">
+<code class="sig-name descname">dropEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">QDropEvent</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_view.NodeGraphicsView.dropEvent" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_view.QNEGraphicsView.addDragEnterListener">
-<code class="sig-name descname">addDragEnterListener</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">callback</span><span class="p">:</span> <span class="n">function</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_view.QNEGraphicsView.addDragEnterListener" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_view.NodeGraphicsView.addDragEnterListener">
+<code class="sig-name descname">addDragEnterListener</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">callback</span><span class="p">:</span> <span class="n">function</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_view.NodeGraphicsView.addDragEnterListener" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_view.QNEGraphicsView.addDropListener">
-<code class="sig-name descname">addDropListener</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">callback</span><span class="p">:</span> <span class="n">function</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_view.QNEGraphicsView.addDropListener" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_view.NodeGraphicsView.addDropListener">
+<code class="sig-name descname">addDropListener</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">callback</span><span class="p">:</span> <span class="n">function</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_view.NodeGraphicsView.addDropListener" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_view.QNEGraphicsView.mousePressEvent">
-<code class="sig-name descname">mousePressEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span><span class="p">:</span> <span class="n">PyQt5.QtGui.QMouseEvent</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#node_editor.node_graphics_view.QNEGraphicsView.mousePressEvent" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_view.NodeGraphicsView.mousePressEvent">
+<code class="sig-name descname">mousePressEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span><span class="p">:</span> <span class="n">PyQt5.QtGui.QMouseEvent</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#node_editor.node_graphics_view.NodeGraphicsView.mousePressEvent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Redirect click events according to the button pressed</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_view.QNEGraphicsView.mouseReleaseEvent">
-<code class="sig-name descname">mouseReleaseEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span><span class="p">:</span> <span class="n">PyQt5.QtGui.QMouseEvent</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#node_editor.node_graphics_view.QNEGraphicsView.mouseReleaseEvent" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_view.NodeGraphicsView.mouseReleaseEvent">
+<code class="sig-name descname">mouseReleaseEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span><span class="p">:</span> <span class="n">PyQt5.QtGui.QMouseEvent</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#node_editor.node_graphics_view.NodeGraphicsView.mouseReleaseEvent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Redirect release events according to the button released</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_view.QNEGraphicsView.middleMouseButtonPress">
-<code class="sig-name descname">middleMouseButtonPress</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span><span class="p">:</span> <span class="n">PyQt5.QtGui.QMouseEvent</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_view.QNEGraphicsView.middleMouseButtonPress" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_view.NodeGraphicsView.middleMouseButtonPress">
+<code class="sig-name descname">middleMouseButtonPress</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span><span class="p">:</span> <span class="n">PyQt5.QtGui.QMouseEvent</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_view.NodeGraphicsView.middleMouseButtonPress" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implement dragging of the scene using middle button</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_view.QNEGraphicsView.middleMouseButtonRelease">
-<code class="sig-name descname">middleMouseButtonRelease</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span><span class="p">:</span> <span class="n">PyQt5.QtGui.QMouseEvent</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_view.QNEGraphicsView.middleMouseButtonRelease" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_view.NodeGraphicsView.middleMouseButtonRelease">
+<code class="sig-name descname">middleMouseButtonRelease</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span><span class="p">:</span> <span class="n">PyQt5.QtGui.QMouseEvent</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_view.NodeGraphicsView.middleMouseButtonRelease" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implement dragging of the scene using middle button</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_view.QNEGraphicsView.leftMouseButtonPress">
-<code class="sig-name descname">leftMouseButtonPress</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_view.QNEGraphicsView.leftMouseButtonPress" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_view.NodeGraphicsView.leftMouseButtonPress">
+<code class="sig-name descname">leftMouseButtonPress</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_view.NodeGraphicsView.leftMouseButtonPress" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_view.QNEGraphicsView.leftMouseButtonRelease">
-<code class="sig-name descname">leftMouseButtonRelease</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_view.QNEGraphicsView.leftMouseButtonRelease" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_view.NodeGraphicsView.leftMouseButtonRelease">
+<code class="sig-name descname">leftMouseButtonRelease</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_view.NodeGraphicsView.leftMouseButtonRelease" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_view.QNEGraphicsView.rightMouseButtonPress">
-<code class="sig-name descname">rightMouseButtonPress</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_view.QNEGraphicsView.rightMouseButtonPress" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_view.NodeGraphicsView.rightMouseButtonPress">
+<code class="sig-name descname">rightMouseButtonPress</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_view.NodeGraphicsView.rightMouseButtonPress" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_view.QNEGraphicsView.rightMouseButtonRelease">
-<code class="sig-name descname">rightMouseButtonRelease</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_view.QNEGraphicsView.rightMouseButtonRelease" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_view.NodeGraphicsView.rightMouseButtonRelease">
+<code class="sig-name descname">rightMouseButtonRelease</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_view.NodeGraphicsView.rightMouseButtonRelease" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_view.QNEGraphicsView.mouseMoveEvent">
-<code class="sig-name descname">mouseMoveEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">QMouseEvent</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_view.QNEGraphicsView.mouseMoveEvent" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_view.NodeGraphicsView.mouseMoveEvent">
+<code class="sig-name descname">mouseMoveEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">QMouseEvent</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_view.NodeGraphicsView.mouseMoveEvent" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_view.QNEGraphicsView.keyPressEvent">
-<code class="sig-name descname">keyPressEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">QKeyEvent</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_view.QNEGraphicsView.keyPressEvent" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_view.NodeGraphicsView.keyPressEvent">
+<code class="sig-name descname">keyPressEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">QKeyEvent</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_view.NodeGraphicsView.keyPressEvent" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_view.QNEGraphicsView.cutIntersectingEdges">
-<code class="sig-name descname">cutIntersectingEdges</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_view.QNEGraphicsView.cutIntersectingEdges" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_view.NodeGraphicsView.cutIntersectingEdges">
+<code class="sig-name descname">cutIntersectingEdges</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_view.NodeGraphicsView.cutIntersectingEdges" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_view.QNEGraphicsView.deleteSelected">
-<code class="sig-name descname">deleteSelected</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_view.QNEGraphicsView.deleteSelected" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_view.NodeGraphicsView.deleteSelected">
+<code class="sig-name descname">deleteSelected</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_view.NodeGraphicsView.deleteSelected" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_view.QNEGraphicsView.debug_modifiers">
-<code class="sig-name descname">debug_modifiers</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_view.QNEGraphicsView.debug_modifiers" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_view.NodeGraphicsView.debug_modifiers">
+<code class="sig-name descname">debug_modifiers</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_view.NodeGraphicsView.debug_modifiers" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_view.QNEGraphicsView.wheelEvent">
-<code class="sig-name descname">wheelEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">QWheelEvent</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_view.QNEGraphicsView.wheelEvent" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_view.NodeGraphicsView.wheelEvent">
+<code class="sig-name descname">wheelEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">QWheelEvent</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_view.NodeGraphicsView.wheelEvent" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_view.QNEGraphicsView.getItemAtClick">
-<code class="sig-name descname">getItemAtClick</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_view.QNEGraphicsView.getItemAtClick" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_view.NodeGraphicsView.getItemAtClick">
+<code class="sig-name descname">getItemAtClick</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_view.NodeGraphicsView.getItemAtClick" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the object on which we clicked</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_view.QNEGraphicsView.distanceBetweenClickAndRelease">
-<code class="sig-name descname">distanceBetweenClickAndRelease</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_view.QNEGraphicsView.distanceBetweenClickAndRelease" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_view.NodeGraphicsView.distanceBetweenClickAndRelease">
+<code class="sig-name descname">distanceBetweenClickAndRelease</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_view.NodeGraphicsView.distanceBetweenClickAndRelease" title="Permalink to this definition">¶</a></dt>
 <dd><p>Measures if we are too far from the last LMB click scene position</p>
 </dd></dl>
 

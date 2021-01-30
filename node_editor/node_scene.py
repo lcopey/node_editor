@@ -15,7 +15,7 @@ from .utils import print_func_name
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from .node_graphics_view import QNEGraphicsView
+    from .node_graphics_view import NodeGraphicsView
 
 DEBUG = False
 
@@ -214,7 +214,7 @@ class Scene(Serializable):
         """
         return Node if self.node_class_selector is None else self.node_class_selector(data)
 
-    def getView(self) -> 'QNEGraphicsView':
+    def getView(self) -> 'NodeGraphicsView':
         return self.grScene.views()[0]
 
     def getItemAt(self, pos):

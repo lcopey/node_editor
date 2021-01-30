@@ -132,8 +132,13 @@ class Edge(Serializable):
     def registerEdgeValidator(cls, validator_callback: 'function'):
         """Register Edge Validator Callback
 
-        :param validator_callback: A function handle to validate Edge
-        :type validator_callback: `function`
+        Parameters
+        ----------
+        validator_callback : 'function'
+            A function handle to validate Edge
+        Returns
+        -------
+
         """
         cls.edge_validators.append(validator_callback)
 
@@ -141,12 +146,18 @@ class Edge(Serializable):
     def validateEdge(cls, start_socket: 'Socket', end_socket: 'Socket') -> bool:
         """Validate Edge agains all registered `Edge Validator Callbacks`
 
-        :param start_socket: Starting :class:`~nodeeditor.node_socket.Socket` of Edge to check
-        :type start_socket: :class:`~nodeeditor.node_socket.Socket`
-        :param end_socket: Target/End :class:`~nodeeditor.node_socket.Socket` of Edge to check
-        :type end_socket: :class:`~nodeeditor.node_socket.Socket`
-        :return: ``True`` if the Edge is valid or ``False`` if not
-        :rtype: ``bool``
+        Parameters
+        ----------
+        start_socket : :class:`~nodeeditor.node_socket.Socket`
+            Starting :class:`~nodeeditor.node_socket.Socket` of Edge to check
+
+        end_socket : :class:`~nodeeditor.node_socket.Socket`
+            Target/End :class:`~nodeeditor.node_socket.Socket` of Edge to check
+
+        Returns
+        -------
+        ``bool``
+            ``True`` if the Edge is valid or ``False`` if not
         """
         for validator in cls.getEdgeValidators():
             if not validator(start_socket, end_socket):
@@ -174,11 +185,8 @@ class Edge(Serializable):
         Triggers the onSelected event that store a new historty stamp
         Parameters
         ----------
-        new_state
-
-        Returns
-        -------
-
+        new_state : ``bool``
+            ``True`` for selected, ``False`` for unselected
         """
         self.grEdge.doSelect(new_state)
 

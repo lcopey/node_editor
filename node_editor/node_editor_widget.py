@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import *
 
 from .node_edge import Edge, EDGE_TYPE_BEZIER
 from .node_graphics_socket import OUTPUT_SOCKET, INPUT_SOCKET_1
-from .node_graphics_view import QNEGraphicsView
+from .node_graphics_view import NodeGraphicsView
 from .node_node import Node
 from .node_scene import Scene, InvalidFile
 from .utils import dumpException
@@ -19,7 +19,7 @@ class NodeEditorWidget(QWidget):
     """The ``NodeEditorWidget`` class"""
     # Allow to specify which scene to use
     Scene_class = Scene
-    GraphicsView_class = QNEGraphicsView
+    GraphicsView_class = NodeGraphicsView
 
     def __init__(self, parent=None):
         super().__init__(parent)

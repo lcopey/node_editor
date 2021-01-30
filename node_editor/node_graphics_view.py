@@ -8,7 +8,8 @@ from .node_graphics_socket import GraphicsSocket
 from .node_graphics_edge import GraphicsEdge
 from .node_graphics_cutline import CutLine
 from .node_edge_rerouting import EdgeRerouting
-from .utils import print_func_name, print_scene, print_items, dumpException
+from .utils import dumpException
+from typing import Callable
 
 
 class ViewMode(enum.IntEnum):
@@ -28,16 +29,35 @@ DEBUG_MRB_SCENE_ITEMS = True
 DEBUG_MRB_LAST_SELECTIONS = True
 
 
-class QNEGraphicsView(QGraphicsView):
+class NodeGraphicsView(QGraphicsView):
     """Implement custom graphics view that holds the scene containing a background and the nodes.
-
-    The logic and mouse events are implemented here"""
+    Holds most key, mouse events."""
 
     # Register new event scenePosChanged
     # It may be used in node editor window to update the status bar with the mouse position
     scenePosChanged = pyqtSignal(int, int)
 
     def __init__(self, scene: 'Scene', parent=None):
+        """
+
+        Parameters
+        ----------
+        scene : `Scene`
+            reference to the :class:`~nodeeditor.node_scene.Scene`
+        parent : ``QWidget``
+            parent widget
+
+        Instance Attributes
+        -------------------
+        - **grScene** - reference to the :class:`~nodeeditor.node_graphics_scene.GraphicsScene`
+        - **mode** - state of the `Graphics View`
+        - **zoomInFactor**- ``float`` - zoom step scaling, default 1.25
+        - **zoomClamp** - ``bool`` - do we clamp zooming or is it infinite?
+        - **zoom** - current zoom step
+        - **zoomStep** - ``int`` - the relative zoom step when zooming in/out
+        - **zoomRange** - ``[min, max]``
+
+        """
         super().__init__(parent=parent)
         self.scene = scene  # reference to parent scene
         self.grScene = scene.grScene  # reference to the graphical implementation of the scene
@@ -70,10 +90,13 @@ class QNEGraphicsView(QGraphicsView):
         self._drag_enter_listeners = []
         self._drop_listeners = []
 
+        # diverses state variables
+        self._last_lmb_click_scene_pos = None
+
     def initUI(self):
-        """Define render settings"""
+        """Define render settings for this `NodeGraphicsView`"""
         # define render settings
-        self.setRenderHints(QPainter.Antialiasing | QPainter.HighQualityAntialiasing | \
+        self.setRenderHints(QPainter.Antialiasing | QPainter.HighQualityAntialiasing |
                             QPainter.TextAntialiasing | QPainter.SmoothPixmapTransform)
         self.setViewportUpdateMode(QGraphicsView.FullViewportUpdate)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
@@ -84,34 +107,77 @@ class QNEGraphicsView(QGraphicsView):
         self.setAcceptDrops(True)
 
     def resetMode(self):
-        """Set mode to MODE_NOOP
-        """
+        """Set mode to MODE_NOOP"""
         self.mode = ViewMode.NOOP
 
     def isInNoOpMode(self):
+        """Check if the view is in no operation mode
+
+        Returns
+        -------
+        ``bool``
+            True if in no operation mode
+        """
         return self.mode == ViewMode.NOOP
 
     def isEdgeCutting(self):
+        """Check if the view is in edge cutting mode
+
+        Returns
+        -------
+        ``bool``
+            True if in edge cutting mode
+        """
         return self.mode == ViewMode.EDGE_CUT
 
     def isEdgeDragging(self):
+        """Check if the view is in edge dragging mode
+
+        Returns
+        -------
+        ``bool``
+            True if in edge dragging mode
+        """
         return self.mode == ViewMode.EDGE_DRAG
 
     def isEdgeRerouting(self):
+        """Check if the view is in edge rerouting mode
+
+        Returns
+        -------
+        ``bool``
+            True if in edge rerouting mode
+        """
         return self.mode == ViewMode.EDGES_REROUTING
 
     def dragEnterEvent(self, event: QDragEnterEvent) -> None:
+        """Trigger our registered `Drag Enter` events"""
         for callback in self._drag_enter_listeners:
             callback(event)
 
     def dropEvent(self, event: QDropEvent) -> None:
+        """Trigger our registered `Drop` events"""
         for callback in self._drop_listeners:
             callback(event)
 
-    def addDragEnterListener(self, callback: 'function'):
+    def addDragEnterListener(self, callback: Callable):
+        """Register callback for `Drag Enter` event
+
+        Parameters
+        ----------
+        callback : Callable
+            callback function
+        """
         self._drag_enter_listeners.append(callback)
 
-    def addDropListener(self, callback: 'function'):
+    def addDropListener(self, callback: Callable):
+        """Register callback for `Drop` event
+
+        Parameters
+        ----------
+        callback : Callable
+            callback function
+        """
         self._drop_listeners.append(callback)
 
     def mousePressEvent(self, event: QMouseEvent) -> None:
@@ -136,15 +202,26 @@ class QNEGraphicsView(QGraphicsView):
         else:
             super().mouseReleaseEvent(event)
 
-    def leftMouseButtonPress(self, event):
+    def leftMouseButtonPress(self, event: QMouseEvent):
+        """Handle left mouse button click
+
+        Change the current mode depending on which item is clicked on :
+            - `Node` or `Edge` + shift : add to selection
+            - `Socket` : Edge dragging or rerouting mode
+            - `Scene' + ctrl : Edge cutting mode
+        Parameters
+        ----------
+        event : QMouseEvent
+
+        """
         # get the item we clicked on
         item = self.getItemAtClick(event)
         # store the current position of the click for later distance calculation
-        self.last_lmb_click_scene_pos = self.mapToScene(event.pos())
+        self._last_lmb_click_scene_pos = self.mapToScene(event.pos())
 
         # logic for multiple selection using shift
-        if DEBUG: print('LMB on ', item, self.debug_modifiers(event))
-
+        self.print('LMB on ', item, self.debug_modifiers(event))
+        # TODO Node Content Widget prevent some node selection...
         if hasattr(item, 'node') or isinstance(item, GraphicsEdge) or item is None:
             if event.modifiers() & Qt.ShiftModifier:
                 event.ignore()
@@ -173,7 +250,8 @@ class QNEGraphicsView(QGraphicsView):
 
         if self.mode == ViewMode.EDGE_DRAG:  # if we already were in edge dragging mode
             res = self.dragging.edgeDragEnd(item)  # check if we click on another valid socket
-            if res: return  # suppress event if we clicked on a socket
+            if res:
+                return  # suppress event if we clicked on a socket
 
         if item is None:
             # Logic for the cutline (Ctrl + LMB)
@@ -190,12 +268,18 @@ class QNEGraphicsView(QGraphicsView):
         super().mousePressEvent(event)
 
     def leftMouseButtonRelease(self, event):
+        """Handle left mouse button is released
 
+        End dragging or rerouting mode
+        Parameters
+        ----------
+        event : QMouseEvent
+        """
         # get item which we released mouse button on
         item = self.getItemAtClick(event)
         try:
 
-            if DEBUG: print('Mouse released at ', item)
+            self.print('Mouse released at ', item)
             # logic for multiple selection using shift
             if hasattr(item, 'node') or isinstance(item, GraphicsEdge) or item is None:
                 if event.modifiers() & Qt.ShiftModifier:
@@ -212,7 +296,8 @@ class QNEGraphicsView(QGraphicsView):
             if self.mode == ViewMode.EDGE_DRAG:  # if we were dragging an edge
                 if self.distanceBetweenClickAndRelease(event):
                     res = self.dragging.edgeDragEnd(item)
-                    if res: return
+                    if res:
+                        return  # skip the rest of the code
 
             if self.mode == ViewMode.EDGES_REROUTING:
                 # pass the socket as target if clicked on socket else None
@@ -221,8 +306,7 @@ class QNEGraphicsView(QGraphicsView):
                     if not self.rerouting.first_mb_release:
                         # for confirmation of first mb release
                         self.rerouting.first_mb_release = True
-                        # skip the rest of the code
-                        return
+                        return  # skip the rest of the code
                     self.rerouting.stopRerouting(item.socket if isinstance(item, GraphicsSocket) else None)
 
                 else:
@@ -245,12 +329,12 @@ class QNEGraphicsView(QGraphicsView):
                 current_selected_items = self.grScene.selectedItems()
 
                 if current_selected_items != self.grScene.scene._last_selected_items:
-                    if current_selected_items == []:
+                    if not current_selected_items:
                         self.grScene.itemsDeselected.emit()
                     else:
                         self.grScene.itemSelected.emit()
                     self.grScene.scene._last_selected_items = current_selected_items
-                return
+                return  # skip the rest of the code
 
             # otherwise deselect everything
             if item is None:
@@ -263,8 +347,6 @@ class QNEGraphicsView(QGraphicsView):
 
     def middleMouseButtonPress(self, event: QMouseEvent):
         """Implement dragging of the scene using middle button"""
-        item = self.getItemAtClick(event)
-
         # faking events for enable MMB dragging the scene
         releaseEvent = QMouseEvent(QEvent.MouseButtonRelease, event.localPos(), event.screenPos(),
                                    Qt.LeftButton, Qt.NoButton, event.modifiers())
@@ -282,49 +364,53 @@ class QNEGraphicsView(QGraphicsView):
         super().mouseReleaseEvent(fakeEvent)
         self.setDragMode(QGraphicsView.RubberBandDrag)
 
-    def rightMouseButtonPress(self, event):
-        # TODO Node Content Widget prevent some node selection...
+    def rightMouseButtonPress(self, event: QMouseEvent):
+        """Mostly debug
+        """
         item = self.getItemAtClick(event)
         # debug printout
         if DEBUG_MRB_SCENE_ITEMS:
             if isinstance(item, GraphicsEdge):
-                print("MRB DEBUG:", item.edge, "\n\t", item.edge.grEdge if item.edge.grEdge is not None else None)
+                self.print("MRB DEBUG:", item.edge, "\n\t", item.edge.grEdge if item.edge.grEdge is not None else None)
                 return
 
             if isinstance(item, GraphicsSocket):
-                print("MRB DEBUG:", item.socket, "socket_type:", item.socket.socket_type,
-                      "input" if item.socket.is_input else "output",
-                      "has edges:", "no" if item.socket.edges == [] else "")
+                self.print("MRB DEBUG:", item.socket, "socket_type:", item.socket.socket_type,
+                           "input" if item.socket.is_input else "output",
+                           "has edges:", "no" if item.socket.edges == [] else "")
                 if item.socket.edges:
-                    for edge in item.socket.edges: print("\t", edge)
+                    for edge in item.socket.edges:
+                        self.print("\t", edge)
                 return
 
             if hasattr(item, 'node'):
-                print('MRB DEBUG:', item)
+                self.print('MRB DEBUG:', item)
                 return
 
             if isinstance(item, QGraphicsProxyWidget):
-                print('MRB DEBUG', item)
-                print(item.widget())
+                self.print('MRB DEBUG', item)
+                self.print(item.widget())
 
             if DEBUG_MRB_SCENE_ITEMS and (item is None or self.mode == ViewMode.EDGES_REROUTING):
-                print("SCENE:")
-                print("  Nodes:")
-                for node in self.grScene.scene.nodes: print("\t", node)
-                print("  Edges:")
-                for edge in self.grScene.scene.edges: print("\t", edge, "\n\t\tgrEdge:",
-                                                            edge.grEdge if edge.grEdge is not None else None)
+                self.print("SCENE:")
+                self.print("  Nodes:")
+                for node in self.grScene.scene.nodes:
+                    self.print("\t", node)
+                self.print("  Edges:")
+                for edge in self.grScene.scene.edges:
+                    self.print("\t", edge, "\n\t\tgrEdge:",
+                               edge.grEdge if edge.grEdge is not None else None)
                 return
 
             if event.modifiers() & Qt.CTRL:
-                print("  Graphic Items in GraphicScene:")
+                self.print("  Graphic Items in GraphicScene:")
                 for item in self.grScene.items():
-                    print('    ', item)
+                    self.print('    ', item)
 
                 return
 
         if DEBUG_MRB_LAST_SELECTIONS and event.modifiers() & Qt.SHIFT:
-            print("scene _last_selected_items:", self.grScene.scene._last_selected_items)
+            self.print("scene _last_selected_items:", self.grScene.scene._last_selected_items)
             return
 
         super().mousePressEvent(event)
@@ -332,7 +418,8 @@ class QNEGraphicsView(QGraphicsView):
     def rightMouseButtonRelease(self, event):
         super().mouseReleaseEvent(event)
 
-    def mouseMoveEvent(self, event: QMouseEvent) -> None:
+    def mouseMoveEvent(self, event: QMouseEvent):
+        """Overriden Qt's ``mouseMoveEvent`` handling Scene/View logic"""
         scenepos = self.mapToScene(event.pos())
 
         try:
@@ -382,6 +469,7 @@ class QNEGraphicsView(QGraphicsView):
         super().keyPressEvent(event)
 
     def cutIntersectingEdges(self):
+        """Compare which `Edges` intersect with current `Cut line` and delete them safely"""
         for ix in range(len(self.cutLine.line_points) - 1):
             p1 = self.cutLine.line_points[ix]
             p2 = self.cutLine.line_points[ix + 1]
@@ -393,13 +481,14 @@ class QNEGraphicsView(QGraphicsView):
         self.grScene.scene.history.storeHistory('Delete cutted edges')
 
     def deleteSelected(self):
+        """Shortcut for safe deleting every object selected in the `Scene`."""
         for item in self.grScene.selectedItems():
             if isinstance(item, GraphicsEdge):
-                if DEBUG: print('View:deleteSelected - removing edge ', item)
+                self.print('deleteSelected - removing edge ', item)
                 item.edge.remove()
 
             elif hasattr(item, 'node'):
-                if DEBUG: print('View:deleteSelected - removing node ', item)
+                self.print('deleteSelected - removing node ', item)
                 item.node.remove()
         self.grScene.scene.history.storeHistory('Delete selected', setModified=True)
 
@@ -411,10 +500,11 @@ class QNEGraphicsView(QGraphicsView):
         return out
 
     def wheelEvent(self, event: QWheelEvent) -> None:
+        """overridden Qt's ``wheelEvent``. This handles zooming"""
         # TODO fix wheelevent when the node implement wheel event ?
         try:
             item = self.getItemAtClick(event)
-            print(item)
+            self.print(item)
         except Exception as e:
             dumpException(e)
 
@@ -442,15 +532,41 @@ class QNEGraphicsView(QGraphicsView):
         # zoom centered on the mouse
         self.setTransformationAnchor(QGraphicsView.AnchorUnderMouse)
 
-    def getItemAtClick(self, event):
-        # TODO merge with getItemAt from node_scene
-        """Return the object on which we clicked"""
+    def getItemAtClick(self, event: QEvent):
+        """Return the object on which we've clicked/release mouse button
+
+        Parameters
+        ----------
+        event: ``QEvent``
+            Qt's mouse or key event
+
+        Returns
+        -------
+            ``QGraphicsItem`` which the mouse event happened or ``None``
+        """
+        # TODO merge with getItemAt from node_scene ?
         pos = event.pos()
         obj = self.itemAt(pos)
         return obj
 
-    def distanceBetweenClickAndRelease(self, event):
-        """Measures if we are too far from the last LMB click scene position"""
+    def distanceBetweenClickAndRelease(self, event: QMouseEvent):
+        """Measures if we are too far from the last LMB click scene position.
+        This is used for detection if we release too far after we clicked on a `Socket`
+
+        Parameters
+        ----------
+        event : `QMouseEvent`
+
+        Returns
+        -------
+        ``bool``
+            ``True`` if we released too far from where we clicked before
+
+        """
         new_lmb_click_scene_pos = self.mapToScene(event.pos())
-        dist_scene_pos = new_lmb_click_scene_pos - self.last_lmb_click_scene_pos
+        dist_scene_pos = new_lmb_click_scene_pos - self._last_lmb_click_scene_pos
         return dist_scene_pos.x() ** 2 + dist_scene_pos.y() ** 2 >= EDGE_DRAG_START_THRESHOLD ** 2
+
+    def print(self, *args):
+        if DEBUG:
+            print('>NodeGraphicsView : ', *args)

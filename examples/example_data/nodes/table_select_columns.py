@@ -32,7 +32,7 @@ class DataNode_SelectColumns(DataNode):
         super().__init__(scene, inputs=[1], outputs=[1])
 
     def initPropertiesToolbar(self):
-        # TODO add select all and None button
+        # TODO displace in content ?
         """Initialize the layout of properties DockWidget"""
         self.properties_toolbar = QWidget()
         self.listWidget = QListWidget()
@@ -56,18 +56,21 @@ class DataNode_SelectColumns(DataNode):
         self.properties_toolbar.setLayout(layout)
 
     def selectAll(self):
+        """Select all item in `listWidget` attributes"""
         for n in range(self.listWidget.count()):
             item = self.listWidget.item(n)
             item.setCheckState(Qt.Checked)
         self.onItemClicked()
 
     def selectNone(self):
+        """Unselect all item in `listWidget` attributes"""
         for n in range(self.listWidget.count()):
             item = self.listWidget.item(n)
             item.setCheckState(Qt.Unchecked)
         self.onItemClicked()
 
     def fillListWidget(self):
+        """Fill `listWidget` with values from input dataframe columns"""
         self.listWidget.clear()
         if self.columns is not None:
             for column in self.columns:
@@ -76,6 +79,22 @@ class DataNode_SelectColumns(DataNode):
                 item.setCheckState(Qt.Checked)
 
                 self.listWidget.addItem(item)
+
+    def getPropertiesToolbar(self):
+        """Return the widget to display properties dock widget"""
+        return self.properties_toolbar
+
+    def onItemClicked(self):
+        """On Item Clicked event
+
+        Update the selection and evaluate the children `Nodes`
+        """
+        # Store the table with only the selected columns
+        self.updateValue()
+
+        # if self.getOutputs():
+        self.markChildrenDirty()
+        self.evalChildren()
 
     def getColumnSelection(self) -> list[str]:
         # TODO Handle index type
@@ -94,18 +113,8 @@ class DataNode_SelectColumns(DataNode):
 
         return result
 
-    def getPropertiesToolbar(self):
-        return self.properties_toolbar
-
-    def onItemClicked(self):
-        # Store the table with only the selected columns
-        self.getSelectedDataframe()
-
-        # if self.getOutputs():
-        self.markChildrenDirty()
-        self.evalChildren()
-
-    def getSelectedDataframe(self):
+    def updateValue(self):
+        """Update self.value with the current selection"""
         # Store the table with only the selected columns
         column_selection = self.getColumnSelection()
         if column_selection:
@@ -146,7 +155,7 @@ class DataNode_SelectColumns(DataNode):
             return
 
         # Store the table with only the selected columns
-        self.getSelectedDataframe()
+        self.updateValue()
 
         # else set flag and tooltip
         self.markDirty(False)
@@ -160,3 +169,24 @@ class DataNode_SelectColumns(DataNode):
         self.evalChildren()
 
         return self.value
+
+    def serialize(self):
+        result = super().serialize()
+
+        state = {}
+        for n in range(self.listWidget.count()):
+            item = self.listWidget.item(n)
+            state[item.text()] = item.checkState() == Qt.Checked
+        result['state'] = state
+        return result
+
+    def deserialize(self, data, hashmap=None, restore_id=True):
+        # TODO Fix
+        result = super().deserialize(data, hashmap, restore_id)
+        # If connected restore the values of the properties widget and evaluate
+        if self.getInput(0):
+            for key, value in result['state']:
+                item = QListWidgetItem()
+                item.setText(str(key))
+                item.setCheckState(Qt.Checked if value else Qt.Unchecked)
+                self.listWidget.addItem(item)
