@@ -5,12 +5,19 @@ from .node_graphics_edge_path import QNEGraphicsEdgePathBezier, QNEGraphicsEdgeP
 
 EDGE_WIDTH = 3.
 
-
 import typing
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .node_edge import Edge
+
+THEME = 'LIGHT'
+
+colors = {'DARK':
+              {'edge_color': QColor("#001000")},
+          'LIGHT':
+              {'edge_color': QColor("#E3c0c0c0")}
+          }
 
 
 class GraphicsEdge(QGraphicsPathItem):
@@ -40,7 +47,7 @@ class GraphicsEdge(QGraphicsPathItem):
     def initAssets(self):
         """Initialize assets ``QObjects`` like ``QColor``, ``QPen`` and ``QBrush``"""
         # Diverse parameters for drawing
-        self._color = self._default_color = QColor("#001000")
+        self._color = self._default_color = colors[THEME]['edge_color']
         self._color_selected = QColor("#00ff00")
         self._color_hovered = QColor("#FF37A6FF")
 
@@ -48,7 +55,7 @@ class GraphicsEdge(QGraphicsPathItem):
         self._pen.setWidthF(EDGE_WIDTH)
 
         self._pen_selected = QPen(self._color_selected)
-        self._pen.setWidthF(EDGE_WIDTH)
+        self._pen_selected.setWidthF(EDGE_WIDTH)
 
         self._pen_dragging = QPen(self._color)
         self._pen_dragging.setWidthF(EDGE_WIDTH)
@@ -56,6 +63,9 @@ class GraphicsEdge(QGraphicsPathItem):
 
         self._pen_hovered = QPen(self._color_hovered)
         self._pen_hovered.setWidthF(EDGE_WIDTH + 2.)
+
+        shadow = QGraphicsDropShadowEffect(blurRadius=5, xOffset=3, yOffset=3)
+        self.setGraphicsEffect(shadow)
 
     def createEdgePathCalculator(self):
         self.pathCalculator = self.determineEdgePathClass()(self)
@@ -166,5 +176,3 @@ class GraphicsEdge(QGraphicsPathItem):
         cutpath.lineTo(p2)
         path = self.calcPath()
         return cutpath.intersects(path)
-
-

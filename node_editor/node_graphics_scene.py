@@ -7,10 +7,20 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .node_scene import Scene
 
+THEME = 'LIGHT'
+
+colors = {'DARK':
+              {'background': QColor('#393939'),
+               'light': QColor("#2f2f2f"),
+               'dark': QColor("#292929")},
+          'LIGHT':
+              {'background': QColor('#eeeeee'),
+               'light': QColor('#eaeaea'),
+               'dark': QColor('#e9e9e9')}}
+
 
 class GraphicsScene(QGraphicsScene):
     """Implement the scene containing the backgroung"""
-    # TODO why in the grScene instead of the scene ?
     itemSelected = pyqtSignal()
     itemsDeselected = pyqtSignal()
 
@@ -35,9 +45,12 @@ class GraphicsScene(QGraphicsScene):
         self.gridSize = 20
         self.gridSquare = 5
 
-        self._color_background = QColor('#393939')
-        self._color_light = QColor("#2f2f2f")
-        self._color_dark = QColor("#292929")
+        # self._color_background = QColor('#393939')
+        # self._color_light = QColor("#2f2f2f")
+        # self._color_dark = QColor("#292929")
+        self._color_background = colors[THEME]['background']
+        self._color_light = colors[THEME]['light']
+        self._color_dark = colors[THEME]['dark']
 
         self._pen_light = QPen(self._color_light)
         self._pen_light.setWidth(1)

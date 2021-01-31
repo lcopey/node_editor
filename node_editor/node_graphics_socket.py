@@ -25,6 +25,14 @@ SOCKET_COLOR = [QColor('#FFFF7F0E'),
                 QColor('#FFBCBD22'),
                 QColor('#FF17BECF')]
 
+THEME = 'LIGHT'
+
+colors = {'DARK':
+              {'color': QColor("#FF00000")},
+          'LIGHT':
+              {'color': QColor("#FFf0f0f0")}
+          }
+
 
 class GraphicsSocket(QGraphicsItem):
     def __init__(self, socket: 'Socket'):
@@ -33,7 +41,7 @@ class GraphicsSocket(QGraphicsItem):
 
         self.isHighlighted = False
 
-        self.radius = 6
+        self.radius = 5
         self.outline_width = 1
         # Set to True to desactivate hover event on parent (useful for resizing the nodes)
         self.setAcceptHoverEvents(True)
@@ -45,7 +53,7 @@ class GraphicsSocket(QGraphicsItem):
 
     def initAssets(self):
         self._color_background = self.getSocketColor(self.socket_type)
-        self._color_outline = QColor('#FF000000')
+        self._color_outline = colors[THEME]['color']
         self._color_highlight = QColor('#FF37A6FF')
 
         self._pen = QPen(self._color_outline)

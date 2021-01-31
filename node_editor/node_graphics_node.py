@@ -13,6 +13,26 @@ OUTLINE_WIDTH = 1.0
 DEBUG = True
 DEBUG_HANDLE = True
 
+THEME = 'LIGHT'
+
+colors = {'DARK':
+              {'title_color': Qt.white,
+               'color': QColor("#7F00000"),
+               'color_selected': QColor("#FFFFA637"),
+               'color_hovered': QColor("#FF37A6FF"),
+               'brush_title': QBrush(QColor("#FF313131")),
+               'brush_background': QBrush(QColor("#E3212121")),
+               'brush_shadow': QBrush(QColor('#c0c0c0'))},
+          'LIGHT':
+              {'title_color': Qt.black,
+               'color': QColor("#7Ff0f0f0"),
+               'color_selected': QColor("#FFFFA637"),
+               'color_hovered': QColor("#FF06acee"),
+               'brush_title': QBrush(QColor("#FFFFFFFF")),
+               'brush_background': QBrush(QColor("#E3e0e0e0")),
+               'brush_shadow': QBrush(QColor('#c0c0c0'))}
+          }
+
 
 # TODO Review the init arguments
 
@@ -109,12 +129,12 @@ class GraphicsNode(QGraphicsRectItem):
         self.height = 240
 
     def initAssets(self):
-        self._title_color = Qt.white
+        self._title_color = colors[THEME]['title_color']
         self._title_font = QFont('Ubuntu', 8)
 
-        self._color = QColor("#7F00000")
-        self._color_selected = QColor("#FFFFA637")
-        self._color_hovered = QColor("#FF37A6FF")
+        self._color = colors[THEME]['color']
+        self._color_selected = colors[THEME]['color_selected']
+        self._color_hovered = colors[THEME]['color_hovered']
 
         self._pen_default = QPen(self._color)
         self._pen_default.setWidthF(OUTLINE_WIDTH)
@@ -123,30 +143,29 @@ class GraphicsNode(QGraphicsRectItem):
         self._pen_hovered = QPen(self._color_hovered)
         self._pen_hovered.setWidthF(OUTLINE_WIDTH + 1)
 
-        self._brush_title = QBrush(QColor("#FF313131"))
-        self._brush_background = QBrush(QColor("#E3212121"))
+        self._brush_title = colors[THEME]['brush_title']
+        self._brush_background = colors[THEME]['brush_background']
+        self._brush_shadow = colors[THEME]['brush_shadow']
 
         self.icons = QImage('../../node_editor/icons/status_icons.png')
+
+        shadow = QGraphicsDropShadowEffect(blurRadius=5, xOffset=3, yOffset=3)
+        self.setGraphicsEffect(shadow)
 
     def initHandles(self):
         for position in (HandlePosition.MiddleRight, HandlePosition.BottomMiddle, HandlePosition.BottomRight):
             self.handles[position] = Handle(self, position)
 
     def initContent(self):
-        """Add the `Content` of the `Node` to the `Graphical Scene`
-        """
+        """Add the `Content` of the `Node` to the `Graphical Scene`"""
         # Draw the contents
-        # self.grContent = QGraphicsProxyWidget(self)  # defines the content as a proxy widget with parent self
-        self.grContent = self.node.scene.grScene.addWidget(self.content)
-        self.grContent.setParentItem(self)
+        # defines the content as a proxy widget with parent self
+        if self.content:
+            self.grContent = self.node.scene.grScene.addWidget(self.content)
+            self.grContent.setParentItem(self)
 
     def initTitle(self):
-        """Title is instanciated as `QGraphicsTextItem`
-
-        Returns
-        -------
-
-        """
+        """Title is instanciated as `QGraphicsTextItem`"""
         # Draw the _title
         self.title_item = QGraphicsTextItem(self)
         self.title_item.node = self.node  # add reference to the node
@@ -155,8 +174,7 @@ class GraphicsNode(QGraphicsRectItem):
         self.title_item.setPos(self.title_horizontal_padding, 0)
 
     def setContentGeometry(self):
-        """Set Content geometry to fit the space available in the `Graphical Node`
-        """
+        """Set Content geometry to fit the space available in the `Graphical Node`"""
         if self.title_item:
             self.title_item.setTextWidth(self.width - 2 * self.title_horizontal_padding)
         if self.content is not None:
@@ -332,67 +350,52 @@ class GraphicsNode(QGraphicsRectItem):
 
     def paint(self, painter: QPainter, option: 'QStyleOptionGraphicsItem',
               widget: Optional[QWidget] = ...) -> None:
-        try:
-            # TO implement
-            # rect = self.rect()
-            # x, y = rect.left(), rect.top()
-            x = y = 0
-            # shadow_path = QPainterPath()
-            # shadow_path.setFillRule(Qt.WindingFill)
-            # offset = 3
-            # shadow_path.addRoundedRect(x + offset, y + offset, self.width + offset, self.height + offset,
-            #                            self.edge_roundness, self.edge_roundness)
-            # painter.setPen(Qt.NoPen)
-            # painter.setBrush(self._brush_title)
-            # painter.drawPath(shadow_path.simplified())
 
-            path_title = QPainterPath()
-            path_title.setFillRule(Qt.WindingFill)
-            # Rectangle for title
-            path_title.addRoundedRect(x, y, self.width, self.title_height, self.edge_roundness, self.edge_roundness)
-            path_title.addRect(x, y + self.title_height - self.edge_roundness, self.edge_roundness, self.edge_roundness)
-            path_title.addRect(x + self.width - self.edge_roundness, y + self.title_height - self.edge_roundness,
-                               self.edge_roundness, self.edge_roundness)
-            painter.setPen(Qt.NoPen)
-            painter.setBrush(self._brush_title)
-            painter.drawPath(path_title.simplified())
+        x = y = 0
 
-            # content
-            path_content = QPainterPath()
-            path_content.setFillRule(Qt.WindingFill)
-            path_content.addRoundedRect(x, y + self.title_height,
-                                        self.width, self.height - self.title_height,
-                                        self.edge_roundness, self.edge_roundness)
-            path_content.addRect(x, y + self.title_height,
-                                 self.edge_roundness, self.edge_roundness)
-            path_content.addRect(x + self.width - self.edge_roundness, y + self.title_height,
-                                 self.edge_roundness, self.edge_roundness)
-            painter.setPen(Qt.NoPen)
-            painter.setBrush(self._brush_background)
-            painter.drawPath(path_content.simplified())
+        path_title = QPainterPath()
+        path_title.setFillRule(Qt.WindingFill)
+        # Rectangle for title
+        path_title.addRoundedRect(x, y, self.width, self.title_height, self.edge_roundness, self.edge_roundness)
+        path_title.addRect(x, y + self.title_height - self.edge_roundness, self.edge_roundness, self.edge_roundness)
+        path_title.addRect(x + self.width - self.edge_roundness, y + self.title_height - self.edge_roundness,
+                           self.edge_roundness, self.edge_roundness)
+        painter.setPen(Qt.NoPen)
+        painter.setBrush(self._brush_title)
+        painter.drawPath(path_title.simplified())
 
-            # outline
-            path_outline = QPainterPath()
-            path_outline.addRoundedRect(x - 1, y - 1,
-                                        self.width + 2, self.height + 2,
-                                        self.edge_roundness, self.edge_roundness)
-            painter.setBrush(Qt.NoBrush)
-            if self.hovered:
-                painter.setPen(self._pen_hovered)
-                painter.drawPath(path_outline.simplified())
-                painter.setPen(self._pen_default)
-                painter.drawPath(path_outline.simplified())
-            else:
-                painter.setPen(self._pen_default if not self.isSelected() else self._pen_selected)
-                painter.drawPath(path_outline.simplified())
+        # content
+        path_content = QPainterPath()
+        path_content.setFillRule(Qt.WindingFill)
+        path_content.addRoundedRect(x, y + self.title_height,
+                                    self.width, self.height - self.title_height,
+                                    self.edge_roundness, self.edge_roundness)
+        path_content.addRect(x, y + self.title_height,
+                             self.edge_roundness, self.edge_roundness)
+        path_content.addRect(x + self.width - self.edge_roundness, y + self.title_height,
+                             self.edge_roundness, self.edge_roundness)
+        painter.setPen(Qt.NoPen)
+        painter.setBrush(self._brush_background)
+        painter.drawPath(path_content.simplified())
 
-            # status
-            offset = 24.0
-            if self.node.isDirty(): offset = 0.
-            if self.node.isInvalid(): offset = 48.
-            painter.drawImage(QRectF(-10., -10., 24., 24.),
-                              self.icons,
-                              QRectF(offset, 0, 24., 24.))
+        # outline
+        path_outline = QPainterPath()
+        path_outline.addRoundedRect(x, y, self.width, self.height,
+                                    self.edge_roundness, self.edge_roundness)
+        painter.setBrush(Qt.NoBrush)
+        if self.hovered:
+            painter.setPen(self._pen_hovered)
+            painter.drawPath(path_outline.simplified())
+            painter.setPen(self._pen_default)
+            painter.drawPath(path_outline.simplified())
+        else:
+            painter.setPen(self._pen_default if not self.isSelected() else self._pen_selected)
+            painter.drawPath(path_outline.simplified())
 
-        except Exception as e:
-            dumpException(e)
+        # status
+        offset = 24.0
+        if self.node.isDirty(): offset = 0.
+        if self.node.isInvalid(): offset = 48.
+        painter.drawImage(QRectF(-10., -10., 24., 24.),
+                          self.icons,
+                          QRectF(offset, 0, 24., 24.))
