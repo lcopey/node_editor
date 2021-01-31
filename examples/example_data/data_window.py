@@ -50,10 +50,10 @@ class DataWindow(NodeEditorWindow):
 
         # Load filesheets
         # TODO Review style
-        # self.stylesheet_filename = os.path.join(os.path.dirname(__file__), 'qss/nodeeditor.qss')
-        # loadStylessheets(os.path.join(os.path.dirname(__file__), 'qss/nodeeditor-dark.qss'),
-        #                  self.stylesheet_filename)
-
+        # self.stylesheet_filenames = (os.path.join(os.path.dirname(__file__), 'qss/nodeeditor.qss'),
+        #                              os.path.join(os.path.dirname(__file__), 'qss/nodeeditor-dark.qss'))
+        # loadStylessheets(*self.stylesheet_filenames)
+        #
         self.empty_icon = QIcon(".")
 
         if DEBUG:
@@ -86,7 +86,7 @@ class DataWindow(NodeEditorWindow):
 
         self.readSettings()
 
-        self.setWindowTitle("Calculator NodeEditor Example")
+        self.setWindowTitle("DataVoz NodeEditor")
 
     def createActions(self):
         """Instantiate various `QAction` for the main toolbar.

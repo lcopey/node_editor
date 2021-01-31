@@ -17,7 +17,7 @@ class DataTableContent(NodeContentWidget):
         df = pd.DataFrame()
         # Define layout including the DataFrameView
         self.layout = QVBoxLayout()
-        self.layout.setContentsMargins(5, 5, 5, 5)
+        # self.layout.setContentsMargins(5, 5, 5, 5)
         self.setLayout(self.layout)
 
         self.view = DataframeView(dataframe=df, parent=self, editable=self.editable, filterable=self.filterable)
@@ -29,7 +29,7 @@ class DataTableContent(NodeContentWidget):
             print('>DataTableContent :', *args)
 
     def setDataFrame(self, dataframe: pd.DataFrame):
-        self.view.setDataFrame(dataframe,)
+        self.view.setDataFrame(dataframe, )
 
     def getDataFrame(self):
         return self.view.getDataFrame()

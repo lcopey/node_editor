@@ -25,7 +25,7 @@ NodeContentWidget QLineEdit#calc_node_input {
   width: 140px;
   height: 36px;
   margin-top: 5px;
-  maring-left: 5px;
+  margin-left: 5px;
   font-size: 28px;
 }
 NodeContentWidget QLabel#calc_node_bg,

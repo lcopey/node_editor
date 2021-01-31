@@ -66,9 +66,6 @@ class DataNode(Node):
         print("Deserialize DataNode {}: res : {}".format(self.__class__.__name__, res))
         return res
 
-    # def evalOperation(self, i1, i2):
-    #     return 123
-
     def evalImplementation(self):
         """Evaluation implementation of the current `DataNode`.
 

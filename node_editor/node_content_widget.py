@@ -6,6 +6,10 @@ from node_editor.node_serializable import Serializable
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QKeyEvent, QFocusEvent
 from .utils import dumpException
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .node_node import Node
 
 
 class NodeContentWidget(QWidget, Serializable):
