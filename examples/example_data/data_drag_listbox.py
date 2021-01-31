@@ -37,11 +37,6 @@ class DragListBox(QListWidget):
             path to the icon
         op_code : int
             id of the item
-
-        Returns
-        -------
-        None
-
         """
         # initialize QListWidgetItem
         item = QListWidgetItem(name, self)

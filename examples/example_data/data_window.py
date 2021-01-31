@@ -45,13 +45,14 @@ class DataWindow(NodeEditorWindow):
         """UI is composed with """
 
         # variable for QSettings
-        self.name_company = 'Michelin'
-        self.name_product = 'Calculator NodeEditor'
+        self.name_company = 'Copey'
+        self.name_product = 'DataViz NodeEditor'
 
         # Load filesheets
-        self.stylesheet_filename = os.path.join(os.path.dirname(__file__), 'qss/nodeeditor.qss')
-        loadStylessheets(os.path.join(os.path.dirname(__file__), 'qss/nodeeditor-dark.qss'),
-                         self.stylesheet_filename)
+        # TODO Review style
+        # self.stylesheet_filename = os.path.join(os.path.dirname(__file__), 'qss/nodeeditor.qss')
+        # loadStylessheets(os.path.join(os.path.dirname(__file__), 'qss/nodeeditor-dark.qss'),
+        #                  self.stylesheet_filename)
 
         self.empty_icon = QIcon(".")
 

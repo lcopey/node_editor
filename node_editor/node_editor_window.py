@@ -302,13 +302,14 @@ class NodeEditorWindow(QMainWindow):
             return current_nodeeditor.scene.clipboard.deserializeFromClipboard(data)
 
     def readSettings(self):
-        settings = QSettings(self.name_company, self.name_product)
+        settings = QSettings(QSettings.IniFormat, QSettings.UserScope, self.name_company, self.name_product)
+        print(settings.fileName())
         pos = settings.value('pos', QPoint(200, 200))
         size = settings.value('size', QSize(400, 400))
         self.move(pos)
         self.resize(size)
 
     def writeSettings(self):
-        settings = QSettings(self.name_company, self.name_product)
+        settings = QSettings(QSettings.IniFormat, QSettings.UserScope, self.name_company, self.name_product)
         settings.setValue('pos', self.pos())
         settings.setValue('size', self.size())

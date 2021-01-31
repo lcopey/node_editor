@@ -18,14 +18,6 @@ def return_simple_id(obj, text):
     return "<{} {}...{}>".format(text, f'{id(obj):02x}'[2:5], f'{id(obj):02x}'[-3:])
 
 
-def print_scene(scene):
-    """Affiche les éléments actuels de la scene"""
-    print('SCENE')
-    print('  Nodes :')
-    [print(node) for node in scene.nodes]
-    print('  Edges :')
-    [print(edge) for edge in scene.edges]
-
 
 def print_items(item):
     if 'GraphicsEdge' in item.__str__():

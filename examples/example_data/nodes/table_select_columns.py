@@ -36,6 +36,8 @@ class DataNode_SelectColumns(DataNode):
         """Initialize the layout of properties DockWidget"""
         self.properties_toolbar = QWidget()
         self.listWidget = QListWidget()
+        self.column_mapping = {}  # mapping between listWidget text and column value
+
         # changing item clicked triggers markdirty and evaluation of the node
         self.listWidget.itemClicked.connect(self.onItemClicked)
         self.fillListWidget()
@@ -72,13 +74,16 @@ class DataNode_SelectColumns(DataNode):
     def fillListWidget(self):
         """Fill `listWidget` with values from input dataframe columns"""
         self.listWidget.clear()
+        self.column_mapping.clear()
+
         if self.columns is not None:
             for column in self.columns:
+                # add item to listWidget
                 item = QListWidgetItem()
                 item.setText(str(column))
                 item.setCheckState(Qt.Checked)
-
                 self.listWidget.addItem(item)
+                self.column_mapping[str(column)] = column
 
     def getPropertiesToolbar(self):
         """Return the widget to display properties dock widget"""
@@ -109,7 +114,9 @@ class DataNode_SelectColumns(DataNode):
         for n in range(self.listWidget.count()):
             item = self.listWidget.item(n)
             if item.checkState() == Qt.Checked:
-                result.append(item.text())
+                result.append(
+                    self.column_mapping[item.text()]
+                )
 
         return result
 
@@ -143,7 +150,7 @@ class DataNode_SelectColumns(DataNode):
             self.columns = None
             columns = None
 
-        if self.columns is None or (self.columns != columns).any():
+        if self.columns is None or (self.columns.equals(columns)):
             # Compare if different
             # Update the properties toolbar accordingly
             self.columns = columns
