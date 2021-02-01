@@ -43,7 +43,6 @@ class NodeEditorWidget(QWidget):
         self.layout.addWidget(self.view)
 
         # self.addDebugContent()
-        # TODO Call fileNew ?
 
     def getSelectedItems(self):
         return self.scene.getSelectedItems()

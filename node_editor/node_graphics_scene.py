@@ -100,3 +100,7 @@ class GraphicsScene(QGraphicsScene):
     # Otherwise, the parent won't catch the event
     def dragMoveEvent(self, QGraphicsSceneDragDropEvent):
         pass
+
+    # def wheelEvent(self, event: 'QGraphicsSceneWheelEvent') -> None:
+    #     print('wheelEvent')
+    #     return

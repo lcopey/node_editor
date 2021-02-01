@@ -1,66 +1,59 @@
-from PyQt5.QtWidgets import QGraphicsItem, QGraphicsProxyWidget, QGraphicsTextItem, QWidget, \
-    QGraphicsRectItem, QStyleOptionGraphicsItem, QGraphicsSceneMouseEvent, QGraphicsDropShadowEffect
+from PyQt5.QtWidgets import QGraphicsItem, QGraphicsTextItem, QWidget, \
+    QGraphicsRectItem, QStyleOptionGraphicsItem, QGraphicsSceneMouseEvent, QGraphicsDropShadowEffect, \
+    QGraphicsSceneWheelEvent
 from PyQt5.QtGui import QFont, QPen, QColor, QBrush, QPainter, QPainterPath, QImage
-from PyQt5.QtCore import Qt, QRectF, QPointF
-from .utils import dumpException, print_func_name
+from PyQt5.QtCore import Qt, QRectF
+from .utils import dumpException
 from .node_handle import HandlePosition, Handle
 from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
     from .node_node import Node
 
-OUTLINE_WIDTH = 1.0
-DEBUG = True
-DEBUG_HANDLE = True
+OUTLINE_WIDTH = 2.0
+DEBUG = False
 
 THEME = 'LIGHT'
 
-colors = {'DARK':
-    {
-        'title_color': Qt.white,
-        'color': QColor("#7F00000"),
+colors = {'DARK': {
+    'title_color': Qt.white,
+    'color': QColor("#7F00000"),
+    'color_selected': QColor("#FFFFA637"),
+    'color_hovered': QColor("#FF37A6FF"),
+    'brush_title': QBrush(QColor("#FF313131")),
+    'brush_background': QBrush(QColor("#E3212121"))
+},
+    'LIGHT': {
+        'title_color': Qt.black,
+        'color': QColor("#7Ff0f0f0"),
         'color_selected': QColor("#FFFFA637"),
-        'color_hovered': QColor("#FF37A6FF"),
-        'brush_title': QBrush(QColor("#FF313131")),
-        'brush_background': QBrush(QColor("#E3212121"))
-    },
-    'LIGHT':
-        {
-            'title_color': Qt.black,
-            'color': QColor("#7Ff0f0f0"),
-            'color_selected': QColor("#FFFFA637"),
-            'color_hovered': QColor("#FF06acee"),
-            'brush_title': QBrush(QColor("#FFFFFFFF")),
-            'brush_background': QBrush(QColor("#fff0f0f0")),
-        }
+        'color_hovered': QColor("#FF06acee"),
+        'brush_title': QBrush(QColor("#FFFFFFFF")),
+        'brush_background': QBrush(QColor("#fff0f0f0")),
+    }
 }
-
-
-# TODO Review the init arguments
 
 
 class GraphicsNode(QGraphicsRectItem):
     """Implement the graphics version of a node"""
 
-    def __init__(self, node: 'Node', parent=None, resizeable=True, min_height=240, min_width=180):
+    def __init__(self, node: 'Node', parent=None, resizeable=True, min_width=180, width=180, min_height=240,
+                 height=240):
         super().__init__(parent=parent)
         self.node = node  # Reference to parent class Node implementing the logic
         # init flags
         self._was_moved = False
         self._resized = False
         self._last_selected_state = False
-        self.hovered = False
-        self.resizeable = resizeable
-        # init attributes
-        self.min_height = min_height
-        self.min_width = min_width
+        self._hovered = False
 
         try:
             self.handles = {}
             self._currentRect = None
             self._currentPos = None
 
-            self.initSizes()
+            self.initSizes(resizeable=resizeable, min_width=min_width, width=width, min_height=min_height,
+                           height=height)
             self.initAssets()
             self.initUI()
 
@@ -119,7 +112,7 @@ class GraphicsNode(QGraphicsRectItem):
         self.initContent()
         self.updateLayout()
 
-    def initSizes(self):
+    def initSizes(self, resizeable=True, min_width=180, width=180, min_height=240, height=240):
         # Diverse parameters for drawing
         self.edge_roundness = 15.
         self.edge_padding = 10.
@@ -129,9 +122,11 @@ class GraphicsNode(QGraphicsRectItem):
 
         self.content_offset = 2  # define margin for the content
 
-        # TODO min and size at the same place
-        self.width = 180
-        self.height = 240
+        self.resizeable = resizeable
+        self.min_width = min_width
+        self.min_height = min_height
+        self.width = width
+        self.height = height
 
     def initAssets(self):
         self._title_color = colors[THEME]['title_color']
@@ -196,7 +191,6 @@ class GraphicsNode(QGraphicsRectItem):
 
     def onSelected(self):
         """onSelected event"""
-        # TODO insert callback ?
         self.print('On selected event', self.node)
         self.node.scene.grScene.itemSelected.emit()
 
@@ -233,15 +227,6 @@ class GraphicsNode(QGraphicsRectItem):
         event : QGraphicsSceneMouseEvent
             event trigerring the mouseMoveEvent
         """
-        # When the node move because of drag
-        # update the corresponding edges0
-
-        # self.node.updateConnectedEdges()  # only work in the case one node is selected
-        # TODO trigger event when resizing
-        # if self.resizeable and self.handleSelected is not None:
-        #     self.resize(event.pos())
-        #     return
-        # else:
         self.updateSocketAndEdges()
         self._was_moved = True
         super().mouseMoveEvent(event)
@@ -292,13 +277,17 @@ class GraphicsNode(QGraphicsRectItem):
         """Overrides double click event. Resent to `Node::onDoubleClicked`"""
         self.node.onDoubleClicked(event)
 
+    def wheelEvent(self, event: 'QGraphicsSceneWheelEvent') -> None:
+        """wheelEvent on the GraphicsNode. Avoid the wheelEvent from the GraphicsScene."""
+        self.print('wheelEvent')
+
     def hoverEnterEvent(self, event: 'QGraphicsSceneHoverEvent') -> None:
-        self.hovered = True
+        self._hovered = True
         self.update()
         super().hoverEnterEvent(event)
 
     def hoverLeaveEvent(self, event: 'QGraphicsSceneHoverEvent') -> None:
-        self.hovered = False
+        self._hovered = False
         self.update()
         super().hoverLeaveEvent(event)
 
@@ -392,7 +381,7 @@ class GraphicsNode(QGraphicsRectItem):
         path_outline.addRoundedRect(x, y, self.width, self.height,
                                     self.edge_roundness, self.edge_roundness)
         painter.setBrush(Qt.NoBrush)
-        if self.hovered:
+        if self._hovered:
             painter.setPen(self._pen_hovered)
             painter.drawPath(path_outline.simplified())
             painter.setPen(self._pen_default)

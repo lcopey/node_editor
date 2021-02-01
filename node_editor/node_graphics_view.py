@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QGraphicsView, QApplication, QGraphicsProxyWidget
+from PyQt5.QtWidgets import QGraphicsView, QApplication, QGraphicsProxyWidget, QGraphicsSceneWheelEvent
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 import enum
@@ -24,7 +24,7 @@ EDGE_DRAG_START_THRESHOLD = 50
 
 EDGE_REROUTING_UE = False
 
-DEBUG = False
+DEBUG = True
 DEBUG_MRB_SCENE_ITEMS = True
 DEBUG_MRB_LAST_SELECTIONS = True
 
@@ -221,7 +221,6 @@ class NodeGraphicsView(QGraphicsView):
 
         # logic for multiple selection using shift
         self.print('LMB on ', item, self.debug_modifiers(event))
-        # TODO Node Content Widget prevent some node selection...
         if hasattr(item, 'node') or isinstance(item, GraphicsEdge) or item is None:
             if event.modifiers() & Qt.ShiftModifier:
                 event.ignore()
@@ -501,12 +500,13 @@ class NodeGraphicsView(QGraphicsView):
 
     def wheelEvent(self, event: QWheelEvent) -> None:
         """overridden Qt's ``wheelEvent``. This handles zooming"""
-        # TODO fix wheelevent when the node implement wheel event ?
-        try:
-            item = self.getItemAtClick(event)
-            self.print(item)
-        except Exception as e:
-            dumpException(e)
+        item = self.getItemAtClick(event)
+        if item:
+            # On hovering an item when wheelEvent, supress the GraphicalView event and pass to the item
+            self.print('ignore wheelEvent')
+            super().wheelEvent(event)
+            print(event.isAccepted())
+            return
 
         # calculate zoom factor
         zoomOutFactor = 1 / self.zoomInFactor

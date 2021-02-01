@@ -16,7 +16,7 @@ THEME = 'LIGHT'
 colors = {'DARK':
               {'edge_color': QColor("#001000")},
           'LIGHT':
-              {'edge_color': QColor("#E3c0c0c0")}
+              {'edge_color': QColor("#E3bdbdbd")}
           }
 
 

@@ -18,18 +18,18 @@ DEBUG = True
 class OpNode_ReadCSVFile(DataNode):
     icon = 'icons/computer-folder-open-64.svg'
     # op_code = NodeType.OP_NODE_FILE_READ
-    op_title = 'Read CSV file'
+    op_title = 'CSV file'
     content_label = ''
     content_label_objname = 'data_node_file_read'
 
     GraphicsNode_class = OpGraphicsNode
 
     def __init__(self, scene):
+
         super().__init__(scene, inputs=[], outputs=[1])
-        # self.initPropertiesToolbar()
         self.filepath = ''
         self.file_last_modified = None
-        # self.grNode.updateLayout()
+        self.grNode.updateLayout()
 
     def initPropertiesToolbar(self):
         """Initialize the layout of properties DockWidget"""

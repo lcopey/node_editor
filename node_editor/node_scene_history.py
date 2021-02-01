@@ -152,7 +152,7 @@ class SceneHistory:
 
             # restore selection
             if DEBUG: print('restoring edge selection')
-            # TODO Existing function to perform the same operation ?
+
             for edge in self.scene.edges:
                 edge.grEdge.setSelected(False)
             for edge_id in history_stamp['selection']['edges']:

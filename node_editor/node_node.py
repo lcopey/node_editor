@@ -265,7 +265,7 @@ class Node(Serializable):
 
     def onDoubleClicked(self, event):
         """Event handling double click on Graphics Node in `Scene`"""
-        raise NotImplementedError
+        pass
 
     def onSelected(self):
         """onSelected event"""
