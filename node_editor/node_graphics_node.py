@@ -3,9 +3,11 @@ from PyQt5.QtWidgets import QGraphicsItem, QGraphicsTextItem, QWidget, \
     QGraphicsSceneWheelEvent, QGraphicsSceneHoverEvent
 from PyQt5.QtGui import QFont, QPen, QColor, QBrush, QPainter, QPainterPath, QImage
 from PyQt5.QtCore import Qt, QRectF
-from .utils import dumpException
 from .node_handle import HandlePosition, Handle
-from typing import TYPE_CHECKING, Optional
+from .node_socket import SocketPosition
+from .utils import dumpException
+
+from typing import TYPE_CHECKING, Optional, List
 
 if TYPE_CHECKING:
     from .node_node import Node
@@ -127,6 +129,17 @@ class GraphicsNode(QGraphicsRectItem):
         self.min_height = min_height
         self.width = width
         self.height = height
+
+        # Socket parameters
+        self.socket_spacing = 22
+        self.socket_offsets = {
+            SocketPosition.BottomLeft: -1,
+            SocketPosition.MiddleLeft: -1,
+            SocketPosition.TopLeft: -1,
+            SocketPosition.BottomRight: 1,
+            SocketPosition.MiddleRight: 1,
+            SocketPosition.TopRight: 1,
+        }
 
     def initAssets(self):
         self._title_color = colors[THEME]['title_color']
@@ -303,6 +316,54 @@ class GraphicsNode(QGraphicsRectItem):
         self.updateSocketAndEdges()
         self.setContentGeometry()
 
+    def getSocketPosition(self, index: int, position: SocketPosition, num_out_of: int = 1) -> List[float]:
+        """Helper function - returns the position of a socket in pixels relative to the `Graphical Node`
+
+        Parameters
+        ----------
+        index : ```int```
+            Index of the socket in the list
+        position : SocketPosition
+            One of enumeration
+        num_out_of : ```int```
+            total number of `Socket` on this position
+
+        Returns
+        -------
+        ```list```
+            x, y position relative to the node
+        """
+        if position in (SocketPosition.TopLeft, SocketPosition.MiddleLeft, SocketPosition.BottomLeft):
+            x = self.socket_offsets[position]
+        else:
+            x = self.width + self.socket_offsets[position]
+
+        if position in (SocketPosition.BottomLeft, SocketPosition.BottomRight):
+            # start from bottom
+            y = self.height - (index * self.socket_spacing + self.grNode.title_vertical_padding + self.edge_roundness)
+
+        elif position in (SocketPosition.MiddleLeft, SocketPosition.MiddleRight):
+            num_sockets = num_out_of
+            node_height = self.height
+            top_offset = self.title_height + 2 * self.title_vertical_padding + self.edge_padding
+            available_height = node_height - top_offset
+
+            total_height_of_all_socket = num_sockets * self.socket_spacing
+
+            new_top = available_height - total_height_of_all_socket
+
+            # y = top_offset + index * self.socket_spacing + new_top / 2
+            y = top_offset + available_height / 2. + (index - 0.5) * self.socket_spacing - \
+                (num_sockets - 1) * self.socket_spacing / 2
+
+        elif position in (SocketPosition.TopLeft, SocketPosition.TopRight):
+            # start from top
+            y = index * self.socket_spacing + self.title_height + self.title_vertical_padding + self.edge_roundness
+        else:
+            y = 0
+
+        return [x, y]
+
     def updateSocketAndEdges(self):
         """Update the `Socket` position and the `Graphical Edges` when available"""
         # As this method can
@@ -399,5 +460,3 @@ class GraphicsNode(QGraphicsRectItem):
         # painter.drawImage(QRectF(-10., -10., 24., 24.),
         #                   self.icons,
         #                   QRectF(offset, 0, 24., 24.))
-
-

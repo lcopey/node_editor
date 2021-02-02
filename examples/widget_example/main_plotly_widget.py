@@ -3,6 +3,11 @@ from PyQt5.QtWebEngineWidgets import QWebEngineView
 import plotly.express as px
 
 
+# pip
+# pyqt5 : 5.15.2
+# plotly : 4.14.3
+# pyqtwebengine : 5.15.2
+
 class Widget(QtWidgets.QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)

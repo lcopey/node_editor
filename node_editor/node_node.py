@@ -6,7 +6,7 @@ from .node_socket import Socket, SocketPosition
 from .node_status import GraphicsStatus
 from .utils import dumpException, return_simple_id
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List, Tuple
 
 if TYPE_CHECKING:
     from .node_scene import Scene
@@ -21,7 +21,7 @@ class Node(Serializable):
     Socket_class = Socket
     """Class representing the `Node`"""
 
-    def __init__(self, scene: 'Scene', title='Undefined Node', inputs=None, outputs=None):
+    def __init__(self, scene: 'Scene', title='Undefined Node', inputs: List[int] = None, outputs: List[int] = None):
         """Instantiate a new `Node` and add it to the `Graphical Scene`
 
         Instance Attributes:
@@ -151,19 +151,10 @@ class Node(Serializable):
             dumpException(e)
 
     def initSettings(self):
-        self.socket_spacing = 22
         self.input_socket_position = SocketPosition.BottomLeft
         self.output_socket_position = SocketPosition.TopRight
         self.input_multi_edged = False
         self.output_multi_edged = True
-        self.socket_offsets = {
-            SocketPosition.BottomLeft: -1,
-            SocketPosition.MiddleLeft: -1,
-            SocketPosition.TopLeft: -1,
-            SocketPosition.BottomRight: 1,
-            SocketPosition.MiddleRight: 1,
-            SocketPosition.TopRight: 1,
-        }
 
     def initSockets(self, inputs: list, outputs: list, reset=True):
         """"Create sockets for inputs and outputs"""
@@ -198,11 +189,9 @@ class Node(Serializable):
     def getGraphicsStatusClass(self):
         return self.__class__.GraphicsStatus_class
 
-    def getSocketPosition(self, index: int, position: SocketPosition, num_out_of: int = 1) -> '(x, y)':
-        """Helper function - returns the position of a socket in pixels relative to the node
+    def getSocketPosition(self, index: int, position: SocketPosition, num_out_of: int = 1) -> List[float]:
+        """Helper function - returns the position of a socket in pixels relative to the `Graphical Node`
 
-
-        TODO implement in graphical node
         Parameters
         ----------
         index : ```int```
@@ -217,40 +206,28 @@ class Node(Serializable):
         ```list```
             x, y position relative to the node
         """
-        if position in (SocketPosition.TopLeft, SocketPosition.MiddleLeft, SocketPosition.BottomLeft):
-            x = self.socket_offsets[position]
-        else:
-            x = self.grNode.width + self.socket_offsets[position]
+        return self.grNode.getSocketPosition(index, position, num_out_of)
 
-        if position in (SocketPosition.BottomLeft, SocketPosition.BottomRight):
-            # start from bottom
-            y = self.grNode.height - (
-                    index * self.socket_spacing + self.grNode.title_vertical_padding + self.grNode.edge_roundness)
-        elif position in (SocketPosition.MiddleLeft, SocketPosition.MiddleRight):
-            num_sockets = num_out_of
-            node_height = self.grNode.height
-            top_offset = self.grNode.title_height + 2 * self.grNode.title_vertical_padding + self.grNode.edge_padding
-            available_height = node_height - top_offset
+    def getSocketScenePosition(self, socket: 'Socket') -> Tuple[float]:
+        """Helper function - returns the position of a socket in pixels relative to the `Graphical Scene`
 
-            total_height_of_all_socket = num_sockets * self.socket_spacing
+        Parameters
+        ----------
+        index : ```int```
+            Index of the socket in the list
+        position : SocketPosition
+            One of enumeration
+        num_out_of : ```int```
+            total number of `Socket` on this position
 
-            new_top = available_height - total_height_of_all_socket
-
-            # y = top_offset + index * self.socket_spacing + new_top / 2
-            y = top_offset + available_height / 2. + (index - 0.5) * self.socket_spacing - \
-                (num_sockets - 1) * self.socket_spacing / 2
-
-        elif position in (SocketPosition.TopLeft, SocketPosition.TopRight):
-            # start from top
-            y = index * self.socket_spacing + self.grNode.title_height + self.grNode.title_vertical_padding + self.grNode.edge_roundness
-        else:
-            y = 0
-
-        return [x, y]
-
-    def getSocketScenePosition(self, socket: 'Socket') -> '(x, y)':
+        Returns
+        -------
+        ```tuple```
+            x, y position relative to the node
+        """
         nodepos = self.grNode.pos()
         socketpos = self.getSocketPosition(socket.index, socket.position, socket.count_on_this_node_side)
+        # return position offseted of node position
         return (nodepos.x() + socketpos[0], nodepos.y() + socketpos[1])
 
     def getSockets(self):
