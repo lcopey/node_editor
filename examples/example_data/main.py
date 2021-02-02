@@ -4,6 +4,8 @@ from node_editor.utils import dumpException
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../..'))
 
+#     dll_dir = os.path.dirname(__file__) + '\\..\\..\\..\\Library\\bin' attempt to fix by adding Qt5Core_conda.dll path in __init__.py of PyQT5
+
 from examples.example_data.data_window import DataWindow
 
 if __name__ == '__main__':

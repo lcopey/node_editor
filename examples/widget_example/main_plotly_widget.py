@@ -2,6 +2,11 @@ from PyQt5 import QtCore, QtWidgets, QtWebEngineWidgets
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 import plotly.express as px
 
+#pip :
+# pyqt5                     5.15.2
+# plotly                    4.14.3
+# pyqtwebengine             5.15.2
+
 
 # pip
 # pyqt5 : 5.15.2
