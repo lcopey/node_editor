@@ -58,7 +58,7 @@ class Handle(QGraphicsItem):
         self.position = position
         self.handleSize = 8
         self._offset = 4
-        self.hovered = False
+        self._hovered = False
         self.setAcceptHoverEvents(True)
         self.mode = HandleMode.NOOP
         self._color = QColor("#7F00000")
@@ -117,12 +117,12 @@ class Handle(QGraphicsItem):
         self.changeCursorOnHover()
 
     def changeCursorOnHover(self, ):
-        self.hovered = True
+        self._hovered = True
         self.setCursor(handleCursors[self.position])
         self.update()
 
     def hoverLeaveEvent(self, event: 'QGraphicsSceneHoverEvent') -> None:
-        self.hovered = False
+        self._hovered = False
         self.setCursor(Qt.ArrowCursor)
         self.update()
 

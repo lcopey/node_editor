@@ -27,10 +27,8 @@ SOCKET_COLOR = [QColor('#FFFF7F0E'),
 
 THEME = 'LIGHT'
 
-colors = {'DARK':
-              {'color': QColor("#FF00000")},
-          'LIGHT':
-              {'color': QColor("#FFf0f0f0")}
+colors = {'DARK': {'socket_outline': QColor("#FF00000")},
+          'LIGHT': {'socket_outline': QColor("#FFf0f0f0")}
           }
 
 
@@ -53,7 +51,7 @@ class GraphicsSocket(QGraphicsItem):
 
     def initAssets(self):
         self._color_background = self.getSocketColor(self.socket_type)
-        self._color_outline = colors[THEME]['color']
+        self._color_outline = colors[THEME]['socket_outline']
         self._color_highlight = QColor('#FF37A6FF')
 
         self._pen = QPen(self._color_outline)

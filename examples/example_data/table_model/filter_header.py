@@ -12,7 +12,7 @@ class FilterHeader(QHeaderView):
     def __init__(self, parent):
         super().__init__(Qt.Horizontal, parent)
         self._editors = []
-        self._padding = 8
+        self._padding = 4
         # self.setStretchLastSection(True)
         # self.setResizeMode(QHeaderView.Stretch)
         self.setDefaultAlignment(Qt.AlignLeft | Qt.AlignVCenter)
@@ -64,8 +64,8 @@ class FilterHeader(QHeaderView):
         """Adjust position of the Widgets in the header"""
         for index, editor in enumerate(self._editors):
             height = editor.sizeHint().height()
-            editor.move(self.sectionPosition(index) - self.offset() + 2, height + (self._padding // 2))
-            editor.resize(self.sectionSize(index), height)
+            editor.move(self.sectionPosition(index) - self.offset(), height - (self._padding // 2))
+            editor.resize(self.sectionSize(index), height - self._padding // 2)
 
     def sizeHint(self) -> QSize:
         """Adjust the sizeHint of the header to account for the header + QLineEdit

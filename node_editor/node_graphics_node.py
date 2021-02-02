@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QGraphicsItem, QGraphicsTextItem, QWidget, \
     QGraphicsRectItem, QStyleOptionGraphicsItem, QGraphicsSceneMouseEvent, QGraphicsDropShadowEffect, \
-    QGraphicsSceneWheelEvent
+    QGraphicsSceneWheelEvent, QGraphicsSceneHoverEvent
 from PyQt5.QtGui import QFont, QPen, QColor, QBrush, QPainter, QPainterPath, QImage
 from PyQt5.QtCore import Qt, QRectF
 from .utils import dumpException
@@ -183,6 +183,11 @@ class GraphicsNode(QGraphicsRectItem):
                                      self.width - 2 * self.edge_padding - 2 * offset,
                                      self.height - 2 * self.edge_padding - self.title_height - 2 * offset)
 
+    def enableHoverEvents(self, enabled: bool = True):
+        self.setAcceptHoverEvents(enabled)
+        if not enabled:
+            self._hovered = False
+
     def doSelect(self, new_state=True):
         self.setSelected(new_state)
         self._last_selected_state = new_state
@@ -195,10 +200,7 @@ class GraphicsNode(QGraphicsRectItem):
         self.node.scene.grScene.itemSelected.emit()
 
     def mousePressEvent(self, event: 'QGraphicsSceneMouseEvent') -> None:
-        """When clicking on the node
-
-        When the mouse is pressed on the `Graphical Node`, stores the current position and retangle
-        to prepare for resizing event.
+        """Overrides Qt's mousePressEvent.
         Parameters
         ----------
         event : QGraphicsSceneMouseEvent
@@ -282,14 +284,14 @@ class GraphicsNode(QGraphicsRectItem):
         self.print('wheelEvent')
 
     def hoverEnterEvent(self, event: 'QGraphicsSceneHoverEvent') -> None:
+        super().hoverEnterEvent(event)
         self._hovered = True
         self.update()
-        super().hoverEnterEvent(event)
 
     def hoverLeaveEvent(self, event: 'QGraphicsSceneHoverEvent') -> None:
+        super().hoverLeaveEvent(event)
         self._hovered = False
         self.update()
-        super().hoverLeaveEvent(event)
 
     def resize(self, rect: QRectF):
         """Update rectangle and bounding rectangle"""
@@ -397,3 +399,5 @@ class GraphicsNode(QGraphicsRectItem):
         # painter.drawImage(QRectF(-10., -10., 24., 24.),
         #                   self.icons,
         #                   QRectF(offset, 0, 24., 24.))
+
+

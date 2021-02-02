@@ -2,6 +2,14 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
+THEME = 'LIGHT'
+
+colors = {'DARK':
+              {'cutline_color': Qt.white},
+          'LIGHT':
+              {'cutline_color': Qt.darkGray}
+          }
+
 
 class CutLine(QGraphicsItem):
     def __init__(self, parent=None):
@@ -9,7 +17,7 @@ class CutLine(QGraphicsItem):
 
         self.line_points = []
 
-        self._pen = QPen(Qt.white)
+        self._pen = QPen(colors[THEME]['cutline_color'])
         self._pen.setWidthF(2.0)
         self._pen.setDashPattern([3, 3])
 

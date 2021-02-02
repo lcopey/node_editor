@@ -28,6 +28,9 @@ Two kind of nodes are available :
 - Rows selection
 - missing value
 
+- viz node in separate window
+  link both ?
+
 
 - Scatter plot
 - Bar plot

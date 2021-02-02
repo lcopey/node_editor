@@ -3,6 +3,7 @@ from .node_serializable import Serializable
 from .node_graphics_node import GraphicsNode
 from node_editor.node_content_widget import NodeContentWidget
 from .node_socket import Socket, SocketPosition
+from .node_status import GraphicsStatus
 from .utils import dumpException, return_simple_id
 
 from typing import TYPE_CHECKING
@@ -16,6 +17,7 @@ DEBUG = True
 class Node(Serializable):
     GraphicsNode_class = GraphicsNode
     NodeContent_class = NodeContentWidget
+    GraphicsStatus_class = GraphicsStatus
     Socket_class = Socket
     """Class representing the `Node`"""
 
@@ -135,12 +137,18 @@ class Node(Serializable):
          of the above two classes
         """
         # Reference to the content
-        node_content_class = self.getNodeContentClass()
-        graphics_node_class = self.getGraphicsNodeClass()
-        if node_content_class is not None:
-            self.content = node_content_class(self)
-        if graphics_node_class is not None:
-            self.grNode = graphics_node_class(self)
+        try:
+            node_content_class = self.getNodeContentClass()
+            graphics_node_class = self.getGraphicsNodeClass()
+            graphics_status_class = self.getGraphicsStatusClass()
+            if node_content_class is not None:
+                self.content = node_content_class(self)
+            if graphics_node_class is not None:
+                self.grNode = graphics_node_class(self)
+            if graphics_status_class is not None:
+                self.grStatus = graphics_status_class(self)
+        except Exception as e:
+            dumpException(e)
 
     def initSettings(self):
         self.socket_spacing = 22
@@ -187,11 +195,14 @@ class Node(Serializable):
     def getGraphicsNodeClass(self):
         return self.__class__.GraphicsNode_class
 
+    def getGraphicsStatusClass(self):
+        return self.__class__.GraphicsStatus_class
+
     def getSocketPosition(self, index: int, position: SocketPosition, num_out_of: int = 1) -> '(x, y)':
         """Helper function - returns the position of a socket in pixels relative to the node
 
 
-        TODO implement in node_socket ?
+        TODO implement in graphical node
         Parameters
         ----------
         index : ```int```
@@ -313,7 +324,15 @@ class Node(Serializable):
         new_value : bool
             ``True`` if this `Node` should be `Dirty`. ``False`` if you want to un-dirty this `Node`
         """
+        # If the value change, update the graphical status
+        graphics_update = True
+        if self._is_dirty == new_value:
+            graphics_update = False
+
         self._is_dirty = new_value
+        if graphics_update and self.grStatus:
+            self.grStatus.update()
+
         if self._is_dirty:
             self.onMarkedDirty()
 
@@ -348,7 +367,14 @@ class Node(Serializable):
         new_value : bool
             ``True`` if this `Node` should be `Invalid`. ``False`` if you want to make this `Node` valid
         """
+        graphics_update = True
+        if self._is_invalid == new_value:
+            graphics_update = False
+
         self._is_invalid = new_value
+        if graphics_update and self.grStatus:
+            self.grStatus.update()
+
         if self._is_invalid:
             self.onMarkedInvalid()
 
@@ -487,6 +513,9 @@ class Node(Serializable):
         return outs
 
     def setToolTip(self, text):
+        """Assign the tooltip to the `Graphical Status` if available and the `Graphical Node`"""
+        if self.grStatus:
+            self.grStatus.setToolTip(text)
         self.grNode.setToolTip(text)
 
     def print(self, *args):

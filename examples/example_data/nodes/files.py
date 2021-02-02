@@ -23,6 +23,7 @@ class OpNode_ReadCSVFile(DataNode):
     content_label_objname = 'data_node_file_read'
 
     GraphicsNode_class = OpGraphicsNode
+    NodeContent_class = None
 
     def __init__(self, scene):
 

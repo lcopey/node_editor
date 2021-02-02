@@ -3,7 +3,8 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from .node_graphics_edge_path import QNEGraphicsEdgePathBezier, QNEGraphicsEdgePathDirect
 
-EDGE_WIDTH = 3.
+EDGE_WIDTH = 2.
+OUTLINE_WIDTH = 2.0
 
 import typing
 from typing import TYPE_CHECKING
@@ -62,7 +63,7 @@ class GraphicsEdge(QGraphicsPathItem):
         self._pen_dragging.setStyle(Qt.DashLine)
 
         self._pen_hovered = QPen(self._color_hovered)
-        self._pen_hovered.setWidthF(EDGE_WIDTH + 2.)
+        self._pen_hovered.setWidthF(EDGE_WIDTH + OUTLINE_WIDTH)
 
         shadow = QGraphicsDropShadowEffect(blurRadius=5, xOffset=3, yOffset=3)
         self.setGraphicsEffect(shadow)
