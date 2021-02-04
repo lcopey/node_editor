@@ -1,7 +1,8 @@
-from PyQt5.QtWidgets import QWidget, QStyleOptionGraphicsItem
+from PyQt5.QtWidgets import QWidget, QStyleOptionGraphicsItem, QGraphicsTextItem, QGraphicsItem
 from PyQt5.QtGui import QPainter, QPainterPath
 from PyQt5.QtGui import QPainter, QColor, QPen, QBrush, QFont, QFontMetrics
 from PyQt5.QtCore import Qt
+
 from math import sin, cos, radians, pi
 from node_editor.node_graphics_node import GraphicsNode
 from node_editor.node_node import Node
@@ -19,14 +20,31 @@ class VizGraphicsNode(GraphicsNode):
         self.title_vertical_padding = 10
 
 
+# class TextItemBackground(QGraphicsTextItem):
+#     def __init__(self: QGraphicsTextItem, parent: Optional[QGraphicsItem], background_color: QColor = Qt.white):
+#         super().__init__(parent=parent)
+#         self.background_brush = QBrush(background_color)
+#
+#     def paint(self, painter: QPainter, option: 'QStyleOptionGraphicsItem', widget: QWidget) -> None:
+#         painter.setBrush(self.background_brush)
+#         painter.drawRect(self.boundingRect())
+#         super().paint(painter, option, widget)
+
+
 class OpGraphicsNode(GraphicsNode):
     def __init__(self, node: 'Node', parent=None):
-        super().__init__(node=node, parent=parent, resizeable=False, min_width=70, width=70, min_height=54, height=54)
-        # Diverse parameters for drawing
-        self.edge_roundness = 6.
-        self.edge_padding = 0
-        self.title_horizontal_padding = 8.
-        self.title_vertical_padding = 10
+        super().__init__(node=node, parent=parent, resizeable=False, min_width=70, width=70, min_height=42, height=42)
+
+    def initTitle(self):
+        """Title is instanciated as `QGraphicsTextItem`"""
+        # Draw the _title
+        self.title_item = QGraphicsTextItem(self)
+        self.title_item.node = self.node  # add reference to the node
+        self.title_item.setDefaultTextColor(self._title_color)
+        self.title_item.setFont(self._title_font)
+        fm = QFontMetrics(self._title_font)
+        width = fm.width(self.node.title)
+        self.title_item.setPos(self.radius - width / 2, self.radius * 2)
 
     # Define a new property relative to currently implemented height
     @property

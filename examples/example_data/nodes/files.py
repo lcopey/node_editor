@@ -1,8 +1,11 @@
-from PyQt5.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QFormLayout, QLabel, QTextEdit, QPushButton, QLineEdit, \
-    QFileDialog, QComboBox, QFrame
+from PyQt5.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout, QLabel, QComboBox, QPushButton, \
+    QLineEdit, QWidget, QTableWidget, QTableView, QTableWidgetItem, QFileDialog
+from PyQt5.QtCore import Qt, QAbstractTableModel
 import os
 import pandas as pd
 import csv
+
+from typing import Any, List
 
 # TODO implement read_csv file
 # TODO Automatic discover for different modules ?
@@ -30,12 +33,12 @@ class OpNode_ReadCSVFile(DataNode):
         super().__init__(scene, inputs=[], outputs=[1])
         self.filepath = ''
         self.file_last_modified = None
-        self.grNode.updateLayout()
 
-    def initPropertiesToolbar(self):
+    def initPropertiesWidget(self):
         """Initialize the layout of properties DockWidget"""
-        self.properties_toolbar = QWidget()
-
+        self.propertiesWidget = QWidget()
+        # Import frame
+        # Layout button and line edit
         fileLayout = QHBoxLayout()
         self._path_text = QLineEdit()
         self._path_text.setReadOnly(True)  # set to read only, it is modified only by selecting a path
@@ -45,24 +48,53 @@ class OpNode_ReadCSVFile(DataNode):
         fileLayout.addWidget(self._path_text)
         fileLayout.addWidget(self._open_file_button)
 
+        # Layout encoding options
         encodingLayout = QHBoxLayout()
         encodingLayout.addWidget(QLabel('Encoding :'))
         self._comboEncoding = QComboBox()
-        self._comboEncoding.addItem('utf-8')
-        self._comboEncoding.addItem('latin-1')
+        self._comboEncoding.addItems(['utf-8', 'latin-1'])
+        self._comboEncoding.setToolTip('Encoding defines the way a text file is encoded into bytes.'
+                                       'US files are usually in utf-8, european files in latin-1')
         self._comboEncoding.currentIndexChanged.connect(self.forcedEval)
         encodingLayout.addWidget(self._comboEncoding)
 
+        importLayout = QVBoxLayout()
+        importLayout.addLayout(fileLayout)
+        importLayout.addLayout(encodingLayout)
+
+        importFrame = QFrame()
+        importFrame.setFrameShape(QFrame.StyledPanel)
+        importFrame.setLayout(importLayout)
+
+        # Column type frame
+        # TODO change for model/view
+        # populate data in the model instead of adding QTableWidgetItem
+        # self.columnTypeTable = QTableWidget()
+        # self.columnTypeTable.setColumnCount(2)
+        # self.columnTypeTable.setHorizontalHeaderLabels(('Column', 'Type'))
+
+        # center the widget
         outerLayout = QVBoxLayout()
         outerLayout.addStretch()
-        outerLayout.addLayout(fileLayout, stretch=1)
-        outerLayout.addLayout(encodingLayout)
+        outerLayout.addWidget(importFrame)
+        # outerLayout.addWidget(self.columnTypeTable)
         outerLayout.addStretch()
-        self.properties_toolbar.setLayout(outerLayout)
+        self.propertiesWidget.setLayout(outerLayout)
 
-    def getPropertiesToolbar(self):
-        self.print('getPropertiesToolbar')
-        return self.properties_toolbar
+    def populateColumnTypeTable(self):
+        """Populate the table containing the columns type with values taken from opened file.
+
+        Returns
+        -------
+        None
+        """
+        # model = self.columnTypeTable.model()
+        # model.beginResetModel()
+        # if isinstance(self.value, pd.DataFrame):
+        #     data = [(str(name), str(dtype)) for name, dtype in self.value.dtypes.items()]
+        #     model.setDataSource(data)
+        # model.endResetModel()
+        pass
 
     def openFileDialog(self):
         subWnd = self.scene.getView().parent()
@@ -79,9 +111,6 @@ class OpNode_ReadCSVFile(DataNode):
         # TODO Probably trigger history stamp event
         # force the evaluation of the node
         self.forcedEval()
-
-    def forcedEval(self):
-        self.eval(force=True)
 
     def evalImplementation(self):
         self.print('evalImplementation')
@@ -105,8 +134,11 @@ class OpNode_ReadCSVFile(DataNode):
 
             # load csv file
             data_frame = pd.read_csv(self.filepath, dialect=dialect, encoding=encoding)
+            # by default cast some column to numeric type if possible
             data_frame = data_frame.apply(pd.to_numeric, errors='ignore')
             self.value = data_frame
+            # update the table containing column type in the properties dock
+            self.populateColumnTypeTable()
 
             self.markDirty(False)
             self.markInvalid(False)

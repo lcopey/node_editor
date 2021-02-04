@@ -30,6 +30,7 @@ class DataTableContent(NodeContentWidget):
 
     def setDataFrame(self, dataframe: pd.DataFrame):
         self.view.setDataFrame(dataframe, )
+        self.view.resizeColumnsToContents()
 
     def getDataFrame(self):
         return self.view.getDataFrame()

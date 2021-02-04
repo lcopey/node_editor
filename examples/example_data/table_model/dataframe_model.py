@@ -38,7 +38,7 @@ class DataframeModel(QAbstractTableModel):
         dataframe
         editable
         """
-        QAbstractTableModel.__init__(self)
+        super().__init__()
         # Reference to initial dataframe
         self.view = view
         self.dataframe = dataframe

@@ -28,14 +28,18 @@ class DataNode(Node):
             inputs = [2, 2]
         super().__init__(scene, title=self.__class__.op_title, inputs=inputs, outputs=outputs)
 
-        # initPropertiesToolbar in case it exists
-        self.initPropertiesToolbar()
+        self.propertiesWidget = None
+        self.initPropertiesWidget()
         # Nodes are dirty by default
         self.value = None
         self.markDirty()
 
-    def initPropertiesToolbar(self):
+    def initPropertiesWidget(self):
+        """To be overridden, defines an attribute named properties_widget used in the properties toolbar"""
         pass
+
+    def hasPropertiesWidget(self):
+        return self.propertiesWidget is not None
 
     @classmethod
     def getOpCode(cls):
@@ -66,12 +70,40 @@ class DataNode(Node):
         print("Deserialize DataNode {}: res : {}".format(self.__class__.__name__, res))
         return res
 
-    def evalImplementation(self):
+    def forcedEval(self):
+        self.markDirty(True)
+        self.eval()
+
+    def eval(self, ):
+        # TODO replace force with dedicated function doing markDirty + eval
+        if not self.isDirty() and not self.isInvalid():
+            self.print('Dirty : ', self.isDirty(), 'Invalid : ', self.isInvalid())
+            self.print(f" _> return cached {self.__class__.__name__} value {self.value}")
+            return self.value
+
+        try:
+            # By default, undirty and valid the node
+            # self.markDirty(False)
+            # self.markInvalid(False)
+
+            val = self.evalImplementation()
+            return val
+
+        except ValueError as e:
+            self.markInvalid()
+            self.setToolTip(str(e))
+            self.markDescendantDirty()
+
+        except Exception as e:
+            self.markInvalid()
+            self.setToolTip(str(e))
+            dumpException(e)
+
+    def evalImplementation(self, *input_nodes):
         """Evaluation implementation of the current `DataNode`.
 
 
         Evaluation of the node usually implements the following steps :
-            - reset the states of the Node : Dirty and Invalid
             - get values of the inputs
             - handle errors :
                 - mark invalid and DescendantDirty
@@ -88,27 +120,6 @@ class DataNode(Node):
 
         """
         raise NotImplementedError
-
-    def eval(self, force=False):
-        # TODO replace force with dedicated function doing markDirty + eval
-        if not self.isDirty() and not self.isInvalid() and not force:
-            self.print('Dirty : ', self.isDirty(), 'Invalid : ', self.isInvalid(), 'Force : ', force)
-            self.print(f" _> return cached {self.__class__.__name__} value {self.value}")
-            return self.value
-
-        try:
-            val = self.evalImplementation()
-            return val
-
-        except ValueError as e:
-            self.markInvalid()
-            self.setToolTip(str(e))
-            self.markDescendantDirty()
-
-        except Exception as e:
-            self.markInvalid()
-            self.setToolTip(str(e))
-            dumpException(e)
 
     def onInputChanged(self, socket: 'Socket'):
         self.print(f'{self.__class__.__name__}::onInputChanged')

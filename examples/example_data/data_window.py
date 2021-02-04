@@ -138,17 +138,15 @@ class DataWindow(NodeEditorWindow):
         self.propDock.setFloating(False)
         self.propDock.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
 
-        # layout of node properties will be set to propDockWdg
-        self.propDockWdg = QWidget()
-        self.propDockWdg.setLayout(QBoxLayout(2))
-
+        self._propDockLayout = QVBoxLayout()
         self.propDockLbl = QLabel('')
         self.propDockLbl.setWordWrap(True)
         self.propDockLbl.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
 
-        self.propDockWdg.layout().addWidget(self.propDockLbl)
-        self.propDock.setWidget(self.propDockWdg)
-
+        # layout of node properties will be set to _propDockWdg
+        self._propDockWdg = QWidget()
+        self.propDock.setWidget(self._propDockWdg)
+        self._propDockWdg.setLayout(self._propDockLayout)
         self.addDockWidget(Qt.LeftDockWidgetArea, self.propDock)
 
     def createNodesDock(self):
@@ -349,11 +347,8 @@ class DataWindow(NodeEditorWindow):
         subwnd = self.mdiArea.addSubWindow(nodeeditor, )
         subwnd.setWindowIcon(self.empty_icon)
 
-        # refresh the dock properties when selecting or deselecting items
-        # nodeeditor.scene.addItemSelectedListener(self.refreshPropertiesDock)
-        # nodeeditor.scene.addItemsDeselectedListener(self.refreshPropertiesDock)
-        #
         nodeeditor.scene.history.addHistoryModifiedListener(self.updateEditMenu)
+        # refresh dock properties when modifying the scene
         nodeeditor.scene.history.addHistoryModifiedListener(self.refreshPropertiesDock)
         nodeeditor.addCloseEventListener(self.onSubWndClose)
         return subwnd
@@ -369,6 +364,7 @@ class DataWindow(NodeEditorWindow):
             self.mdiArea.setActiveSubWindow(window)
 
     def refreshPropertiesDock(self):
+        # TODO separate the toolbar with one bottom widget holding some informations and a upper part holding a layout specific to each node
         self.print('Dock properties')
         # get DataSubWindow
         if hasattr(self.mdiArea.activeSubWindow(), 'widget'):
@@ -377,20 +373,20 @@ class DataWindow(NodeEditorWindow):
                 # reset layout
                 itemsSelected = actSubWnd.scene.getSelectedItems()
                 if len(itemsSelected) > 1:
-                    self.propDock.setWidget(self.propDockWdg)
+                    self.propDock.setWidget(self._propDockWdg)
                     self.propDockLbl.setText('{} items selected'.format(len(itemsSelected)))
 
                 elif len(itemsSelected) == 1:
                     itemSelected = itemsSelected[0]
-                    if hasattr(itemSelected, 'node') and hasattr(itemSelected.node, 'getPropertiesToolbar'):
-                        self.propDock.setWidget(itemSelected.node.getPropertiesToolbar())
+                    if hasattr(itemSelected, 'node') and itemSelected.node.hasPropertiesWidget():
+                        self.propDock.setWidget(itemSelected.node.propertiesWidget)
 
                     else:
-                        self.propDock.setWidget(self.propDockWdg)
+                        self.propDock.setWidget(self._propDockWdg)
                         self.propDockLbl.setText('{} items selected'.format(len(itemsSelected)))
 
                 else:
-                    self.propDock.setWidget(self.propDockWdg)
+                    self.propDock.setWidget(self._propDockWdg)
                     self.propDockLbl.setText('No selection')
 
             except Exception as e:

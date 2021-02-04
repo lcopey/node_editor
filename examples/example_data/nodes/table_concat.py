@@ -19,9 +19,6 @@ class OpNode_ConcatTable(DataNode):
     def evalImplementation(self):
         self.print('evalImplementation')
 
-        self.markDirty(False)
-        self.markInvalid(False)
-
         # get first input
         i1 = self.getInput(0)
         i2 = self.getInput(1)

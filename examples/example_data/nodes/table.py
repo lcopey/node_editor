@@ -36,8 +36,6 @@ class DataNode_Table(DataNode):
 
     def evalImplementation(self):
         self.print('evalImplementation')
-        self.markDirty(False)
-        self.markInvalid(False)
         # get first input
         input_node = self.getInput(0)
         if not input_node:

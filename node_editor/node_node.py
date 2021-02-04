@@ -386,7 +386,7 @@ class Node(Serializable):
         """Called when this `Node` has been marked as `Invalid`. This method is supposed to be overridden"""
         pass
 
-    def eval(self, force=False):
+    def eval(self, ):
         """Evaluated this `Node`. This method is supposed to be overriden."""
         self.markDirty(False)
         self.markInvalid(False)

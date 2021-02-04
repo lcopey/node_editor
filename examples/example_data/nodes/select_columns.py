@@ -31,16 +31,16 @@ class DataNode_SelectColumns(DataNode):
         self.columns = None
         super().__init__(scene, inputs=[1], outputs=[1])
 
-    def initPropertiesToolbar(self):
+    def initPropertiesWidget(self):
         # TODO displace in content ?
         """Initialize the layout of properties DockWidget"""
-        self.properties_toolbar = QWidget()
+        self.propertiesWidget = QWidget()
         self.listWidget = QListWidget()
         self.column_mapping = {}  # mapping between listWidget text and column value
 
         # changing item clicked triggers markdirty and evaluation of the node
         self.listWidget.itemClicked.connect(self.onItemClicked)
-        self.fillListWidget()
+        self.populateListWidget()
 
         layout = QVBoxLayout()
         button_layout = QHBoxLayout()
@@ -55,7 +55,7 @@ class DataNode_SelectColumns(DataNode):
         button_layout.addWidget(select_none)
         layout.addLayout(button_layout)
         layout.addWidget(self.listWidget)
-        self.properties_toolbar.setLayout(layout)
+        self.propertiesWidget.setLayout(layout)
 
     def selectAll(self):
         """Select all item in `listWidget` attributes"""
@@ -71,8 +71,8 @@ class DataNode_SelectColumns(DataNode):
             item.setCheckState(Qt.Unchecked)
         self.onItemClicked()
 
-    def fillListWidget(self):
-        """Fill `listWidget` with values from input dataframe columns"""
+    def populateListWidget(self):
+        """Populate `listWidget` with values from input dataframe columns"""
         self.listWidget.clear()
         self.column_mapping.clear()
 
@@ -84,10 +84,6 @@ class DataNode_SelectColumns(DataNode):
                 item.setCheckState(Qt.Checked)
                 self.listWidget.addItem(item)
                 self.column_mapping[str(column)] = column
-
-    def getPropertiesToolbar(self):
-        """Return the widget to display properties dock widget"""
-        return self.properties_toolbar
 
     def onItemClicked(self):
         """On Item Clicked event
@@ -130,10 +126,8 @@ class DataNode_SelectColumns(DataNode):
             self.value = pd.DataFrame()
 
     def evalImplementation(self):
+        # TODO correct implementation when multiple select columns are stacked
         self.print('evalImplementation')
-
-        self.markDirty(False)
-        self.markInvalid(False)
 
         # get first input
         input_node = self.getInput(0)
@@ -145,16 +139,16 @@ class DataNode_SelectColumns(DataNode):
         # get value from input node
         self.input_val = input_node.eval()
         if isinstance(self.input_val, pd.DataFrame):
-            columns = self.input_val.columns
+            new_columns = self.input_val.columns
         else:
             self.columns = None
-            columns = None
+            new_columns = None
 
-        if self.columns is None or (self.columns.equals(columns)):
-            # Compare if different
+        # Compare if new columns are the same as the old one
+        if self.columns is None or not (self.columns.equals(new_columns)):
             # Update the properties toolbar accordingly
-            self.columns = columns
-            self.fillListWidget()
+            self.columns = new_columns
+            self.populateListWidget()
 
         if self.columns is None:
             self.setToolTip('Input is NaN')
