@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QTableView, QVBoxLayout, QComboBox, QItemDelegate
+from PyQt5.QtWidgets import QWidget, QTableView, QVBoxLayout, QComboBox, QItemDelegate, QListWidget
 from PyQt5.QtCore import Qt, QAbstractTableModel, QModelIndex, pyqtSlot, pyqtSignal
 from PyQt5.QtGui import QIcon
 import pandas as pd
@@ -81,15 +81,25 @@ class ComboDelegate(QItemDelegate):
         self.options = options
 
     def createEditor(self, parent, option, index):
-        combo = QComboBox(parent)
-        combo.addItems(self.options)
-        return combo
+        editor = QComboBox(parent)
+        editor.addItems(self.options)
+        editor.currentIndexChanged.connect(self.currentItemChanged)
+
+        return editor
 
     def setEditorData(self, editor, index):
         try:
             value = index.data(Qt.DisplayRole)
             num = self.options.index(value)
             editor.setCurrentIndex(num)
+        except Exception as e:
+            dumpException(e)
+
+    @pyqtSlot()
+    def currentItemChanged(self):
+        try:
+            print(self.sender())
+            self.commitData.emit(self.sender())
         except Exception as e:
             dumpException(e)
 
@@ -114,7 +124,7 @@ class OpNode_CastColumns(DataNode):
         self.columnTypeTable = QTableView()
         delegate = ComboDelegate(self.columnTypeTable, options=TYPE_OPTIONS)
         self.columnTypeTable.setItemDelegate(delegate)
-        # delegate.commitData()
+        delegate.commitData.connect(self.updateValue)
         model = TypeChooserModel()
         self.columnTypeTable.setModel(model)
         layout.addWidget(self.columnTypeTable)
@@ -122,6 +132,9 @@ class OpNode_CastColumns(DataNode):
         self.propertiesWidget.setLayout(layout)
 
     def populateColumnTypeTable(self):
+        """Populate the properties dock widget with datatypes from input `Node`.
+
+        It is called upon evaluation of the node in case columns names are different from previous evaluation"""
         if self.columnsDtype is not None:
             dtypes = self.columnsDtype.astype(str)
             # extract types from their respective string
@@ -133,11 +146,16 @@ class OpNode_CastColumns(DataNode):
             model.endResetModel()
             self.columnTypeTable.setColumnWidth(0, 80)
 
-    def updateValue(self):
+    def updateValue(self, editor: QWidget = None, evalChildren=False):
+        """Update current evaluation of the Node."""
         dtypes = self.columnTypeTable.model().getData()
         # convert string values for the corresponding type
         dtypes = dtypes.apply(eval)
         self.value = self.input_val.astype(dtypes, errors='ignore')
+        if editor:
+            self.markDescendantInvalid(False)
+            self.markDescendantDirty()
+            self.evalChildren()
 
     def evalImplementation(self):
         self.print('evalImplementation')
@@ -158,11 +176,10 @@ class OpNode_CastColumns(DataNode):
             new_columns_dtype = None
 
         # Compare if new columns are the same as the old one
-        # TODO improve the workflow and compare only the index ? Common values should not change ?
-        if self.columnsDtype is None or not (self.columnsDtype.equals(new_columns_dtype)):
-            # Update the properties toolbar accordingly
-            self.columnsDtype = new_columns_dtype
-            self.populateColumnTypeTable()
+        if self.columnsDtype is None or not (self.columnsDtype.index.equals(new_columns_dtype.index)):
+                # Update the properties toolbar accordingly
+                self.columnsDtype = new_columns_dtype
+                self.populateColumnTypeTable()
 
         if self.columnsDtype is None:
             self.setToolTip('Input is NaN')
