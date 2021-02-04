@@ -1,10 +1,14 @@
+import re
 import pandas as pd
+from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QAbstractTableModel, Qt, QModelIndex
 from node_editor.utils import dumpException
 from typing import Any, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from PyQt5.QtWidgets import QHeaderView, QTableView
+
+TYPE_OPTIONS = ['str', 'int', 'float', 'bool']
 
 
 def _align(value: Any) -> Qt.AlignmentFlag:
@@ -43,6 +47,7 @@ class DataframeModel(QAbstractTableModel):
         self.view = view
         self.dataframe = dataframe
         self.editable = editable
+        self._type_icons = {key: QIcon('./icons/{}_icon.svg'.format(key)) for key in TYPE_OPTIONS}
 
     def flags(self, index):
         flags = Qt.ItemIsSelectable | Qt.ItemIsEnabled
@@ -144,6 +149,18 @@ class DataframeModel(QAbstractTableModel):
                 return str(self._data.columns[p_int])
             if orientation == Qt.Vertical:
                 return str(self._data.index[p_int])
+        elif role == Qt.DecorationRole and orientation == Qt.Horizontal:
+            try:
+                dtype = str(self._data[self._data.columns[p_int]].dtype)
+                dtype = re.search('(' + '|'.join(TYPE_OPTIONS) + ')', dtype)
+                if dtype:
+                    dtype = dtype.group()
+                else:
+                    dtype = 'str'
+                return self._type_icons[dtype]
+            except Exception as e:
+                dumpException(e)
+            return None
 
         return None
 

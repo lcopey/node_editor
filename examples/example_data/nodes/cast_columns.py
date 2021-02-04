@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QWidget, QTableView, QVBoxLayout, QComboBox, QItemDelegate
-from PyQt5.QtCore import Qt, QAbstractTableModel, QModelIndex
+from PyQt5.QtCore import Qt, QAbstractTableModel, QModelIndex, pyqtSlot, pyqtSignal
 from PyQt5.QtGui import QIcon
 import pandas as pd
 import numpy as np
@@ -7,27 +7,20 @@ import numpy as np
 from ..data_node_base import DataNode
 from ..data_node_graphics_base import OpGraphicsNode
 from ..data_conf import NodeFactory
+# from ..data_resources import TYPE_ICONS, TYPE_OPTIONS
 
 from typing import List, Any
 from node_editor.node_socket import Socket
 from node_editor.utils import dumpException
 
 TYPE_OPTIONS = ['str', 'int', 'float', 'bool']
-TYPE_MAPPING = {'str': str, 'int': int, 'float': float, 'bool': bool}
-
-def _get_datatype_str(dtype: str):
-    for string in TYPE_OPTIONS:
-        if string in str(dtype):
-            return string
-    else:
-        return 'str'
 
 
 class TypeChooserModel(QAbstractTableModel):
     def __init__(self, ):
         super().__init__()
         self._data = None
-        self._icons = {key: QIcon('./icons/{}_icon.svg'.format(key)) for key in TYPE_OPTIONS}
+        self._type_icons = {key: QIcon('./icons/{}_icon.svg'.format(key)) for key in TYPE_OPTIONS}
 
     def flags(self, index):
         flags = Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.ItemIsEditable
@@ -49,7 +42,7 @@ class TypeChooserModel(QAbstractTableModel):
                 # elif role == Qt.TextAlignmentRole:
                 #     return _align(value)
                 elif role == Qt.DecorationRole:
-                    return self._icons[self._data.iloc[index.row()]]
+                    return self._type_icons[self._data.iloc[index.row()]]
 
         except Exception as e:
             dumpException(e)
@@ -63,6 +56,9 @@ class TypeChooserModel(QAbstractTableModel):
                 return True
         except Exception as e:
             dumpException(e)
+
+    def getData(self):
+        return self._data
 
     def setDataSource(self, data: pd.Series):
         self._data = data
@@ -118,6 +114,7 @@ class OpNode_CastColumns(DataNode):
         self.columnTypeTable = QTableView()
         delegate = ComboDelegate(self.columnTypeTable, options=TYPE_OPTIONS)
         self.columnTypeTable.setItemDelegate(delegate)
+        # delegate.commitData()
         model = TypeChooserModel()
         self.columnTypeTable.setModel(model)
         layout.addWidget(self.columnTypeTable)
@@ -137,7 +134,10 @@ class OpNode_CastColumns(DataNode):
             self.columnTypeTable.setColumnWidth(0, 80)
 
     def updateValue(self):
-        self.value = self.input_val.astype(self.columnsDtype)
+        dtypes = self.columnTypeTable.model().getData()
+        # convert string values for the corresponding type
+        dtypes = dtypes.apply(eval)
+        self.value = self.input_val.astype(dtypes, errors='ignore')
 
     def evalImplementation(self):
         self.print('evalImplementation')
@@ -158,6 +158,7 @@ class OpNode_CastColumns(DataNode):
             new_columns_dtype = None
 
         # Compare if new columns are the same as the old one
+        # TODO improve the workflow and compare only the index ? Common values should not change ?
         if self.columnsDtype is None or not (self.columnsDtype.equals(new_columns_dtype)):
             # Update the properties toolbar accordingly
             self.columnsDtype = new_columns_dtype
