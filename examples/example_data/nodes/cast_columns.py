@@ -124,6 +124,7 @@ class OpNode_CastColumns(DataNode):
         self.columnTypeTable = QTableView()
         delegate = ComboDelegate(self.columnTypeTable, options=TYPE_OPTIONS)
         self.columnTypeTable.setItemDelegate(delegate)
+
         delegate.commitData.connect(self.updateValue)
         model = TypeChooserModel()
         self.columnTypeTable.setModel(model)
@@ -146,16 +147,22 @@ class OpNode_CastColumns(DataNode):
             model.endResetModel()
             self.columnTypeTable.setColumnWidth(0, 80)
 
-    def updateValue(self, editor: QWidget = None, evalChildren=False):
-        """Update current evaluation of the Node."""
-        dtypes = self.columnTypeTable.model().getData()
-        # convert string values for the corresponding type
-        dtypes = dtypes.apply(eval)
-        self.value = self.input_val.astype(dtypes, errors='ignore')
-        if editor:
-            self.markDescendantInvalid(False)
-            self.markDescendantDirty()
-            self.evalChildren()
+    # def updateValue(self, editor: QWidget = None, evalChildren=False):
+    #     """Update current evaluation of the Node."""
+    #     dtypes = self.columnTypeTable.model().getData()
+    #     # convert string values for the corresponding type
+    #     dtypes = dtypes.apply(eval)
+    #     self.value = self.input_val.astype(dtypes, errors='ignore')
+    #     if editor:
+    #         self.markDescendantInvalid(False)
+    #         self.markDescendantDirty()
+    #         self.evalChildren()
+
+    def updateValue(self, editor: QWidget):
+        """Update current evaluation of the `Node`.
+
+        Is called upon chnage of value in properties dock widget"""
+        self.forcedEval()
 
     def evalImplementation(self):
         self.print('evalImplementation')
@@ -177,17 +184,22 @@ class OpNode_CastColumns(DataNode):
 
         # Compare if new columns are the same as the old one
         if self.columnsDtype is None or not (self.columnsDtype.index.equals(new_columns_dtype.index)):
-                # Update the properties toolbar accordingly
-                self.columnsDtype = new_columns_dtype
-                self.populateColumnTypeTable()
+            # Update the properties toolbar accordingly
+            self.columnsDtype = new_columns_dtype
+            self.populateColumnTypeTable()
 
         if self.columnsDtype is None:
             self.setToolTip('Input is NaN')
             self.markInvalid()
             return
 
-        # Store the table with only the selected columns
-        self.updateValue()
+        # Change column datatype to the one selected from table
+        dtypes = self.columnTypeTable.model().getData()
+        # convert string values for the corresponding type
+        dtypes = dtypes.apply(eval)
+        self.value = self.input_val.astype(dtypes, errors='ignore')
+        # TODO handle failure
+        # TODO serialize / deserialize
 
         # else set flag and tooltip
         self.markDirty(False)

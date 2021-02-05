@@ -39,7 +39,7 @@ class DataNode_SelectColumns(DataNode):
         self.column_mapping = {}  # mapping between listWidget text and column value
 
         # changing item clicked triggers markdirty and evaluation of the node
-        self.listWidget.itemClicked.connect(self.onItemClicked)
+        self.listWidget.itemClicked.connect(self.forcedEval)
         self.populateListWidget()
 
         layout = QVBoxLayout()
@@ -62,14 +62,14 @@ class DataNode_SelectColumns(DataNode):
         for n in range(self.listWidget.count()):
             item = self.listWidget.item(n)
             item.setCheckState(Qt.Checked)
-        self.onItemClicked()
+        self.forcedEval()
 
     def selectNone(self):
         """Unselect all item in `listWidget` attributes"""
         for n in range(self.listWidget.count()):
             item = self.listWidget.item(n)
             item.setCheckState(Qt.Unchecked)
-        self.onItemClicked()
+        self.forcedEval()
 
     def populateListWidget(self):
         """Populate `listWidget` with values from input dataframe columns"""
@@ -84,18 +84,6 @@ class DataNode_SelectColumns(DataNode):
                 item.setCheckState(Qt.Checked)
                 self.listWidget.addItem(item)
                 self.column_mapping[str(column)] = column
-
-    def onItemClicked(self):
-        """On Item Clicked event
-
-        Update the selection and evaluate the children `Nodes`
-        """
-        # Store the table with only the selected columns
-        self.updateValue()
-
-        # if self.getOutputs():
-        self.markChildrenDirty()
-        self.evalChildren()
 
     def getColumnSelection(self) -> list[str]:
         # TODO Handle index type
@@ -115,15 +103,6 @@ class DataNode_SelectColumns(DataNode):
                 )
 
         return result
-
-    def updateValue(self):
-        """Update self.value with the current selection"""
-        # Store the table with only the selected columns
-        column_selection = self.getColumnSelection()
-        if column_selection:
-            self.value = self.input_val[column_selection]
-        else:
-            self.value = pd.DataFrame()
 
     def evalImplementation(self):
         # TODO correct implementation when multiple select columns are stacked
@@ -156,7 +135,12 @@ class DataNode_SelectColumns(DataNode):
             return
 
         # Store the table with only the selected columns
-        self.updateValue()
+        # self.updateValue()
+        column_selection = self.getColumnSelection()
+        if column_selection:
+            self.value = self.input_val[column_selection]
+        else:
+            self.value = pd.DataFrame()
 
         # else set flag and tooltip
         self.markDirty(False)
