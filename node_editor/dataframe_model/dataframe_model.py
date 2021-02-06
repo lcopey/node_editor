@@ -3,7 +3,7 @@ import pandas as pd
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QAbstractTableModel, Qt, QModelIndex
 from node_editor.utils import dumpException
-from typing import Any, TYPE_CHECKING
+from typing import Any, TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
     from PyQt5.QtWidgets import QHeaderView, QTableView
@@ -32,21 +32,26 @@ def _align(value: Any) -> Qt.AlignmentFlag:
 class DataframeModel(QAbstractTableModel):
     """Class representing a pandas DataFrame in a Qt context"""
 
-    def __init__(self, view: 'QTableView', dataframe: pd.DataFrame, editable=False):
+    def __init__(self, view: 'QTableView', dataframe: Union[pd.DataFrame, pd.Series], editable=False,
+                 columnDecorator: bool = True):
         """Initiate a new `DataframeModel`, base class for representing the data.
 
         Parameters
         ----------
         view : QTableView
             Reference to QTableView holding the model
-        dataframe
-        editable
+        dataframe : pd.DataFrame or pd.Series
+            DataFrame or Series as source for the model
+        editable : bool
+            if ``True`` set the model as editable by adding a delegate
         """
         super().__init__()
         # Reference to initial dataframe
         self.view = view
         self.dataframe = dataframe
+        self.isDataFrame = isinstance(self._data, pd.DataFrame)
         self.editable = editable
+        self.columnDecorator = columnDecorator
         self._type_icons = {key: QIcon('./icons/{}_icon.svg'.format(key)) for key in TYPE_OPTIONS}
 
     def flags(self, index):
@@ -56,32 +61,39 @@ class DataframeModel(QAbstractTableModel):
         return flags
 
     def rowCount(self, parent=None):
-        return self._data.shape[0]
+        if self._data is not None:
+            return self._data.shape[0]
+        else:
+            return 0
 
     def columnCount(self, parent=None):
-        return self._data.shape[1]
+        if self.isDataFrame:
+            return self._data.shape[1]
+        else:
+            return 1
 
-    def data(self, index, role=Qt.DisplayRole):
+    def data(self, index: QModelIndex, role: int = ...) -> Any:
         """Internal method to QAbstractTableModel overridden to supply information on the header
 
-        Parameters
-        ----------
-        index
-        role
-
-        Returns
-        -------
-
+        Returns value corresponding to index.
+        Implements :
+            - Qt.DisplayRole
+            - Qt.TextAlignmentRole
+        Overrides to implement :
+            - Qt.DecorationRole
         """
         if index.isValid():
-            value = self._data.iloc[index.row(), index.column()]
+            if self.isDataFrame:
+                value = self._data.iloc[index.row(), index.column()]
+            else:
+                value = self._data.iloc[index.row()]
+
             if role == Qt.DisplayRole:
                 if pd.isna(value):
                     return ''
                 return str(value)
             elif role == Qt.TextAlignmentRole:
                 return _align(value)
-            # elif role == Qt.DecorationRole
 
         return None
 
@@ -105,17 +117,15 @@ class DataframeModel(QAbstractTableModel):
         """
         # Set value in case of editable
         if role == Qt.EditRole:
-            self._source_data.iloc[index.row(), index.column()] = value
+            if self.isDataFrame:
+                self._source_data.iloc[index.row(), index.column()] = value
+            else:
+                self._source_data.iloc[index.row()] = value
             return True
 
     @property
     def dataframe(self):
         return self._data
-
-    def setSourceData(self, value):
-        self.beginResetModel()
-        self.dataframe = value
-        self.endResetModel()
 
     @dataframe.setter
     def dataframe(self, value):
@@ -125,9 +135,11 @@ class DataframeModel(QAbstractTableModel):
         ----------
         value : pd.DataFrame
         """
+        self.beginResetModel()
         self._source_data = value
         # Copy of the dataframe to handle filtering
         self._data = self._source_data
+        self.endResetModel()
 
     def headerData(self, p_int: int, orientation: Qt.Orientation, role: Qt.ItemDataRole = None):
         """Internal method to QAbstractTableModel overridden to supply information on the header
@@ -146,10 +158,14 @@ class DataframeModel(QAbstractTableModel):
         """
         if role == Qt.DisplayRole:
             if orientation == Qt.Horizontal:
-                return str(self._data.columns[p_int])
+                if self.isDataFrame:
+                    return str(self._data.columns[p_int])
+                else:
+                    return str(self._data.name)
             if orientation == Qt.Vertical:
                 return str(self._data.index[p_int])
-        elif role == Qt.DecorationRole and orientation == Qt.Horizontal:
+
+        elif role == Qt.DecorationRole and self.columnDecorator and orientation == Qt.Horizontal:
             try:
                 dtype = str(self._data[self._data.columns[p_int]].dtype)
                 dtype = re.search('(' + '|'.join(TYPE_OPTIONS) + ')', dtype)

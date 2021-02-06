@@ -74,7 +74,7 @@ class OpNode_CastColumns(DataNode):
             dtypes = dtypes.str.extract('(' + '|'.join(TYPE_OPTIONS) + ')', expand=False)
             dtypes = dtypes.replace(np.nan, 'str')
             model = self.columnTypeTable.model()
-            model.setDataSource(dtypes)
+            model.dataframe = dtypes
             self.columnTypeTable.setColumnWidth(0, 80)
 
             # Update the lower frame dtypesCombo box
@@ -120,7 +120,7 @@ class OpNode_CastColumns(DataNode):
             return
 
         # Change column datatype to the one selected from table
-        dtypes = self.columnTypeTable.model().getData()
+        dtypes = self.columnTypeTable.model().dataframe
         # convert string values for the corresponding type
         dtypes = dtypes.apply(eval)
         self.value = self.input_val.astype(dtypes, errors='ignore')

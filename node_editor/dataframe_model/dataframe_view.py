@@ -82,7 +82,7 @@ class DataframeView(QTableView):
         try:
             # dataframe_model = DataframeModel(view=self, dataframe=dataframe, editable=editable)
             # self.header.setFilterBoxes(dataframe_model.columnCount())
-            self.model().setSourceData(dataframe)
+            self.model().dataframe = dataframe
             self.header.setFilterBoxes(dataframe.shape[1])
             # Connect filter from model to event in FilterHeader
             # super().setModel(dataframe_model)

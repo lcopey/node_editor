@@ -1,13 +1,9 @@
-from PyQt5.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QDialog, QListWidget, QListWidgetItem, QScrollArea, \
-    QWidget, QPushButton
+from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QListWidget, QListWidgetItem, QPushButton
 from PyQt5.QtCore import Qt
 import pandas as pd
-from ..table_model.dataframe_view import DataframeView
 from ..data_conf import *
 from ..data_node_base import *
 from ..data_node_graphics_base import OpGraphicsNode
-from ..table_model.datatable_content import DataTableContent, DataEditableTableContent
-from node_editor.utils import dumpException
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:

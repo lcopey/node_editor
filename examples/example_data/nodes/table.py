@@ -1,17 +1,15 @@
 from PyQt5.QtWidgets import QVBoxLayout, QDialog
 from PyQt5.QtCore import Qt
 import pandas as pd
-from ..table_model.dataframe_view import DataframeView
 from ..data_conf import *
 from ..data_node_base import *
 from ..data_node_graphics_base import VizGraphicsNode
-from ..table_model.datatable_content import DataTableContent, DataEditableTableContent
+from node_editor.dataframe_model.datatable_content import DataTableContent, DataEditableTableContent
 from node_editor.utils import dumpException
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from node_editor.node_node import Node
-    from PyQt5.QtWidgets import QWidget
 
 DEBUG = True
 

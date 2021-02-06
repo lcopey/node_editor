@@ -1,71 +1,84 @@
-from PyQt5.QtWidgets import QItemDelegate, QComboBox
+from PyQt5.QtWidgets import QItemDelegate, QComboBox, QTableView
 from PyQt5.QtCore import Qt, QAbstractTableModel, QModelIndex, pyqtSlot, pyqtSignal
 from PyQt5.QtGui import QIcon
 import pandas as pd
-from node_editor.utils import dumpException
+from node_editor.dataframe_model import DataframeModel
 
+from node_editor.utils import dumpException
 from typing import Any
 
 TYPE_OPTIONS = ['str', 'int', 'float', 'bool']
 
 
-class TypeChooserModel(QAbstractTableModel):
-    def __init__(self, ):
-        super().__init__()
-        self._data = None
+class TypeChooserModel(DataframeModel):
+    def __init__(self, view: 'QTableView' = None):
+        super().__init__(view=view, dataframe=pd.Series(name='Type'), editable=True, columnDecorator=False)
         self._type_icons = {key: QIcon('./icons/{}_icon.svg'.format(key)) for key in TYPE_OPTIONS}
 
-    def flags(self, index):
-        flags = Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.ItemIsEditable
-        return flags
+    def data(self, index: QModelIndex, role: int = ...) -> Any:
+        if role == Qt.DecorationRole:
+            return self._type_icons[self._data.iloc[index.row()]]
+        else:
+            return super().data(index, role)
 
-    def rowCount(self, parent=None):
-        if self._data is not None:
-            return self._data.shape[0]
-        return 0
 
-    def columnCount(self, parent=None):
-        return 1
-
-    def data(self, index, role=Qt.DisplayRole):
-        try:
-            if index.isValid():
-                if role == Qt.DisplayRole:
-                    return self._data.iloc[index.row()]
-                # elif role == Qt.TextAlignmentRole:
-                #     return _align(value)
-                elif role == Qt.DecorationRole:
-                    return self._type_icons[self._data.iloc[index.row()]]
-
-        except Exception as e:
-            dumpException(e)
-
-        return None
-
-    def setData(self, index: QModelIndex, value: Any, role: int = ...) -> bool:
-        try:
-            if role == Qt.EditRole:
-                self._data.iloc[index.row()] = value
-                return True
-        except Exception as e:
-            dumpException(e)
-
-    def getData(self):
-        return self._data
-
-    def setDataSource(self, data: pd.Series):
-        self.beginResetModel()
-        self._data = data
-        self.endResetModel()
-
-    def headerData(self, section: int, orientation: Qt.Orientation, role: int = ...) -> Any:
-        if role == Qt.DisplayRole:
-            if orientation == Qt.Vertical:
-                return self._data.index[section]
-            else:
-                return 'Type'
-
-        return None
+# class TypeChooserModel(QAbstractTableModel):
+#     def __init__(self, ):
+#         super().__init__()
+#         self._data = None
+#         self._type_icons = {key: QIcon('./icons/{}_icon.svg'.format(key)) for key in TYPE_OPTIONS}
+#
+#     def flags(self, index):
+#         flags = Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.ItemIsEditable
+#         return flags
+#
+#     def rowCount(self, parent=None):
+#         if self._data is not None:
+#             return self._data.shape[0]
+#         return 0
+#
+#     def columnCount(self, parent=None):
+#         return 1
+#
+#     def data(self, index, role=Qt.DisplayRole):
+#         try:
+#             if index.isValid():
+#                 if role == Qt.DisplayRole:
+#                     return self._data.iloc[index.row()]
+#                 # elif role == Qt.TextAlignmentRole:
+#                 #     return _align(value)
+#                 elif role == Qt.DecorationRole:
+#                     return self._type_icons[self._data.iloc[index.row()]]
+#
+#         except Exception as e:
+#             dumpException(e)
+#
+#         return None
+#
+#     def setData(self, index: QModelIndex, value: Any, role: int = ...) -> bool:
+#         try:
+#             if role == Qt.EditRole:
+#                 self._data.iloc[index.row()] = value
+#                 return True
+#         except Exception as e:
+#             dumpException(e)
+#
+#     def getData(self):
+#         return self._data
+#
+#     def setDataSource(self, data: pd.Series):
+#         self.beginResetModel()
+#         self._data = data
+#         self.endResetModel()
+#
+#     def headerData(self, section: int, orientation: Qt.Orientation, role: int = ...) -> Any:
+#         if role == Qt.DisplayRole:
+#             if orientation == Qt.Vertical:
+#                 return self._data.index[section]
+#             else:
+#                 return 'Type'
+#
+#         return None
 
 
 class ErrorTableModel(QAbstractTableModel):
