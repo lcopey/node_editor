@@ -20,7 +20,6 @@ colors = {'DARK': {'status_outline': QColor("#FF00000"),
 
 
 class GraphicsStatus(QGraphicsItem):
-    # TODO separate in Status and GraphicsStatus ?
     def __init__(self, node: 'Node' = None):
         super().__init__(parent=node.grNode)
         self.node = node

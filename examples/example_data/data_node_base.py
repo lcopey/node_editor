@@ -13,7 +13,6 @@ DEBUG = True
 
 class DataNode(Node):
     icon = ""
-    # op_code = 0
     op_title = 'Undefined'
     content_label = ''
     content_label_objname = 'calc_node_bg'

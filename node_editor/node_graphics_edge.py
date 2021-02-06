@@ -3,7 +3,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from .node_graphics_edge_path import QNEGraphicsEdgePathBezier, QNEGraphicsEdgePathDirect
 
-EDGE_WIDTH = 2.
+EDGE_WIDTH = 4.
 OUTLINE_WIDTH = 2.0
 
 import typing
@@ -17,7 +17,7 @@ THEME = 'LIGHT'
 colors = {'DARK':
               {'edge_color': QColor("#001000")},
           'LIGHT':
-              {'edge_color': QColor("#E3bdbdbd")}
+              {'edge_color': QColor("#E3b0b0b0")}
           }
 
 

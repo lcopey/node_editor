@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout, QLabel, QComboBox, QPushButton, \
     QLineEdit, QWidget, QTableWidget, QTableView, QTableWidgetItem, QFileDialog
 from PyQt5.QtCore import Qt, QAbstractTableModel
+from PyQt5.QtGui import QIcon
 import os
 import pandas as pd
 import csv
@@ -20,7 +21,6 @@ DEBUG = True
 @NodeFactory.register()
 class OpNode_ReadCSVFile(DataNode):
     icon = 'icons/computer-folder-open-64.svg'
-    # op_code = NodeType.OP_NODE_FILE_READ
     op_title = 'CSV file'
     content_label = ''
     content_label_objname = 'data_node_file_read'
@@ -43,7 +43,10 @@ class OpNode_ReadCSVFile(DataNode):
         self._path_text = QLineEdit()
         self._path_text.setReadOnly(True)  # set to read only, it is modified only by selecting a path
         self._open_file_button = QPushButton()
+        icon = QIcon(self.icon)
+        self._open_file_button.setIcon(icon)
         self._open_file_button.clicked.connect(self.openFileDialog)
+
         fileLayout.addWidget(QLabel('File : '))
         fileLayout.addWidget(self._path_text)
         fileLayout.addWidget(self._open_file_button)
@@ -100,8 +103,8 @@ class OpNode_ReadCSVFile(DataNode):
         subWnd = self.scene.getView().parent()
         mainWnd = subWnd.getMainWindow()
 
-        fname, filter = QFileDialog.getOpenFileName(mainWnd, 'Open csv file', '',
-                                                    'CSV (*.csv);;All files (*)')
+        fname, fileFilter = QFileDialog.getOpenFileName(mainWnd, 'Open csv file', '',
+                                                        'CSV (*.csv);;All files (*)')
         self.print('Filename selected :', fname)
         if fname == '' and self._path_text.text() != '':
             return
@@ -158,8 +161,10 @@ class OpNode_ReadCSVFile(DataNode):
         result['file_path'] = self._path_text.text()
         return result
 
-    def deserialize(self, data, hashmap={}, restore_id=True):
+    def deserialize(self, data, hashmap=None, restore_id=True):
         """Restore node including the file path"""
+        if hashmap is None:
+            hashmap = {}
         result = super().deserialize(data, hashmap, restore_id)
         self._path_text.setText(data['file_path'])
         return result

@@ -146,7 +146,7 @@ class DataWindow(NodeEditorWindow):
         self._propDockWdg = QWidget()
         self.propDock.setWidget(self._propDockWdg)
         self._propDockWdg.setLayout(self._propDockLayout)
-        self.addDockWidget(Qt.LeftDockWidgetArea, self.propDock)
+        self.addDockWidget(Qt.RightDockWidgetArea, self.propDock)
 
     def createNodesDock(self):
         """Create `Nodes Dock` and populates it with the list of `Nodes`
@@ -160,7 +160,7 @@ class DataWindow(NodeEditorWindow):
         self.nodesDock.setWidget(self.nodeListWidget)
         self.nodesDock.setFloating(False)
 
-        self.addDockWidget(Qt.RightDockWidgetArea, self.nodesDock)
+        self.addDockWidget(Qt.LeftDockWidgetArea, self.nodesDock)
 
     def createStatusBar(self):
         self.statusBar().showMessage("Ready", )
