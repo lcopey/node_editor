@@ -32,7 +32,6 @@ class DataNode_SelectColumns(DataNode):
         super().__init__(scene, inputs=[1], outputs=[1])
 
     def initPropertiesWidget(self):
-        # TODO displace in content ?
         """Initialize the layout of properties DockWidget"""
         self.propertiesWidget = QWidget()
         self.listWidget = QListWidget()
@@ -40,7 +39,7 @@ class DataNode_SelectColumns(DataNode):
 
         # changing item clicked triggers markdirty and evaluation of the node
         self.listWidget.itemClicked.connect(self.forcedEval)
-        self.populateListWidget()
+        self.updatePropertiesWidget()
 
         layout = QVBoxLayout()
         button_layout = QHBoxLayout()
@@ -71,7 +70,7 @@ class DataNode_SelectColumns(DataNode):
             item.setCheckState(Qt.Unchecked)
         self.forcedEval()
 
-    def populateListWidget(self):
+    def updatePropertiesWidget(self):
         """Populate `listWidget` with values from input dataframe columns"""
         self.listWidget.clear()
         self.column_mapping.clear()
@@ -105,7 +104,6 @@ class DataNode_SelectColumns(DataNode):
         return result
 
     def evalImplementation(self):
-        # TODO correct implementation when multiple select columns are stacked
         self.print('evalImplementation')
 
         # get first input
@@ -127,7 +125,7 @@ class DataNode_SelectColumns(DataNode):
         if self.columns is None or not (self.columns.equals(new_columns)):
             # Update the properties toolbar accordingly
             self.columns = new_columns
-            self.populateListWidget()
+            self.updatePropertiesWidget()
 
         if self.columns is None:
             self.setToolTip('Input is NaN')

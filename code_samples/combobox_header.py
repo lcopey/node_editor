@@ -44,8 +44,8 @@ class HorizontalHeader(QtWidgets.QHeaderView):
                 edit.addItems(["Variable", "Timestamp"])
             else:
                 edit = QtWidgets.QLineEdit(self)
-                # combo.setEditable(True)
-                # combo.addItems(["Variable", "Timestamp"])
+                # dtypesCombo.setEditable(True)
+                # dtypesCombo.addItems(["Variable", "Timestamp"])
                 self.line_edits.append(edit)
 
             # if i == 0:

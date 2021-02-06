@@ -2,9 +2,11 @@
 """
 Module implementing the MainWindow to the calculator example
 """
-import os
-# from PyQt5.QtWidgets import QMdiArea, QWidget, QListWidget, QDockWidget, QLabel, QAction, QMessageBox, QFileDialog, \
-#     QVBoxLayout, QBoxLayout, QHBoxLayout
+from .data_subwindow import DataSubWindow
+from .data_drag_listbox import DragListBox
+from .data_conf import NodeFactory
+from .nodes import *
+
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import QSignalMapper, Qt, QFileInfo
@@ -13,9 +15,6 @@ from node_editor.utils import loadStylessheets
 from node_editor.node_editor_window import NodeEditorWindow
 from node_editor.node_editor_widget import NodeEditorWidget
 from node_editor.utils import dumpException, pp
-from .data_subwindow import DataSubWindow
-from .data_drag_listbox import DragListBox
-from .data_conf import NodeFactory
 
 from node_editor.node_edge import Edge
 from node_editor.node_edge_validators import *
