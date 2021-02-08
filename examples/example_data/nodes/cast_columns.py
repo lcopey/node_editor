@@ -8,6 +8,7 @@ from ..data_conf import NodeFactory
 from .cast_columns_utils import TYPE_OPTIONS, ComboDelegate, TypeChooserModel
 
 from node_editor.utils import dumpException
+from typing import Union
 
 
 @NodeFactory.register()
@@ -20,7 +21,7 @@ class OpNode_CastColumns(DataNode):
     GraphicsNode_class = OpGraphicsNode
 
     def __init__(self, scene):
-        self.columnsDtype = None
+        self.columnsDtype: Union[pd.Series, None] = None
         super().__init__(scene, inputs=[1, ], outputs=[1])
 
     def initPropertiesWidget(self):
@@ -94,7 +95,7 @@ class OpNode_CastColumns(DataNode):
         self.print('evalImplementation')
 
         # get first input
-        input_node = self.getInput(0)
+        input_node: Union[DataNode, None] = self.getInput(0)
         if not input_node:
             self.setToolTip('Input is not connected')
             self.markInvalid()

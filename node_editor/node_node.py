@@ -417,7 +417,7 @@ class Node(Serializable):
                 other_nodes.append(other_node)
         return other_nodes
 
-    def getInput(self, index: int = 0) -> [Socket, None]:
+    def getInput(self, index: int = 0) -> ['Node', None]:
         """Get the **first** `Node` connected to the Input specified by index
 
         Parameters
