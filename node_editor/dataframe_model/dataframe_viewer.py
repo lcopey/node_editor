@@ -15,6 +15,9 @@ class DataFrameView(QWidget):
         self.columnHeader = HeaderView(parent=self, orientation=Qt.Horizontal)
         self.indexHeader = HeaderView(parent=self, orientation=Qt.Vertical)
 
+        # TODO minsize larger than node ?
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+
         # Linking scrollbars
         # Scrolling in data table also scrolls the headers
         self.dataView.horizontalScrollBar().valueChanged.connect(self.columnHeader.horizontalScrollBar().setValue)
@@ -48,11 +51,10 @@ class DataFrameView(QWidget):
         self.gridLayout.setColumnStretch(2, 0)
         self.gridLayout.setRowStretch(2, 0)
 
-        # set margin of content
+        # set margin of content and layout
         self.indexHeader.setContentsMargins(0, 0, 0, 0)
         self.columnHeader.setContentsMargins(0, 0, 0, 0)
         self.dataView.setContentsMargins(0, 0, 0, 0)
-
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
         self.gridLayout.setSpacing(2)
         self.setLayout(self.gridLayout)

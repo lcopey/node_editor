@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QTableView, QSizePolicy, QAbstractItemView
-from PyQt5.QtCore import Qt, QAbstractTableModel, QModelIndex, QSize
+from PyQt5.QtCore import Qt, QAbstractTableModel, QModelIndex, QSize, QItemSelectionModel, QItemSelection
 from PyQt5.QtGui import QFont
 import pandas as pd
 import numpy as np
@@ -72,6 +72,8 @@ class HeaderView(QTableView):
         font = QFont()
         font.setBold(True)
         self.setFont(font)
+
+        self.selectionModel().selectionChanged.connect(self.onSelectionChanged)
 
         self.set_spans()
         self.init_column_sizes()
@@ -166,5 +168,65 @@ class HeaderView(QTableView):
                 if self.orientation == Qt.Horizontal:
                     self.setSpan(nlevel, spans[n] + 1, 1, span_size)
                 else:
-                    print(nlevel, spans[n] + 1, span_size, 1)
                     self.setSpan(spans[n] + 1, nlevel, span_size, 1)
+
+    def onSelectionChanged(self, selected: QItemSelection, deselected: QItemSelection):
+        """Select corresponding cells
+
+        Parameters
+        ----------
+        selected: QItemSelection
+        deselected: QItemSelection
+
+        Returns
+        -------
+
+        """
+        if self.hasFocus():
+            dataView = self.parent().dataView
+            selection = self.selectionModel().selection()
+
+            if self.orientation == Qt.Horizontal:
+                # Removes the higher levels so that only the lowest level of the header affects the data table selection
+                # last_row_ix = self.dataframe.columns.nlevels - 1
+                # last_col_ix = self.model().columnCount() - 1
+                # higher_levels = QItemSelection(
+                #     self.model().index(0, 0),
+                #     self.model().index(last_row_ix - 1, last_col_ix),
+                # )
+                # selection.merge(higher_levels, QItemSelectionModel.Deselect)
+                # Unselect the indexHeader
+                indexHeader: HeaderView = self.parent().indexHeader
+                indexModel = indexHeader.model()
+                indexSelect = QItemSelection(indexModel.index(0, 0),
+                                             indexModel.index(indexModel.rowCount() - 1,
+                                                              indexModel.columnCount() - 1))
+
+                indexHeader.selectionModel().select(indexSelect, QItemSelectionModel.Deselect)
+                # Select the cells in the data view
+                dataView.selectionModel().select(
+                    selection,
+                    QItemSelectionModel.Columns | QItemSelectionModel.ClearAndSelect,
+                )
+            if self.orientation == Qt.Vertical:
+                # Removes the higher levels so that only the lowest level of the header affects the data table selection
+                # last_row_ix = self.model().rowCount() - 1
+                # last_col_ix = self.dataframe.index.nlevels - 1
+                # higher_levels = QItemSelection(
+                #     self.model().index(0, 0),
+                #     self.model().index(last_row_ix, last_col_ix - 1),
+                # )
+                # selection.merge(higher_levels, QItemSelectionModel.Deselect)
+
+                # Unselect the columnHeader
+                columnHeader: HeaderView = self.parent().columnHeader
+                columnModel = columnHeader.model()
+                columnSelect = QItemSelection(columnModel.index(0, 0),
+                                              columnModel.index(columnModel.rowCount() - 1,
+                                                                columnModel.columnCount() - 1))
+
+                columnHeader.selectionModel().select(columnSelect, QItemSelectionModel.Deselect)
+                dataView.selectionModel().select(
+                    selection,
+                    QItemSelectionModel.Rows | QItemSelectionModel.ClearAndSelect,
+                )

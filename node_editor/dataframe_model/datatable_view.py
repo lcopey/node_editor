@@ -17,7 +17,7 @@ class DataTableView(QTableView):
         self.horizontalHeader().hide()
         self.verticalHeader().hide()
 
-        self.setSizePolicy(QSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored))
+        self.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
 
         # deactivate scrollbar, they are handled by their respective headerview in the dataframe_viewer
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
@@ -28,12 +28,44 @@ class DataTableView(QTableView):
         # assign model
         self.setModel(model)
 
+        # selection model
+        self.selectionModel().selectionChanged.connect(self.onSelectionChanged)
+
     def setDataFrame(self, dataframe: Union[pd.DataFrame, pd.Series]):
         self.model().setDataSource(dataframe)
 
     @property
     def dataframe(self):
         return self.model().dataframe
+
+    def onSelectionChanged(self, selected: QItemSelection, deselected: QItemSelection):
+        """On selection, also select the header
+
+        Parameters
+        ----------
+        selected: QItemSelection
+            Holds the item newly selected
+        deselected : QItemSelection
+            Holds the item deselected in this event
+        """
+        if self.hasFocus():
+            columnHeader = self.parent().columnHeader
+            indexHeader = self.parent().indexHeader
+            selection = self.selectionModel().selection()
+
+            if not columnHeader.hasFocus():
+                columnHeader.selectionModel().select(
+                    selection,
+                    QItemSelectionModel.Columns
+                    | QItemSelectionModel.ClearAndSelect,
+                )
+
+            if not indexHeader.hasFocus():
+                indexHeader.selectionModel().select(
+                    selection,
+                    QItemSelectionModel.Rows
+                    | QItemSelectionModel.ClearAndSelect,
+                )
 
 
 @dataclass
