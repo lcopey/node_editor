@@ -1,4 +1,4 @@
-from .dataframe_model import DataframeModel
-from .dataframe_view import DataframeView
+from .datatable_view import DataTableModel, DataTableView
+from .dataframe_viewer import DataFrameView
 
-__all__ = ['DataframeModel', 'DataframeView']
+__all__ = ['DataTableModel', 'DataTableView', 'DataFrameView']

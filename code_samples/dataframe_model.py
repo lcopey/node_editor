@@ -145,7 +145,7 @@ if __name__ == '__main__':
                        'c': ['a', 'ba', 'c']})
 
     app = QApplication(sys.argv)
-    # model = DataframeModel(df)
+    # model = DataTableModel(df)
     # view = QTableView()
     # view.setModel(model)
     view = DataframeView(dataframe=df)

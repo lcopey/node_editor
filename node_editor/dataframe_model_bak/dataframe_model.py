@@ -12,7 +12,7 @@ TYPE_OPTIONS = ['str', 'int', 'float', 'bool']
 
 
 def _align(value: Any) -> Qt.AlignmentFlag:
-    """Align values in the `DataframeModel` according to their type
+    """Align values in the `DataTableModel` according to their type
 
     Parameters
     ----------
@@ -34,7 +34,7 @@ class DataframeModel(QAbstractTableModel):
 
     def __init__(self, view: 'QTableView', dataframe: Union[pd.DataFrame, pd.Series], editable=False,
                  columnDecorator: bool = True):
-        """Initiate a new `DataframeModel`, base class for representing the data.
+        """Initiate a new `DataTableModel`, base class for representing the data.
 
         Parameters
         ----------
@@ -89,8 +89,10 @@ class DataframeModel(QAbstractTableModel):
                 value = self._data.iloc[index.row()]
 
             if role == Qt.DisplayRole:
-                if pd.isna(value):
-                    return ''
+                # Need to check type since a cell might contain a list or Series, then .isna returns a Series not a bool
+                cell_is_na = pd.isna(value)
+                if type(cell_is_na) == bool and cell_is_na:
+                    return ""
                 return str(value)
             elif role == Qt.TextAlignmentRole:
                 return _align(value)

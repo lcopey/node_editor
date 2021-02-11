@@ -7,7 +7,7 @@ class EditDelegate(QItemDelegate):
 
     # ========================================================================
     def createEditor(self, parent, option, index):
-        """Create widget to edit cell `DataframeModel`
+        """Create widget to edit cell `DataTableModel`
 
         Parameters
         ----------

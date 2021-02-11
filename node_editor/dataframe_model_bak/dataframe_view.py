@@ -70,32 +70,32 @@ class DataframeView(QTableView):
             dumpException(e)
 
     def setDataFrame(self, dataframe: pd.DataFrame):
-        """Define the dataframe through a new `DataframeModel`
+        """Define the dataframe through a new `DataTableModel`
 
         Parameters
         ----------
         dataframe : pd.DataFrame
             dataframe holding the data
         editable : bool
-            flag setting the `DataframeModel` as editable
+            flag setting the `DataTableModel` as editable
         """
         try:
-            # dataframe_model = DataframeModel(view=self, dataframe=dataframe, editable=editable)
-            # self.header.setFilterBoxes(dataframe_model.columnCount())
+            # dataframe_model_bak = DataTableModel(view=self, dataframe=dataframe, editable=editable)
+            # self.header.setFilterBoxes(dataframe_model_bak.columnCount())
             self.model().dataframe = dataframe
             self.header.setFilterBoxes(dataframe.shape[1])
             # Connect filter from model to event in FilterHeader
-            # super().setModel(dataframe_model)
+            # super().setModel(dataframe_model_bak)
         except Exception as e:
             dumpException(e)
 
     def getDataFrame(self):
-        """Returns dataframe currently hold in the `DataframeModel`
+        """Returns dataframe currently hold in the `DataTableModel`
 
         Returns
         -------
         pd.DataFrame
-            dataframe currently hold in the `DataframeModel`
+            dataframe currently hold in the `DataTableModel`
         """
         return self.model().dataframe
 

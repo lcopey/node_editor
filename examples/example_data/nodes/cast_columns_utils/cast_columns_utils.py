@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QItemDelegate, QComboBox, QTableView
 from PyQt5.QtCore import Qt, QAbstractTableModel, QModelIndex, pyqtSlot, pyqtSignal
 from PyQt5.QtGui import QIcon
 import pandas as pd
-from node_editor.dataframe_model import DataframeModel
+from node_editor.dataframe_model_bak import DataframeModel
 
 from node_editor.utils import dumpException
 from typing import Any

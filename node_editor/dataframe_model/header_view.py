@@ -1,0 +1,170 @@
+from PyQt5.QtWidgets import QTableView, QSizePolicy, QAbstractItemView
+from PyQt5.QtCore import Qt, QAbstractTableModel, QModelIndex, QSize
+from PyQt5.QtGui import QFont
+import pandas as pd
+import numpy as np
+
+from typing import Dict, List, Union, Iterable, Any, TYPE_CHECKING
+from node_editor.utils import dumpException
+
+if TYPE_CHECKING:
+    from .dataframe_viewer import DataFrameView
+
+
+class HeaderModel(QAbstractTableModel):
+    def __init__(self, parent: 'DataFrameView', orientation):
+        super().__init__(parent)
+        self.orientation = orientation
+        self.dataframe: pd.DataFrame = parent.dataframe
+
+    def columnCount(self, parent: QModelIndex = ...) -> int:
+        if self.orientation == Qt.Horizontal:
+            return self.dataframe.columns.shape[0]
+        else:
+            return self.dataframe.index.nlevels
+
+    def rowCount(self, parent: QModelIndex = ...) -> int:
+        if self.orientation == Qt.Horizontal:
+            return self.dataframe.columns.nlevels
+        elif self.orientation == Qt.Vertical:
+            return self.dataframe.index.shape[0]
+
+    def data(self, index: QModelIndex, role: int = ...) -> Any:
+        row, col = index.row(), index.column()
+        if role == Qt.DisplayRole or role == Qt.ToolTipRole:
+            if self.orientation == Qt.Horizontal:
+                # Header corresponds to columns
+                if isinstance(self.dataframe.columns, pd.MultiIndex):
+                    return str(self.dataframe.columns[col][row])
+                else:
+                    return str(self.dataframe.columns[col])
+            elif self.orientation == Qt.Vertical:
+
+                if isinstance(self.dataframe.index, pd.MultiIndex):
+                    return str(self.dataframe.index[row][col])
+                else:
+                    return str(self.dataframe.index[row])
+
+
+class HeaderView(QTableView):
+    def __init__(self, parent: 'DataFrameView', orientation):
+        super().__init__(parent)
+        self.dataframe: pd.DataFrame = parent.dataframe
+        self.table = parent.dataView  # reference to table
+        self.orientation = orientation
+        # define model data
+        model = HeaderModel(parent, orientation)
+        self.setModel(model)
+
+        # setup ui
+        self.horizontalHeader().hide()
+        self.verticalHeader().hide()
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setHorizontalScrollMode(QAbstractItemView.ScrollPerPixel)
+        self.setVerticalScrollMode(QAbstractItemView.ScrollPerPixel)
+        # Set stretch parameters of headers
+        if self.orientation == Qt.Horizontal:
+            self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Maximum)
+        else:
+            self.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Expanding)
+
+        font = QFont()
+        font.setBold(True)
+        self.setFont(font)
+
+        self.set_spans()
+        self.init_column_sizes()
+
+        # Set initial size
+        self.resize(self.sizeHint())
+
+    def sizeHint(self):
+        # Columm headers
+        if self.orientation == Qt.Horizontal:
+            # Width of DataTableView
+            width = self.table.sizeHint().width() + self.verticalHeader().width()
+            # Height
+            height = 2 * self.frameWidth()  # Account for border & padding
+            for i in range(self.model().rowCount()):
+                height += self.rowHeight(i)
+
+        # Index header
+        else:
+            # Height of DataTableView
+            height = self.table.sizeHint().height() + self.horizontalHeader().height()
+            # Width
+            width = 2 * self.frameWidth()  # Account for border & padding
+            for i in range(self.model().columnCount()):
+                width += self.columnWidth(i)
+        return QSize(width, height)
+
+    # This is needed because otherwise when the horizontal header is a single row it will add whitespace to be bigger
+    def minimumSizeHint(self):
+        if self.orientation == Qt.Horizontal:
+            return QSize(0, self.sizeHint().height())
+        else:
+            return QSize(self.sizeHint().width(), 0)
+
+    # Fits columns to contents but with a minimum width and added padding
+    def init_column_sizes(self):
+        padding = 5
+
+        # Columns match columns of content with header
+        if self.orientation == Qt.Horizontal:
+            min_size = 0
+
+            self.resizeColumnsToContents()
+            for col in range(self.model().columnCount()):
+                width = self.columnWidth(col)
+                if width + padding < min_size:
+                    new_width = min_size
+                else:
+                    new_width = width + padding
+                # Match column width of content with header
+                self.setColumnWidth(col, new_width)
+                self.table.setColumnWidth(col, new_width)
+
+        else:
+            # Index, only set the width
+            self.resizeColumnsToContents()
+            for col in range(self.model().columnCount()):
+                width = self.columnWidth(col)
+                self.setColumnWidth(col, width + padding)
+
+    def set_spans(self):
+        """Adjust spans of the table to display multiheader like"""
+        self.clearSpans()
+        try:
+            # Find spans for horizontal HeaderView
+            if self.orientation == Qt.Horizontal:
+                self._adjust_spans(self.dataframe.columns)
+            else:
+                self._adjust_spans(self.dataframe.index)
+
+        except Exception as e:
+            dumpException(e)
+
+    def _adjust_spans(self, index: Union[pd.Index, pd.MultiIndex]):
+        """Compute spans"""
+        if isinstance(index, pd.MultiIndex):
+            levels = np.stack([np.array(value) for value in index]).T
+        else:
+            levels = np.array([index])
+
+        for nlevel, level in enumerate(levels):
+            # detect where level are discontinuous
+            spans = list(np.where(level[1:] != level[:-1])[0])
+            # add the first and last cell if necessary
+            if 0 not in spans:
+                spans.insert(0, -1)
+            if len(level) - 1 not in spans:
+                spans.append(len(level) - 1)
+            # only check if span if larger thant one cell
+            for n in np.where(np.diff(list(spans)) > 1)[0]:
+                span_size = spans[n + 1] - (spans[n] + 1) + 1
+                if self.orientation == Qt.Horizontal:
+                    self.setSpan(nlevel, spans[n] + 1, 1, span_size)
+                else:
+                    print(nlevel, spans[n] + 1, span_size, 1)
+                    self.setSpan(spans[n] + 1, nlevel, span_size, 1)
