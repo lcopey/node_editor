@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QGraphicsItem, QStyleOptionGraphicsItem, QWidget
+from PyQt5.QtWidgets import QGraphicsItem, QStyleOptionGraphicsItem, QWidget, QApplication
 from PyQt5.QtCore import Qt, QRectF, QPointF, QPoint
 from PyQt5.QtGui import QFont, QPen, QColor, QBrush, QPainter, QPainterPath
 from .utils import dumpException
@@ -118,12 +118,14 @@ class Handle(QGraphicsItem):
 
     def changeCursorOnHover(self, ):
         self._hovered = True
-        self.setCursor(handleCursors[self.position])
+        QApplication.setOverrideCursor(handleCursors[self.position])
+        # self.setCursor(handleCursors[self.position])
         self.update()
 
     def hoverLeaveEvent(self, event: 'QGraphicsSceneHoverEvent') -> None:
         self._hovered = False
-        self.setCursor(Qt.ArrowCursor)
+        QApplication.setOverrideCursor(Qt.ArrowCursor)
+        # self.setCursor(Qt.ArrowCursor)
         self.update()
 
     def mousePressEvent(self, event: 'QGraphicsSceneMouseEvent') -> None:

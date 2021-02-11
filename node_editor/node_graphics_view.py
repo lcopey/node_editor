@@ -259,6 +259,7 @@ class NodeGraphicsView(QGraphicsView):
                 fakeEvent = QMouseEvent(QEvent.MouseButtonRelease, event.pos(), event.screenPos(),
                                         Qt.LeftButton, Qt.NoButton, event.modifiers())
                 super().mouseReleaseEvent(fakeEvent)
+                # self.setCursor(Qt.CrossCursor)
                 QApplication.setOverrideCursor(Qt.CrossCursor)
                 return
             else:
@@ -318,6 +319,7 @@ class NodeGraphicsView(QGraphicsView):
                 self.cutIntersectingEdges()
                 self.cutLine.line_points = []
                 self.cutLine.update()
+                # self.setCursor(Qt.ArrowCursor)
                 QApplication.setOverrideCursor(Qt.ArrowCursor)
                 self.mode = ViewMode.NOOP
                 return
