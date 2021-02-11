@@ -61,6 +61,8 @@ class DataFrameView(QWidget):
 
     def setDataFrame(self, dataframe: Union[pd.DataFrame, pd.Series]):
         self.dataView.setDataFrame(dataframe)
+        self.indexHeader.updateModel()
+        self.columnHeader.updateModel()
 
     @property
     def dataframe(self):

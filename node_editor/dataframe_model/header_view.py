@@ -15,7 +15,22 @@ class HeaderModel(QAbstractTableModel):
     def __init__(self, parent: 'DataFrameView', orientation):
         super().__init__(parent)
         self.orientation = orientation
+        self._dataframe: Union[pd.DataFrame, None] = None
         self.dataframe: pd.DataFrame = parent.dataframe
+
+    @property
+    def dataframe(self):
+        return self._dataframe
+
+    @dataframe.setter
+    def dataframe(self, value):
+        self.beginResetModel()
+        if value is None:
+            value = pd.DataFrame()  # Default value for DataFrame
+        if isinstance(value, pd.Series):
+            value = value.to_frame()  # in case of Series cast to DataFrame
+        self._dataframe = value
+        self.endResetModel()
 
     def columnCount(self, parent: QModelIndex = ...) -> int:
         if self.orientation == Qt.Horizontal:
@@ -80,6 +95,10 @@ class HeaderView(QTableView):
 
         # Set initial size
         self.resize(self.sizeHint())
+
+    def updateModel(self):
+        dataframe = self.parent().dataframe
+        self.model().dataframe = dataframe
 
     def sizeHint(self):
         # Columm headers
