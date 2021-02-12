@@ -1,5 +1,6 @@
-from PyQt5.QtWidgets import QTableView, QSizePolicy, QAbstractItemView
-from PyQt5.QtCore import Qt, QAbstractTableModel, QModelIndex, QSize, QItemSelectionModel, QItemSelection
+from PyQt5.QtWidgets import QTableView, QSizePolicy, QAbstractItemView, QApplication
+from PyQt5.QtCore import Qt, QAbstractTableModel, QModelIndex, QSize, QItemSelectionModel, QItemSelection, QObject, \
+    QEvent, QPoint
 from PyQt5.QtGui import QFont
 import pandas as pd
 import numpy as np
@@ -34,6 +35,12 @@ class HeaderModel(QAbstractTableModel):
     def dataframe(self):
         return self._dataframe
 
+    def isHorizontal(self):
+        return self.orientation == Qt.Horizontal
+
+    def isVertical(self):
+        return self.orientation == Qt.Vertical
+
     def updateModel(self):
         """Update model - Is typically called when new dataframe is set upon the DataFrameView"""
         self.beginResetModel()
@@ -51,22 +58,21 @@ class HeaderModel(QAbstractTableModel):
     def rowCount(self, parent: QModelIndex = ...) -> int:
         """Rows count is either the count of rows in case orientation is Vertical.
         Else it corresponds to the count of levels of the columns"""
-        if self.orientation == Qt.Horizontal:
+        if self.isHorizontal():
             return self.dataframe.columns.nlevels
-        elif self.orientation == Qt.Vertical:
+        elif self.isVertical():
             return self.dataframe.index.shape[0]
 
     def data(self, index: QModelIndex, role: int = ...) -> Any:
         row, col = index.row(), index.column()
         if role == Qt.DisplayRole or role == Qt.ToolTipRole:
-            if self.orientation == Qt.Horizontal:
+            if self.isHorizontal():
                 # Header corresponds to columns
                 if isinstance(self.dataframe.columns, pd.MultiIndex):
                     return str(self.dataframe.columns[col][row])
                 else:
                     return str(self.dataframe.columns[col])
-            elif self.orientation == Qt.Vertical:
-
+            elif self.isVertical():
                 if isinstance(self.dataframe.index, pd.MultiIndex):
                     return str(self.dataframe.index[row][col])
                 else:
@@ -89,11 +95,22 @@ class HeaderView(QTableView):
         """
         super().__init__(parent)
         self.dataframe: pd.DataFrame = parent.dataframe
-        self.table = parent.dataView  # reference to table
+        self.dataView = parent.dataView  # reference to table
         self.orientation = orientation
+
+        # variables for resize event
+        self._header_being_resized = None
+        self._resize_start_position = None
+        self._header_initial_size = None
+
         # define model data
         model = HeaderModel(dataframeView=parent, parent=self)
         self.setModel(model)
+
+        # install eventFilter
+        self.setMouseTracking(True)
+        self.viewport().setMouseTracking(True)
+        self.viewport().installEventFilter(self)
 
         # setup ui
         self.horizontalHeader().hide()
@@ -103,7 +120,7 @@ class HeaderView(QTableView):
         self.setHorizontalScrollMode(QAbstractItemView.ScrollPerPixel)
         self.setVerticalScrollMode(QAbstractItemView.ScrollPerPixel)
         # Set stretch parameters of headers
-        if self.orientation == Qt.Horizontal:
+        if self.isHorizontal():
             self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Maximum)
         else:
             self.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Expanding)
@@ -120,15 +137,17 @@ class HeaderView(QTableView):
         # Set initial size
         self.resize(self.sizeHint())
 
-    def updateModel(self):
-        """Update model - Is typically called when new dataframe is set upon the DataFrameView"""
-        self.model().updateModel()
+    def isHorizontal(self):
+        return self.orientation == Qt.Horizontal
+
+    def isVertical(self):
+        return self.orientation == Qt.Vertical
 
     def sizeHint(self):
         # Columm headers
-        if self.orientation == Qt.Horizontal:
+        if self.isHorizontal():
             # Width of DataTableView
-            width = self.table.sizeHint().width() + self.verticalHeader().width()
+            width = self.dataView.sizeHint().width() + self.verticalHeader().width()
             # Height
             height = 2 * self.frameWidth()  # Account for border & padding
             for i in range(self.model().rowCount()):
@@ -137,7 +156,7 @@ class HeaderView(QTableView):
         # Index header
         else:
             # Height of DataTableView
-            height = self.table.sizeHint().height() + self.horizontalHeader().height()
+            height = self.dataView.sizeHint().height() + self.horizontalHeader().height()
             # Width
             width = 2 * self.frameWidth()  # Account for border & padding
             for i in range(self.model().columnCount()):
@@ -146,17 +165,162 @@ class HeaderView(QTableView):
 
     # This is needed because otherwise when the horizontal header is a single row it will add whitespace to be bigger
     def minimumSizeHint(self):
-        if self.orientation == Qt.Horizontal:
+        if self.isHorizontal():
             return QSize(0, self.sizeHint().height())
         else:
             return QSize(self.sizeHint().width(), 0)
+
+    def onSelectionChanged(self, selected: QItemSelection, deselected: QItemSelection):
+        """Select corresponding cells
+
+        Parameters
+        ----------
+        selected: QItemSelection
+        deselected: QItemSelection
+
+        Returns
+        -------
+
+        """
+        if self.hasFocus():
+            dataView = self.parent().dataView
+            selection = self.selectionModel().selection()
+
+            if self.isHorizontal():
+                # Removes the higher levels so that only the lowest level of the header affects the data table selection
+                # last_row_ix = self.dataframe.columns.nlevels - 1
+                # last_col_ix = self.model().columnCount() - 1
+                # higher_levels = QItemSelection(
+                #     self.model().index(0, 0),
+                #     self.model().index(last_row_ix - 1, last_col_ix),
+                # )
+                # selection.merge(higher_levels, QItemSelectionModel.Deselect)
+                # Unselect the indexHeader
+                indexHeader: HeaderView = self.parent().indexHeader
+                indexModel = indexHeader.model()
+                indexSelect = QItemSelection(indexModel.index(0, 0),
+                                             indexModel.index(indexModel.rowCount() - 1,
+                                                              indexModel.columnCount() - 1))
+
+                indexHeader.selectionModel().select(indexSelect, QItemSelectionModel.Deselect)
+                # Select the cells in the data view
+                dataView.selectionModel().select(
+                    selection,
+                    QItemSelectionModel.Columns | QItemSelectionModel.ClearAndSelect,
+                )
+            if self.isVertical():
+                # Removes the higher levels so that only the lowest level of the header affects the data table selection
+                # last_row_ix = self.model().rowCount() - 1
+                # last_col_ix = self.dataframe.index.nlevels - 1
+                # higher_levels = QItemSelection(
+                #     self.model().index(0, 0),
+                #     self.model().index(last_row_ix, last_col_ix - 1),
+                # )
+                # selection.merge(higher_levels, QItemSelectionModel.Deselect)
+
+                # Unselect the columnHeader
+                columnHeader: HeaderView = self.parent().columnHeader
+                columnModel = columnHeader.model()
+                columnSelect = QItemSelection(columnModel.index(0, 0),
+                                              columnModel.index(columnModel.rowCount() - 1,
+                                                                columnModel.columnCount() - 1))
+
+                columnHeader.selectionModel().select(columnSelect, QItemSelectionModel.Deselect)
+                dataView.selectionModel().select(
+                    selection,
+                    QItemSelectionModel.Rows | QItemSelectionModel.ClearAndSelect,
+                )
+
+    def eventFilter(self, object: QObject, event: QEvent) -> bool:
+        try:
+            # start dragging process
+            if event.type() == QEvent.MouseButtonPress:
+                self.print('>Try resizing')
+                # store mouse position and header being resized
+                mousePosition = event.pos()
+                self._header_being_resized = self.overHeaderEdge(mousePosition)
+                if self._header_being_resized is not None:
+                    self.print('>>Resize triggered')
+                    self.print('Header selected : ', self._header_being_resized)
+                    # store initial header size
+                    if self.isHorizontal():
+                        self._resize_start_position = mousePosition.x()
+                        self._header_initial_size = self.columnWidth(self._header_being_resized)
+                    else:
+                        self._resize_start_position = mousePosition.y()
+                        self._header_initial_size = self.rowHeight(self._header_being_resized)
+                    return True
+            # end dragging process
+            elif event.type() == QEvent.MouseButtonRelease:
+                self._header_being_resized = None
+                self.print('>>Resize ended')
+                return True
+
+            # Handle active drag resizing
+            elif event.type() == QEvent.MouseMove:
+                if self._header_being_resized is not None:
+                    self.print('>>Resizing')
+                    mousePosition = event.pos()
+                    if self.isHorizontal():
+                        new_size = self._header_initial_size + mousePosition.x() - self._resize_start_position
+                        self.setColumnWidth(self._header_being_resized, new_size)
+                        self.dataView.setColumnWidth(self._header_being_resized, new_size)
+                    else:
+                        new_size = self._header_initial_size + mousePosition.y() - self._resize_start_position
+                        self.setRowHeight(self._header_being_resized, new_size)
+                        self.dataView.setRowHeight(self._header_being_resized, new_size)
+                    return True
+                else:
+                    # Change cursor upon hover
+                    if self.overHeaderEdge(event.pos()) is not None:
+                        if self.isHorizontal():
+                            QApplication.setOverrideCursor(Qt.SizeHorCursor)
+                        else:
+                            QApplication.setOverrideCursor(Qt.SizeVerCursor)
+                    else:
+                        QApplication.setOverrideCursor(Qt.ArrowCursor)
+
+
+        except Exception as e:
+            dumpException(e)
+        return False
+
+    def overHeaderEdge(self, pos: QPoint, margin: int = 3):
+        """Helper function - returns the index of the column this x position is on the right edge of"""
+        # Return the index of the column this x position is on the right edge of
+        if self.isHorizontal():
+            x = pos.x()
+            if self.columnAt(x - margin) != self.columnAt(x + margin):
+                if self.columnAt(x + margin) == 0:
+                    # We're at the left edge of the first column
+                    return None
+                else:
+                    return self.columnAt(x - margin)
+            else:
+                return None
+
+        # Return the index of the row this y position is on the top edge of
+        elif self.isVertical():
+            y = pos.y()
+            if self.rowAt(y - margin) != self.rowAt(y + margin):
+                if self.rowAt(y + margin) == 0:
+                    # We're at the top edge of the first row
+                    return None
+                else:
+                    return self.rowAt(y - margin)
+            else:
+                return None
+
+    def updateModel(self):
+        """Update model - Is typically called when new dataframe is set upon the DataFrameView"""
+        self.model().updateModel()
 
     # Fits columns to contents but with a minimum width and added padding
     def init_column_sizes(self):
         padding = 5
 
         # Columns match columns of content with header
-        if self.orientation == Qt.Horizontal:
+        if self.isHorizontal():
             min_size = 0
 
             self.resizeColumnsToContents()
@@ -168,7 +332,7 @@ class HeaderView(QTableView):
                     new_width = width + padding
                 # Match column width of content with header
                 self.setColumnWidth(col, new_width)
-                self.table.setColumnWidth(col, new_width)
+                self.dataView.setColumnWidth(col, new_width)
 
         else:
             # Index, only set the width
@@ -182,7 +346,7 @@ class HeaderView(QTableView):
         self.clearSpans()
         try:
             # Find spans for horizontal HeaderView
-            if self.orientation == Qt.Horizontal:
+            if self.isHorizontal():
                 self._adjust_spans(self.dataframe.columns)
             else:
                 self._adjust_spans(self.dataframe.index)
@@ -208,68 +372,13 @@ class HeaderView(QTableView):
             # only check if span if larger thant one cell
             for n in np.where(np.diff(list(spans)) > 1)[0]:
                 span_size = spans[n + 1] - (spans[n] + 1) + 1
-                if self.orientation == Qt.Horizontal:
+                if self.isHorizontal():
                     self.setSpan(nlevel, spans[n] + 1, 1, span_size)
                 else:
                     self.setSpan(spans[n] + 1, nlevel, span_size, 1)
 
-    def onSelectionChanged(self, selected: QItemSelection, deselected: QItemSelection):
-        """Select corresponding cells
-
-        Parameters
-        ----------
-        selected: QItemSelection
-        deselected: QItemSelection
-
-        Returns
-        -------
-
-        """
-        if self.hasFocus():
-            dataView = self.parent().dataView
-            selection = self.selectionModel().selection()
-
-            if self.orientation == Qt.Horizontal:
-                # Removes the higher levels so that only the lowest level of the header affects the data table selection
-                # last_row_ix = self.dataframe.columns.nlevels - 1
-                # last_col_ix = self.model().columnCount() - 1
-                # higher_levels = QItemSelection(
-                #     self.model().index(0, 0),
-                #     self.model().index(last_row_ix - 1, last_col_ix),
-                # )
-                # selection.merge(higher_levels, QItemSelectionModel.Deselect)
-                # Unselect the indexHeader
-                indexHeader: HeaderView = self.parent().indexHeader
-                indexModel = indexHeader.model()
-                indexSelect = QItemSelection(indexModel.index(0, 0),
-                                             indexModel.index(indexModel.rowCount() - 1,
-                                                              indexModel.columnCount() - 1))
-
-                indexHeader.selectionModel().select(indexSelect, QItemSelectionModel.Deselect)
-                # Select the cells in the data view
-                dataView.selectionModel().select(
-                    selection,
-                    QItemSelectionModel.Columns | QItemSelectionModel.ClearAndSelect,
-                )
-            if self.orientation == Qt.Vertical:
-                # Removes the higher levels so that only the lowest level of the header affects the data table selection
-                # last_row_ix = self.model().rowCount() - 1
-                # last_col_ix = self.dataframe.index.nlevels - 1
-                # higher_levels = QItemSelection(
-                #     self.model().index(0, 0),
-                #     self.model().index(last_row_ix, last_col_ix - 1),
-                # )
-                # selection.merge(higher_levels, QItemSelectionModel.Deselect)
-
-                # Unselect the columnHeader
-                columnHeader: HeaderView = self.parent().columnHeader
-                columnModel = columnHeader.model()
-                columnSelect = QItemSelection(columnModel.index(0, 0),
-                                              columnModel.index(columnModel.rowCount() - 1,
-                                                                columnModel.columnCount() - 1))
-
-                columnHeader.selectionModel().select(columnSelect, QItemSelectionModel.Deselect)
-                dataView.selectionModel().select(
-                    selection,
-                    QItemSelectionModel.Rows | QItemSelectionModel.ClearAndSelect,
-                )
+    def print(self, *args):
+        if self.isHorizontal():
+            print('> ColumnHeader ', *args)
+        else:
+            print('> IndexHeader ', *args)

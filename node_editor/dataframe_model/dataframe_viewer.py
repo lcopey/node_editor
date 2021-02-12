@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import *
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QObject, QEvent
 from .datatable_view import DataTableView
 from .header_view import HeaderView
 import pandas as pd
