@@ -12,33 +12,45 @@ if TYPE_CHECKING:
 
 
 class HeaderModel(QAbstractTableModel):
-    def __init__(self, parent: 'DataFrameView', orientation):
+    """Model handling values taken either from a DataFrame or a Series index or columns"""
+
+    def __init__(self, parent: 'HeaderView', dataframeView: 'DataFrameView'):
+        """Model handling values from parent DataFrameView
+
+        Parameters
+        ----------
+        parent: DataFrameView
+            DataFrameView handling the corresponding headerView
+        orientation: Qt.Orientation
+            if Qt.Horizontal, the HeaderModel will contain column information
+            if Qt.Vertical, the HeaderModel will contain index information
+        """
         super().__init__(parent)
-        self.orientation = orientation
-        self._dataframe: Union[pd.DataFrame, None] = None
-        self.dataframe: pd.DataFrame = parent.dataframe
+        self.dataframeView = dataframeView
+        self.orientation = parent.orientation
+        self._dataframe = parent.dataframe
 
     @property
     def dataframe(self):
         return self._dataframe
 
-    @dataframe.setter
-    def dataframe(self, value):
+    def updateModel(self):
+        """Update model - Is typically called when new dataframe is set upon the DataFrameView"""
         self.beginResetModel()
-        if value is None:
-            value = pd.DataFrame()  # Default value for DataFrame
-        if isinstance(value, pd.Series):
-            value = value.to_frame()  # in case of Series cast to DataFrame
-        self._dataframe = value
+        self._dataframe = self.dataframeView.dataframe
         self.endResetModel()
 
     def columnCount(self, parent: QModelIndex = ...) -> int:
+        """Columns count is either the count of columns in case orientation is Horizontal.
+        Else it corresponds to the count of levels of the index"""
         if self.orientation == Qt.Horizontal:
             return self.dataframe.columns.shape[0]
         else:
             return self.dataframe.index.nlevels
 
     def rowCount(self, parent: QModelIndex = ...) -> int:
+        """Rows count is either the count of rows in case orientation is Vertical.
+        Else it corresponds to the count of levels of the columns"""
         if self.orientation == Qt.Horizontal:
             return self.dataframe.columns.nlevels
         elif self.orientation == Qt.Vertical:
@@ -62,13 +74,25 @@ class HeaderModel(QAbstractTableModel):
 
 
 class HeaderView(QTableView):
-    def __init__(self, parent: 'DataFrameView', orientation):
+    """View displaying datas from a HeaderModel"""
+
+    def __init__(self, parent: 'DataFrameView', orientation: Qt.Orientation):
+        """View displaying values from parent DataFrameView
+
+        Parameters
+        ----------
+        parent: DataFrameView
+            DataFrameView handling the corresponding headerView
+        orientation: Qt.Orientation
+            if Qt.Horizontal, the HeaderModel will contain column information
+            if Qt.Vertical, the HeaderModel will contain index information
+        """
         super().__init__(parent)
         self.dataframe: pd.DataFrame = parent.dataframe
         self.table = parent.dataView  # reference to table
         self.orientation = orientation
         # define model data
-        model = HeaderModel(parent, orientation)
+        model = HeaderModel(dataframeView=parent, parent=self)
         self.setModel(model)
 
         # setup ui
@@ -97,8 +121,8 @@ class HeaderView(QTableView):
         self.resize(self.sizeHint())
 
     def updateModel(self):
-        dataframe = self.parent().dataframe
-        self.model().dataframe = dataframe
+        """Update model - Is typically called when new dataframe is set upon the DataFrameView"""
+        self.model().updateModel()
 
     def sizeHint(self):
         # Columm headers
