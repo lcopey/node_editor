@@ -319,8 +319,7 @@ class NodeGraphicsView(QGraphicsView):
                 self.cutIntersectingEdges()
                 self.cutLine.line_points = []
                 self.cutLine.update()
-                # self.setCursor(Qt.ArrowCursor)
-                QApplication.setOverrideCursor(Qt.ArrowCursor)
+                QApplication.restoreOverrideCursor()
                 self.mode = ViewMode.NOOP
                 return
 

@@ -118,14 +118,12 @@ class Handle(QGraphicsItem):
 
     def changeCursorOnHover(self, ):
         self._hovered = True
-        QApplication.setOverrideCursor(handleCursors[self.position])
-        # self.setCursor(handleCursors[self.position])
+        self.setCursor(handleCursors[self.position])
         self.update()
 
     def hoverLeaveEvent(self, event: 'QGraphicsSceneHoverEvent') -> None:
         self._hovered = False
-        QApplication.setOverrideCursor(Qt.ArrowCursor)
-        # self.setCursor(Qt.ArrowCursor)
+        self.setCursor(Qt.ArrowCursor)
         self.update()
 
     def mousePressEvent(self, event: 'QGraphicsSceneMouseEvent') -> None:

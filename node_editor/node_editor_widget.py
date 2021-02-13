@@ -120,8 +120,8 @@ class NodeEditorWidget(QWidget):
     def fileSave(self, filename=None):
         if filename is not None:
             self.filename = filename
-        # self.setCursor(Qt.WaitCursor)
-        QApplication.setOverrideCursor(Qt.WaitCursor)
+        self.setCursor(Qt.WaitCursor)
+        # QApplication.setOverrideCursor(Qt.WaitCursor)
         self.scene.saveToFile(self.filename)
         self.setCursor(Qt.ArrowCursor)
         # QApplication.restoreOverrideCursor()

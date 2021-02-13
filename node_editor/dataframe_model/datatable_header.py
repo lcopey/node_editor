@@ -274,12 +274,11 @@ class HeaderView(QTableView):
                     # Change cursor upon hover
                     if self.overHeaderEdge(event.pos()) is not None:
                         if self.isHorizontal():
-                            QApplication.setOverrideCursor(Qt.SizeHorCursor)
+                            QApplication.setOverrideCursor(Qt.SplitHCursor)
                         else:
-                            QApplication.setOverrideCursor(Qt.SizeVerCursor)
+                            QApplication.setOverrideCursor(Qt.SplitVCursor)
                     else:
-                        QApplication.setOverrideCursor(Qt.ArrowCursor)
-
+                        QApplication.restoreOverrideCursor()
 
         except Exception as e:
             dumpException(e)
