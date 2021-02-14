@@ -24,11 +24,6 @@ class DataTableContent(NodeContentWidget):
 
     def initUI(self):
         df = pd.DataFrame()
-        # TODO for debug purpose only
-        # df = pd.DataFrame(np.random.rand(20, 3))
-        # index = pd.MultiIndex.from_tuples(
-        #     [(f'level_0_{i}', f'level_1_{j}', f'level_2_{k}') for i in range(2) for j in range(3) for k in range(5)])
-        # df = pd.DataFrame(np.random.rand(3, len(index)).T, index=index).T
         # Define layout including the DataFrameView
         self.layout = QVBoxLayout()
         # self.layout.setContentsMargins(5, 5, 5, 5)
@@ -76,6 +71,14 @@ class DataNode_Table(DataNode):
 
     def evalImplementation(self):
         self.print('evalImplementation')
+
+        # df = pd.DataFrame(np.random.rand(20, 3))
+        # index = pd.MultiIndex.from_tuples(
+        #     [(f'level_0_{i}', f'level_1_{j}', f'level_2_{k}') for i in range(2) for j in range(3) for k in range(5)])
+        # df = pd.DataFrame(np.random.rand(3, len(index)).T, index=index).T
+        # self.value = df
+        # return self.value
+
         # get first input
         input_node = self.getInput(0)
         if not input_node:
