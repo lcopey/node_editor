@@ -6,7 +6,7 @@ from .node_socket import Socket, SocketPosition
 from .node_status import GraphicsStatus
 from .utils import dumpException, return_simple_id
 
-from typing import TYPE_CHECKING, List, Tuple
+from typing import TYPE_CHECKING, List, Tuple, Union
 
 if TYPE_CHECKING:
     from .node_scene import Scene
@@ -21,7 +21,8 @@ class Node(Serializable):
     Socket_class = Socket
     """Class representing the `Node`"""
 
-    def __init__(self, scene: 'Scene', title='Undefined Node', inputs: List[int] = None, outputs: List[int] = None):
+    def __init__(self, scene: 'Scene', title: str = 'Undefined Node', inputs: List[int] = None,
+                 outputs: List[int] = None):
         """Instantiate a new `Node` and add it to the `Graphical Scene`
 
         Instance Attributes:
@@ -49,7 +50,7 @@ class Node(Serializable):
         self.title = title
 
         self.content = None
-        self.grNode = None
+        self.grNode: Union[GraphicsNode, None] = None
         self.initInnerClasses()
         self.initSettings()
 
@@ -118,11 +119,11 @@ class Node(Serializable):
         self.grNode.resizeable = value
 
     @property
-    def title(self, ):
+    def title(self, ) -> str:
         return self._title
 
     @title.setter
-    def title(self, value):
+    def title(self, value: str):
         self._title = value
         if hasattr(self, 'grNode'):
             self.grNode.title = self._title

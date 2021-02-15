@@ -44,6 +44,7 @@ class OpGraphicsNode(GraphicsNode):
         self.title_item.setFont(self._title_font)
         fm = QFontMetrics(self._title_font)
         width = fm.width(self.node.title)
+        # self.title_item.setTextWidth(width)
         self.title_item.setPos(self.radius - width / 2, self.radius * 2)
 
     # Define a new property relative to currently implemented height

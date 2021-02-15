@@ -16,7 +16,7 @@ class OpNode_TransposeTable(DataNode):
     def __init__(self, scene):
         super().__init__(scene, inputs=[1], outputs=[1])
 
-    def evalImplementation(self):
+    def evalImplementation(self, force=False):
         self.print('evalImplementation')
 
         # get first input

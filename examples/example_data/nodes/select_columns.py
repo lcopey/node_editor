@@ -38,6 +38,7 @@ class DataNode_SelectColumns(DataNode):
         # self.listWidget.itemClicked.connect(self.forcedEval)
         # self.updatePropertiesWidget()
         self.treeWidget = HeaderTreeWidget()
+        # self.treeWidget.itemClicked.connect(self.forcedEval)
 
         layout = QVBoxLayout()
         button_layout = QHBoxLayout()
@@ -104,7 +105,7 @@ class DataNode_SelectColumns(DataNode):
         #
         # return result
 
-    def evalImplementation(self):
+    def evalImplementation(self, force=False):
         self.print('evalImplementation')
 
         # get first input
@@ -134,7 +135,6 @@ class DataNode_SelectColumns(DataNode):
             return
 
         # Store the table with only the selected columns
-        # self.updateValue()
         column_selection = self.getColumnSelection()
         if column_selection:
             self.value = self.input_val[column_selection]

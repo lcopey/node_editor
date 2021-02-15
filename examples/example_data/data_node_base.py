@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from node_editor.node_socket import Socket
     from node_editor.node_scene import Scene
 
-DEBUG = False
+DEBUG = True
 
 
 class DataNode(Node):
@@ -71,9 +71,9 @@ class DataNode(Node):
 
     def forcedEval(self):
         self.markDirty(True)
-        self.eval()
+        self.eval(force=True)
 
-    def eval(self, ):
+    def eval(self, force: bool = False):
         # TODO replace force with dedicated function doing markDirty + eval
         if not self.isDirty() and not self.isInvalid():
             self.print('Dirty : ', self.isDirty(), 'Invalid : ', self.isInvalid())
@@ -85,7 +85,7 @@ class DataNode(Node):
             # self.markDirty(False)
             # self.markInvalid(False)
 
-            val = self.evalImplementation()
+            val = self.evalImplementation(force=force)
             return val
 
         except ValueError as e:
@@ -98,7 +98,7 @@ class DataNode(Node):
             self.setToolTip(str(e))
             dumpException(e)
 
-    def evalImplementation(self, *input_nodes):
+    def evalImplementation(self, *input_nodes, force: bool = False):
         """Evaluation implementation of the current `DataNode`.
 
 

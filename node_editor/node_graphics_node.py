@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QGraphicsItem, QGraphicsTextItem, QWidget, \
     QGraphicsRectItem, QStyleOptionGraphicsItem, QGraphicsSceneMouseEvent, QGraphicsDropShadowEffect, \
     QGraphicsSceneWheelEvent, QGraphicsSceneHoverEvent
-from PyQt5.QtGui import QFont, QPen, QColor, QBrush, QPainter, QPainterPath, QImage
+from PyQt5.QtGui import QFont, QPen, QColor, QBrush, QPainter, QPainterPath, QImage, QFontMetrics
 from PyQt5.QtCore import Qt, QRectF
 from .node_handle import HandlePosition, Handle
 from .node_socket import SocketPosition
@@ -94,7 +94,10 @@ class GraphicsNode(QGraphicsRectItem):
     @title.setter
     def title(self, value):
         self._title = value
+        # fm = QFontMetrics(self._title_font)
+        # width = fm.width(self.node.title)
         self.title_item.setPlainText(self._title)
+        # self.title_item.setTextWidth(width)
 
     def initUI(self):
         # Define the node as selectable and movable

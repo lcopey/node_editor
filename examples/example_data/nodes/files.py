@@ -115,26 +115,26 @@ class OpNode_ReadCSVFile(DataNode):
         # force the evaluation of the node
         self.forcedEval()
 
-    def evalImplementation(self):
+    def evalImplementation(self, force=False):
         self.print('evalImplementation')
 
         if self.filepath != '':
+
             # store the last modified time of the file
             if not self.file_last_modified:
                 self.file_last_modified = os.path.getmtime(self.filepath)
 
-            elif self.file_last_modified == os.path.getmtime(self.filepath):
+            elif self.file_last_modified == os.path.getmtime(self.filepath) and not force:
                 # the file has already been loaded, simply return the values stored
                 return self.value
 
             with open(self.filepath) as f:
                 # automatically detect delimiters
                 dialect = csv.Sniffer().sniff(f.read(4096), delimiters=';, \t')
-                # TODO support encoding for latin-1 file
                 # encoding = f.encoding
-                # get encoding of the file
-                encoding = self._comboEncoding.currentText()
 
+            # get encoding of the file
+            encoding = self._comboEncoding.currentText()
             # load csv file
             data_frame = pd.read_csv(self.filepath, dialect=dialect, encoding=encoding)
             # by default cast some column to numeric type if possible

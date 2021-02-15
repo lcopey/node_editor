@@ -91,7 +91,7 @@ class OpNode_CastColumns(DataNode):
         Is called upon chnage of value in properties dock widget"""
         self.forcedEval()
 
-    def evalImplementation(self):
+    def evalImplementation(self, force=False):
         self.print('evalImplementation')
 
         # get first input

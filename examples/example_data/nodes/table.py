@@ -69,7 +69,7 @@ class DataNode_Table(DataNode):
         self.width = 320
         self.grNode.updateLayout()
 
-    def evalImplementation(self):
+    def evalImplementation(self, force=False):
         self.print('evalImplementation')
 
         # df = pd.DataFrame(np.random.rand(20, 3))

@@ -16,7 +16,7 @@ class OpNode_DescribeTable(DataNode):
     def __init__(self, scene):
         super().__init__(scene, inputs=[1], outputs=[1])
 
-    def evalImplementation(self):
+    def evalImplementation(self, force=False):
         self.print('evalImplementation')
 
         # get first input
@@ -32,7 +32,6 @@ class OpNode_DescribeTable(DataNode):
             self.setToolTip('Input is NaN')
             self.markInvalid()
             return
-
 
         self.value = df1.describe()
 
