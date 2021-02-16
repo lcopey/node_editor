@@ -23,7 +23,7 @@ class SceneHistory:
         self._history_restored_listeners = []
 
     def clear(self):
-        """Clear history stack"""
+        """Clear history _stack"""
         self.history_stack = []
         self.history_current_step = -1
 
@@ -80,7 +80,7 @@ class SceneHistory:
                   '.... current step: {}'.format(self.history_current_step),
                   'len {}'.format(len(self.history_stack)))
 
-        # if the current step is not at the end of the history stack
+        # if the current step is not at the end of the history _stack
         if self.history_current_step + 1 < len(self.history_stack):
             self.history_stack = self.history_stack[0:self.history_current_step + 1]
 
