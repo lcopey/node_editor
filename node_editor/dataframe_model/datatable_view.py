@@ -161,7 +161,8 @@ class DataTableView(QTableView):
         self.horizontalHeader().hide()
         self.verticalHeader().hide()
 
-        self.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
+        # self.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
         # deactivate scrollbar, they are handled by their respective headerview in the dataframe_viewer
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
@@ -175,8 +176,9 @@ class DataTableView(QTableView):
         # selection model
         self.selectionModel().selectionChanged.connect(self.onSelectionChanged)
 
-    def setDataFrame(self, dataframe: Union[pd.DataFrame, pd.Series]):
-        self.model().setDataSource(dataframe)
+    # def setDataFrame(self, dataframe: Union[pd.DataFrame, pd.Series]):
+    #     model: DataTableModel = self.model()
+    #     model.setDataSource(dataframe)
 
     @property
     def dataframe(self):

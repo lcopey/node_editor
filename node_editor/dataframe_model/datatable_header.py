@@ -11,6 +11,8 @@ from node_editor.utils import dumpException
 if TYPE_CHECKING:
     from .dataframe_viewer import DataFrameView
 
+DEBUG = True
+
 
 class HeaderModel(QAbstractTableModel):
     """Model handling values taken either from a DataFrame or a Series index or columns"""
@@ -41,12 +43,6 @@ class HeaderModel(QAbstractTableModel):
     def isVertical(self):
         return self.orientation == Qt.Vertical
 
-    def updateModel(self):
-        """Update model - Is typically called when new dataframe is set upon the DataFrameView"""
-        self.beginResetModel()
-        self._dataframe = self.dataframeView.dataframe
-        self.endResetModel()
-
     def columnCount(self, parent: QModelIndex = ...) -> int:
         """Columns count is either the count of columns in case orientation is Horizontal.
         Else it corresponds to the count of levels of the index"""
@@ -66,17 +62,30 @@ class HeaderModel(QAbstractTableModel):
     def data(self, index: QModelIndex, role: int = ...) -> Any:
         row, col = index.row(), index.column()
         if role == Qt.DisplayRole or role == Qt.ToolTipRole:
+            value = None
             if self.isHorizontal():
                 # Header corresponds to columns
                 if isinstance(self.dataframe.columns, pd.MultiIndex):
-                    return str(self.dataframe.columns[col][row])
+                    value = self.dataframe.columns[col][row]
                 else:
-                    return str(self.dataframe.columns[col])
+                    value = self.dataframe.columns[col]
             elif self.isVertical():
                 if isinstance(self.dataframe.index, pd.MultiIndex):
-                    return str(self.dataframe.index[row][col])
+                    value = self.dataframe.index[row][col]
                 else:
-                    return str(self.dataframe.index[row])
+                    value = self.dataframe.index[row]
+            if pd.isna(value):
+                return ''
+            else:
+                return str(value)
+
+    # def updateModel(self):
+    #     """Update model - Is typically called when new dataframe is set upon the DataFrameView"""
+    #     self.layoutAboutToBeChanged.emit()
+    #     # self.beginResetModel()
+    #     self._dataframe = self.dataframeView.dataframe
+    #     # self.endResetModel()
+    #     self.layoutChanged.emit()
 
 
 class HeaderView(QTableView):
@@ -131,10 +140,9 @@ class HeaderView(QTableView):
 
         self.selectionModel().selectionChanged.connect(self.onSelectionChanged)
 
+        # Set initial size
         self.set_spans()
         self.init_column_sizes()
-
-        # Set initial size
         self.resize(self.sizeHint())
 
     def isHorizontal(self):
@@ -188,13 +196,14 @@ class HeaderView(QTableView):
 
             if self.isHorizontal():
                 # Removes the higher levels so that only the lowest level of the header affects the data table selection
-                # last_row_ix = self.dataframe.columns.nlevels - 1
-                # last_col_ix = self.model().columnCount() - 1
-                # higher_levels = QItemSelection(
-                #     self.model().index(0, 0),
-                #     self.model().index(last_row_ix - 1, last_col_ix),
-                # )
-                # selection.merge(higher_levels, QItemSelectionModel.Deselect)
+                last_row_ix = self.dataframe.columns.nlevels - 1
+                last_col_ix = self.model().columnCount() - 1
+                higher_levels = QItemSelection(
+                    self.model().index(0, 0),
+                    self.model().index(last_row_ix - 1, last_col_ix),
+                )
+                selection.merge(higher_levels, QItemSelectionModel.Deselect)
+
                 # Unselect the indexHeader
                 indexHeader: HeaderView = self.parent().indexHeader
                 indexModel = indexHeader.model()
@@ -210,13 +219,13 @@ class HeaderView(QTableView):
                 )
             if self.isVertical():
                 # Removes the higher levels so that only the lowest level of the header affects the data table selection
-                # last_row_ix = self.model().rowCount() - 1
-                # last_col_ix = self.dataframe.index.nlevels - 1
-                # higher_levels = QItemSelection(
-                #     self.model().index(0, 0),
-                #     self.model().index(last_row_ix, last_col_ix - 1),
-                # )
-                # selection.merge(higher_levels, QItemSelectionModel.Deselect)
+                last_row_ix = self.model().rowCount() - 1
+                last_col_ix = self.dataframe.index.nlevels - 1
+                higher_levels = QItemSelection(
+                    self.model().index(0, 0),
+                    self.model().index(last_row_ix, last_col_ix - 1),
+                )
+                selection.merge(higher_levels, QItemSelectionModel.Deselect)
 
                 # Unselect the columnHeader
                 columnHeader: HeaderView = self.parent().columnHeader
@@ -274,11 +283,14 @@ class HeaderView(QTableView):
                     # Change cursor upon hover
                     if self.overHeaderEdge(event.pos()) is not None:
                         if self.isHorizontal():
-                            QApplication.setOverrideCursor(Qt.SplitHCursor)
+                            # QApplication.setOverrideCursor(Qt.SplitHCursor)
+                            self.setCursor(Qt.SplitHCursor)
                         else:
-                            QApplication.setOverrideCursor(Qt.SplitVCursor)
+                            # QApplication.setOverrideCursor(Qt.SplitVCursor)
+                            self.setCursor(Qt.SplitVCursor)
                     else:
-                        QApplication.restoreOverrideCursor()
+                        # QApplication.restoreOverrideCursor()
+                        self.setCursor(Qt.ArrowCursor)
 
         except Exception as e:
             dumpException(e)
@@ -310,9 +322,13 @@ class HeaderView(QTableView):
             else:
                 return None
 
-    def updateModel(self):
-        """Update model - Is typically called when new dataframe is set upon the DataFrameView"""
-        self.model().updateModel()
+    # def updateModel(self):
+    #     """Update model - Is typically called when new dataframe is set upon the DataFrameView"""
+    #     model: HeaderModel = self.model()
+    #     model.updateModel()
+    #     self.set_spans()
+    #     self.init_column_sizes()
+    #     self.resize(self.sizeHint())
 
     # Fits columns to contents but with a minimum width and added padding
     def init_column_sizes(self):

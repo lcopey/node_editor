@@ -49,7 +49,7 @@ class Node(Serializable):
         self.scene = scene
         self.title = title
 
-        self.content = None
+        self.content: Union[NodeContentWidget, None] = None
         self.grNode: Union[GraphicsNode, None] = None
         self.initInnerClasses()
         self.initSettings()

@@ -411,7 +411,6 @@ class GraphicsNode(QGraphicsRectItem):
 
     def paint(self, painter: QPainter, option: 'QStyleOptionGraphicsItem',
               widget: Optional[QWidget] = ...) -> None:
-
         x = y = 0
 
         path_title = QPainterPath()

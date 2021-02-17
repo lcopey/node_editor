@@ -24,6 +24,12 @@ class DataTableContent(NodeContentWidget):
 
     def initUI(self):
         df = pd.DataFrame()
+        # df = pd.DataFrame(np.random.rand(20, 3))
+        # index = pd.MultiIndex.from_tuples(
+        #     [(f'level_0_{i}', f'level_1_{j}', f'level_2_{k}') for i in range(2) for j in range(3) for k in range(5)])
+        # df = pd.DataFrame(np.random.rand(3, len(index)).T, index=index).T
+        self.value = df
+        # return self.value
         # Define layout including the DataFrameView
         self.layout = QVBoxLayout()
         # self.layout.setContentsMargins(5, 5, 5, 5)
@@ -38,8 +44,16 @@ class DataTableContent(NodeContentWidget):
         if DEBUG:
             print('>DataTableContent :', *args)
 
-    def setDataFrame(self, dataframe: pd.DataFrame):
-        self.view.setDataFrame(dataframe, )
+    # def setDataFrame(self, dataframe: pd.DataFrame):
+    #     self.view.setDataFrame(dataframe, )
+    def updateContent(self, value):
+        self.view.hide()  # old widget remained visible otherwise
+        # Remove and reassign new DataFrameView
+        self.layout.removeWidget(self.view)
+        view = DataFrameView(dataframe=value, parent=self)
+        view.setObjectName(self.node.content_label_objname)
+        self.view = view
+        self.layout.addWidget(self.view)
 
     @property
     def dataframe(self):
@@ -63,6 +77,7 @@ class DataNode_Table(DataNode):
 
     def __init__(self, scene):
         super().__init__(scene, inputs=[1], outputs=[1])
+        self.content: DataTableContent
         self.min_height = 160
         self.height = 200
         self.min_width = 280
@@ -72,15 +87,8 @@ class DataNode_Table(DataNode):
     def evalImplementation(self, force=False):
         self.print('evalImplementation')
 
-        # df = pd.DataFrame(np.random.rand(20, 3))
-        # index = pd.MultiIndex.from_tuples(
-        #     [(f'level_0_{i}', f'level_1_{j}', f'level_2_{k}') for i in range(2) for j in range(3) for k in range(5)])
-        # df = pd.DataFrame(np.random.rand(3, len(index)).T, index=index).T
-        # self.value = df
-        # return self.value
-
         # get first input
-        input_node = self.getInput(0)
+        input_node: Node = self.getInput(0)
         if not input_node:
             self.setToolTip('Input is not connected')
             self.markInvalid()
@@ -94,7 +102,8 @@ class DataNode_Table(DataNode):
             return
 
         self.value = val
-        self.content.setDataFrame(self.value)
+        # self.content.setDataFrame(self.value)
+        self.content.updateContent(self.value)
         # else set flag and tooltip
         self.markDirty(False)
         self.markInvalid(False)

@@ -175,14 +175,17 @@ class OpNode_ReadCSVFile(DataNode):
         new_item = QListWidgetItem()
         new_item.setText(str(value))
         self._idx_list.addItem(new_item)
+        self._idx_list.setCurrentRow(self._idx_list.count() - 1)
         self._idx_spinbox.setValue(value + 1)
         self.forcedEval()
 
     def onIdxRemBtnClicked(self):
         # remove from list
         row = self._idx_list.currentRow()
-        self._idx_list.takeItem(row)
-        self.forcedEval()
+        if row != -1:
+            value = int(self._idx_list.takeItem(row).text())
+            self._idx_spinbox.setValue(value)
+            self.forcedEval()
 
     def onHdrAddBtnClicked(self):
         # check items in list widget
@@ -195,14 +198,17 @@ class OpNode_ReadCSVFile(DataNode):
         new_item = QListWidgetItem()
         new_item.setText(str(value))
         self._hdr_list.addItem(new_item)
+        self._hdr_list.setCurrentRow(self._hdr_list.count() - 1)
         self._hdr_spinbox.setValue(value + 1)
         self.forcedEval()
 
     def onHdrRemBtnClicked(self):
         # remove from list
         row = self._hdr_list.currentRow()
-        self._hdr_list.takeItem(row)
-        self.forcedEval()
+        if row != -1:
+            value = int(self._hdr_list.takeItem(row).text())
+            self._hdr_spinbox.setValue(value)
+            self.forcedEval()
 
     def openFileDialog(self):
         subWnd = self.scene.getView().parent()

@@ -48,7 +48,7 @@ handleCursors = {
     HandlePosition.BottomRight: Qt.SizeFDiagCursor,
 }
 
-DEBUG = True
+DEBUG = False
 
 
 class Handle(QGraphicsItem):
