@@ -128,7 +128,7 @@ class OpNode_PivotTable(DataNode):
     def _remove_items_from_val(self):
         self._move_items_to(self._valuesListWidget, self._selectListWidget)
 
-    def _get_pivot_args(self):
+    def getNodeSettings(self):
         kwargs = {}
         kwargs['index'] = [self._indexListWidget.item(n).text() for n in range(self._indexListWidget.count())]
         kwargs['columns'] = [self._columnsListWidget.item(n).text() for n in range(self._columnsListWidget.count())]
@@ -137,6 +137,10 @@ class OpNode_PivotTable(DataNode):
             if len(kwargs[key]) == 0:
                 kwargs[key] = None
         return kwargs
+
+    def restoreNodeSettings(self, data: dict) -> bool:
+        # TODO implement
+        pass
 
     def evalImplementation(self, force=False):
         self.print('evalImplementation')
@@ -177,7 +181,7 @@ class OpNode_PivotTable(DataNode):
         evaluate &= self._indexListWidget.count() > 1
         evaluate &= self._valuesListWidget > 1
         if evaluate:
-            kwargs = self._get_pivot_args()
+            kwargs = self.getNodeSettings()
             self.value = self.input_val.pivot_table(**kwargs)
 
         # else set flag and tooltip

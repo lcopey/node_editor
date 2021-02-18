@@ -226,7 +226,7 @@ class OpNode_ReadCSVFile(DataNode):
         # force the evaluation of the node
         self.forcedEval()
 
-    def _get_arguments(self) -> dict:
+    def getNodeSettings(self) -> dict:
         kwargs = dict()
         # Retrieve index_col from properties dock
         kwargs['index_col'] = None
@@ -255,7 +255,7 @@ class OpNode_ReadCSVFile(DataNode):
 
     def evalImplementation(self, force=False):
         self.print('evalImplementation')
-        kwargs = self._get_arguments()
+        kwargs = self.getNodeSettings()
         print(kwargs)
 
         if self.filepath != '':
@@ -289,28 +289,32 @@ class OpNode_ReadCSVFile(DataNode):
 
         return self.value
 
-    def serialize(self):
-        # Additionally store the file path
-        result = super().serialize()
-        result['settings'] = self._get_arguments()
-        return result
-
-    def deserialize(self, data, hashmap=None, restore_id=True):
-        """Restore node including the file path"""
-        if hashmap is None:
-            hashmap = {}
-        result = super().deserialize(data, hashmap, restore_id)
-        # retrieve settings
-        kwargs = data['settings']
+    def restoreNodeSettings(self, data: dict) -> bool:
+        kwargs = data['node_settings']
         # restore file_path
         self._path_text.setText(kwargs['filepath_or_buffer'])
         # restore options
         index = self._combo_encoding.findText(kwargs['encoding'], Qt.MatchFixedString)
         if index > 0:
             self._combo_encoding.setCurrentIndex(index)
-        for value in kwargs['index_col']:
-            new_item = QListWidgetItem()
-            new_item.setText(str(value))
-            self._idx_list.addItem(new_item)
+        if kwargs['index_col']:
+            for value in kwargs['index_col']:
+                new_item = QListWidgetItem()
+                new_item.setText(str(value))
+                self._idx_list.addItem(new_item)
 
-        return result
+        return True
+    # def serialize(self):
+    #     # Additionally store the file path
+    #     result = super().serialize()
+    #     result['node_settings'] = self.getNodeSettings()
+    #     return result
+
+    # def deserialize(self, data, hashmap=None, restore_id=True):
+    #     """Restore node including the file path"""
+    #     if hashmap is None:
+    #         hashmap = {}
+    #     result = super().deserialize(data, hashmap, restore_id)
+    #     # retrieve settings
+    #
+    #     return result

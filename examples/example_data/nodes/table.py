@@ -59,10 +59,10 @@ class DataTableContent(NodeContentWidget):
     def dataframe(self):
         return self.view.dataframe
 
-    def serialize(self):
-        # must return a value otherwise crash on deserialize
-        self.print('serialize')
-        return 0
+    # def serialize(self):
+    #     # must return a value otherwise crash on deserialize
+    #     self.print('serialize')
+    #     return 0
 
 
 @NodeFactory.register()

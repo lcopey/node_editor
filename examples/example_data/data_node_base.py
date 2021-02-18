@@ -56,9 +56,18 @@ class DataNode(Node):
         self.input_socket_position = SocketPosition.MiddleLeft
         self.output_socket_position = SocketPosition.MiddleRight
 
+    def getNodeSettings(self) -> dict:
+        """To be overridden - should returns the node settings"""
+        return dict()
+
+    def restoreNodeSettings(self, data: dict) -> bool:
+        """To be overridden - restore the node settings"""
+        return False
+
     def serialize(self):
         res = super().serialize()
         res['op_code'] = self.__class__.getOpCode()
+        res['node_settings'] = self.getNodeSettings()
         self.print('serialize')
         return res
 
@@ -66,6 +75,9 @@ class DataNode(Node):
         if hashmap is None:
             hashmap = {}
         res = super().deserialize(data, hashmap, restore_id)
+        # restore the node settings
+        if data['node_settings'] != dict():
+            res &= self.restoreNodeSettings(data)
         print("Deserialize DataNode {}: res : {}".format(self.__class__.__name__, res))
         return res
 

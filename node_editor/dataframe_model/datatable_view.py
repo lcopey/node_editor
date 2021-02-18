@@ -99,7 +99,7 @@ class DataTableModel(QAbstractTableModel):
                 # Float formatting
                 if isinstance(value, (float, np.floating)):
                     if not role == Qt.ToolTipRole:
-                        return "{:.4f}".format(value)
+                        return "{:.4f}".format(value).strip('0')
 
                 return str(value)
             elif role == Qt.TextAlignmentRole:

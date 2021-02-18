@@ -244,7 +244,6 @@ class HeaderView(QTableView):
         try:
             # start dragging process
             if event.type() == QEvent.MouseButtonPress:
-                self.print('>Try resizing')
                 # store mouse position and header being resized
                 mousePosition = event.pos()
                 self._header_being_resized = self.overHeaderEdge(mousePosition)
@@ -262,7 +261,6 @@ class HeaderView(QTableView):
             # end dragging process
             elif event.type() == QEvent.MouseButtonRelease:
                 self._header_being_resized = None
-                self.print('>>Resize ended')
                 return True
 
             # Handle active drag resizing
