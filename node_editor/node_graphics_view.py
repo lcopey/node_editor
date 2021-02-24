@@ -18,6 +18,7 @@ class ViewMode(enum.IntEnum):
     EDGE_DRAG = 2
     EDGE_CUT = 3
     EDGES_REROUTING = 4
+    SCENE_DRAG = 5
 
 
 EDGE_DRAG_START_THRESHOLD = 50
@@ -79,12 +80,14 @@ class NodeGraphicsView(QGraphicsView):
         self.grScene.addItem(self.cutLine)
 
         # Zoom parameters
-        self.last_scene_mouse_position = QPoint(0, 0)
+        self.last_scene_mouse_position = QPointF(0, 0)
+        self.last_screen_mouse_position = QPoint(0, 0)
+        self.last_drag_scene_center = QPointF(0, 0)
         self.zoomInFactor = 1.25
         self.zoomClamp = True
         self.zoom = 5
         self.zoomStep = 1
-        self.zoomRange = [0, 10]
+        self.zoomRange = [-10, 10]
 
         # listeners for drag and drop event
         self._drag_enter_listeners = []
@@ -348,21 +351,29 @@ class NodeGraphicsView(QGraphicsView):
     def middleMouseButtonPress(self, event: QMouseEvent):
         """Implement dragging of the scene using middle button"""
         # faking events for enable MMB dragging the scene
-        releaseEvent = QMouseEvent(QEvent.MouseButtonRelease, event.localPos(), event.screenPos(),
-                                   Qt.LeftButton, Qt.NoButton, event.modifiers())
-        super().mouseReleaseEvent(releaseEvent)
-        self.setDragMode(QGraphicsView.ScrollHandDrag)
-        fakeEvent = QMouseEvent(event.type(), event.localPos(), event.screenPos(),
-                                Qt.LeftButton, event.buttons() | Qt.LeftButton, event.modifiers())
-        super().mousePressEvent(fakeEvent)
+        # releaseEvent = QMouseEvent(QEvent.MouseButtonRelease, event.localPos(), event.screenPos(),
+        #                            Qt.LeftButton, Qt.NoButton, event.modifiers())
+        # super().mouseReleaseEvent(releaseEvent)
+        if self.mode == ViewMode.NOOP:
+            self.mode = ViewMode.SCENE_DRAG
+            self.last_drag_scene_center = self.mapToScene(self.rect().center())
+            self.last_screen_mouse_position = event.pos()
+            QApplication.setOverrideCursor(Qt.ClosedHandCursor)
+            # self.setDragMode(QGraphicsView.ScrollHandDrag)
+            # fakeEvent = QMouseEvent(event.type(), event.localPos(), event.screenPos(),
+            #                         Qt.LeftButton, event.buttons() | Qt.LeftButton, event.modifiers())
+            # super().mousePressEvent(fakeEvent)
 
     def middleMouseButtonRelease(self, event: QMouseEvent):
         """Implement dragging of the scene using middle button"""
         # when releasing the middle button, release the left button instead and reset the drag mode
-        fakeEvent = QMouseEvent(event.type(), event.localPos(), event.screenPos(),
-                                Qt.LeftButton, event.buttons() & ~Qt.LeftButton, event.modifiers())
-        super().mouseReleaseEvent(fakeEvent)
-        self.setDragMode(QGraphicsView.RubberBandDrag)
+        if self.mode == ViewMode.SCENE_DRAG:
+            self.mode = ViewMode.NOOP
+            QApplication.restoreOverrideCursor()
+            # fakeEvent = QMouseEvent(event.type(), event.localPos(), event.screenPos(),
+            #                         Qt.LeftButton, event.buttons() & ~Qt.LeftButton, event.modifiers())
+            # super().mouseReleaseEvent(fakeEvent)
+            # self.setDragMode(QGraphicsView.RubberBandDrag)
 
     def rightMouseButtonPress(self, event: QMouseEvent):
         """Mostly debug
@@ -420,6 +431,7 @@ class NodeGraphicsView(QGraphicsView):
 
     def mouseMoveEvent(self, event: QMouseEvent):
         """Overriden Qt's ``mouseMoveEvent`` handling Scene/View logic"""
+        screenpos = event.pos()
         scenepos = self.mapToScene(event.pos())
 
         try:
@@ -435,9 +447,20 @@ class NodeGraphicsView(QGraphicsView):
         except Exception as e:
             dumpException(e)
 
+        if self.mode == ViewMode.SCENE_DRAG:
+            self.print('Dragging')
+            delta = self.last_screen_mouse_position - screenpos
+            transform = self.transform()
+            deltaX = delta.x() / transform.m11()
+            deltaY = delta.y() / transform.m22()
+            delta = QPointF(deltaX, deltaY)
+            newCenter = self.last_drag_scene_center + delta
+            self.centerOn(newCenter)
+
         self.last_scene_mouse_position = scenepos
 
         # Trigger new event scenePosChanged returning the current mouse position
+        # main use is diplaying the scene position in a taskbar
         self.scenePosChanged.emit(int(scenepos.x()), int(scenepos.y()))
 
         super().mouseMoveEvent(event)
@@ -506,7 +529,6 @@ class NodeGraphicsView(QGraphicsView):
             # On hovering an item when wheelEvent, supress the GraphicalView event and pass to the item
             self.print('ignore wheelEvent')
             super().wheelEvent(event)
-            print(event.isAccepted())
             return
 
         # calculate zoom factor

@@ -229,7 +229,6 @@ class GraphicsNode(QGraphicsRectItem):
             #     self._currentPos = event.pos()
             #     # # current rectangle at mouse pressed
             #     self._currentRect = self.boundingRect()
-
             super().mousePressEvent(event)
         except Exception as e:
             dumpException(e)

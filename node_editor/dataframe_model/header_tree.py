@@ -24,7 +24,20 @@ class DictLike:
 
 
 class ChildItem(QTreeWidgetItem):
+    """Helper class instantiating a QTreeWidgetItem in a simple way"""
+
     def __init__(self, parent, text: str, checked: Qt.CheckState = Qt.Checked):
+        """Helper class instantiating a QTreeWidget
+
+        Parameters
+        ----------
+        parent: Union[QTreeWidget, QTreeWidgetItem]
+            parent of the current item
+        text: str
+            text to set the current item to
+        checked: bool
+            current value of the checkbox
+        """
         super().__init__(parent)
         self.setText(0, text)
         self.setFlags(self.flags() | Qt.ItemIsTristate | Qt.ItemIsUserCheckable)
@@ -32,6 +45,8 @@ class ChildItem(QTreeWidgetItem):
 
 
 class HeaderTreeWidget(QTreeWidget):
+    """Widget implementing a tree view of dataframe header"""
+
     def __init__(self, parent=None):
         super().__init__(parent=parent)
         self.setHeaderHidden(True)

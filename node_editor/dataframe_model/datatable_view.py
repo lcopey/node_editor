@@ -79,14 +79,14 @@ class DataTableModel(QAbstractTableModel):
         self._source_dataframe = self._dataframe = value
         self.endResetModel()
 
-    def setDataSource(self, dataframe: Union[pd.Series, pd.DataFrame]):
-        """Helper function for setting a new dataframe in the model
-
-        Parameters
-        ----------
-        dataframe: Union[pd.Series, pd.DataFrame]
-        """
-        self.dataframe = dataframe
+    # def setDataSource(self, dataframe: Union[pd.Series, pd.DataFrame]):
+    #     """Helper function for setting a new dataframe in the model
+    #
+    #     Parameters
+    #     ----------
+    #     dataframe: Union[pd.Series, pd.DataFrame]
+    #     """
+    #     self.dataframe = dataframe
 
     def data(self, index: QModelIndex, role: int = ...) -> Any:
         """Access to data"""

@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import *
-from PyQt5.QtCore import pyqtSlot, pyqtSignal
+from PyQt5.QtCore import pyqtSlot, pyqtSignal, QSize
+from PyQt5.QtGui import QFont, QFontMetrics
 from ..data_node_base import DataNode
 from ..data_node_graphics_base import OpGraphicsNode
 from ..data_conf import NodeFactory
@@ -27,6 +28,13 @@ class OpNode_PivotTable(DataNode):
         # global layout
         outerLayout = QVBoxLayout()
         self._selectListWidget = QListWidget()
+        self._selectListWidget.setViewMode(QListWidget.IconMode)
+        self._selectListWidget.setResizeMode(QListView.Adjust)
+        self._selectListWidget.setSpacing(5)
+        # font = QFont('Ubuntu', 8)
+        # self._selectListWidget.setFont(font)
+        # self._selectListWidget.setGridSize(QSize(64, QFontMetrics(font).height() + 10))
+
         self._columnsListWidget = QListWidget()
         self._indexListWidget = QListWidget()
         self._valuesListWidget = QListWidget()
@@ -37,13 +45,13 @@ class OpNode_PivotTable(DataNode):
         bttnLayout = QVBoxLayout()
         self._add_to_col = QPushButton()
         self._add_to_col.setText('To columns')
-        self._add_to_col.clicked.connect(self._move_items_to_col)
+        self._add_to_col.clicked.connect(self._moveItemsToCol)
         self._add_to_idx = QPushButton()
         self._add_to_idx.setText('To index')
-        self._add_to_idx.clicked.connect(self._move_items_to_idx)
+        self._add_to_idx.clicked.connect(self._moveItemsToIdx)
         self._add_to_val = QPushButton()
         self._add_to_val.setText('To values')
-        self._add_to_val.clicked.connect(self._move_items_to_val)
+        self._add_to_val.clicked.connect(self._moveItemsToVal)
         bttnLayout.addWidget(self._add_to_col)
         bttnLayout.addWidget(self._add_to_idx)
         bttnLayout.addWidget(self._add_to_val)
@@ -56,7 +64,7 @@ class OpNode_PivotTable(DataNode):
         self._col_up = QPushButton()
         self._col_down = QPushButton()
         self._col_del = QPushButton()
-        self._col_del.clicked.connect(self._remove_items_from_col)
+        self._col_del.clicked.connect(self._removeItemsFromCol)
         bttnLayout.addWidget(self._col_up)
         bttnLayout.addWidget(self._col_down)
         bttnLayout.addWidget(self._col_del)
@@ -69,7 +77,7 @@ class OpNode_PivotTable(DataNode):
         self._idx_up = QPushButton()
         self._idx_down = QPushButton()
         self._idx_del = QPushButton()
-        self._idx_del.clicked.connect(self._remove_items_from_idx)
+        self._idx_del.clicked.connect(self._removeItemsFromIdx)
         bttnLayout.addWidget(self._idx_up)
         bttnLayout.addWidget(self._idx_down)
         bttnLayout.addWidget(self._idx_del)
@@ -82,7 +90,7 @@ class OpNode_PivotTable(DataNode):
         self._val_up = QPushButton()
         self._val_down = QPushButton()
         self._val_del = QPushButton()
-        self._val_del.clicked.connect(self._remove_items_from_val)
+        self._val_del.clicked.connect(self._removeItemsFromVal)
         bttnLayout.addWidget(self._val_up)
         bttnLayout.addWidget(self._val_down)
         bttnLayout.addWidget(self._val_del)
@@ -105,28 +113,28 @@ class OpNode_PivotTable(DataNode):
                 item.setText(str(column))
                 self._selectListWidget.addItem(item)
 
-    def _move_items_to(self, fromList: QListWidget, destList: QListWidget):
+    def _moveItemsTo(self, fromList: QListWidget, destList: QListWidget):
         item = fromList.takeItem(fromList.currentRow())
         destList.addItem(item)
         self.forcedEval()
 
-    def _move_items_to_col(self):
-        self._move_items_to(self._selectListWidget, self._columnsListWidget)
+    def _moveItemsToCol(self):
+        self._moveItemsTo(self._selectListWidget, self._columnsListWidget)
 
-    def _move_items_to_idx(self):
-        self._move_items_to(self._selectListWidget, self._indexListWidget)
+    def _moveItemsToIdx(self):
+        self._moveItemsTo(self._selectListWidget, self._indexListWidget)
 
-    def _move_items_to_val(self):
-        self._move_items_to(self._selectListWidget, self._valuesListWidget)
+    def _moveItemsToVal(self):
+        self._moveItemsTo(self._selectListWidget, self._valuesListWidget)
 
-    def _remove_items_from_col(self):
-        self._move_items_to(self._columnsListWidget, self._selectListWidget)
+    def _removeItemsFromCol(self):
+        self._moveItemsTo(self._columnsListWidget, self._selectListWidget)
 
-    def _remove_items_from_idx(self):
-        self._move_items_to(self._indexListWidget, self._selectListWidget)
+    def _removeItemsFromIdx(self):
+        self._moveItemsTo(self._indexListWidget, self._selectListWidget)
 
-    def _remove_items_from_val(self):
-        self._move_items_to(self._valuesListWidget, self._selectListWidget)
+    def _removeItemsFromVal(self):
+        self._moveItemsTo(self._valuesListWidget, self._selectListWidget)
 
     def getNodeSettings(self):
         kwargs = {}
@@ -139,8 +147,15 @@ class OpNode_PivotTable(DataNode):
         return kwargs
 
     def restoreNodeSettings(self, data: dict) -> bool:
-        # TODO implement
-        pass
+        kwargs = data['node_settings']
+        for value, wdg in zip(('index', 'columns', 'values'),
+                              (self._indexListWidget, self._columnsListWidget, self._valuesListWidget)):
+            if kwargs[value]:
+                new_item = QListWidgetItem()
+                new_item.setText(str(value))
+                wdg.addItem(new_item)
+
+        return True
 
     def evalImplementation(self, force=False):
         self.print('evalImplementation')
@@ -177,9 +192,9 @@ class OpNode_PivotTable(DataNode):
             self.markInvalid()
             return
 
-        evaluate = self._columnsListWidget.count() > 1
-        evaluate &= self._indexListWidget.count() > 1
-        evaluate &= self._valuesListWidget > 1
+        evaluate = self._columnsListWidget.count() >= 1
+        evaluate &= self._indexListWidget.count() >= 1
+        evaluate &= self._valuesListWidget.count() >= 1
         if evaluate:
             kwargs = self.getNodeSettings()
             self.value = self.input_val.pivot_table(**kwargs)

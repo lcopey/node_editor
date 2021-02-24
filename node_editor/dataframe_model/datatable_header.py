@@ -320,14 +320,6 @@ class HeaderView(QTableView):
             else:
                 return None
 
-    # def updateModel(self):
-    #     """Update model - Is typically called when new dataframe is set upon the DataFrameView"""
-    #     model: HeaderModel = self.model()
-    #     model.updateModel()
-    #     self.set_spans()
-    #     self.init_column_sizes()
-    #     self.resize(self.sizeHint())
-
     # Fits columns to contents but with a minimum width and added padding
     def init_column_sizes(self):
         padding = 5

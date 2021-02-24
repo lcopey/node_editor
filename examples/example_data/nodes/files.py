@@ -147,8 +147,8 @@ class OpNode_ReadCSVFile(DataNode):
 
         layout = QHBoxLayout()
         self._change_axis = QComboBox()
-        self._change_axis.addItems(['0', '1'])
-        self._change_axis.currentIndexChanged.connect(self.onChangeAxis)
+        self._change_axis.addItems(['row', 'column'])
+        self._change_axis.currentIndexChanged.connect(self.onAxisChange)
         layout.addWidget(QLabel('Axis options :'))
         layout.addWidget(self._change_axis)
         layout.addStretch()
@@ -158,8 +158,8 @@ class OpNode_ReadCSVFile(DataNode):
         outer_layout.addStretch()
         self.propertiesWidget.setLayout(outer_layout)
 
-    def onChangeAxis(self):
-        if self._change_axis.currentText() == '0':
+    def onAxisChange(self):
+        if self._change_axis.currentText() == 'row':
             self._stack.setCurrentIndex(0)
         else:
             self._stack.setCurrentIndex(1)
