@@ -85,7 +85,7 @@ class DataWindow(NodeEditorWindow):
 
         self.readSettings()
 
-        self.setWindowTitle("DataVoz NodeEditor")
+        self.setWindowTitle("DataViz NodeEditor")
 
     def createActions(self):
         """Instantiate various `QAction` for the main toolbar.

@@ -5,7 +5,7 @@ from ..data_conf import *
 from ..data_node_base import *
 from ..data_node_graphics_base import OpGraphicsNode
 from node_editor.widgets import HierarchicalTreeWidget
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union, List, Tuple, Any
 
 if TYPE_CHECKING:
     from node_editor.node_node import Node
@@ -32,13 +32,9 @@ class DataNode_SelectColumns(DataNode):
         """Initialize the layout of properties DockWidget"""
         self.propertiesWidget = QWidget()
         # widget holding the column name
-        # self.listWidget = QListWidget()
-        # self.column_mapping = {}  # mapping between listWidget text and column value
-        # # changing item clicked triggers markdirty and evaluation of the node
-        # self.listWidget.itemClicked.connect(self.forcedEval)
-        # self.updatePropertiesWidget()
         self.treeWidget = HierarchicalTreeWidget()
-        # self.treeWidget.itemClicked.connect(self.forcedEval)
+        # changing item clicked triggers markdirty and evaluation of the node
+        self.treeWidget.itemClicked.connect(self.forcedEval)
 
         layout = QVBoxLayout()
         button_layout = QHBoxLayout()
@@ -52,58 +48,34 @@ class DataNode_SelectColumns(DataNode):
         button_layout.addWidget(select_all)
         button_layout.addWidget(select_none)
         layout.addLayout(button_layout)
-        # layout.addWidget(self.listWidget)
         layout.addWidget(self.treeWidget)
         self.propertiesWidget.setLayout(layout)
 
     def selectAll(self):
         """Select all item in `listWidget` attributes"""
-        # for n in range(self.listWidget.count()):
-        #     item = self.listWidget.item(n)
-        #     item.setCheckState(Qt.Checked)
-        # self.forcedEval()
+        self.treeWidget.checkAll()
+        self.forcedEval()
 
     def selectNone(self):
         """Unselect all item in `listWidget` attributes"""
-        # for n in range(self.listWidget.count()):
-        #     item = self.listWidget.item(n)
-        #     item.setCheckState(Qt.Unchecked)
-        # self.forcedEval()
+        self.treeWidget.checkNone()
+        self.forcedEval()
 
     def updatePropertiesWidget(self):
         """Populate `listWidget` with values from input dataframe columns"""
-        # self.listWidget.clear()
-        # self.column_mapping.clear()
-        #
-        # if self.columns is not None:
-        #     for column in self.columns:
-        #         # add item to listWidget
-        #         item = QListWidgetItem()
-        #         item.setText(str(column))
-        #         item.setCheckState(Qt.Checked)
-        #         self.listWidget.addItem(item)
-        #         self.column_mapping[str(column)] = column
         if self.columns is not None:
-            self.treeWidget.init_model(self.columns)
+            self.treeWidget.initModel(self.columns)
 
-    def getColumnSelection(self) -> list[str]:
+    def getColumnSelection(self) -> List[Union[Tuple, Any]]:
         # TODO Handle index type
         """Returns a list of checked columns
 
         Returns
         -------
-        list[str]
+        list[Union[tuple, Any]]
             list of checked column name
         """
-        # result = []
-        # for n in range(self.listWidget.count()):
-        #     item = self.listWidget.item(n)
-        #     if item.checkState() == Qt.Checked:
-        #         result.append(
-        #             self.column_mapping[item.text()]
-        #         )
-        #
-        # return result
+        return self.treeWidget.getItems()
 
     def evalImplementation(self, force=False):
         self.print('evalImplementation')
@@ -154,26 +126,34 @@ class DataNode_SelectColumns(DataNode):
 
         return self.value
 
-    def serialize(self):
-        result = super().serialize()
+    def getNodeSettings(self) -> dict:
+        return {'items': self.treeWidget.getItems(selected_only=False)}
 
-        state = {}
-        # save the the state of the properties dock widget
-        # for n in range(self.listWidget.count()):
-        #     item = self.listWidget.item(n)
-        #     state[item.text()] = item.checkState() == Qt.Checked
-        result['state'] = state
-        return result
+    def restoreNodeSettings(self, data: dict) -> bool:
+        kwargs = data['node_settings']
+        self.treeWidget.initModel(kwargs['items'], include_checked=True)
+        return True
 
-    def deserialize(self, data, hashmap=None, restore_id=True):
-        # TODO Fix
-        result = super().deserialize(data, hashmap, restore_id)
-        # If connected restore the values of the properties widget and evaluate
-        if self.getInput(0):
-            for key, value in result['state'].items():
-                # restore the state of the properties dock widget
-                # item = QListWidgetItem()
-                # item.setText(str(key))
-                # item.setCheckState(Qt.Checked if value else Qt.Unchecked)
-                # self.listWidget.addItem(item)
-                pass
+    # def serialize(self):
+    #     result = super().serialize()
+    #
+    #     state = {}
+    #     # save the the state of the properties dock widget
+    #     # for n in range(self.listWidget.count()):
+    #     #     item = self.listWidget.item(n)
+    #     #     state[item.text()] = item.checkState() == Qt.Checked
+    #     result['state'] = state
+    #     return result
+    #
+    # def deserialize(self, data, hashmap=None, restore_id=True):
+    #     # TODO Fix
+    #     result = super().deserialize(data, hashmap, restore_id)
+    #     # If connected restore the values of the properties widget and evaluate
+    #     if self.getInput(0):
+    #         for key, value in result['state'].items():
+    #             # restore the state of the properties dock widget
+    #             # item = QListWidgetItem()
+    #             # item.setText(str(key))
+    #             # item.setCheckState(Qt.Checked if value else Qt.Unchecked)
+    #             # self.listWidget.addItem(item)
+    #             pass

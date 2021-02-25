@@ -253,6 +253,22 @@ class OpNode_ReadCSVFile(DataNode):
 
         return kwargs
 
+    def restoreNodeSettings(self, data: dict) -> bool:
+        kwargs = data['node_settings']
+        # restore file_path
+        self._path_text.setText(kwargs['filepath_or_buffer'])
+        # restore options
+        index = self._combo_encoding.findText(kwargs['encoding'], Qt.MatchFixedString)
+        if index > 0:
+            self._combo_encoding.setCurrentIndex(index)
+        if kwargs['index_col']:
+            for value in kwargs['index_col']:
+                new_item = QListWidgetItem()
+                new_item.setText(str(value))
+                self._idx_list.addItem(new_item)
+
+        return True
+
     def evalImplementation(self, force=False):
         self.print('evalImplementation')
         kwargs = self.getNodeSettings()
@@ -289,21 +305,7 @@ class OpNode_ReadCSVFile(DataNode):
 
         return self.value
 
-    def restoreNodeSettings(self, data: dict) -> bool:
-        kwargs = data['node_settings']
-        # restore file_path
-        self._path_text.setText(kwargs['filepath_or_buffer'])
-        # restore options
-        index = self._combo_encoding.findText(kwargs['encoding'], Qt.MatchFixedString)
-        if index > 0:
-            self._combo_encoding.setCurrentIndex(index)
-        if kwargs['index_col']:
-            for value in kwargs['index_col']:
-                new_item = QListWidgetItem()
-                new_item.setText(str(value))
-                self._idx_list.addItem(new_item)
 
-        return True
     # def serialize(self):
     #     # Additionally store the file path
     #     result = super().serialize()
