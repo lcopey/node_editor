@@ -4,7 +4,7 @@ import pandas as pd
 from ..data_conf import *
 from ..data_node_base import *
 from ..data_node_graphics_base import OpGraphicsNode
-from node_editor.dataframe_model import HeaderTreeWidget
+from node_editor.widgets import HierarchicalTreeWidget
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -37,7 +37,7 @@ class DataNode_SelectColumns(DataNode):
         # # changing item clicked triggers markdirty and evaluation of the node
         # self.listWidget.itemClicked.connect(self.forcedEval)
         # self.updatePropertiesWidget()
-        self.treeWidget = HeaderTreeWidget()
+        self.treeWidget = HierarchicalTreeWidget()
         # self.treeWidget.itemClicked.connect(self.forcedEval)
 
         layout = QVBoxLayout()

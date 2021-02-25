@@ -26,25 +26,26 @@ class DictLike:
 class ChildItem(QTreeWidgetItem):
     """Helper class instantiating a QTreeWidgetItem in a simple way"""
 
-    def __init__(self, parent, text: str, checked: Qt.CheckState = Qt.Checked):
+    def __init__(self, parent, value: Any, checked: Qt.CheckState = Qt.Checked):
         """Helper class instantiating a QTreeWidget
 
         Parameters
         ----------
         parent: Union[QTreeWidget, QTreeWidgetItem]
             parent of the current item
-        text: str
+        value: Any
             text to set the current item to
         checked: bool
             current value of the checkbox
         """
         super().__init__(parent)
-        self.setText(0, text)
+        self.type = type(value)
+        self.setText(0, str(value))
         self.setFlags(self.flags() | Qt.ItemIsTristate | Qt.ItemIsUserCheckable)
         self.setCheckState(0, checked)
 
 
-class HeaderTreeWidget(QTreeWidget):
+class HierarchicalTreeWidget(QTreeWidget):
     """Widget implementing a tree view of dataframe header"""
 
     def __init__(self, parent=None):
@@ -52,9 +53,9 @@ class HeaderTreeWidget(QTreeWidget):
         self.setHeaderHidden(True)
         # self.setColumnCount(2)  # in case additional information are needed
 
-    def init_model(self, header_values: Union[pd.Index, pd.MultiIndex]):
+    def init_model(self, values: Union[pd.Index, pd.MultiIndex]):
         self.clear()
-        level_values = np.array([np.array(value) for value in header_values])
+        level_values = np.array([np.array(value) for value in values])
         self._recursive_add(self, level_values)
 
     def _recursive_add(self, parent, level_values):
