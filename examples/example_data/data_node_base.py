@@ -86,7 +86,6 @@ class DataNode(Node):
         self.eval(force=True)
 
     def eval(self, force: bool = False):
-        # TODO replace force with dedicated function doing markDirty + eval
         if not self.isDirty() and not self.isInvalid():
             self.print('Dirty : ', self.isDirty(), 'Invalid : ', self.isInvalid())
             self.print(f" _> return cached {self.__class__.__name__} value {self.value}")

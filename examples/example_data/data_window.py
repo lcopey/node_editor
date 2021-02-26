@@ -372,7 +372,7 @@ class DataWindow(NodeEditorWindow):
                 # reset layout
                 itemsSelected = actSubWnd.scene.getSelectedItems()
                 if len(itemsSelected) > 1:
-                    self.propDock.setWidget(self._propDockWdg)
+                    self.propDock.setWidget(self.propDockLbl)
                     self.propDockLbl.setText('{} items selected'.format(len(itemsSelected)))
 
                 elif len(itemsSelected) == 1:
@@ -382,10 +382,10 @@ class DataWindow(NodeEditorWindow):
 
                     else:
                         self.propDockLbl.setText('{} items selected'.format(len(itemsSelected)))
-                        self.propDock.setWidget(self._propDockWdg)
+                        self.propDock.setWidget(self.propDockLbl)
 
                 else:
-                    self.propDock.setWidget(self._propDockWdg)
+                    self.propDock.setWidget(self.propDockLbl)
                     self.propDockLbl.setText('No selection')
 
             except Exception as e:

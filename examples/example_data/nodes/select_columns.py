@@ -51,6 +51,11 @@ class DataNode_SelectColumns(DataNode):
         layout.addWidget(self.treeWidget)
         self.propertiesWidget.setLayout(layout)
 
+    def updatePropertiesWidget(self):
+        """Populate `listWidget` with values from input dataframe columns"""
+        if self.columns is not None:
+            self.treeWidget.initModel(self.columns)
+
     def selectAll(self):
         """Select all item in `listWidget` attributes"""
         self.treeWidget.checkAll()
@@ -60,11 +65,6 @@ class DataNode_SelectColumns(DataNode):
         """Unselect all item in `listWidget` attributes"""
         self.treeWidget.checkNone()
         self.forcedEval()
-
-    def updatePropertiesWidget(self):
-        """Populate `listWidget` with values from input dataframe columns"""
-        if self.columns is not None:
-            self.treeWidget.initModel(self.columns)
 
     def getColumnSelection(self) -> List[Union[Tuple, Any]]:
         # TODO Handle index type
