@@ -55,6 +55,65 @@ class ChildItem(QTreeWidgetItem):
         self._value = value
 
 
+class TreeWidgetUI(QWidget):
+    itemChecked = pyqtSignal()
+
+    def __init__(self, parent=None):
+        super(TreeWidgetUI, self).__init__()
+        self.treeWidget = HierarchicalTreeWidget(parent)
+
+        layout = QVBoxLayout()
+        button_layout = QHBoxLayout()
+
+        select_all = QPushButton()
+        select_all.setIcon(QIcon(QPixmap('icons/check-all-button.svg')))
+        select_all.setIconSize(QSize(16, 16))
+        select_all.clicked.connect(self.checkAll)
+
+        select_none = QPushButton()
+        select_none.setIcon(QIcon(QPixmap('icons/check-none-button.svg')))
+        select_none.setIconSize(QSize(16, 16))
+        select_none.clicked.connect(self.checkNone)
+
+        expand_all = QPushButton()
+        expand_all.clicked.connect(self.expandAll)
+        expand_all.setIcon(QIcon(QPixmap('icons/expand-all-button.svg')))
+        expand_all.setIconSize(QSize(16, 16))
+
+        collapse_all = QPushButton()
+        collapse_all.setIcon(QIcon(QPixmap('icons/collapse-all-button.svg')))
+        collapse_all.setIconSize(QSize(16, 16))
+        collapse_all.clicked.connect(self.collapseAll)
+
+        button_layout.addWidget(select_all)
+        button_layout.addWidget(select_none)
+        button_layout.addWidget(expand_all)
+        button_layout.addWidget(collapse_all)
+        layout.addLayout(button_layout)
+        layout.addWidget(self.treeWidget)
+        self.setLayout(layout)
+
+    def initModel(self, values: Union[pd.Index, pd.MultiIndex], include_checked=False):
+        self.treeWidget.initModel(values, include_checked)
+
+    def getItems(self, selected_only=True) -> List[Tuple]:
+        return self.treeWidget.getItems(selected_only)
+
+    def checkAll(self):
+        self.treeWidget.checkAll()
+        self.itemChecked.emit()
+
+    def checkNone(self):
+        self.treeWidget.checkNone()
+        self.itemChecked.emit()
+
+    def expandAll(self):
+        self.treeWidget.expandAll()
+
+    def collapseAll(self):
+        self.treeWidget.collapseAll()
+
+
 class HierarchicalTreeWidget(QTreeWidget):
     """Widget implementing a tree view of dataframe header"""
 

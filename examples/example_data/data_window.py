@@ -5,7 +5,9 @@ Module implementing the MainWindow to the calculator example
 from .data_subwindow import DataSubWindow
 from .data_drag_listbox import DragListBox
 from .data_conf import NodeFactory
+# Import to include the node in the toolbar
 from .nodes import *
+import os
 
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
@@ -51,7 +53,9 @@ class DataWindow(NodeEditorWindow):
         # TODO Review style
         # self.stylesheet_filenames = (os.path.join(os.path.dirname(__file__), 'qss/nodeeditor.qss'),
         #                              os.path.join(os.path.dirname(__file__), 'qss/nodeeditor-dark.qss'))
-        # loadStylessheets(*self.stylesheet_filenames)
+        self.stylesheet_filenames = (os.path.join(os.path.dirname(__file__), 'icons/nodeeditor.qss'))
+        print(self.stylesheet_filenames)
+        loadStylessheets(*self.stylesheet_filenames)
         #
         self.empty_icon = QIcon(".")
 

@@ -60,3 +60,27 @@ NodeContentWidget QLabel#calc_node_div {
 QGraphicsView {
   selection-background-color: #fff;
 }
+
+DestTreeWidget::branch:has-siblings:!adjoins-item {
+    border-image: url(stylesheet-vline.png) 0;
+}
+
+DestTreeWidget::branch:has-siblings:adjoins-item {
+    border-image: url(stylesheet-branch-more.png) 0;
+}
+
+DestTreeWidget::branch:!has-children:!has-siblings:adjoins-item {
+    border-image: url(stylesheet-branch-end.png) 0;
+}
+
+DestTreeWidget::branch:has-children:!has-siblings:closed,
+DestTreeWidget::branch:closed:has-children:has-siblings {
+        border-image: none;
+        image: url(stylesheet-branch-closed.png);
+}
+
+DestTreeWidget::branch:open:has-children:!has-siblings,
+DestTreeWidget::branch:open:has-children:has-siblings  {
+        border-image: none;
+        image: url(stylesheet-branch-open.png);
+}

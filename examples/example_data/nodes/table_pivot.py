@@ -25,19 +25,78 @@ class OpNode_PivotTable(DataNode):
     def initPropertiesWidget(self):
         self.propertiesWidget = QWidget()
         self.propertiesWidget.setMinimumWidth(100)
-        self.dragger = Dragger(fromListLabel='Columns', toListNames=['index', 'columns', 'values'])
+        self.dragger = Dragger(inputTitle='Input columns', outputNames=['index', 'columns', 'values'])
+        self.dragger.itemDropped.connect(self.forcedEval)
         layout = QVBoxLayout()
         layout.addWidget(self.dragger)
         self.propertiesWidget.setLayout(layout)
 
     def updatePropertiesWidget(self):
-        self._selectListWidget.clear()
         if self.columns is not None:
-            for column in self.columns:
-                # add item to listWidget
-                item = QListWidgetItem()
-                item.setText(str(column))
-                self._selectListWidget.addItem(item)
+            self.dragger.initModel(self.columns)
+
+    def getNodeSettings(self) -> dict:
+        return self.dragger.getStatus()
+
+    def restoreNodeSettings(self, data: dict) -> bool:
+        return self.dragger.restoreStatus(data['node_settings'])
+
+    def evalImplementation(self, force=False):
+        self.print('evalImplementation')
+
+        # get first input
+        input_node = self.getInput(0)
+        if not input_node:
+            self.setToolTip('Input is not connected')
+            self.markInvalid()
+            return
+
+        # get value from input node
+        self.input_val = input_node.eval()
+        if isinstance(self.input_val, pd.DataFrame):
+            new_columns = self.input_val.columns
+        else:
+            self.columns = None
+            new_columns = None
+
+        # Compare if new columns are the same as the old one
+        if self.columns is None or not (self.columns.equals(new_columns)):
+            # Update the properties toolbar accordingly
+            self.columns = new_columns
+            self.updatePropertiesWidget()
+
+        if self.columns is None:
+            self.setToolTip('Input is NaN')
+            self.markInvalid()
+            return
+
+        # check if at least one item is present in each
+        # TODO evaluate such that only two value in the settings are necessary
+        widgetSettings = self.getNodeSettings()
+        evaluate = True
+        for key, value in widgetSettings['outputs'].items():
+            print(value)
+            evaluate &= len(value) >= 1
+        # evaluate = self._columnsListWidget.count() >= 1
+        # evaluate &= self._indexListWidget.count() >= 1
+        # evaluate &= self._valuesListWidget.count() >= 1
+        if evaluate:
+            self.print('evaluate')
+            kwargs = widgetSettings['outputs']
+            self.value = self.input_val.pivot_table(**kwargs)
+
+        # else set flag and tooltip
+        self.markDirty(False)
+        self.markInvalid(False)
+
+        self.markDescendantInvalid(False)
+        self.markDescendantDirty()
+
+        self.setToolTip('')
+
+        self.evalChildren()
+
+        return self.value
 
 # @NodeFactory.register()
 # class OpNode_PivotTable(DataNode):

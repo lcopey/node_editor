@@ -4,7 +4,7 @@ import pandas as pd
 from ..data_conf import *
 from ..data_node_base import *
 from ..data_node_graphics_base import OpGraphicsNode
-from node_editor.widgets import HierarchicalTreeWidget
+from node_editor.widgets import TreeWidgetUI
 from typing import TYPE_CHECKING, Union, List, Tuple, Any
 
 if TYPE_CHECKING:
@@ -32,39 +32,41 @@ class DataNode_SelectColumns(DataNode):
         """Initialize the layout of properties DockWidget"""
         self.propertiesWidget = QWidget()
         # widget holding the column name
-        self.treeWidget = HierarchicalTreeWidget()
-        # changing item clicked triggers markdirty and evaluation of the node
-        self.treeWidget.itemClicked.connect(self.forcedEval)
-
+        self.treeWidget = TreeWidgetUI()
+        self.treeWidget.itemChecked.connect(self.forcedEval)
+        # self.treeWidget = HierarchicalTreeWidget()
+        # # changing item clicked triggers markdirty and evaluation of the node
+        # self.treeWidget.itemClicked.connect(self.forcedEval)
+        #
         layout = QVBoxLayout()
-        button_layout = QHBoxLayout()
-
-        select_all = QPushButton('Select All')
-        select_all.clicked.connect(self.selectAll)
-
-        select_none = QPushButton('Select None')
-        select_none.clicked.connect(self.selectNone)
-
-        button_layout.addWidget(select_all)
-        button_layout.addWidget(select_none)
-        layout.addLayout(button_layout)
+        # button_layout = QHBoxLayout()
+        #
+        # select_all = QPushButton('Select All')
+        # select_all.clicked.connect(self.selectAll)
+        #
+        # select_none = QPushButton('Select None')
+        # select_none.clicked.connect(self.selectNone)
+        #
+        # button_layout.addWidget(select_all)
+        # button_layout.addWidget(select_none)
+        # layout.addLayout(button_layout)
         layout.addWidget(self.treeWidget)
         self.propertiesWidget.setLayout(layout)
+
+    # def selectAll(self):
+    #     """Select all item in `listWidget` attributes"""
+    #     self.treeWidget.checkAll()
+    #     self.forcedEval()
+    #
+    # def selectNone(self):
+    #     """Unselect all item in `listWidget` attributes"""
+    #     self.treeWidget.checkNone()
+    #     self.forcedEval()
 
     def updatePropertiesWidget(self):
         """Populate `listWidget` with values from input dataframe columns"""
         if self.columns is not None:
             self.treeWidget.initModel(self.columns)
-
-    def selectAll(self):
-        """Select all item in `listWidget` attributes"""
-        self.treeWidget.checkAll()
-        self.forcedEval()
-
-    def selectNone(self):
-        """Unselect all item in `listWidget` attributes"""
-        self.treeWidget.checkNone()
-        self.forcedEval()
 
     def getColumnSelection(self) -> List[Union[Tuple, Any]]:
         # TODO Handle index type
