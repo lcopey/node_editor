@@ -48,6 +48,7 @@ class DataWindow(NodeEditorWindow):
         # variable for QSettings
         self.name_company = 'Copey'
         self.name_product = 'DataViz NodeEditor'
+        self.setWindowIcon(QIcon('icons/main-icon.svg'))
 
         # Load filesheets
         # TODO Review style

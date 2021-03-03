@@ -17,7 +17,21 @@
    inkscape:version="0.92.3 (2405546, 2018-03-11)"
    sodipodi:docname="check-none-button.svg">
   <defs
-     id="defs2" />
+     id="defs2">
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter3389"
+       x="-0.012"
+       width="1.024"
+       y="-0.012"
+       height="1.024">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.019843751"
+         id="feGaussianBlur3391" />
+    </filter>
+  </defs>
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -25,9 +39,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="7.9195959"
-     inkscape:cx="11.287765"
-     inkscape:cy="31.70139"
+     inkscape:zoom="11.2"
+     inkscape:cx="15.85911"
+     inkscape:cy="17.344478"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -67,13 +81,13 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
     <path
-       style="fill:none;stroke:#b4b4b4;stroke-width:0.79374999;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:none;stroke:#b4b4b4;stroke-width:0.79374999;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter3389)"
        d="m 3.1749997,291.44374 3.9687502,3.96875"
        id="path1488-7-1"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
     <path
-       style="fill:none;stroke:#a8a8a8;stroke-width:0.79401457;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:none;stroke:#a8a8a8;stroke-width:0.79401458;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;"
        d="m 1.3229167,296.33845 v -6.48221 h 6.4822136"
        id="path840-9"
        inkscape:connector-curvature="0" />
