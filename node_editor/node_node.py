@@ -45,6 +45,9 @@ class Node(Serializable):
         if outputs is None:
             outputs = []
 
+        # init attributes
+        self.grStatus: Union[Node.GraphicsStatus_class, None] = None
+
         # reference to the actual scene
         self.scene = scene
         self.title = title
@@ -59,8 +62,8 @@ class Node(Serializable):
         self.scene.grScene.addItem(self.grNode)  # add item to the graphical scene, so it can be displayed
 
         # instantiate sockets
-        self.inputs = []
-        self.outputs = []
+        self.inputs: List[Union['Socket', None]] = []
+        self.outputs: List[Union['Socket', None]] = []
         self.initSockets(inputs, outputs)
 
         # dirty and evaluation
@@ -209,18 +212,13 @@ class Node(Serializable):
         """
         return self.grNode.getSocketPosition(index, position, num_out_of)
 
-    def getSocketScenePosition(self, socket: 'Socket') -> Tuple[float]:
+    def getSocketScenePosition(self, socket: 'Socket') -> Tuple[Union[None, float], Union[None, float]]:
         """Helper function - returns the position of a socket in pixels relative to the `Graphical Scene`
 
         Parameters
         ----------
-        index : ```int```
-            Index of the socket in the list
-        position : SocketPosition
-            One of enumeration
-        num_out_of : ```int```
-            total number of `Socket` on this position
-
+        socket : `Socket`
+            Socket to return position from
         Returns
         -------
         ```tuple```
@@ -229,9 +227,9 @@ class Node(Serializable):
         nodepos = self.grNode.pos()
         socketpos = self.getSocketPosition(socket.index, socket.position, socket.count_on_this_node_side)
         # return position offseted of node position
-        return (nodepos.x() + socketpos[0], nodepos.y() + socketpos[1])
+        return nodepos.x() + socketpos[0], nodepos.y() + socketpos[1]
 
-    def getSockets(self):
+    def getSockets(self) -> List['Socket']:
         """Return the list of sockets for this `Node`"""
         return self.inputs + self.outputs
 
@@ -240,11 +238,11 @@ class Node(Serializable):
         return self.grNode.isSelected()
 
     def onEdgeConnectionChanged(self, new_edge):
-        if DEBUG: print(f'{self.__class__.__name__}::onEdgeConnectionChanged {new_edge}')
+        self.print(f'{self.__class__.__name__}::onEdgeConnectionChanged {new_edge}')
         pass
 
     def onInputChanged(self, socket: 'Socket'):
-        if DEBUG: print(f'{self.__class__.__name__}::onInputChanged {socket}')
+        self.print(f'{self.__class__.__name__}::onInputChanged {socket}')
         self.markDirty()
         self.markDescendantDirty()
 
@@ -272,20 +270,20 @@ class Node(Serializable):
                 edge.updatePositions()
 
     def remove(self):
-        if DEBUG: print('> Removing Node', self)
-        if DEBUG: print(' - remove all edges from sockets', self)
+        self.print('> Removing Node', self)
+        self.print(' - remove all edges from sockets', self)
         for socket in (self.inputs + self.outputs):
             # TODO revisit the remove edge method ???
             for edge in socket.edges.copy():
-                if DEBUG: print('   - removing edge ', edge, ' from socket ', socket)
+                self.print('   - removing edge ', edge, ' from socket ', socket)
                 edge.remove()
 
-        if DEBUG: print(' - remove grNode', self)
+        self.print(' - remove grNode', self)
         self.scene.grScene.removeItem(self.grNode)
         self.grNode = None
-        if DEBUG: print(' - remove node from scene', self)
+        self.print(' - remove node from scene', self)
         self.scene.removeNode(self)
-        if DEBUG: print(' - everything was done')
+        self.print(' - everything was done')
 
     # node evaluation function
     def isDirty(self):
@@ -325,13 +323,14 @@ class Node(Serializable):
         for other_node in self.getChildrenNodes():
             other_node.markDirty(new_value)
 
-    def markDescendantDirty(self, new_value=True):
+    def markDescendantDirty(self, new_value: bool = True):
         """Mark all children and descendants of this `Node` to be `Invalid`. Not this `Node` it self
 
         Parameters
         ----------
         new_value : bool
-            ``True`` if children and descendants should be `Invalid`. ``False`` if you want to make children and descendants valid
+            ``True`` if children and descendants should be `Invalid`.
+            ``False`` if you want to make children and descendants valid
         """
         for other_node in self.getChildrenNodes():
             other_node.markDirty(new_value)
@@ -367,13 +366,14 @@ class Node(Serializable):
         for other_node in self.getChildrenNodes():
             other_node.markInvalid(new_value)
 
-    def markDescendantInvalid(self, new_value=True):
+    def markDescendantInvalid(self, new_value: bool = True):
         """Mark all children and descendants of this `Node` to be `Invalid`. Not this `Node` it self
 
         Parameters
         ----------
         new_value : bool
-            ``True`` if children and descendants should be `Invalid`. ``False`` if you want to make children and descendants valid
+            ``True`` if children and descendants should be `Invalid`.
+            ``False`` if you want to make children and descendants valid
         """
         for other_node in self.getChildrenNodes():
             other_node.markInvalid(new_value)
@@ -418,7 +418,7 @@ class Node(Serializable):
                 other_nodes.append(other_node)
         return other_nodes
 
-    def getInput(self, index: int = 0) -> ['Node', None]:
+    def getInput(self, index: int = 0) -> Union['Node', None]:
         """Get the **first** `Node` connected to the Input specified by index
 
         Parameters
@@ -433,7 +433,8 @@ class Node(Serializable):
         """
         try:
             input_socket = self.inputs[index]
-            if len(input_socket.edges) == 0: return None
+            if len(input_socket.edges) == 0:
+                return None
             connecting_edge = self.inputs[index].edges[0]
             other_socket = connecting_edge.getOtherSocket(self.inputs[index])
             return other_socket.node
@@ -444,10 +445,11 @@ class Node(Serializable):
             dumpException(e)
             return None
 
-    def getInputWithSocket(self, index: int = 0) -> [('Node', 'Socket'), (None, None)]:
+    def getInputWithSocket(self, index: int = 0) -> Union[Tuple['Node', 'Socket'], None]:
         try:
             input_socket = self.inputs[index]
-            if len(input_socket) == 0: return None, None
+            if len(input_socket) == 0:
+                return None
             connecting_edge = input_socket.edges[0]
             other_socket = connecting_edge.getOtherSocket(self.inputs[index])
             return other_socket.node, other_socket
@@ -459,10 +461,11 @@ class Node(Serializable):
             dumpException(e)
             return None
 
-    def getInputWithSocketIndex(self, index: int = 0) -> [('Node', 'Socket'), (None, None)]:
+    def getInputWithSocketIndex(self, index: int = 0) -> Union[Tuple['Node', int], None]:
         try:
             input_socket = self.inputs[index]
-            if len(input_socket) == 0: return None, None
+            if len(input_socket) == 0:
+                return None
             connecting_edge = input_socket.edges[0]
             other_socket = connecting_edge.getOtherSocket(self.inputs[index])
             return other_socket.node, other_socket.index
@@ -542,8 +545,8 @@ class Node(Serializable):
             self.grNode.updateLayout()
 
             # Deserialize the Sockets
-            data['inputs'].sort(key=lambda socket: socket['index'] + socket['position'] * 1e3)
-            data['outputs'].sort(key=lambda socket: socket['index'] + socket['position'] * 1e3)
+            data['inputs'].sort(key=lambda value: value['index'] + value['position'] * 1e3)
+            data['outputs'].sort(key=lambda value: value['index'] + value['position'] * 1e3)
             num_inputs = len(data['inputs'])
             num_outputs = len(data['outputs'])
 

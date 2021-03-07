@@ -11,16 +11,17 @@ from .node_node import Node
 from .node_edge import Edge
 from .node_scene_history import SceneHistory
 from .node_scene_clipboard import SceneClipboard
-from .utils import print_func_name
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union, Type
 
 if TYPE_CHECKING:
     from .node_graphics_view import NodeGraphicsView
+    from PyQt5.QtWidgets import QGraphicsItem
 
 DEBUG = False
 
 
-class InvalidFile(Exception): pass
+class InvalidFile(Exception):
+    pass
 
 
 class Scene(Serializable):
@@ -37,11 +38,13 @@ class Scene(Serializable):
          - **scene_height** - `Scene` height in pixels
         """
         super().__init__()
+        # init attributes
+        self.grScene: Union[GraphicsScene, None] = None
+
         self.nodes = []
         self.edges = []
         self.scene_width = 64000
         self.scene_height = 64000
-        # self.grScene = None
 
         # custom flag used to suppress triggering onItemSelected which does a bunch of stuff
         self._silent_selection_events = False
@@ -96,17 +99,34 @@ class Scene(Serializable):
         self.grScene.setGrScene(self.scene_width, self.scene_height)
 
     def setSilentSelectionEvents(self, value: bool = True):
-        """Calling this can suppress onItemSelected events to be triggered. This is useful when working with clipboard"""
+        """Calling this can suppress onItemSelected events to be triggered.
+        This is useful when working with clipboard
+
+        Parameters
+        ----------
+        value: bool
+            if ``True``, suppress onItemSelected events,
+             otherwise onItemSelected is triggered and a history stamp is stored
+
+        Returns
+        -------
+        None
+        """
         self._silent_selection_events = value
 
-    def onItemSelected(self, silent=False):
+    def onItemSelected(self, silent: bool = False):
         """On item selected events - store history stamp
 
-        When the selection changed, store the current selected items and stor history stamp"""
-        # if silent selection is True, ignore the event
-        if self._silent_selection_events: return
+        When the selection changed, store the current selected items and store history stamp.
 
-        # TODO call onDeselected event on items
+        Returns
+        -------
+        None"""
+        # if silent selection is True, ignore the event
+        if self._silent_selection_events:
+            return
+
+        # Detect change in selected items by comparing old selection to the new ones
         current_selected_items = self.getSelectedItems()
         if current_selected_items != self._last_selected_items:
             self._last_selected_items = current_selected_items
@@ -127,7 +147,7 @@ class Scene(Serializable):
 
         Returns
         -------
-
+        None
         """
         try:
             current_selected_items = self.getSelectedItems()
@@ -146,43 +166,69 @@ class Scene(Serializable):
             dumpException(e)
 
     # helper listener function
-    def addHasBeenModifiedListener(self, callback: 'function'):
+    def addHasBeenModifiedListener(self, callback: 'callable'):
         """Register `callback` to `Has Been Modified` event
 
         Parameters
         ----------
-        callback : functino
+        callback : callable
+
+        Returns
+        -------
+        None
         """
         self._has_been_modified_listeners.append(callback)
 
-    def addItemSelectedListener(self, callback: 'function'):
+    def addItemSelectedListener(self, callback: 'callable'):
         """Register `callback` to `Item Selected` event
 
         Parameters
         ----------
-        callback : functino
+        callback : callable
+
+        Returns
+        -------
+        None
         """
         self._item_selected_listeners.append(callback)
 
-    def addItemsDeselectedListener(self, callbak: 'function'):
+    def addItemsDeselectedListener(self, callback: 'callable'):
         """Register `callback` to `Items Deselected` event
 
         Parameters
         ----------
-        callback : functino
-        """
-        self._items_deselected_listeners.append(callbak)
+        callback : callable
 
-    def addDragEnterListener(self, callback: 'function'):
+        Returns
+        -------
+        None
+        """
+        self._items_deselected_listeners.append(callback)
+
+    def addDragEnterListener(self, callback: 'callable'):
         """Register `callback` to `Drag Enter` event
 
         Parameters
         ----------
-        callback : functino
+        callback : callable
+
+        Returns
+        -------
+        None
         """
         self.getView().addDragEnterListener(callback)
 
-    def addDropListener(self, callback: 'function'):
+    def addDropListener(self, callback: 'callable'):
+        """Register `callback` to `Drop` event
+
+        Parameters
+        ----------
+        callback: callable
+
+        Returns
+        -------
+        None
+        """
         self.getView().addDropListener(callback)
 
     # custom flag to detect node or edge has been selected
@@ -192,15 +238,29 @@ class Scene(Serializable):
         for edge in self.edges:
             edge.grEdge._last_selected_state = False
 
-    def getEdgeClass(self):
-        """Returns the class representing the Edge. Override if needed"""
+    def getEdgeClass(self) -> Type[Edge]:
+        """Returns the class representing the Edge. Override if needed
+
+        Returns
+        -------
+        Type[Edge]"""
         return Edge
 
-    def setNodeClassSelector(self, class_selecting_function):
-        """When the function self.node_class_selector is set, we can use different Node classes"""
+    def setNodeClassSelector(self, class_selecting_function: callable):
+        """When the function self.node_class_selector is set, we can use different Node classes
+
+        Parameters
+        ----------
+        class_selecting_function: callable
+            Function returning the class of `Node` to instantiate. Used in getNodeClassFromData
+
+        Returns
+        -------
+        None
+        """
         self.node_class_selector = class_selecting_function
 
-    def getNodeClassFromData(self, data):
+    def getNodeClassFromData(self, data: OrderedDict):
         """Return corresponding Node class from data.
 
         Parameters
@@ -215,9 +275,26 @@ class Scene(Serializable):
         return Node if self.node_class_selector is None else self.node_class_selector(data)
 
     def getView(self) -> 'NodeGraphicsView':
+        """Returns current NodeGraphicsView instance.
+
+        Returns
+        -------
+        NodeGraphicsView
+        """
         return self.grScene.views()[0]
 
-    def getItemAt(self, pos):
+    def getItemAt(self, pos: Union[QPoint, QPointF]) -> 'QGraphicsItem':
+        """Returns the QGraphicsItem at position in the current graphics view
+
+        Parameters
+        ----------
+        pos: Union[QPoint, QPointF]
+            position in the view
+
+        Returns
+        -------
+        QGraphicsItem
+        """
         if isinstance(pos, QPointF):
             pos = QPoint(pos.x(), pos.y())
         return self.getView().itemAt(pos)
@@ -225,9 +302,8 @@ class Scene(Serializable):
     def getSelectedItems(self):
         return self.grScene.selectedItems()
 
-    def getNodeByID(self, node_id: int):
-        """
-        Find node in the scene according to provided `node_id` (node.id).
+    def getNodeByID(self, node_id: int) -> Union[Node, None]:
+        """Find node in the scene according to provided `node_id` (node.id).
 
         Parameters
         ----------
@@ -237,7 +313,6 @@ class Scene(Serializable):
         Returns
         -------
         `Node` or None
-
         """
         for node in self.nodes:
             if node.id == node_id:
@@ -250,35 +325,34 @@ class Scene(Serializable):
 
         Parameters
         ----------
-        silent : ```bool```
+        silent : ``bool``
             If ``True`` scene's onItemsDeselected won't be called
 
         Returns
         -------
-
+        None
         """
-
         for item in self.getSelectedItems():
             item.setSelected(False)
         if not silent:
             self.onItemsDeselected()
 
-    def addNode(self, node):
+    def addNode(self, node: Node):
         """Append node to the list of nodes"""
         self.nodes.append(node)
 
-    def addEdge(self, edge):
+    def addEdge(self, edge: Edge):
         """Append edge to the list of edges"""
         self.edges.append(edge)
 
-    def removeNode(self, node):
+    def removeNode(self, node: Node):
         """Remove node from the list of nodes"""
         if node in self.nodes:
             self.nodes.remove(node)
         else:
             print('!W', 'Scene:removeNode', 'wanna remove edge', node, 'from self.nodes but it is not in the list!')
 
-    def removeEdge(self, edge):
+    def removeEdge(self, edge: Edge):
         """Remove edge from the list of edges"""
         if edge in self.edges:
             self.edges.remove(edge)
@@ -292,12 +366,21 @@ class Scene(Serializable):
 
         self.has_been_modified = False
 
-    def saveToFile(self, filename):
-        """Save current graph to filename"""
+    def saveToFile(self, filename: str):
+        """Save current graph to filename.
+
+        Parameters
+        ----------
+        filename: str
+
+        Returns
+        -------
+        None
+        """
         with open(filename, 'w') as file:
             serialized = self.serialize()
             file.write(json.dumps(serialized, indent=4))
-            if DEBUG: print('saving to ', filename, ' was successful')
+            self.print('saving to ', filename, ' was successful')
 
             self.has_been_modified = False
 
@@ -324,7 +407,7 @@ class Scene(Serializable):
             - nodes
             - edges
         """
-        if DEBUG: print("Scene holding {} items".format(len(self.grScene.items())))
+        self.print("Scene holding {} items".format(len(self.grScene.items())))
         nodes = [node.serialize() for node in self.nodes]
         edges = [edge.serialize() for edge in self.edges]
         return OrderedDict([('id', self.id),
@@ -334,7 +417,7 @@ class Scene(Serializable):
                             ('edges', edges)
                             ])
 
-    def deserialize(self, data: dict, hashmap: dict = {}, restore_id: bool = True) -> bool:
+    def deserialize(self, data: dict, hashmap: Union[dict, None] = None, restore_id: bool = True) -> bool:
         hashmap = {}
         if restore_id:
             self.id = data['id']
@@ -345,7 +428,7 @@ class Scene(Serializable):
             # go through deserialized nodes
             for node_data in data['nodes']:
                 # can we find this node in the scene ?
-                found = False
+                found: Union[Node, bool] = False
                 for node in all_nodes:
                     if node.id == node_data['id']:
                         found = node
@@ -394,3 +477,7 @@ class Scene(Serializable):
             dumpException(e)
 
         return True
+
+    def print(self, *args):
+        if DEBUG:
+            print('>Edge :', *args)
