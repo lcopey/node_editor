@@ -4,16 +4,16 @@ from .node_serializable import Serializable
 from .utils import return_simple_id, dumpException
 from .node_graphics_edge import *
 
-EDGE_TYPE_DIRECT = 1
-EDGE_TYPE_BEZIER = 2
-
-DEBUG = False
-
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Optional, Type
 
 if TYPE_CHECKING:
     from .node_scene import Scene
     from .node_socket import Socket
+
+EDGE_TYPE_DIRECT = 1
+EDGE_TYPE_BEZIER = 2
+
+DEBUG = False
 
 
 class Edge(Serializable):
@@ -104,11 +104,11 @@ class Edge(Serializable):
         if self.start_socket is not None:
             self.updatePositions()
 
-    def getGraphicsEdgeClass(self):
+    def getGraphicsEdgeClass(self) -> Type[GraphicsEdge]:
         """Returns the class representing the Graphics Edge. Override if needed"""
         return GraphicsEdge
 
-    def createEdgeClassInstance(self):
+    def createEdgeClassInstance(self) -> GraphicsEdge:
         """Create instance of grEdge class
 
 
@@ -117,7 +117,7 @@ class Edge(Serializable):
         -------
             Instance of grEdge class representing the Graphics Edge in the grScene
         """
-        self.grEdge = self.getGraphicsEdgeClass()(self)
+        self.grEdge: GraphicsEdge = self.getGraphicsEdgeClass()(self)
         self.scene.grScene.addItem(self.grEdge)
         if self.start_socket is not None:
             self.updatePositions()
@@ -129,16 +129,16 @@ class Edge(Serializable):
         return cls.edge_validators
 
     @classmethod
-    def registerEdgeValidator(cls, validator_callback: 'function'):
+    def registerEdgeValidator(cls, validator_callback: 'callable'):
         """Register Edge Validator Callback
 
         Parameters
         ----------
-        validator_callback : 'function'
+        validator_callback : 'callable'
             A function handle to validate Edge
         Returns
         -------
-
+        None
         """
         cls.edge_validators.append(validator_callback)
 
@@ -236,25 +236,25 @@ class Edge(Serializable):
         old_sockets = [self.start_socket, self.end_socket]
 
         # sometimes grEdge stay in the scene even when removed...
-        if DEBUG: print(" - hide grEdge")
+        self.print(" - hide grEdge")
         self.grEdge.hide()
 
-        if DEBUG: print(" - remove grEdge", self.grEdge)
+        self.print(" - remove grEdge", self.grEdge)
         self.scene.grScene.removeItem(self.grEdge)
-        if DEBUG: print("   grEdge:", self.grEdge)
+        self.print("   grEdge:", self.grEdge)
 
         self.scene.grScene.update()
 
-        if DEBUG: print("# Removing Edge", self)
-        if DEBUG: print(" - remove edge from all sockets")
+        self.print("# Removing Edge", self)
+        self.print(" - remove edge from all sockets")
         self.remove_from_sockets()
-        if DEBUG: print(" - remove edge from scene")
-        if DEBUG: print(old_sockets)
+        self.print(" - remove edge from scene")
+        self.print(old_sockets)
         try:
             self.scene.removeEdge(self)
         except ValueError:
             pass
-        if DEBUG: print(" - everything is done.")
+        self.print(" - everything is done.")
 
         # On change, notify that the connection and eventually the inputs changed
         try:
@@ -280,9 +280,15 @@ class Edge(Serializable):
             ('end', self.end_socket.id if self.end_socket is not None else None)
         ])
 
-    def deserialize(self, data: dict, hashmap: dict = {}, restore_id: bool = True):
+    def deserialize(self, data: dict, hashmap=None, restore_id: bool = True):
+        if hashmap is None:
+            hashmap = {}
         if restore_id:
             self.id = data['id']
         self.start_socket = hashmap[data['start']]
         self.end_socket = hashmap[data['end']]
         self.edge_type = data['edge_type']
+
+    def print(self, *args):
+        if DEBUG:
+            print('>Edge :', *args)

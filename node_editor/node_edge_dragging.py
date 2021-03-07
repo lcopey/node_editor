@@ -3,19 +3,22 @@ from .node_edge import EDGE_TYPE_BEZIER, EDGE_TYPE_DIRECT, Edge
 from .node_graphics_socket import GraphicsSocket
 from .utils import print_items, dumpException
 
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Union, Type
 
 if TYPE_CHECKING:
     from .node_graphics_view import NodeGraphicsView
+    from .node_socket import Socket
 
 DEBUG = False
 
 
 class EdgeDragging:
-    def __init__(self, grView: 'NodeGraphicsView'):
-        self.grView = grView
+    def __init__(self, view: 'NodeGraphicsView'):
+        self.grView = view
+        self.drag_start_socket: Union['Socket', None] = None
+        self.drag_edge: Union[Edge, None] = None
 
-    def getEdgeClass(self):
+    def getEdgeClass(self) -> Type[Edge]:
         """Helper function to get the Edge class. Using what SCene class provides"""
         return self.grView.scene.getEdgeClass()
 
@@ -39,7 +42,7 @@ class EdgeDragging:
         else:
             print("View::mouseMoveEvent Trying to update drag_edge/grEdge but None")
 
-    def edgeDragStart(self, item):
+    def edgeDragStart(self, item: 'GraphicsSocket'):
         """Start the dragging of a dashed `Edge`
 
         `drag_start_socket` and `drag_edge` are created here as references to the current socket and the edge in the
@@ -52,18 +55,15 @@ class EdgeDragging:
 
         """
         try:
-            if DEBUG:
-                print('Clicked :')
-                print_items(item)
+            self.print('Clicked :', item)
 
             # Store previous edge and socket if existing
             self.drag_start_socket = item.socket
 
             # Create a new edge
             self.drag_edge = self.getEdgeClass()(item.socket.node.scene, item.socket, None, EDGE_TYPE_BEZIER)
-            if DEBUG:
-                print('Dragging :')
-                print_items(self.drag_edge.grEdge)
+            self.print('Dragging :', self.drag_edge.grEdge)
+
         except Exception as e:
             dumpException(e)
 
@@ -89,9 +89,8 @@ class EdgeDragging:
         """
         try:
             if not isinstance(item, GraphicsSocket):
-
                 self.grView.resetMode()
-                if DEBUG: print('View:edgeDragEnd - End dragging edge')
+                self.print('View:edgeDragEnd - End dragging edge')
                 # remove the edge without trigerring any event
                 self.drag_edge.remove(silent=True)
                 self.drag_edge = None
@@ -123,9 +122,8 @@ class EdgeDragging:
                 new_edge = self.getEdgeClass()(item.socket.node.scene, self.drag_start_socket, item.socket,
                                                edge_type=EDGE_TYPE_BEZIER)
 
-                if DEBUG: print('View:edgeDragEnd - Created new edge', new_edge, 'connecting',
-                                new_edge.routing_start_socket,
-                                '<-->', new_edge.end_socket)
+                self.print('View:edgeDragEnd - Created new edge', new_edge, 'connecting', new_edge.routing_start_socket,
+                           '<-->', new_edge.end_socket)
 
                 for socket in [self.drag_start_socket, item.socket]:
                     # Notify Edge Connection Changed
@@ -142,3 +140,7 @@ class EdgeDragging:
         if DEBUG: print('View:edgeDragEnd - everything done')
 
         return False
+
+    def print(self, *args):
+        if DEBUG:
+            print('>Edge dragging :', *args)

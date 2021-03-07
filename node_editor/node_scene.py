@@ -302,6 +302,9 @@ class Scene(Serializable):
     def getSelectedItems(self):
         return self.grScene.selectedItems()
 
+    def getLastSelectedItems(self):
+        return self._last_selected_items
+
     def getNodeByID(self, node_id: int) -> Union[Node, None]:
         """Find node in the scene according to provided `node_id` (node.id).
 
@@ -480,4 +483,4 @@ class Scene(Serializable):
 
     def print(self, *args):
         if DEBUG:
-            print('>Edge :', *args)
+            print('>Scene :', *args)

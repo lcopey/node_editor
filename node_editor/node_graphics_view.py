@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QGraphicsView, QApplication, QGraphicsProxyWidget, QGraphicsSceneWheelEvent
+from PyQt5.QtWidgets import QGraphicsView, QApplication, QGraphicsProxyWidget
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 import enum
@@ -329,9 +329,11 @@ class NodeGraphicsView(QGraphicsView):
             # Dragging rectangle selection
             if self.rubberBandDraggingRectangle:
                 self.rubberBandDraggingRectangle = False
-                current_selected_items = self.grScene.selectedItems()
 
-                if current_selected_items != self.grScene.scene._last_selected_items:
+                # check if selection changed
+                # TODO create a function to check on selection changed ?
+                current_selected_items = self.grScene.selectedItems()
+                if current_selected_items != self.grScene.scene.getLastSelectedItems():
                     if not current_selected_items:
                         self.grScene.itemsDeselected.emit()
                     else:
@@ -421,7 +423,7 @@ class NodeGraphicsView(QGraphicsView):
                 return
 
         if DEBUG_MRB_LAST_SELECTIONS and event.modifiers() & Qt.SHIFT:
-            self.print("scene _last_selected_items:", self.grScene.scene._last_selected_items)
+            self.print("scene _last_selected_items:", self.grScene.scene.getLastSelectedItems())
             return
 
         super().mousePressEvent(event)
@@ -517,9 +519,12 @@ class NodeGraphicsView(QGraphicsView):
 
     def debug_modifiers(self, event):
         out = 'MODS: '
-        if event.modifiers() & Qt.ShiftModifier: out += 'SHIFT'
-        if event.modifiers() & Qt.ControlModifier: out += 'CTRL'
-        if event.modifiers() & Qt.AltModifier: out += 'ALT'
+        if event.modifiers() & Qt.ShiftModifier:
+            out += 'SHIFT'
+        if event.modifiers() & Qt.ControlModifier:
+            out += 'CTRL'
+        if event.modifiers() & Qt.AltModifier:
+            out += 'ALT'
         return out
 
     def wheelEvent(self, event: QWheelEvent) -> None:
