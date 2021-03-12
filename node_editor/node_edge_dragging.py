@@ -122,7 +122,7 @@ class EdgeDragging:
                 new_edge = self.getEdgeClass()(item.socket.node.scene, self.drag_start_socket, item.socket,
                                                edge_type=EDGE_TYPE_BEZIER)
 
-                self.print('View:edgeDragEnd - Created new edge', new_edge, 'connecting', new_edge.routing_start_socket,
+                self.print('View:edgeDragEnd - Created new edge', new_edge, 'connecting', new_edge.start_socket,
                            '<-->', new_edge.end_socket)
 
                 for socket in [self.drag_start_socket, item.socket]:
