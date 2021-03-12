@@ -13,6 +13,7 @@ if __name__ == '__main__':
     screen = app.screens()[0]
     dpi = screen.physicalDotsPerInch()
     print(dpi)
+    # dpi 267.54
 
     app.setStyle('Fusion')
     wnd = DataWindow()
