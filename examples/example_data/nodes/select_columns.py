@@ -4,7 +4,7 @@ import pandas as pd
 from ..data_conf import *
 from ..data_node_base import *
 from ..data_node_graphics_base import OpGraphicsNode
-from node_editor.widgets import TreeWidgetUI
+from .node_widgets import TreeWidgetUI
 from typing import TYPE_CHECKING, Union, List, Tuple, Any
 
 if TYPE_CHECKING:

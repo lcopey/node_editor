@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import *
 from ..data_node_base import DataNode
 from ..data_node_graphics_base import OpGraphicsNode
 from ..data_conf import NodeFactory
-from node_editor.widgets import Dragger
+from .node_widgets import Dragger
 import pandas as pd
 from typing import Union
 

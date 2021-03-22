@@ -17,7 +17,25 @@
    inkscape:version="0.92.3 (2405546, 2018-03-11)"
    sodipodi:docname="main-icon.svg">
   <defs
-     id="defs3501" />
+     id="defs3501">
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath998">
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.65240669px;line-height:1.25;font-family:Gabriola;-inkscape-font-specification:'Gabriola, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#787878;fill-opacity:1;stroke:#787878;stroke-width:0.29190305;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         x="4.6961861"
+         y="279.25183"
+         id="text1002"
+         transform="scale(1.0099681,0.99013028)"
+         inkscape:label="E_shadow"><tspan
+           sodipodi:role="line"
+           id="tspan1000"
+           x="4.6961861"
+           y="279.25183"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.65240669px;font-family:Gabriola;-inkscape-font-specification:'Gabriola, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#787878;fill-opacity:1;stroke:#787878;stroke-width:0.29190305;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1">E</tspan></text>
+    </clipPath>
+  </defs>
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -25,9 +43,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.979899"
-     inkscape:cx="61.362806"
-     inkscape:cy="68.062391"
+     inkscape:zoom="3.959798"
+     inkscape:cx="22.667078"
+     inkscape:cy="57.173451"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -49,62 +67,91 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
   <g
-     inkscape:label="Calque 1"
+     inkscape:label="Node"
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(0,-280.06665)">
-    <g
-       id="g4094"
-       transform="matrix(1.4788373,0,0,1.4497899,-1.2051168,-127.47173)">
-      <text
-         id="text4056-0"
-         y="291.23587"
-         x="1.4646574"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16.93333244px;line-height:1.25;font-family:Gabriola;-inkscape-font-specification:'Gabriola, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#9f9f9f;fill-opacity:1;stroke:none;stroke-width:0.26499999;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         xml:space="preserve"><tspan
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16.93333244px;font-family:Gabriola;-inkscape-font-specification:'Gabriola, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#9f9f9f;fill-opacity:1;stroke:none;stroke-width:0.26499999;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-           y="291.23587"
-           x="1.4646574"
-           id="tspan4054-7"
-           sodipodi:role="line">N</tspan></text>
-      <text
-         id="text4060-5"
-         y="292.55878"
-         x="5.4334073"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16.93333244px;line-height:1.25;font-family:Gabriola;-inkscape-font-specification:'Gabriola, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#9f9f9f;fill-opacity:1;stroke:none;stroke-width:0.26499999;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         xml:space="preserve"><tspan
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16.93333244px;font-family:Gabriola;-inkscape-font-specification:'Gabriola, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#9f9f9f;fill-opacity:1;stroke:none;stroke-width:0.26499999;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-           y="292.55878"
-           x="5.4334073"
-           id="tspan4058-9"
-           sodipodi:role="line">E</tspan></text>
-      <text
-         id="text4056"
-         y="290.7634"
-         x="0.8504464"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16.93333244px;line-height:1.25;font-family:Gabriola;-inkscape-font-specification:'Gabriola, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#1f77b5;fill-opacity:1;stroke:#000000;stroke-width:0.26499999;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         xml:space="preserve"><tspan
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16.93333244px;font-family:Gabriola;-inkscape-font-specification:'Gabriola, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#1f77b5;fill-opacity:1;stroke:#000000;stroke-width:0.26499999;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-           y="290.7634"
-           x="0.8504464"
-           id="tspan4054"
-           sodipodi:role="line">N</tspan></text>
-      <text
-         id="text4060"
-         y="292.0863"
-         x="4.8191962"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16.93333244px;line-height:1.25;font-family:Gabriola;-inkscape-font-specification:'Gabriola, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#1f77b5;fill-opacity:1;stroke:#000000;stroke-width:0.26499999;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         xml:space="preserve"><tspan
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16.93333244px;font-family:Gabriola;-inkscape-font-specification:'Gabriola, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#1f77b5;fill-opacity:1;stroke:#000000;stroke-width:0.26499999;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-           y="292.0863"
-           x="4.8191962"
-           id="tspan4058"
-           sodipodi:role="line">E</tspan></text>
-    </g>
+    <circle
+       style="opacity:1;fill:#a0a0a0;fill-opacity:1;fill-rule:nonzero;stroke:#a0a0a0;stroke-width:0.36389929;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path830-5"
+       cx="8.9044161"
+       cy="288.54886"
+       r="7.9378161"
+       inkscape:label="node_shadow" />
+    <circle
+       style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#e5e5e5;stroke-width:0.36389929;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path830"
+       cx="8.2106152"
+       cy="288.30618"
+       r="7.9378161"
+       clip-path="none"
+       inkscape:label="node" />
+    <circle
+       style="opacity:1;fill:#787878;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.38814375;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path830-4"
+       cx="5.471972"
+       cy="270.08734"
+       r="8.4666662"
+       clip-path="url(#clipPath998)"
+       inkscape:label="node_"
+       transform="matrix(0.9375374,0,0,0.9375374,2.7833394,35.177796)" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.48732948px;line-height:1.25;font-family:Gabriola;-inkscape-font-specification:'Gabriola, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#787878;fill-opacity:1;stroke:none;stroke-width:0.27375454;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       x="3.0601223"
+       y="295.97131"
+       id="text4056-4"
+       transform="scale(1.0099681,0.99013028)"
+       inkscape:label="N_shadow"><tspan
+         sodipodi:role="line"
+         id="tspan4054-4"
+         x="3.0601223"
+         y="295.97131"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.48732948px;font-family:Gabriola;-inkscape-font-specification:'Gabriola, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#787878;fill-opacity:1;stroke:none;stroke-width:0.27375454;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1">N</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.48732948px;line-height:1.25;font-family:Gabriola;-inkscape-font-specification:'Gabriola, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#1f77b5;fill-opacity:1;stroke:#000000;stroke-width:0.27375454;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       x="2.4918973"
+       y="295.32349"
+       id="text4056"
+       transform="scale(1.0099681,0.99013028)"
+       inkscape:label="N"><tspan
+         sodipodi:role="line"
+         id="tspan4054"
+         x="2.4918973"
+         y="295.32349"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.48732948px;font-family:Gabriola;-inkscape-font-specification:'Gabriola, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#1f77b5;fill-opacity:1;stroke:#000000;stroke-width:0.27375454;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1">N</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.48732948px;line-height:1.25;font-family:Gabriola;-inkscape-font-specification:'Gabriola, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#1f77b5;fill-opacity:1;stroke:#000000;stroke-width:0.27367002;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       x="6.5904946"
+       y="296.6897"
+       id="text4060"
+       transform="scale(1.0099681,0.99013028)"
+       inkscape:label="E"><tspan
+         sodipodi:role="line"
+         id="tspan4058"
+         x="6.5904946"
+         y="296.6897"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.48732948px;font-family:Gabriola;-inkscape-font-specification:'Gabriola, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#1f77b5;fill-opacity:1;stroke:#000000;stroke-width:0.27367002;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1">E</tspan></text>
+    <circle
+       style="opacity:1;fill:#787878;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.19001149;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path1004-9"
+       cx="16.180927"
+       cy="289.18607"
+       r="0.62014192"
+       inkscape:label="socket_shadow" />
+    <circle
+       style="opacity:1;fill:#1f77b5;fill-opacity:1;fill-rule:nonzero;stroke:#ffffff;stroke-width:0.19001149;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path1004"
+       cx="15.946474"
+       cy="288.73209"
+       r="0.62014192"
+       inkscape:label="socket" />
   </g>
 </svg>
