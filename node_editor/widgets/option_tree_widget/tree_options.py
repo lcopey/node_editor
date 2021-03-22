@@ -71,10 +71,10 @@ class OptionTreeWidget(QTreeWidget):
     def getDropValidator(cls):
         return cls.dropValidator
 
-    def validateDrop(self, source, destination) -> bool:
+    def validateDrop(self, source, destination, item) -> bool:
         result = True
         for callback in self.dropValidator:
-            result &= callback(self, source, destination)
+            result &= callback(self, source, destination, item)
         return result
 
     def addRootItem(self, itemName: str, widget: Optional[QWidget] = None, flags: Optional[Qt.ItemFlag] = None):
@@ -169,7 +169,7 @@ class OptionTreeWidget(QTreeWidget):
                 new_item = self.getItemClass()(value)
                 # only add new item to DestTreeWidgetItem
                 # it avoids having deep tree
-                if self.validateDrop(source, item):
+                if self.validateDrop(source, item, new_item):
                     # find existing items with the same name and remove them
                     # source is either self or the instance of SourceListWidget
                     source.removeItems(new_item.text(0))

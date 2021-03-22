@@ -8,10 +8,33 @@ class PivotOptionTree(OptionTreeWidget):
     def __init__(self):
         super(PivotOptionTree, self).__init__(names=['pivot'], acceptDrops=True)
         flags = Qt.ItemIsEnabled | Qt.ItemIsSelectable | Qt.ItemIsDropEnabled
-        for value in ['rows', 'columns', 'values']:
+        for n, value in enumerate(['rows', 'columns', 'values']):
             self.addRootItem(itemName=value, flags=flags)
+        self.expandAll()
 
-        self.registerDropValidator()
+        self.registerDropValidator(PivotOptionTree.isRootChildItem)
+
+    def isRootChildItem(self, source, destination, item) -> bool:
+        """Check wether the item is dropped on first level of items.
+
+        Parameters
+        ----------
+        source :
+            source widget of the item
+        destination :
+            destination widget or item where to drop
+        item :
+            item to drop in destination
+
+        Returns
+        -------
+        bool
+            True to validate the move, False otherwise
+
+        """
+        root = self.invisibleRootItem()
+        child = [root.child(n) for n in range(root.childCount())]
+        return destination in child
 
 
 class ResetIndexOptionTree(OptionTreeWidget):
@@ -40,7 +63,9 @@ if __name__ == '__main__':
             self.sourceList = DraggableListWidget()
             self.sourceList.addItems([value for value in range(10)])
             # self.optionTree = OptionTreeWidget(['func', 'options'])
-            self.optionTree = PivotOptionTree()
+            # self.optionTree = PivotOptionTree()
+            # self.optionTree = ResetIndexOptionTree()
+            self.optionTree = StackOptionTree()
             layout = QVBoxLayout()
             layout.addWidget(self.sourceList)
             layout.addWidget(self.optionTree)
