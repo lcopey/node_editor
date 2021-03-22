@@ -25,7 +25,8 @@ class Node(Serializable):
                  outputs: List[int] = None):
         """Instantiate a new `Node` and add it to the `Graphical Scene`
 
-        Instance Attributes:
+        Instance Attributes
+        -------------------
             scene - reference to the :class:`~node_editor.node_scene.Scene`
             grNode - reference to the :class:`~node_editor.node_graphics_node.GraphicsNode`
 
@@ -388,7 +389,7 @@ class Node(Serializable):
         pass
 
     def eval(self, ):
-        """Evaluated this `Node`. This method is supposed to be overriden."""
+        """Evaluate this `Node`. This method is supposed to be overriden."""
         self.markDirty(False)
         self.markInvalid(False)
         return 0

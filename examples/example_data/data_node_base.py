@@ -2,7 +2,7 @@ from node_editor.node_node import Node
 from .data_node_graphics_base import VizGraphicsNode
 from node_editor.node_socket import SocketPosition
 from node_editor.utils import dumpException
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional, Any
 
 if TYPE_CHECKING:
     from node_editor.node_socket import Socket
@@ -12,6 +12,7 @@ DEBUG = False
 
 
 class DataNode(Node):
+    """Class representing the `DataNode`"""
     icon = ""
     op_title = 'Undefined'
     content_label = ''
@@ -21,11 +22,30 @@ class DataNode(Node):
     NodeContent_class = None
 
     def __init__(self, scene: 'Scene', inputs=None, outputs=None):
+        """Instantiate a `DataNode` which is a subclass of :class:`~node_editor.node_node.Node`
+
+        Instance Attributes
+        -------------------
+            scene - reference to the :class:`~node_editor.node_scene.Scene`
+            grNode - by default, reference to the :class:`~data_node_graphics_base.VizGraphicsNode`
+            input_socket_position - :class:`~node_socket.SocketPosition`
+            output_socket_position - :class:`~node_socket.SocketPosition`
+
+        Parameters
+        ----------
+        scene: Scene
+            reference to the :class:`~node_editor.node_scene.Scene`
+        inputs: List[int]
+        outputs: List[int]
+        """
         if outputs is None:
             outputs = [1]
         if inputs is None:
             inputs = [2, 2]
         super().__init__(scene, title=self.__class__.op_title, inputs=inputs, outputs=outputs)
+
+        self.input_socket_position: Optional[SocketPosition] = None
+        self.output_socket_position: Optional[SocketPosition] = None
 
         self.propertiesWidget = None
         self.initPropertiesWidget()
@@ -35,7 +55,7 @@ class DataNode(Node):
 
     def initPropertiesWidget(self):
         """To be overridden, defines an attribute named properties_widget used in the properties toolbar"""
-        pass
+        raise NotImplementedError
 
     def hasPropertiesWidget(self):
         return self.propertiesWidget is not None
@@ -49,7 +69,8 @@ class DataNode(Node):
         return cls.__name__
 
     def print(self, *args):
-        if DEBUG: print(f'> {self.__class__.__name__}', *args)
+        if DEBUG:
+            print(f'> {self.__class__.__name__}', *args)
 
     def initSettings(self):
         super().initSettings()
@@ -64,14 +85,38 @@ class DataNode(Node):
         """To be overridden - restore the node settings"""
         return False
 
-    def serialize(self):
+    def serialize(self) -> dict:
+        """Serialize the node.
+
+        Call :py:meth:`~data_node_base.DataNode.getNodeSettings` to retrieve the node specific settings.
+        Returns
+        -------
+        dict
+            Dictionary of node settings and parameters to serialize
+        """
         res = super().serialize()
         res['op_code'] = self.__class__.getOpCode()
         res['node_settings'] = self.getNodeSettings()
         self.print('serialize')
         return res
 
-    def deserialize(self, data, hashmap=None, restore_id=True):
+    def deserialize(self, data: dict, hashmap: dict = None, restore_id: bool = True) -> bool:
+        """Deserialize the node with corresponding data
+
+        Parameters
+        ----------
+        data: dict
+            Serialized settings of the node
+        hashmap: dict
+        restore_id: bool
+            if ``True``, set the 'id' attribute to data['id'] else a new object with its own id is generated.
+
+        Returns
+        -------
+        bool
+            ``True`` if successful, ``False`` otherwise
+
+        """
         if hashmap is None:
             hashmap = {}
         res = super().deserialize(data, hashmap, restore_id)
@@ -81,11 +126,35 @@ class DataNode(Node):
         print("Deserialize DataNode {}: res : {}".format(self.__class__.__name__, res))
         return res
 
-    def forcedEval(self):
-        self.markDirty(True)
-        self.eval(force=True)
+    def forcedEval(self) -> Any:
+        """Force evaluation of the current `DataNode`.
 
-    def eval(self, force: bool = False):
+        Returns
+        -------
+        Any
+
+
+        """
+        self.markDirty(True)
+        return self.eval(force=True)
+
+    def eval(self, force: bool = False) -> Any:
+        """Evaluate this `Node`.
+
+        Return cached value in case no change was detected. Evaluation can be forced by setting Force to ``True``.
+        Otherwise, evaluate this `Node` by calling :py:meth:`~data_node_base.DataNode.evalImplementation`.
+        In case of ValueError, set the node and their children as dirty.
+        Any other error will set the node and their children as invalid
+        Parameters
+        ----------
+        force: bool
+            ``True`` Force evaluation of this `Node`.
+
+        Returns
+        -------
+        Any
+
+        """
         if not self.isDirty() and not self.isInvalid():
             self.print('Dirty : ', self.isDirty(), 'Invalid : ', self.isInvalid())
             self.print(f" _> return cached {self.__class__.__name__} value {self.value}")
@@ -95,12 +164,11 @@ class DataNode(Node):
             # By default, undirty and valid the node
             # self.markDirty(False)
             # self.markInvalid(False)
-
             val = self.evalImplementation(force=force)
             return val
 
         except ValueError as e:
-            self.markInvalid()
+            self.markDirty()
             self.setToolTip(str(e))
             self.markDescendantDirty()
 
@@ -109,7 +177,7 @@ class DataNode(Node):
             self.setToolTip(str(e))
             dumpException(e)
 
-    def evalImplementation(self, *input_nodes, force: bool = False):
+    def evalImplementation(self, force: bool = False):
         """Evaluation implementation of the current `DataNode`.
 
 
@@ -121,7 +189,7 @@ class DataNode(Node):
             - reset the states of the Node : un-Dirty and Valid
             - store the current evaluation in self.value
             - reset tooltip
-            - markDescendantDirty(True) markDescendantInvalid(False)
+            - markDescendantDirty(True) :py:meth:'~data_node_base.DataNode.markDescendantInvalid(False)'
             - evaluate the children of the `Node`
             - return current evaluation
 
@@ -131,7 +199,17 @@ class DataNode(Node):
         """
         raise NotImplementedError
 
-    def onInputChanged(self, socket: 'Socket'):
+    def onInputChanged(self, socket: 'Socket') -> Any:
+        """Event called when an `Edge` is connected to the inputs
+
+        Parameters
+        ----------
+        socket: 'Socket'
+
+        Returns
+        -------
+
+        """
         self.print(f'{self.__class__.__name__}::onInputChanged')
         self.markDirty()
-        self.eval()
+        return self.eval()
