@@ -186,43 +186,48 @@
 <dl class="py class">
 <dt id="node_editor.node_socket.SocketPosition">
 <em class="property">class </em><code class="sig-prename descclassname">node_editor.node_socket.</code><code class="sig-name descname">SocketPosition</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_socket.SocketPosition" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.IntEnum</span></code></p>
 <p>Enumeration of possible position of sockets in the <cite>Node</cite></p>
 <dl class="py attribute">
-<dt id="node_editor.node_socket.SocketPosition.LEFT_TOP">
-<code class="sig-name descname">LEFT_TOP</code><em class="property"> = 1</em><a class="headerlink" href="#node_editor.node_socket.SocketPosition.LEFT_TOP" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_socket.SocketPosition.TopLeft">
+<code class="sig-name descname">TopLeft</code><em class="property"> = 1</em><a class="headerlink" href="#node_editor.node_socket.SocketPosition.TopLeft" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="node_editor.node_socket.SocketPosition.LEFT_CENTER">
-<code class="sig-name descname">LEFT_CENTER</code><em class="property"> = 2</em><a class="headerlink" href="#node_editor.node_socket.SocketPosition.LEFT_CENTER" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_socket.SocketPosition.MiddleLeft">
+<code class="sig-name descname">MiddleLeft</code><em class="property"> = 2</em><a class="headerlink" href="#node_editor.node_socket.SocketPosition.MiddleLeft" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="node_editor.node_socket.SocketPosition.LEFT_BOTTOM">
-<code class="sig-name descname">LEFT_BOTTOM</code><em class="property"> = 3</em><a class="headerlink" href="#node_editor.node_socket.SocketPosition.LEFT_BOTTOM" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_socket.SocketPosition.BottomLeft">
+<code class="sig-name descname">BottomLeft</code><em class="property"> = 3</em><a class="headerlink" href="#node_editor.node_socket.SocketPosition.BottomLeft" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="node_editor.node_socket.SocketPosition.RIGHT_TOP">
-<code class="sig-name descname">RIGHT_TOP</code><em class="property"> = 4</em><a class="headerlink" href="#node_editor.node_socket.SocketPosition.RIGHT_TOP" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_socket.SocketPosition.TopRight">
+<code class="sig-name descname">TopRight</code><em class="property"> = 4</em><a class="headerlink" href="#node_editor.node_socket.SocketPosition.TopRight" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="node_editor.node_socket.SocketPosition.RIGHT_CENTER">
-<code class="sig-name descname">RIGHT_CENTER</code><em class="property"> = 5</em><a class="headerlink" href="#node_editor.node_socket.SocketPosition.RIGHT_CENTER" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_socket.SocketPosition.MiddleRight">
+<code class="sig-name descname">MiddleRight</code><em class="property"> = 5</em><a class="headerlink" href="#node_editor.node_socket.SocketPosition.MiddleRight" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="node_editor.node_socket.SocketPosition.RIGHT_BOTTOM">
-<code class="sig-name descname">RIGHT_BOTTOM</code><em class="property"> = 6</em><a class="headerlink" href="#node_editor.node_socket.SocketPosition.RIGHT_BOTTOM" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_socket.SocketPosition.BottomRight">
+<code class="sig-name descname">BottomRight</code><em class="property"> = 6</em><a class="headerlink" href="#node_editor.node_socket.SocketPosition.BottomRight" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_socket.SocketPosition.has_value">
+<em class="property">classmethod </em><code class="sig-name descname">has_value</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_socket.SocketPosition.has_value" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt id="node_editor.node_socket.Socket">
-<em class="property">class </em><code class="sig-prename descclassname">node_editor.node_socket.</code><code class="sig-name descname">Socket</code><span class="sig-paren">(</span><em class="sig-param">node: Node</em>, <em class="sig-param">index=0</em>, <em class="sig-param">position=&lt;SocketPosition.LEFT_TOP: 1&gt;</em>, <em class="sig-param">socket_type=1</em>, <em class="sig-param">multi_edges=True</em>, <em class="sig-param">count_on_this_node_side=1</em>, <em class="sig-param">is_input=False</em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_socket.Socket" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">node_editor.node_socket.</code><code class="sig-name descname">Socket</code><span class="sig-paren">(</span><em class="sig-param">node: Node</em>, <em class="sig-param">index=0</em>, <em class="sig-param">position=&lt;SocketPosition.TopLeft: 1&gt;</em>, <em class="sig-param">socket_type=1</em>, <em class="sig-param">multi_edges=True</em>, <em class="sig-param">count_on_this_node_side=1</em>, <em class="sig-param">is_input=False</em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_socket.Socket" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="node_editor.node_serializable.html#node_editor.node_serializable.Serializable" title="node_editor.node_serializable.Serializable"><code class="xref py py-class docutils literal notranslate"><span class="pre">node_editor.node_serializable.Serializable</span></code></a></p>
 <dl class="py attribute">
 <dt id="node_editor.node_socket.Socket.Socket_GR_Class">

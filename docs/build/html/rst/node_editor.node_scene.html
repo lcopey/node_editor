@@ -236,14 +236,38 @@
 <dl class="py method">
 <dt id="node_editor.node_scene.Scene.setSilentSelectionEvents">
 <code class="sig-name descname">setSilentSelectionEvents</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.setSilentSelectionEvents" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calling this can suppress onItemSelected events to be triggered. This is useful when working with clipboard</p>
+<dd><p>Calling this can suppress onItemSelected events to be triggered.
+This is useful when working with clipboard</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>bool</em>) – <dl class="simple">
+<dt>if <code class="docutils literal notranslate"><span class="pre">True</span></code>, suppress onItemSelected events,</dt><dd><p>otherwise onItemSelected is triggered and a history stamp is stored</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_scene.Scene.onItemSelected">
-<code class="sig-name descname">onItemSelected</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">silent</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.onItemSelected" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">onItemSelected</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">silent</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.onItemSelected" title="Permalink to this definition">¶</a></dt>
 <dd><p>On item selected events - store history stamp</p>
-<p>When the selection changed, store the current selected items and stor history stamp</p>
+<p>When the selection changed, store the current selected items and store history stamp.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -255,57 +279,99 @@
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>silent</strong> (<em>bool</em>) – if <code class="docutils literal notranslate"><span class="pre">True</span></code> scene’s onItemsDeselected w’ont be called and history stamp not stored</p>
 </dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_scene.Scene.addHasBeenModifiedListener">
-<code class="sig-name descname">addHasBeenModifiedListener</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">callback</span><span class="p">:</span> <span class="n">function</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.addHasBeenModifiedListener" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">addHasBeenModifiedListener</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">callback</span><span class="p">:</span> <span class="n">callable</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.addHasBeenModifiedListener" title="Permalink to this definition">¶</a></dt>
 <dd><p>Register <cite>callback</cite> to <cite>Has Been Modified</cite> event</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>callback</strong> (<em>functino</em>) – </p>
+<dd class="field-odd"><p><strong>callback</strong> (<em>callable</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_scene.Scene.addItemSelectedListener">
-<code class="sig-name descname">addItemSelectedListener</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">callback</span><span class="p">:</span> <span class="n">function</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.addItemSelectedListener" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">addItemSelectedListener</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">callback</span><span class="p">:</span> <span class="n">callable</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.addItemSelectedListener" title="Permalink to this definition">¶</a></dt>
 <dd><p>Register <cite>callback</cite> to <cite>Item Selected</cite> event</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>callback</strong> (<em>functino</em>) – </p>
+<dd class="field-odd"><p><strong>callback</strong> (<em>callable</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_scene.Scene.addItemsDeselectedListener">
-<code class="sig-name descname">addItemsDeselectedListener</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">callbak</span><span class="p">:</span> <span class="n">function</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.addItemsDeselectedListener" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">addItemsDeselectedListener</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">callback</span><span class="p">:</span> <span class="n">callable</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.addItemsDeselectedListener" title="Permalink to this definition">¶</a></dt>
 <dd><p>Register <cite>callback</cite> to <cite>Items Deselected</cite> event</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>callback</strong> (<em>functino</em>) – </p>
+<dd class="field-odd"><p><strong>callback</strong> (<em>callable</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_scene.Scene.addDragEnterListener">
-<code class="sig-name descname">addDragEnterListener</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">callback</span><span class="p">:</span> <span class="n">function</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.addDragEnterListener" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">addDragEnterListener</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">callback</span><span class="p">:</span> <span class="n">callable</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.addDragEnterListener" title="Permalink to this definition">¶</a></dt>
 <dd><p>Register <cite>callback</cite> to <cite>Drag Enter</cite> event</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>callback</strong> (<em>functino</em>) – </p>
+<dd class="field-odd"><p><strong>callback</strong> (<em>callable</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_scene.Scene.addDropListener">
-<code class="sig-name descname">addDropListener</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">callback</span><span class="p">:</span> <span class="n">function</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.addDropListener" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname">addDropListener</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">callback</span><span class="p">:</span> <span class="n">callable</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.addDropListener" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register <cite>callback</cite> to <cite>Drop</cite> event</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>callback</strong> (<em>callable</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_scene.Scene.resetLastSelectedStates">
@@ -314,19 +380,38 @@
 
 <dl class="py method">
 <dt id="node_editor.node_scene.Scene.getEdgeClass">
-<code class="sig-name descname">getEdgeClass</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.getEdgeClass" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">getEdgeClass</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Type<span class="p">[</span><a class="reference internal" href="node_editor.node_edge.html#node_editor.node_edge.Edge" title="node_editor.node_edge.Edge">node_editor.node_edge.Edge</a><span class="p">]</span><a class="headerlink" href="#node_editor.node_scene.Scene.getEdgeClass" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the class representing the Edge. Override if needed</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Type[<a class="reference internal" href="node_editor.node_edge.html#node_editor.node_edge.Edge" title="node_editor.node_edge.Edge">Edge</a>]</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_scene.Scene.setNodeClassSelector">
-<code class="sig-name descname">setNodeClassSelector</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">class_selecting_function</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.setNodeClassSelector" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">setNodeClassSelector</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">class_selecting_function</span><span class="p">:</span> <span class="n">callable</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.setNodeClassSelector" title="Permalink to this definition">¶</a></dt>
 <dd><p>When the function self.node_class_selector is set, we can use different Node classes</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>class_selecting_function</strong> (<em>callable</em>) – Function returning the class of <cite>Node</cite> to instantiate. Used in getNodeClassFromData</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_scene.Scene.getNodeClassFromData">
-<code class="sig-name descname">getNodeClassFromData</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.getNodeClassFromData" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">getNodeClassFromData</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">collections.OrderedDict</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.getNodeClassFromData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return corresponding Node class from data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -343,13 +428,34 @@
 
 <dl class="py method">
 <dt id="node_editor.node_scene.Scene.getView">
-<code class="sig-name descname">getView</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.getView" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname">getView</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; NodeGraphicsView<a class="headerlink" href="#node_editor.node_scene.Scene.getView" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns current NodeGraphicsView instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="node_editor.node_graphics_view.html#node_editor.node_graphics_view.NodeGraphicsView" title="node_editor.node_graphics_view.NodeGraphicsView">NodeGraphicsView</a></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_scene.Scene.getItemAt">
-<code class="sig-name descname">getItemAt</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pos</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.getItemAt" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname">getItemAt</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pos</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>PyQt5.QtCore.QPoint<span class="p">, </span>PyQt5.QtCore.QPointF<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; QGraphicsItem<a class="headerlink" href="#node_editor.node_scene.Scene.getItemAt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the QGraphicsItem at position in the current graphics view</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pos</strong> (<em>Union</em><em>[</em><em>QPoint</em><em>, </em><em>QPointF</em><em>]</em>) – position in the view</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>QGraphicsItem</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_scene.Scene.getSelectedItems">
@@ -357,8 +463,13 @@
 <dd></dd></dl>
 
 <dl class="py method">
+<dt id="node_editor.node_scene.Scene.getLastSelectedItems">
+<code class="sig-name descname">getLastSelectedItems</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.getLastSelectedItems" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
 <dt id="node_editor.node_scene.Scene.getNodeByID">
-<code class="sig-name descname">getNodeByID</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">node_id</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.getNodeByID" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">getNodeByID</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">node_id</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; Optional<span class="p">[</span><a class="reference internal" href="node_editor.node_node.html#node_editor.node_node.Node" title="node_editor.node_node.Node">node_editor.node_node.Node</a><span class="p">]</span><a class="headerlink" href="#node_editor.node_scene.Scene.getNodeByID" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find node in the scene according to provided <cite>node_id</cite> (node.id).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -379,32 +490,38 @@
 <dd><p>Deselects everything in scene</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>silent</strong> (<code class="docutils literal notranslate"><span class="pre">`bool`</span></code>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> scene’s onItemsDeselected won’t be called</p>
+<dd class="field-odd"><p><strong>silent</strong> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> scene’s onItemsDeselected won’t be called</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_scene.Scene.addNode">
-<code class="sig-name descname">addNode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">node</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.addNode" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">addNode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">node</span><span class="p">:</span> <span class="n"><a class="reference internal" href="node_editor.node_node.html#node_editor.node_node.Node" title="node_editor.node_node.Node">node_editor.node_node.Node</a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.addNode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Append node to the list of nodes</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_scene.Scene.addEdge">
-<code class="sig-name descname">addEdge</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">edge</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.addEdge" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">addEdge</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">edge</span><span class="p">:</span> <span class="n"><a class="reference internal" href="node_editor.node_edge.html#node_editor.node_edge.Edge" title="node_editor.node_edge.Edge">node_editor.node_edge.Edge</a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.addEdge" title="Permalink to this definition">¶</a></dt>
 <dd><p>Append edge to the list of edges</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_scene.Scene.removeNode">
-<code class="sig-name descname">removeNode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">node</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.removeNode" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">removeNode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">node</span><span class="p">:</span> <span class="n"><a class="reference internal" href="node_editor.node_node.html#node_editor.node_node.Node" title="node_editor.node_node.Node">node_editor.node_node.Node</a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.removeNode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove node from the list of nodes</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_scene.Scene.removeEdge">
-<code class="sig-name descname">removeEdge</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">edge</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.removeEdge" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">removeEdge</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">edge</span><span class="p">:</span> <span class="n"><a class="reference internal" href="node_editor.node_edge.html#node_editor.node_edge.Edge" title="node_editor.node_edge.Edge">node_editor.node_edge.Edge</a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.removeEdge" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove edge from the list of edges</p>
 </dd></dl>
 
@@ -416,8 +533,19 @@
 
 <dl class="py method">
 <dt id="node_editor.node_scene.Scene.saveToFile">
-<code class="sig-name descname">saveToFile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.saveToFile" title="Permalink to this definition">¶</a></dt>
-<dd><p>Save current graph to filename</p>
+<code class="sig-name descname">saveToFile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.saveToFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save current graph to filename.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -443,7 +571,12 @@
 
 <dl class="py method">
 <dt id="node_editor.node_scene.Scene.deserialize">
-<code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">dict</span></em>, <em class="sig-param"><span class="n">hashmap</span><span class="p">:</span> <span class="n">dict</span> <span class="o">=</span> <span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">restore_id</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#node_editor.node_scene.Scene.deserialize" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">dict</span></em>, <em class="sig-param"><span class="n">hashmap</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>dict<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">restore_id</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#node_editor.node_scene.Scene.deserialize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_scene.Scene.print">
+<code class="sig-name descname">print</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_scene.Scene.print" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

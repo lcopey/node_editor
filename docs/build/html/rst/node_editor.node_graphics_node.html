@@ -185,8 +185,8 @@
 <span id="node-editor-node-graphics-node-module"></span><h1>node_editor.node_graphics_node module<a class="headerlink" href="#module-node_editor.node_graphics_node" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="node_editor.node_graphics_node.GraphicsNode">
-<em class="property">class </em><code class="sig-prename descclassname">node_editor.node_graphics_node.</code><code class="sig-name descname">GraphicsNode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">node</span><span class="p">:</span> <span class="n">Node</span></em>, <em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_node.GraphicsNode" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QGraphicsItem</span></code></p>
+<em class="property">class </em><code class="sig-prename descclassname">node_editor.node_graphics_node.</code><code class="sig-name descname">GraphicsNode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">node</span><span class="p">:</span> <span class="n">Node</span></em>, <em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">resizeable</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">min_width</span><span class="o">=</span><span class="default_value">180</span></em>, <em class="sig-param"><span class="n">width</span><span class="o">=</span><span class="default_value">180</span></em>, <em class="sig-param"><span class="n">min_height</span><span class="o">=</span><span class="default_value">240</span></em>, <em class="sig-param"><span class="n">height</span><span class="o">=</span><span class="default_value">240</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_node.GraphicsNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QGraphicsRectItem</span></code></p>
 <p>Implement the graphics version of a node</p>
 <dl class="py method">
 <dt id="node_editor.node_graphics_node.GraphicsNode.content">
@@ -195,13 +195,28 @@
 </dd></dl>
 
 <dl class="py method">
+<dt id="node_editor.node_graphics_node.GraphicsNode.height">
+<em class="property">property </em><code class="sig-name descname">height</code><a class="headerlink" href="#node_editor.node_graphics_node.GraphicsNode.height" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_graphics_node.GraphicsNode.width">
+<em class="property">property </em><code class="sig-name descname">width</code><a class="headerlink" href="#node_editor.node_graphics_node.GraphicsNode.width" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_graphics_node.GraphicsNode.title">
+<em class="property">property </em><code class="sig-name descname">title</code><a class="headerlink" href="#node_editor.node_graphics_node.GraphicsNode.title" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
 <dt id="node_editor.node_graphics_node.GraphicsNode.initUI">
 <code class="sig-name descname">initUI</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_node.GraphicsNode.initUI" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_graphics_node.GraphicsNode.initSizes">
-<code class="sig-name descname">initSizes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_node.GraphicsNode.initSizes" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">initSizes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">resizeable</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">min_width</span><span class="o">=</span><span class="default_value">180</span></em>, <em class="sig-param"><span class="n">width</span><span class="o">=</span><span class="default_value">180</span></em>, <em class="sig-param"><span class="n">min_height</span><span class="o">=</span><span class="default_value">240</span></em>, <em class="sig-param"><span class="n">height</span><span class="o">=</span><span class="default_value">240</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_node.GraphicsNode.initSizes" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -210,18 +225,31 @@
 <dd></dd></dl>
 
 <dl class="py method">
+<dt id="node_editor.node_graphics_node.GraphicsNode.initHandles">
+<code class="sig-name descname">initHandles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_node.GraphicsNode.initHandles" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
 <dt id="node_editor.node_graphics_node.GraphicsNode.initContent">
 <code class="sig-name descname">initContent</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_node.GraphicsNode.initContent" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Add the <cite>Content</cite> of the <cite>Node</cite> to the <cite>Graphical Scene</cite></p>
+</dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_graphics_node.GraphicsNode.initTitle">
 <code class="sig-name descname">initTitle</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_node.GraphicsNode.initTitle" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Title is instanciated as <cite>QGraphicsTextItem</cite></p>
+</dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_graphics_node.GraphicsNode.title">
-<em class="property">property </em><code class="sig-name descname">title</code><a class="headerlink" href="#node_editor.node_graphics_node.GraphicsNode.title" title="Permalink to this definition">¶</a></dt>
+<dt id="node_editor.node_graphics_node.GraphicsNode.setContentGeometry">
+<code class="sig-name descname">setContentGeometry</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_node.GraphicsNode.setContentGeometry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set Content geometry to fit the space available in the <cite>Graphical Node</cite></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_graphics_node.GraphicsNode.enableHoverEvents">
+<code class="sig-name descname">enableHoverEvents</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">enabled</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_node.GraphicsNode.enableHoverEvents" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -232,22 +260,55 @@
 <dl class="py method">
 <dt id="node_editor.node_graphics_node.GraphicsNode.onSelected">
 <code class="sig-name descname">onSelected</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_node.GraphicsNode.onSelected" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>onSelected event</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_graphics_node.GraphicsNode.mousePressEvent">
+<code class="sig-name descname">mousePressEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span><span class="p">:</span> <span class="n">PyQt5.QtWidgets.QGraphicsSceneMouseEvent</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#node_editor.node_graphics_node.GraphicsNode.mousePressEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overrides Qt’s mousePressEvent.
+:param event: current event
+:type event: QGraphicsSceneMouseEvent</p>
+</dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_graphics_node.GraphicsNode.mouseMoveEvent">
-<code class="sig-name descname">mouseMoveEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">QGraphicsSceneMouseEvent</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_node.GraphicsNode.mouseMoveEvent" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname">mouseMoveEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span><span class="p">:</span> <span class="n">PyQt5.QtWidgets.QGraphicsSceneMouseEvent</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#node_editor.node_graphics_node.GraphicsNode.mouseMoveEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mouse move event</p>
+<dl class="simple">
+<dt>Handle two cases :</dt><dd><ul class="simple">
+<li><p>either the <cite>Graphical Node</cite> is resizeable and a handle is selected, the trigger the resize event</p></li>
+<li><p>or the node is selected and update the <cite>Graphical Socket</cite> and <cite>Graphical Edge</cite>.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>event</strong> (<em>QGraphicsSceneMouseEvent</em>) – event trigerring the mouseMoveEvent</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_graphics_node.GraphicsNode.mouseReleaseEvent">
-<code class="sig-name descname">mouseReleaseEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">QGraphicsSceneMouseEvent</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_node.GraphicsNode.mouseReleaseEvent" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname">mouseReleaseEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span><span class="p">:</span> <span class="n">PyQt5.QtWidgets.QGraphicsSceneMouseEvent</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_node.GraphicsNode.mouseReleaseEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mouse Release Event</p>
+<p>On release, if moved, trigger storeHistory from <a class="reference internal" href="node_editor.node_scene_history.html#node_editor.node_scene_history.SceneHistory" title="node_editor.node_scene_history.SceneHistory"><code class="xref py py-class docutils literal notranslate"><span class="pre">SceneHistory</span></code></a>.
+Also handles selection of the node and triggers onSelected event.
+:param event: event triggering the mouseReleaseEvent
+:type event: QGraphicsSceneMouseEvent</p>
+</dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_graphics_node.GraphicsNode.mouseDoubleClickEvent">
-<code class="sig-name descname">mouseDoubleClickEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span><span class="p">:</span> <span class="n">QGraphicsSceneMouseEvent</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#node_editor.node_graphics_node.GraphicsNode.mouseDoubleClickEvent" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">mouseDoubleClickEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span><span class="p">:</span> <span class="n">PyQt5.QtWidgets.QGraphicsSceneMouseEvent</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#node_editor.node_graphics_node.GraphicsNode.mouseDoubleClickEvent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Overrides double click event. Resent to <cite>Node::onDoubleClicked</cite></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_graphics_node.GraphicsNode.wheelEvent">
+<code class="sig-name descname">wheelEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span><span class="p">:</span> <span class="n">PyQt5.QtWidgets.QGraphicsSceneWheelEvent</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#node_editor.node_graphics_node.GraphicsNode.wheelEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>wheelEvent on the GraphicsNode. Avoid the wheelEvent from the GraphicsScene.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -258,6 +319,60 @@
 <dl class="py method">
 <dt id="node_editor.node_graphics_node.GraphicsNode.hoverLeaveEvent">
 <code class="sig-name descname">hoverLeaveEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">QGraphicsSceneHoverEvent</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_node.GraphicsNode.hoverLeaveEvent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_graphics_node.GraphicsNode.resize">
+<code class="sig-name descname">resize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">rect</span><span class="p">:</span> <span class="n">PyQt5.QtCore.QRectF</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_node.GraphicsNode.resize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update rectangle and bounding rectangle</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_graphics_node.GraphicsNode.getSocketPosition">
+<code class="sig-name descname">getSocketPosition</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">position</span><span class="p">:</span> <span class="n"><a class="reference internal" href="node_editor.node_socket.html#node_editor.node_socket.SocketPosition" title="node_editor.node_socket.SocketPosition">node_editor.node_socket.SocketPosition</a></span></em>, <em class="sig-param"><span class="n">num_out_of</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>float<span class="p">]</span><a class="headerlink" href="#node_editor.node_graphics_node.GraphicsNode.getSocketPosition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function - returns the position of a socket in pixels relative to the <cite>Graphical Node</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> (<code class="docutils literal notranslate"><span class="pre">`int`</span></code>) – Index of the socket in the list</p></li>
+<li><p><strong>position</strong> (<a class="reference internal" href="node_editor.node_socket.html#node_editor.node_socket.SocketPosition" title="node_editor.node_socket.SocketPosition"><em>SocketPosition</em></a>) – One of enumeration</p></li>
+<li><p><strong>num_out_of</strong> (<code class="docutils literal notranslate"><span class="pre">`int`</span></code>) – total number of <cite>Socket</cite> on this position</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>x, y position relative to the node</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">`list`</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_graphics_node.GraphicsNode.updateSocketAndEdges">
+<code class="sig-name descname">updateSocketAndEdges</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_node.GraphicsNode.updateSocketAndEdges" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the <cite>Socket</cite> position and the <cite>Graphical Edges</cite> when available</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_graphics_node.GraphicsNode.updateHandles">
+<code class="sig-name descname">updateHandles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_node.GraphicsNode.updateHandles" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_graphics_node.GraphicsNode.updateLayout">
+<code class="sig-name descname">updateLayout</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_node.GraphicsNode.updateLayout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the layout.</p>
+<p>Updates :
+- Socket position
+- Edges connected to the node
+- Position of the handle to resize
+- Size of the content</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_graphics_node.GraphicsNode.print">
+<code class="sig-name descname">print</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_graphics_node.GraphicsNode.print" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">

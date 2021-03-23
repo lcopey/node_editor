@@ -185,14 +185,13 @@
 <span id="node-editor-node-node-module"></span><h1>node_editor.node_node module<a class="headerlink" href="#module-node_editor.node_node" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="node_editor.node_node.Node">
-<em class="property">class </em><code class="sig-prename descclassname">node_editor.node_node.</code><code class="sig-name descname">Node</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scene</span><span class="p">:</span> <span class="n">Scene</span></em>, <em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">'Undefined Node'</span></em>, <em class="sig-param"><span class="n">inputs</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">outputs</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">node_editor.node_node.</code><code class="sig-name descname">Node</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scene</span><span class="p">:</span> <span class="n">Scene</span></em>, <em class="sig-param"><span class="n">title</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'Undefined Node'</span></em>, <em class="sig-param"><span class="n">inputs</span><span class="p">:</span> <span class="n">List<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">outputs</span><span class="p">:</span> <span class="n">List<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="node_editor.node_serializable.html#node_editor.node_serializable.Serializable" title="node_editor.node_serializable.Serializable"><code class="xref py py-class docutils literal notranslate"><span class="pre">node_editor.node_serializable.Serializable</span></code></a></p>
 <p>Instantiate a new <cite>Node</cite> and add it to the <cite>Graphical Scene</cite></p>
-<dl class="simple">
-<dt>Instance Attributes:</dt><dd><p>scene - reference to the <a class="reference internal" href="node_editor.node_scene.html#node_editor.node_scene.Scene" title="node_editor.node_scene.Scene"><code class="xref py py-class docutils literal notranslate"><span class="pre">Scene</span></code></a>
+<blockquote>
+<div><p>scene - reference to the <a class="reference internal" href="node_editor.node_scene.html#node_editor.node_scene.Scene" title="node_editor.node_scene.Scene"><code class="xref py py-class docutils literal notranslate"><span class="pre">Scene</span></code></a>
 grNode - reference to the <a class="reference internal" href="node_editor.node_graphics_node.html#node_editor.node_graphics_node.GraphicsNode" title="node_editor.node_graphics_node.GraphicsNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">GraphicsNode</span></code></a></p>
-</dd>
-</dl>
+</div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -216,6 +215,12 @@ grNode - reference to the <a class="reference internal" href="node_editor.node_g
 </dd></dl>
 
 <dl class="py attribute">
+<dt id="node_editor.node_node.Node.GraphicsStatus_class">
+<code class="sig-name descname">GraphicsStatus_class</code><a class="headerlink" href="#node_editor.node_node.Node.GraphicsStatus_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">node_editor.node_status.GraphicsStatus</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
 <dt id="node_editor.node_node.Node.Socket_class">
 <code class="sig-name descname">Socket_class</code><a class="headerlink" href="#node_editor.node_node.Node.Socket_class" title="Permalink to this definition">¶</a></dt>
 <dd><p>alias of <a class="reference internal" href="node_editor.node_socket.html#node_editor.node_socket.Socket" title="node_editor.node_socket.Socket"><code class="xref py py-class docutils literal notranslate"><span class="pre">node_editor.node_socket.Socket</span></code></a></p>
@@ -229,6 +234,31 @@ grNode - reference to the <a class="reference internal" href="node_editor.node_g
 <dl class="py method">
 <dt id="node_editor.node_node.Node.setPos">
 <code class="sig-name descname">setPos</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.setPos" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_node.Node.width">
+<em class="property">property </em><code class="sig-name descname">width</code><a class="headerlink" href="#node_editor.node_node.Node.width" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_node.Node.height">
+<em class="property">property </em><code class="sig-name descname">height</code><a class="headerlink" href="#node_editor.node_node.Node.height" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_node.Node.min_width">
+<em class="property">property </em><code class="sig-name descname">min_width</code><a class="headerlink" href="#node_editor.node_node.Node.min_width" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_node.Node.min_height">
+<em class="property">property </em><code class="sig-name descname">min_height</code><a class="headerlink" href="#node_editor.node_node.Node.min_height" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_node.Node.resizeable">
+<em class="property">property </em><code class="sig-name descname">resizeable</code><a class="headerlink" href="#node_editor.node_node.Node.resizeable" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -255,7 +285,7 @@ grNode - reference to the <a class="reference internal" href="node_editor.node_g
 
 <dl class="py method">
 <dt id="node_editor.node_node.Node.initSockets">
-<code class="sig-name descname">initSockets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inputs</span></em>, <em class="sig-param"><span class="n">outputs</span></em>, <em class="sig-param"><span class="n">reset</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.initSockets" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">initSockets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inputs</span><span class="p">:</span> <span class="n">list</span></em>, <em class="sig-param"><span class="n">outputs</span><span class="p">:</span> <span class="n">list</span></em>, <em class="sig-param"><span class="n">reset</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.initSockets" title="Permalink to this definition">¶</a></dt>
 <dd><p>“Create sockets for inputs and outputs</p>
 </dd></dl>
 
@@ -270,9 +300,14 @@ grNode - reference to the <a class="reference internal" href="node_editor.node_g
 <dd></dd></dl>
 
 <dl class="py method">
+<dt id="node_editor.node_node.Node.getGraphicsStatusClass">
+<code class="sig-name descname">getGraphicsStatusClass</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.getGraphicsStatusClass" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
 <dt id="node_editor.node_node.Node.getSocketPosition">
-<code class="sig-name descname">getSocketPosition</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">position</span><span class="p">:</span> <span class="n"><a class="reference internal" href="node_editor.node_socket.html#node_editor.node_socket.SocketPosition" title="node_editor.node_socket.SocketPosition">node_editor.node_socket.SocketPosition</a></span></em>, <em class="sig-param"><span class="n">num_out_of</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.getSocketPosition" title="Permalink to this definition">¶</a></dt>
-<dd><p>Helper function - returns the position of a socket in pixels relative to the node</p>
+<code class="sig-name descname">getSocketPosition</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">position</span><span class="p">:</span> <span class="n"><a class="reference internal" href="node_editor.node_socket.html#node_editor.node_socket.SocketPosition" title="node_editor.node_socket.SocketPosition">node_editor.node_socket.SocketPosition</a></span></em>, <em class="sig-param"><span class="n">num_out_of</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>float<span class="p">]</span><a class="headerlink" href="#node_editor.node_node.Node.getSocketPosition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function - returns the position of a socket in pixels relative to the <cite>Graphical Node</cite></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -292,8 +327,26 @@ grNode - reference to the <a class="reference internal" href="node_editor.node_g
 
 <dl class="py method">
 <dt id="node_editor.node_node.Node.getSocketScenePosition">
-<code class="sig-name descname">getSocketScenePosition</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">socket</span><span class="p">:</span> <span class="n">Socket</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.getSocketScenePosition" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname">getSocketScenePosition</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">socket</span><span class="p">:</span> <span class="n"><a class="reference internal" href="node_editor.node_socket.html#node_editor.node_socket.Socket" title="node_editor.node_socket.Socket">node_editor.node_socket.Socket</a></span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>Union<span class="p">[</span>None<span class="p">, </span>float<span class="p">]</span><span class="p">, </span>Union<span class="p">[</span>None<span class="p">, </span>float<span class="p">]</span><span class="p">]</span><a class="headerlink" href="#node_editor.node_node.Node.getSocketScenePosition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function - returns the position of a socket in pixels relative to the <cite>Graphical Scene</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>socket</strong> (<cite>Socket</cite>) – Socket to return position from</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>x, y position relative to the node</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">`tuple`</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_node.Node.getSockets">
+<code class="sig-name descname">getSockets</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference internal" href="node_editor.node_socket.html#node_editor.node_socket.Socket" title="node_editor.node_socket.Socket">node_editor.node_socket.Socket</a><span class="p">]</span><a class="headerlink" href="#node_editor.node_node.Node.getSockets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the list of sockets for this <cite>Node</cite></p>
+</dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_node.Node.isSelected">
@@ -324,6 +377,17 @@ grNode - reference to the <a class="reference internal" href="node_editor.node_g
 </dd></dl>
 
 <dl class="py method">
+<dt id="node_editor.node_node.Node.onSelected">
+<code class="sig-name descname">onSelected</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.onSelected" title="Permalink to this definition">¶</a></dt>
+<dd><p>onSelected event</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_node.Node.onDelected">
+<code class="sig-name descname">onDelected</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.onDelected" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
 <dt id="node_editor.node_node.Node.doSelect">
 <code class="sig-name descname">doSelect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_state</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.doSelect" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -344,69 +408,119 @@ grNode - reference to the <a class="reference internal" href="node_editor.node_g
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="node_editor.node_node.Node.markDirty">
-<code class="sig-name descname">markDirty</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_value</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.markDirty" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="node_editor.node_node.Node.markChildrenDirty">
-<code class="sig-name descname">markChildrenDirty</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_value</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.markChildrenDirty" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="node_editor.node_node.Node.markDescendantDirty">
-<code class="sig-name descname">markDescendantDirty</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_value</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.markDescendantDirty" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
 <dt id="node_editor.node_node.Node.isInvalid">
 <code class="sig-name descname">isInvalid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.isInvalid" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
+<dt id="node_editor.node_node.Node.markDirty">
+<code class="sig-name descname">markDirty</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_value</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.markDirty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mark this <cite>Node</cite> as <cite>Dirty</cite>. See <span class="xref std std-ref">evaluation</span> for more</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>new_value</strong> (<em>bool</em>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> if this <cite>Node</cite> should be <cite>Dirty</cite>. <code class="docutils literal notranslate"><span class="pre">False</span></code> if you want to un-dirty this <cite>Node</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_node.Node.markChildrenDirty">
+<code class="sig-name descname">markChildrenDirty</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_value</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.markChildrenDirty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mark all first level children of this <cite>Node</cite> to be <cite>Dirty</cite>. Not this <cite>Node</cite> it self. Not other descendants</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>new_value</strong> (<em>bool</em>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> if children should be <cite>Dirty</cite>. <code class="docutils literal notranslate"><span class="pre">False</span></code> if you want to un-dirty children</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_node.Node.markDescendantDirty">
+<code class="sig-name descname">markDescendantDirty</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_value</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.markDescendantDirty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mark all children and descendants of this <cite>Node</cite> to be <cite>Invalid</cite>. Not this <cite>Node</cite> it self</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>new_value</strong> (<em>bool</em>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> if children and descendants should be <cite>Invalid</cite>.
+<code class="docutils literal notranslate"><span class="pre">False</span></code> if you want to make children and descendants valid</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="node_editor.node_node.Node.markInvalid">
 <code class="sig-name descname">markInvalid</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_value</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.markInvalid" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Mark this <cite>Node</cite> as <cite>Invalid</cite>. See <span class="xref std std-ref">evaluation</span> for more</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>new_value</strong> (<em>bool</em>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> if this <cite>Node</cite> should be <cite>Invalid</cite>. <code class="docutils literal notranslate"><span class="pre">False</span></code> if you want to make this <cite>Node</cite> valid</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_node.Node.markChildrenInvalid">
 <code class="sig-name descname">markChildrenInvalid</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_value</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.markChildrenInvalid" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Mark all first level children of this <cite>Node</cite> to be <cite>Invalid</cite>. Not this <cite>Node</cite> it self. Not other descendants</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>new_value</strong> (<em>bool</em>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> if children should be <cite>Invalid</cite>. <code class="docutils literal notranslate"><span class="pre">False</span></code> if you want to make children valid</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_node.Node.markDescendantInvalid">
-<code class="sig-name descname">markDescendantInvalid</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_value</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.markDescendantInvalid" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname">markDescendantInvalid</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_value</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.markDescendantInvalid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mark all children and descendants of this <cite>Node</cite> to be <cite>Invalid</cite>. Not this <cite>Node</cite> it self</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>new_value</strong> (<em>bool</em>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> if children and descendants should be <cite>Invalid</cite>.
+<code class="docutils literal notranslate"><span class="pre">False</span></code> if you want to make children and descendants valid</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_node.Node.onMarkedDirty">
 <code class="sig-name descname">onMarkedDirty</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.onMarkedDirty" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Called when this <cite>Node</cite> has been marked as <cite>Dirty</cite>. This method is supposed to be overridden</p>
+</dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_node.Node.onMarkedInvalid">
 <code class="sig-name descname">onMarkedInvalid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.onMarkedInvalid" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Called when this <cite>Node</cite> has been marked as <cite>Invalid</cite>. This method is supposed to be overridden</p>
+</dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_node.Node.eval">
-<code class="sig-name descname">eval</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.eval" title="Permalink to this definition">¶</a></dt>
-<dd><p>Evaluated this <cite>Node</cite>. This method is supposed to be overriden.</p>
+<code class="sig-name descname">eval</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate this <cite>Node</cite>. This method is supposed to be overriden.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_node.Node.evalChildren">
 <code class="sig-name descname">evalChildren</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.evalChildren" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Evaluate all children of this <cite>Node</cite></p>
+</dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_node.Node.getChildrenNodes">
 <code class="sig-name descname">getChildrenNodes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.getChildrenNodes" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Retrieve all first-level children connected to this <cite>Node</cite> <cite>Outputs</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>list of <cite>Nodes</cite> connected to this <cite>Node</cite> from all <cite>Outputs</cite></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>List[<code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_node.Node.getInput">
-<code class="sig-name descname">getInput</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em><span class="sig-paren">)</span> &#x2192; [&lt;class ‘node_editor.node_socket.Socket’&gt;, None]<a class="headerlink" href="#node_editor.node_node.Node.getInput" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">getInput</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em><span class="sig-paren">)</span> &#x2192; Optional<span class="p">[</span><a class="reference internal" href="#node_editor.node_node.Node" title="node_editor.node_node.Node">node_editor.node_node.Node</a><span class="p">]</span><a class="headerlink" href="#node_editor.node_node.Node.getInput" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the <strong>first</strong> <cite>Node</cite> connected to the Input specified by index</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -428,22 +542,35 @@ grNode - reference to the <a class="reference internal" href="node_editor.node_g
 
 <dl class="py method">
 <dt id="node_editor.node_node.Node.getInputWithSocket">
-<code class="sig-name descname">getInputWithSocket</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em><span class="sig-paren">)</span> &#x2192; <span class="p">[</span><a class="reference internal" href="#node_editor.node_node.Node" title="node_editor.node_node.Node">Node</a><span class="p">, </span>Socket<span class="p">, </span>None<span class="p">, </span>None<span class="p">]</span><a class="headerlink" href="#node_editor.node_node.Node.getInputWithSocket" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">getInputWithSocket</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em><span class="sig-paren">)</span> &#x2192; Optional<span class="p">[</span>Tuple<span class="p">[</span><a class="reference internal" href="#node_editor.node_node.Node" title="node_editor.node_node.Node">node_editor.node_node.Node</a><span class="p">, </span><a class="reference internal" href="node_editor.node_socket.html#node_editor.node_socket.Socket" title="node_editor.node_socket.Socket">node_editor.node_socket.Socket</a><span class="p">]</span><span class="p">]</span><a class="headerlink" href="#node_editor.node_node.Node.getInputWithSocket" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_node.Node.getInputWithSocketIndex">
-<code class="sig-name descname">getInputWithSocketIndex</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em><span class="sig-paren">)</span> &#x2192; <span class="p">[</span><a class="reference internal" href="#node_editor.node_node.Node" title="node_editor.node_node.Node">Node</a><span class="p">, </span>Socket<span class="p">, </span>None<span class="p">, </span>None<span class="p">]</span><a class="headerlink" href="#node_editor.node_node.Node.getInputWithSocketIndex" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">getInputWithSocketIndex</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em><span class="sig-paren">)</span> &#x2192; Optional<span class="p">[</span>Tuple<span class="p">[</span><a class="reference internal" href="#node_editor.node_node.Node" title="node_editor.node_node.Node">node_editor.node_node.Node</a><span class="p">, </span>int<span class="p">]</span><span class="p">]</span><a class="headerlink" href="#node_editor.node_node.Node.getInputWithSocketIndex" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_node.Node.getInputs">
 <code class="sig-name descname">getInputs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.getInputs" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Get the list of <cite>Nodes</cite> connected to the input <cite>Socket</cite> <cite>Node</cite></p>
+</dd></dl>
 
 <dl class="py method">
 <dt id="node_editor.node_node.Node.getOutputs">
 <code class="sig-name descname">getOutputs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.getOutputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the list of <cite>Nodes</cite> connected to the output <cite>Socket</cite> <cite>Node</cite></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_node.Node.setToolTip">
+<code class="sig-name descname">setToolTip</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.setToolTip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assign the tooltip to the <cite>Graphical Status</cite> if available and the <cite>Graphical Node</cite></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="node_editor.node_node.Node.print">
+<code class="sig-name descname">print</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.print" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -453,18 +580,8 @@ grNode - reference to the <a class="reference internal" href="node_editor.node_g
 
 <dl class="py method">
 <dt id="node_editor.node_node.Node.deserialize">
-<code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">dict</span></em>, <em class="sig-param"><span class="n">hashmap</span><span class="p">:</span> <span class="n">dict</span> <span class="o">=</span> <span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">restore_id</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.deserialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Deserialize the node.</p>
-<dl class="simple">
-<dt>Handle :</dt><dd><ul class="simple">
-<li><p>id</p></li>
-<li><p>node position</p></li>
-<li><p>sockets</p></li>
-<li><p>content</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
+<code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">dict</span></em>, <em class="sig-param"><span class="n">hashmap</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">restore_id</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_editor.node_node.Node.deserialize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
