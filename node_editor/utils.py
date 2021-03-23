@@ -7,8 +7,8 @@ from pprint import PrettyPrinter
 pp = PrettyPrinter(indent=4).pprint
 
 
-def get_path_relative_to_file(file, path):
-    return os.path.join(os.path.dirname(file), path)
+def get_path_relative_to_file(file, *args):
+    return os.path.join(os.path.dirname(file), *args)
 
 
 def print_func_name(func):

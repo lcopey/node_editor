@@ -1,127 +1,13 @@
 import pandas as pd
 import numpy as np
-import sys
-import os
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
-from PyQt5.QtCore import *
-from node_editor.utils import dumpException, get_path_relative_to_file
-
-from typing import Union, Any, List, Tuple
-
-# class DictLike:
-#     def __getitem__(self, key):
-#         return getattr(self, key)
-#
-#     def __setitem__(self, key, value):
-#         setattr(self, key, value)
-
-
-# @dataclass
-# class Item:
-#     state: bool
-#     text: str
-#     parent:
-
-_RESOURCE_PATH = get_path_relative_to_file(__file__, '../../resources/')
-
-
-def _get_icon(file_path):
-    return QIcon(QPixmap(os.path.join(_RESOURCE_PATH, file_path)))
-
-
-class ChildItem(QTreeWidgetItem):
-    """Helper class instantiating a QTreeWidgetItem in a simple way"""
-
-    def __init__(self, parent, value: Any, checked: Qt.CheckState = Qt.Checked):
-        """Helper class instantiating a QTreeWidget
-
-        Parameters
-        ----------
-        parent: Union[QTreeWidget, QTreeWidgetItem]
-            parent of the current item
-        value: Any
-            text to set the current item to
-        checked: bool
-            current value of the checkbox
-        """
-        super().__init__(parent)
-        self.value = value  # store the value untouched
-        self.setText(0, str(value))  # set the text
-        self.setFlags(self.flags() | Qt.ItemIsTristate | Qt.ItemIsUserCheckable)
-        self.setCheckState(0, checked)
-
-    @property
-    def value(self):
-        return self._value
-
-    @value.setter
-    def value(self, value):
-        self._value = value
-
-
-class TreeWidgetUI(QWidget):
-    itemChecked = pyqtSignal()
-
-    def __init__(self, parent=None):
-        super(TreeWidgetUI, self).__init__()
-        self.treeWidget = HierarchicalTreeWidget(parent)
-
-
-        layout = QVBoxLayout()
-        button_layout = QHBoxLayout()
-
-        select_all = QPushButton()
-        select_all.setIcon(_get_icon('check-all-button.svg'))
-        select_all.setIconSize(QSize(16, 16))
-        select_all.clicked.connect(self.checkAll)
-
-        select_none = QPushButton()
-        select_none.setIcon(_get_icon('check-none-button.svg'))
-        select_none.setIconSize(QSize(16, 16))
-        select_none.clicked.connect(self.checkNone)
-
-        expand_all = QPushButton()
-        expand_all.clicked.connect(self.expandAll)
-        expand_all.setIcon(_get_icon('expand-all-button.svg'))
-        expand_all.setIconSize(QSize(16, 16))
-
-        collapse_all = QPushButton()
-        collapse_all.setIcon(_get_icon('collapse-all-button.svg'))
-        collapse_all.setIconSize(QSize(16, 16))
-        collapse_all.clicked.connect(self.collapseAll)
-
-        button_layout.addWidget(select_all)
-        button_layout.addWidget(select_none)
-        button_layout.addWidget(expand_all)
-        button_layout.addWidget(collapse_all)
-        layout.addLayout(button_layout)
-        layout.addWidget(self.treeWidget)
-        self.setLayout(layout)
-
-    def initModel(self, values: Union[pd.Index, pd.MultiIndex], include_checked=False):
-        self.treeWidget.initModel(values, include_checked)
-
-    def getItems(self, selected_only=True) -> List[Tuple]:
-        return self.treeWidget.getItems(selected_only)
-
-    def checkAll(self):
-        self.treeWidget.checkAll()
-        self.itemChecked.emit()
-
-    def checkNone(self):
-        self.treeWidget.checkNone()
-        self.itemChecked.emit()
-
-    def expandAll(self):
-        self.treeWidget.expandAll()
-
-    def collapseAll(self):
-        self.treeWidget.collapseAll()
+from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem
+from PyQt5.QtCore import Qt
+from .tree_child_item import ChildItem
+from typing import Union, List, Tuple, TYPE_CHECKING
 
 
 class HierarchicalTreeWidget(QTreeWidget):
-    """Widget implementing a tree view of dataframe header"""
+    """Widget implementing a hierarchical tree view of dataframe header"""
 
     def __init__(self, parent=None):
         super().__init__(parent=parent)
@@ -129,7 +15,22 @@ class HierarchicalTreeWidget(QTreeWidget):
         # self.itemClicked.connect(self.debug)
         # self.setColumnCount(2)  # in case additional information are needed
 
-    def initModel(self, values: Union[pd.Index, pd.MultiIndex], include_checked=False):
+    def initModel(self, values: Union[pd.Index, pd.MultiIndex, np.array], include_checked: bool = False) -> None:
+        """Initialize inner model from array-like values.
+
+        Examples of values includes pd.Index, pd.MultiIndex and np.array.
+        Parameters
+        ----------
+        values: Union[pd.Index, pd.MultiIndex, np.array]
+            instance of an Index or Multindex of a dataframe
+        include_checked: bool
+            if ``True``, values should include boolean values in the last columns stating which ones are checked or not
+
+        Returns
+        -------
+        None
+        """
+
         def recurse(parent: Union[QTreeWidgetItem, QTreeWidget], level_values: np.array, checked: np.array):
             """Recursively add inner items to the treeWidget
 
@@ -168,6 +69,7 @@ class HierarchicalTreeWidget(QTreeWidget):
             level_values = level_values[:, :-1]
         else:
             checked = np.ones(level_values.shape[0], dtype=bool)
+
         recurse(self, level_values, checked)
 
     def getItems(self, selected_only=True) -> List[Tuple]:
@@ -237,16 +139,3 @@ class HierarchicalTreeWidget(QTreeWidget):
 
     def debug(self):
         print(self.getItems())
-
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    tree = HierarchicalTreeWidget()
-    columns = pd.MultiIndex.from_tuples(
-        [(i, f'level_1_{j}', f'level_2_{k}', np.random.randint(0, 2, dtype=bool)) for i in range(2) for j in range(3)
-         for k in range(5)])
-    # columns = pd.Index(np.arange(10))
-    tree.initModel(columns, include_checked=True)
-
-    tree.show()
-    sys.exit(app.exec_())

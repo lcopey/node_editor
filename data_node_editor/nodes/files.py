@@ -1,9 +1,10 @@
+import os
+import csv
+import pandas as pd
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import Qt, QAbstractTableModel, QSize
 from PyQt5.QtGui import QIcon
-import os
-import pandas as pd
-import csv
+from node_editor.utils import get_path_relative_to_file
 
 from typing import Any, List
 
@@ -40,7 +41,7 @@ class OpNode_ReadCSVFile(DataNode):
         self._path_text = QLineEdit()
         self._path_text.setReadOnly(True)  # set to read only, it is modified only by selecting a path
         self._open_file_button = QPushButton()
-        icon = QIcon(self.icon)
+        icon = QIcon(get_path_relative_to_file(__file__, '..', self.icon))
         self._open_file_button.setIcon(icon)
         self._open_file_button.clicked.connect(self.openFileDialog)
 
@@ -304,7 +305,6 @@ class OpNode_ReadCSVFile(DataNode):
             self.evalChildren()
 
         return self.value
-
 
     # def serialize(self):
     #     # Additionally store the file path

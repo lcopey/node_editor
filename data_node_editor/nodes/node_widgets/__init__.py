@@ -1,2 +1,2 @@
-from .hierarchical_tree import TreeWidgetUI
+from .checkable_tree_widget import TreeWidgetUI
 from .dragger import Dragger
