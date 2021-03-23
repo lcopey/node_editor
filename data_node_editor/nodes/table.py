@@ -67,7 +67,7 @@ class DataTableContent(NodeContentWidget):
 
 @NodeFactory.register()
 class DataNode_Table(DataNode):
-    icon = 'icons/table-64.svg'
+    icon = 'resources/table-64.svg'
     op_title = 'Table'
     content_label = ''
     content_label_objname = 'data_node_table'
@@ -136,7 +136,7 @@ class DataNode_Table(DataNode):
 
 @NodeFactory.register()
 class DataNode_EditableTable(DataNode):
-    icon = 'icons/editable-table-64.svg'
+    icon = 'resources/editable-table-64.svg'
     op_title = 'Editable Table'
     content_label = ''
     content_label_objname = 'data_node_editable_table'

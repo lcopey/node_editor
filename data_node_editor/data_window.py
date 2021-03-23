@@ -16,15 +16,12 @@ from PyQt5.QtCore import QSignalMapper, Qt, QFileInfo
 from node_editor.utils import loadStylessheets
 from node_editor.node_editor_window import NodeEditorWindow
 from node_editor.node_editor_widget import NodeEditorWidget
-from node_editor.utils import dumpException, pp
+from node_editor.utils import dumpException, pp, get_path_relative_to_file
 
 from node_editor.node_edge import Edge
 from node_editor.node_edge_validators import *
 
 from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from node_editor.node_graphics_node import GraphicsNode
 
 # Edge.registerEdgeValidator(edge_validator_debug)
 Edge.registerEdgeValidator(edge_cannot_connect_two_outputs_or_two_inputs)
@@ -46,22 +43,25 @@ class DataWindow(NodeEditorWindow):
         """UI is composed with """
 
         # variable for QSettings
+        # print(os.getcwd())
         self.name_company = 'Copey'
         self.name_product = 'DataViz NodeEditor'
-        self.setWindowIcon(QIcon('icons/main-icon.png'))
+        main_icon_path = get_path_relative_to_file(__file__, 'resources/main-icon.png')
+        self.setWindowIcon(QIcon(main_icon_path))
 
         # Load filesheets
         # TODO Review style
         # self.stylesheet_filenames = (os.path.join(os.path.dirname(__file__), 'qss/nodeeditor.qss'),
         #                              os.path.join(os.path.dirname(__file__), 'qss/nodeeditor-dark.qss'))
-        self.stylesheet_filenames = (os.path.join(os.path.dirname(__file__), 'icons/nodeeditor.qss'))
-        print(self.stylesheet_filenames)
+        # self.stylesheet_filenames = (os.path.join(os.path.dirname(__file__), 'resources/nodeeditor.qss'))
+        self.stylesheet_filenames = (get_path_relative_to_file(__file__, 'resources/nodeeditor.qss'))
+        self.print(self.stylesheet_filenames)
         loadStylessheets(*self.stylesheet_filenames)
-        #
-        self.empty_icon = QIcon(".")
+        # TODO Fix resource
+        self.empty_icon = QIcon("../examples/example_data")
 
         if DEBUG:
-            print('Registered Node')
+            self.print('Registered Node')
             pp(NodeFactory.get_nodes())
 
         # Instantiate the MultiDocument Area
@@ -161,7 +161,7 @@ class DataWindow(NodeEditorWindow):
         # populates the nodes dock with automatically discovered nodes in DragListBox
         self.nodeListWidget = DragListBox()
 
-        self.nodesDock = QDockWidget("Nodes")
+        self.nodesDock = QDockWidget("nodes")
         self.nodesDock.setWidget(self.nodeListWidget)
         self.nodesDock.setFloating(False)
 

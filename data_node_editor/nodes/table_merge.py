@@ -4,13 +4,13 @@ from ..data_conf import NodeFactory
 
 
 @NodeFactory.register()
-class OpNode_MeltTable(DataNode):
-    icon = 'icons/table-melt-64.svg'
-    op_title = 'Unpivot'
+class OpNode_MergeTable(DataNode):
+    icon = 'resources/table-merge-64.svg'
+    op_title = 'Merge'
     content_label = ''
-    content_label_objname = 'data_node_melt_table'
+    content_label_objname = 'data_node_merge_tables'
 
     GraphicsNode_class = OpGraphicsNode
 
     def __init__(self, scene):
-        super().__init__(scene, inputs=[1, ], outputs=[1])
+        super().__init__(scene, inputs=[1, 1], outputs=[1])

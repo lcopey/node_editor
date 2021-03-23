@@ -9,7 +9,7 @@ from typing import Union
 
 @NodeFactory.register()
 class OpNode_PivotTable(DataNode):
-    icon = 'icons/table-pivot-64.svg'
+    icon = 'resources/table-pivot-64.svg'
     op_title = 'Pivot'
     content_label = ''
     content_label_objname = 'data_node_pivot_table'

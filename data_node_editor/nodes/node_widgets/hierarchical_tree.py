@@ -1,21 +1,20 @@
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
-from PyQt5.QtCore import *
-from node_editor.utils import dumpException
-from dataclasses import dataclass
 import pandas as pd
 import numpy as np
 import sys
+import os
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
+from node_editor.utils import dumpException, get_path_relative_to_file
 
 from typing import Union, Any, List, Tuple
 
-
-class DictLike:
-    def __getitem__(self, key):
-        return getattr(self, key)
-
-    def __setitem__(self, key, value):
-        setattr(self, key, value)
+# class DictLike:
+#     def __getitem__(self, key):
+#         return getattr(self, key)
+#
+#     def __setitem__(self, key, value):
+#         setattr(self, key, value)
 
 
 # @dataclass
@@ -23,6 +22,12 @@ class DictLike:
 #     state: bool
 #     text: str
 #     parent:
+
+_RESOURCE_PATH = get_path_relative_to_file(__file__, '../../resources/')
+
+
+def _get_icon(file_path):
+    return QIcon(QPixmap(os.path.join(_RESOURCE_PATH, file_path)))
 
 
 class ChildItem(QTreeWidgetItem):
@@ -62,26 +67,27 @@ class TreeWidgetUI(QWidget):
         super(TreeWidgetUI, self).__init__()
         self.treeWidget = HierarchicalTreeWidget(parent)
 
+
         layout = QVBoxLayout()
         button_layout = QHBoxLayout()
 
         select_all = QPushButton()
-        select_all.setIcon(QIcon(QPixmap('icons/check-all-button.svg')))
+        select_all.setIcon(_get_icon('check-all-button.svg'))
         select_all.setIconSize(QSize(16, 16))
         select_all.clicked.connect(self.checkAll)
 
         select_none = QPushButton()
-        select_none.setIcon(QIcon(QPixmap('icons/check-none-button.svg')))
+        select_none.setIcon(_get_icon('check-none-button.svg'))
         select_none.setIconSize(QSize(16, 16))
         select_none.clicked.connect(self.checkNone)
 
         expand_all = QPushButton()
         expand_all.clicked.connect(self.expandAll)
-        expand_all.setIcon(QIcon(QPixmap('icons/expand-all-button.svg')))
+        expand_all.setIcon(_get_icon('expand-all-button.svg'))
         expand_all.setIconSize(QSize(16, 16))
 
         collapse_all = QPushButton()
-        collapse_all.setIcon(QIcon(QPixmap('icons/collapse-all-button.svg')))
+        collapse_all.setIcon(_get_icon('collapse-all-button.svg'))
         collapse_all.setIconSize(QSize(16, 16))
         collapse_all.clicked.connect(self.collapseAll)
 

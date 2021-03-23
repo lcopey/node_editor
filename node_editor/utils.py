@@ -1,9 +1,14 @@
 import traceback
+import os
 from PyQt5.QtCore import QFile
 from PyQt5.QtWidgets import QApplication
 from pprint import PrettyPrinter
 
 pp = PrettyPrinter(indent=4).pprint
+
+
+def get_path_relative_to_file(file, path):
+    return os.path.join(os.path.dirname(file), path)
 
 
 def print_func_name(func):
@@ -16,7 +21,6 @@ def print_func_name(func):
 
 def return_simple_id(obj, text):
     return "<{} {}...{}>".format(text, f'{id(obj):02x}'[2:5], f'{id(obj):02x}'[-3:])
-
 
 
 def print_items(item):

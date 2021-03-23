@@ -5,7 +5,7 @@ from node_editor.utils import dumpException
 
 @register_node(NodeType.OP_NODE_ADD)
 class CalcNode_Add(CalcNode):
-    icon = 'icons/add.png'
+    icon = 'resources/add.png'
     op_code = NodeType.OP_NODE_ADD
     op_title = 'Add'
     content_label = '+'
@@ -17,7 +17,7 @@ class CalcNode_Add(CalcNode):
 
 @register_node(NodeType.OP_NODE_SUB)
 class CalcNode_Sub(CalcNode):
-    icon = 'icons/sub.png'
+    icon = 'resources/sub.png'
     op_code = NodeType.OP_NODE_SUB
     op_title = 'Substract'
     content_label = '-'
@@ -29,7 +29,7 @@ class CalcNode_Sub(CalcNode):
 
 @register_node(NodeType.OP_NODE_MUL)
 class CalcNode_Mul(CalcNode):
-    icon = 'icons/mul.png'
+    icon = 'resources/mul.png'
     op_code = NodeType.OP_NODE_MUL
     op_title = 'Multiply'
     content_label = '*'
@@ -41,7 +41,7 @@ class CalcNode_Mul(CalcNode):
 
 @register_node(NodeType.OP_NODE_DIV)
 class CalcNode_Div(CalcNode):
-    icon = 'icons/divide.png'
+    icon = 'resources/divide.png'
     op_code = NodeType.OP_NODE_DIV
     op_title = 'Divide'
     content_label = '/'

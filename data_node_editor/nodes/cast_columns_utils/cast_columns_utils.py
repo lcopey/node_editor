@@ -13,7 +13,7 @@ TYPE_OPTIONS = ['str', 'int', 'float', 'bool']
 class TypeChooserModel(DataframeModel):
     def __init__(self, view: 'QTableView' = None):
         super().__init__(view=view, dataframe=pd.Series(name='Type'), editable=True, columnDecorator=False)
-        self._type_icons = {key: QIcon('./icons/{}_icon.svg'.format(key)) for key in TYPE_OPTIONS}
+        self._type_icons = {key: QIcon('./resources/{}_icon.svg'.format(key)) for key in TYPE_OPTIONS}
 
     def data(self, index: QModelIndex, role: int = ...) -> Any:
         if role == Qt.DecorationRole:
@@ -26,7 +26,7 @@ class TypeChooserModel(DataframeModel):
 #     def __init__(self, ):
 #         super().__init__()
 #         self._data = None
-#         self._type_icons = {key: QIcon('./icons/{}_icon.svg'.format(key)) for key in TYPE_OPTIONS}
+#         self._type_icons = {key: QIcon('./resources/{}_icon.svg'.format(key)) for key in TYPE_OPTIONS}
 #
 #     def flags(self, index):
 #         flags = Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.ItemIsEditable

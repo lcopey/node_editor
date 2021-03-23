@@ -29,7 +29,7 @@ class CalcInputContent(NodeContentWidget):
 
 @register_node(NodeType.OP_NODE_INPUT)
 class CalcNode_Input(CalcNode):
-    icon = 'icons/in.png'
+    icon = 'resources/in.png'
     op_code = NodeType.OP_NODE_INPUT
     op_title = 'Input'
     content_label = ''

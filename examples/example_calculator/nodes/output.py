@@ -13,7 +13,7 @@ class CalcOutputContent(NodeContentWidget):
 
 @register_node(NodeType.OP_NODE_OUTPUT)
 class CalcNodeOutput(CalcNode):
-    icon = 'icons/out.png'
+    icon = 'resources/out.png'
     op_code = NodeType.OP_NODE_OUTPUT
     op_title = 'Output'
     content_label = ''

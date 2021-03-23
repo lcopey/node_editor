@@ -16,7 +16,7 @@ DEBUG = True
 
 @NodeFactory.register()
 class DataNode_SelectColumns(DataNode):
-    icon = 'icons/table-select-columns-64.svg'
+    icon = 'resources/table-select-columns-64.svg'
     op_title = 'Select Columns'
     content_label = ''
     content_label_objname = 'data_node_select_columns'

@@ -1,12 +1,25 @@
+import os
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
-from node_editor.utils import dumpException
+from typing import Optional
+from node_editor.utils import dumpException, get_path_relative_to_file
 from .data_conf import *
 
 
 class DragListBox(QListWidget):
-    def __init__(self, parent=None):
+    """Class implementing a list of available :class:'~data_node_base.DataNode'"""
+
+    def __init__(self, parent: Optional[QWidget] = None):
+        """Instantiates :class:'~data_drag_listbox.DragListBox'
+
+        Subclass QListWidget to implement specific drag features creating nodes when dropping on a
+        :class:'~data_subwindow.DataSubWindow'
+        Parameters
+        ----------
+        parent: Optional[QWidget]
+            Parent widget
+        """
         super().__init__(parent)
         self.initUI()
 
@@ -40,7 +53,14 @@ class DragListBox(QListWidget):
         """
         # initialize QListWidgetItem
         item = QListWidgetItem(name, self)
-        pixmap = QPixmap(icon if icon is not None else '.')
+        # look for resources
+        icon_path = icon
+        if not os.path.exists(icon):
+            icon_path = get_path_relative_to_file(__file__, icon)
+        if not os.path.exists(icon_path):
+            icon_path = None
+
+        pixmap = QPixmap(icon_path if icon_path is not None else '.')
         item.setIcon(QIcon(pixmap))
         item.setSizeHint(QSize(32, 32))
         # item.setText(name)

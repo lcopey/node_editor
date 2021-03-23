@@ -303,7 +303,7 @@ class NodeEditorWindow(QMainWindow):
 
     def readSettings(self):
         settings = QSettings(QSettings.IniFormat, QSettings.UserScope, self.name_company, self.name_product)
-        print(settings.fileName())
+        self.print(settings.fileName())
         pos = settings.value('pos', QPoint(200, 200))
         size = settings.value('size', QSize(400, 400))
         self.move(pos)

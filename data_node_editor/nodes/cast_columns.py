@@ -13,7 +13,7 @@ from typing import Union
 
 @NodeFactory.register()
 class OpNode_CastColumns(DataNode):
-    icon = 'icons/table-cast-64.svg'
+    icon = 'resources/table-cast-64.svg'
     op_title = 'Data Type'
     content_label = ''
     content_label_objname = 'data_node_cast_columns'

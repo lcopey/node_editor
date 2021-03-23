@@ -19,7 +19,7 @@ DEBUG = False
 
 @NodeFactory.register()
 class OpNode_ReadCSVFile(DataNode):
-    icon = 'icons/computer-folder-open-64.svg'
+    icon = 'resources/computer-folder-open-64.svg'
     op_title = 'CSV file'
     content_label = ''
     content_label_objname = 'data_node_file_read'

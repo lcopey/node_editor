@@ -5,11 +5,11 @@ import pandas as pd
 
 
 @NodeFactory.register()
-class OpNode_TransposeTable(DataNode):
-    icon = 'icons/table-transpose-64.svg'
-    op_title = 'Transpose'
+class OpNode_DescribeTable(DataNode):
+    icon = 'resources/table-describe-64.svg'
+    op_title = 'Describe'
     content_label = ''
-    content_label_objname = 'data_node_transpose_tables'
+    content_label_objname = 'data_node_describe_tables'
 
     GraphicsNode_class = OpGraphicsNode
 
@@ -29,11 +29,11 @@ class OpNode_TransposeTable(DataNode):
         # get value from input node
         df1 = i1.eval()
         if df1 is None:
-            self.setToolTip('First input is NaN')
+            self.setToolTip('Input is NaN')
             self.markInvalid()
             return
 
-        self.value = df1.T
+        self.value = df1.describe()
 
         # else set flag and tooltip
         self.markDirty(False)

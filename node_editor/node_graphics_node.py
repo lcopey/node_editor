@@ -162,7 +162,7 @@ class GraphicsNode(QGraphicsRectItem):
         self._brush_title = colors[THEME]['brush_title']
         self._brush_background = colors[THEME]['brush_background']
 
-        self.icons = QImage('../../node_editor/icons/status_icons.png')
+        self.icons = QImage('../../node_editor/resources/status_icons.png')
 
         shadow = QGraphicsDropShadowEffect(blurRadius=5, xOffset=3, yOffset=3)
         self.setGraphicsEffect(shadow)
@@ -459,5 +459,5 @@ class GraphicsNode(QGraphicsRectItem):
         # if self.node.isDirty(): offset = 0.
         # if self.node.isInvalid(): offset = 48.
         # painter.drawImage(QRectF(-10., -10., 24., 24.),
-        #                   self.icons,
+        #                   self.resources,
         #                   QRectF(offset, 0, 24., 24.))

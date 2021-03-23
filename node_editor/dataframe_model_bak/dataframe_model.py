@@ -52,7 +52,7 @@ class DataframeModel(QAbstractTableModel):
         self.isDataFrame = isinstance(self._data, pd.DataFrame)
         self.editable = editable
         self.columnDecorator = columnDecorator
-        self._type_icons = {key: QIcon('./icons/{}_icon.svg'.format(key)) for key in TYPE_OPTIONS}
+        self._type_icons = {key: QIcon('./resources/{}_icon.svg'.format(key)) for key in TYPE_OPTIONS}
 
     def flags(self, index):
         flags = Qt.ItemIsSelectable | Qt.ItemIsEnabled
