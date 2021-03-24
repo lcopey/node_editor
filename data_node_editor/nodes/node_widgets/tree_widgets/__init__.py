@@ -1,1 +1,1 @@
-from .hierarchical_tree import CheckableHierarchicalTreeWidget
+from .checkable_hierarchical_tree import CheckableHierarchicalTreeWidget

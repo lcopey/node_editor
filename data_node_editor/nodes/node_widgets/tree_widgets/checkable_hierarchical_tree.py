@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem
 from PyQt5.QtCore import Qt
-from .tree_child_item import ChildItem
+from .child_items import TreeItem
 from typing import Union, List, Tuple, TYPE_CHECKING
 
 
@@ -46,7 +46,7 @@ class CheckableHierarchicalTreeWidget(QTreeWidget):
                 outer_levels = level_values[:, 0]
                 unique_levels = np.unique(outer_levels)
                 for level in unique_levels:
-                    inner_item = ChildItem(parent, level)
+                    inner_item = TreeItem(parent=parent, value=level, checkable=True)
                     inner_levels = level_values[outer_levels == level, 1:]
                     recurse(inner_item, inner_levels, checked[outer_levels == level])
 
@@ -54,7 +54,8 @@ class CheckableHierarchicalTreeWidget(QTreeWidget):
             else:
                 unique_levels = np.unique(level_values)
                 for level, check in zip(unique_levels, checked):
-                    inner_item = ChildItem(parent, level, Qt.Checked if check else Qt.Unchecked)
+                    inner_item = TreeItem(parent=parent, value=level, checkable=True,
+                                          checked=Qt.Checked if check else Qt.Unchecked)
 
         self.clear()
         # set the type as O to keep the data type intact

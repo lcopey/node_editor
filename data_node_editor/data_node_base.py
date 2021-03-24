@@ -55,7 +55,7 @@ class DataNode(Node):
 
     def initPropertiesWidget(self):
         """To be overridden, defines an attribute named properties_widget used in the properties toolbar"""
-        raise NotImplementedError
+        return None
 
     def hasPropertiesWidget(self):
         return self.propertiesWidget is not None
