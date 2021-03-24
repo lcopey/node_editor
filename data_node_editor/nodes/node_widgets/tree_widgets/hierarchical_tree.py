@@ -6,7 +6,7 @@ from .tree_child_item import ChildItem
 from typing import Union, List, Tuple, TYPE_CHECKING
 
 
-class HierarchicalTreeWidget(QTreeWidget):
+class CheckableHierarchicalTreeWidget(QTreeWidget):
     """Widget implementing a hierarchical tree view of dataframe header"""
 
     def __init__(self, parent=None):
