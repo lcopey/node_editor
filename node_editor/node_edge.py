@@ -22,19 +22,25 @@ class Edge(Serializable):
 
     def __init__(self, scene: Optional['Scene'] = None, start_socket: Optional['Socket'] = None,
                  end_socket: Optional['Socket'] = None,
-                 edge_type=EDGE_TYPE_DIRECT):
-        """
+                 edge_type: int = EDGE_TYPE_DIRECT):
+        """Instantiates a `Edge` object holding the logic to create a new edge, the edge type (Bezier or direct) and
+        which :class:`~node_editor.node_scene.Socket` it can connect to.
+
+        **Instance Attributes**
+
+        - scene : Reference to the :class:`~node_editor.node_scene.Scene`
+        - grEdge : Reference to the :class:`~node_editor.node_graphics_edge.GraphicsEdge`
 
         Parameters
         ----------
-        scene
-        start_socket
-        end_socket
-        edge_type
-
-        Instance Attributes:
-            scene - reference to the :class:`~node_editor.node_scene.Scene`
-            grEdge - reference to the :class:`~node_editor.node_graphics_edge.GraphicsEdge`
+        scene: Optional[`Scene`]
+            Reference to :class:`~node_editor.node_scene.Scene`
+        start_socket: Optional[`Socket`]
+            Reference to first :class:`~node_editor.node_scene.Socket`
+        end_socket: Optional[`Socket`]
+            Reference to last :class:`~node_editor.node_scene.Socket`
+        edge_type: int
+            One of EDGE_TYPE_DIRECT or EDGE_TYPE_BEZIER
         """
         super().__init__()
         self.scene = scene
@@ -92,10 +98,19 @@ class Edge(Serializable):
         return self._edge_type
 
     @edge_type.setter
-    def edge_type(self, value):
+    def edge_type(self, value: int):
         """Setter for the edge type.
 
-        In case of change, the graphical edge is automatically set to the corresponding edge type."""
+        In case of change, the graphical edge is automatically set to the corresponding edge type.
+        Parameters
+        ----------
+        value: int
+            One of EDGE_TYPE_DIRECT or EDGE_TYPE_BEZIER
+
+        Returns
+        -------
+        None
+        """
         # if hasattr(self, 'grEdge') and self.grEdge is not None:
         #     self.scene.grScene.removeItem(self.grEdge)
         self._edge_type = value
@@ -111,11 +126,11 @@ class Edge(Serializable):
     def createEdgeClassInstance(self) -> GraphicsEdge:
         """Create instance of grEdge class
 
-
         Override if needed
         Returns
         -------
-            Instance of grEdge class representing the Graphics Edge in the grScene
+        GraphicsEdge
+            Instance of grEdge class representing the :class:`~node_editor.node_graphics_edge.GraphicsEdge`
         """
         self.grEdge: GraphicsEdge = self.getGraphicsEdgeClass()(self)
         self.scene.grScene.addItem(self.grEdge)
@@ -169,12 +184,13 @@ class Edge(Serializable):
 
         Parameters
         ----------
-        known_socket
+        known_socket: Socket
+            First side of :class:`~node_editor.node_socket.Socket`
 
         Returns
         -------
         `Socket`
-            Returns the opposite socket on this `Edge`
+            Returns the opposite socket on this :class:`~node_editor.node_edge.Edge`
         """
         # return the other end of the edge
         return self.start_socket if known_socket == self.end_socket else self.end_socket

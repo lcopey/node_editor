@@ -1,0 +1,386 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>data_window module &mdash; Node Editor 0.9.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="data_subwindow module" href="data_subwindow.html" />
+    <link rel="prev" title="data_node_editor package" href="data_node_editor.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> Node Editor
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.9.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../coding_standards.html">Coding Standards</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../node_editor/node_editor.html">node_editor package</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="data_node_editor.html">data_node_editor package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="data_node_editor.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">data_window</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data_subwindow.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">data_subwindow</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data_node_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">data_node_base</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data_node_graphics_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">data_node_graphics_base</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data_drag_listbox.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">data_drag_listbox</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data_conf.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">data_conf</span></code> module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="data_node_editor.html#module-data_node_editor">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_node_editor.html#subpackages">Subpackages</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Node Editor</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="data_node_editor.html">data_node_editor package</a> &raquo;</li>
+        
+      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">data_window</span></code> module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/rst/data_node_editor/data_window.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-data_node_editor.data_window">
+<span id="data-window-module"></span><h1><code class="xref py py-mod docutils literal notranslate"><span class="pre">data_window</span></code> module<a class="headerlink" href="#module-data_node_editor.data_window" title="Permalink to this headline">¶</a></h1>
+<p>Module implementing the MainWindow to the calculator example</p>
+<dl class="py class">
+<dt id="data_node_editor.data_window.DataWindow">
+<em class="property">class </em><code class="sig-prename descclassname">data_node_editor.data_window.</code><code class="sig-name descname">DataWindow</code><a class="headerlink" href="#data_node_editor.data_window.DataWindow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../node_editor/node_editor_window.html#node_editor.node_editor_window.NodeEditorWindow" title="node_editor.node_editor_window.NodeEditorWindow"><code class="xref py py-class docutils literal notranslate"><span class="pre">node_editor.node_editor_window.NodeEditorWindow</span></code></a></p>
+<p>Class representing the MainWindow of the application.</p>
+<dl class="simple">
+<dt>Instance Attributes:</dt><dd><p>name_company and name_product - used to register the settings</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="data_node_editor.data_window.DataWindow.initUI">
+<code class="sig-name descname">initUI</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_window.DataWindow.initUI" title="Permalink to this definition">¶</a></dt>
+<dd><p>UI is composed with</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_window.DataWindow.createActions">
+<code class="sig-name descname">createActions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_window.DataWindow.createActions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instantiate various <cite>QAction</cite> for the main toolbar.</p>
+<p>File and Edit menu actions are instantiated in the :classs:~`node_editor.node_editor_widget.NodeEditorWidget`
+Window and Help actions are specific to the :class:~`examples.calc_window.CalcWindow`</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_window.DataWindow.createMenus">
+<code class="sig-name descname">createMenus</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_window.DataWindow.createMenus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Populate File, Edit, Window and Help with <cite>QAction</cite></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_window.DataWindow.createToolBars">
+<code class="sig-name descname">createToolBars</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_window.DataWindow.createToolBars" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_window.DataWindow.createPropertiesDock">
+<code class="sig-name descname">createPropertiesDock</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_window.DataWindow.createPropertiesDock" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_window.DataWindow.createNodesDock">
+<code class="sig-name descname">createNodesDock</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_window.DataWindow.createNodesDock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create <cite>Nodes Dock</cite> and populates it with the list of <cite>Nodes</cite></p>
+<p>The <cite>Nodes</cite> are automatically detected via the :class:~`examples.calc_drag_listbox.QNEDragListBox`</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_window.DataWindow.createStatusBar">
+<code class="sig-name descname">createStatusBar</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_window.DataWindow.createStatusBar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Utility function, instantiate the status bar notifying the cursor position in the scene</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_window.DataWindow.onFileNew">
+<code class="sig-name descname">onFileNew</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_window.DataWindow.onFileNew" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new mdi Child</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_window.DataWindow.onFileOpen">
+<code class="sig-name descname">onFileOpen</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_window.DataWindow.onFileOpen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open OpenFileDialog</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_window.DataWindow.onSubWndClose">
+<code class="sig-name descname">onSubWndClose</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">widget</span><span class="p">:</span> <span class="n"><a class="reference internal" href="data_subwindow.html#data_node_editor.data_subwindow.DataSubWindow" title="data_node_editor.data_subwindow.DataSubWindow">data_node_editor.data_subwindow.DataSubWindow</a></span></em>, <em class="sig-param"><span class="n">event</span><span class="p">:</span> <span class="n">PyQt5.QtGui.QCloseEvent</span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_window.DataWindow.onSubWndClose" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_window.DataWindow.onWindowNodesToolbar">
+<code class="sig-name descname">onWindowNodesToolbar</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_window.DataWindow.onWindowNodesToolbar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event handling the visibility of the <cite>Nodes Dock</cite></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_window.DataWindow.onPropertiesNodesToolbar">
+<code class="sig-name descname">onPropertiesNodesToolbar</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_window.DataWindow.onPropertiesNodesToolbar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event handling the visibility of the <cite>Nodes Dock</cite></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_window.DataWindow.updateMenus">
+<code class="sig-name descname">updateMenus</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_window.DataWindow.updateMenus" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_window.DataWindow.updateEditMenu">
+<code class="sig-name descname">updateEditMenu</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_window.DataWindow.updateEditMenu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gray the properties of the editMenu in function of the active subwindow</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_window.DataWindow.updateWindowMenu">
+<code class="sig-name descname">updateWindowMenu</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_window.DataWindow.updateWindowMenu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gray the properties of the editMenu in function of the active subwindow</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_window.DataWindow.getCurrentNodeEditorWidget">
+<code class="sig-name descname">getCurrentNodeEditorWidget</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="../node_editor/node_editor_widget.html#node_editor.node_editor_widget.NodeEditorWidget" title="node_editor.node_editor_widget.NodeEditorWidget">node_editor.node_editor_widget.NodeEditorWidget</a><a class="headerlink" href="#data_node_editor.data_window.DataWindow.getCurrentNodeEditorWidget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the widget currently holding the scene.</p>
+<p>For different application, the method can be overridden to return mdiArea, the central widget…</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Node editor Widget. The widget holding the scene.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="../node_editor/node_editor_widget.html#node_editor.node_editor_widget.NodeEditorWidget" title="node_editor.node_editor_widget.NodeEditorWidget">NodeEditorWidget</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_window.DataWindow.about">
+<code class="sig-name descname">about</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_window.DataWindow.about" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_window.DataWindow.closeEvent">
+<code class="sig-name descname">closeEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span><span class="p">:</span> <span class="n">PyQt5.QtGui.QCloseEvent</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#data_node_editor.data_window.DataWindow.closeEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close if no change is detected, else prompt a dialog asking to save.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_window.DataWindow.createMdiChild">
+<code class="sig-name descname">createMdiChild</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">child_widget</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_window.DataWindow.createMdiChild" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_window.DataWindow.findMdiChild">
+<code class="sig-name descname">findMdiChild</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fileName</span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_window.DataWindow.findMdiChild" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_window.DataWindow.setActiveSubWindow">
+<code class="sig-name descname">setActiveSubWindow</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">window</span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_window.DataWindow.setActiveSubWindow" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_window.DataWindow.refreshPropertiesDock">
+<code class="sig-name descname">refreshPropertiesDock</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_window.DataWindow.refreshPropertiesDock" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_window.DataWindow.print">
+<code class="sig-name descname">print</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_window.DataWindow.print" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="data_subwindow.html" class="btn btn-neutral float-right" title="data_subwindow module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="data_node_editor.html" class="btn btn-neutral float-left" title="data_node_editor package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Laurent Copey
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

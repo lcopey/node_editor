@@ -11,7 +11,7 @@ class DragListBox(QListWidget):
     """Class implementing a list of available :class:'~data_node_base.DataNode'"""
 
     def __init__(self, parent: Optional[QWidget] = None):
-        """Instantiates :class:'~data_drag_listbox.DragListBox'
+        """Instantiates :class:'~data_drag_listbox.rst.DragListBox'
 
         Subclass QListWidget to implement specific drag features creating nodes when dropping on a
         :class:'~data_subwindow.DataSubWindow'

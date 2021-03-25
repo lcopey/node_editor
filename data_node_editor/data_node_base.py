@@ -12,24 +12,23 @@ DEBUG = False
 
 
 class DataNode(Node):
-    """Class representing the `DataNode`"""
+    GraphicsNode_class = VizGraphicsNode
+    NodeContent_class = None
     icon = ""
     op_title = 'Undefined'
     content_label = ''
     content_label_objname = 'calc_node_bg'
-
-    GraphicsNode_class = VizGraphicsNode
-    NodeContent_class = None
+    """Class representing the `DataNode`"""
 
     def __init__(self, scene: 'Scene', inputs=None, outputs=None):
         """Instantiate a `DataNode` which is a subclass of :class:`~node_editor.node_node.Node`
 
-        Instance Attributes
-        -------------------
-            scene - reference to the :class:`~node_editor.node_scene.Scene`
-            grNode - by default, reference to the :class:`~data_node_graphics_base.VizGraphicsNode`
-            input_socket_position - :class:`~node_socket.SocketPosition`
-            output_socket_position - :class:`~node_socket.SocketPosition`
+        **Instance Attributes**
+
+        - scene : reference to the :class:`~node_editor.node_scene.Scene`
+        - grNode : by default, reference to the :class:`~data_node_graphics_base.rst.VizGraphicsNode`
+        - input_socket_position : :class:`~node_socket.SocketPosition`
+        - output_socket_position : :class:`~node_socket.SocketPosition`
 
         Parameters
         ----------

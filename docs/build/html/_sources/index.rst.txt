@@ -11,7 +11,8 @@ Welcome to Node Editor's documentation!
    :caption: Contents:
 
    coding_standards
-   rst/node_editor
+   rst/node_editor/node_editor
+   rst/data_node_editor/data_node_editor
 
 Indices and tables
 ==================

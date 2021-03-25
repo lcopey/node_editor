@@ -1,0 +1,280 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>data_conf module &mdash; Node Editor 0.9.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="prev" title="data_drag_listbox module" href="data_drag_listbox.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> Node Editor
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.9.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../coding_standards.html">Coding Standards</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../node_editor/node_editor.html">node_editor package</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="data_node_editor.html">data_node_editor package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="data_node_editor.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="data_window.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">data_window</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data_subwindow.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">data_subwindow</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data_node_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">data_node_base</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data_node_graphics_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">data_node_graphics_base</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data_drag_listbox.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">data_drag_listbox</span></code> module</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">data_conf</span></code> module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="data_node_editor.html#module-data_node_editor">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_node_editor.html#subpackages">Subpackages</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Node Editor</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="data_node_editor.html">data_node_editor package</a> &raquo;</li>
+        
+      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">data_conf</span></code> module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/rst/data_node_editor/data_conf.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-data_node_editor.data_conf">
+<span id="data-conf-module"></span><h1><code class="xref py py-mod docutils literal notranslate"><span class="pre">data_conf</span></code> module<a class="headerlink" href="#module-data_node_editor.data_conf" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="data_node_editor.data_conf.NodeFactory">
+<em class="property">class </em><code class="sig-prename descclassname">data_node_editor.data_conf.</code><code class="sig-name descname">NodeFactory</code><a class="headerlink" href="#data_node_editor.data_conf.NodeFactory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Register of nodes create in sumodules nodes.</p>
+<p>Update a dictionary with the class name and the reference to constructor</p>
+<dl class="py attribute">
+<dt id="data_node_editor.data_conf.NodeFactory.registered_nodes">
+<code class="sig-name descname">registered_nodes</code><em class="property"> = {'DataNode_EditableTable': &lt;class 'data_node_editor.nodes.table.DataNode_EditableTable'&gt;, 'DataNode_SelectColumns': &lt;class 'data_node_editor.nodes.select_columns.DataNode_SelectColumns'&gt;, 'DataNode_Table': &lt;class 'data_node_editor.nodes.table.DataNode_Table'&gt;, 'OpNode_CastColumns': &lt;class 'data_node_editor.nodes.cast_columns.OpNode_CastColumns'&gt;, 'OpNode_ConcatTable': &lt;class 'data_node_editor.nodes.table_concat.OpNode_ConcatTable'&gt;, 'OpNode_DescribeTable': &lt;class 'data_node_editor.nodes.table_describe.OpNode_DescribeTable'&gt;, 'OpNode_MeltTable': &lt;class 'data_node_editor.nodes.table_melt.OpNode_MeltTable'&gt;, 'OpNode_MergeTable': &lt;class 'data_node_editor.nodes.table_merge.OpNode_MergeTable'&gt;, 'OpNode_PivotTable': &lt;class 'data_node_editor.nodes.table_pivot.OpNode_PivotTable'&gt;, 'OpNode_ReadCSVFile': &lt;class 'data_node_editor.nodes.files.OpNode_ReadCSVFile'&gt;, 'OpNode_TransposeTable': &lt;class 'data_node_editor.nodes.table_transpose.OpNode_TransposeTable'&gt;}</em><a class="headerlink" href="#data_node_editor.data_conf.NodeFactory.registered_nodes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_conf.NodeFactory.get_nodes">
+<em class="property">static </em><code class="sig-name descname">get_nodes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_conf.NodeFactory.get_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get registered nodes</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_conf.NodeFactory.register">
+<em class="property">static </em><code class="sig-name descname">register</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_conf.NodeFactory.register" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decorator registering the node in NodeFactory</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_conf.NodeFactory.from_op_code">
+<em class="property">static </em><code class="sig-name descname">from_op_code</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">op_code</span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_conf.NodeFactory.from_op_code" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return class reference corresponding to op_code</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt id="data_node_editor.data_conf.ConfException">
+<em class="property">exception </em><code class="sig-prename descclassname">data_node_editor.data_conf.</code><code class="sig-name descname">ConfException</code><a class="headerlink" href="#data_node_editor.data_conf.ConfException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="data_node_editor.data_conf.InvalidNodeRegistration">
+<em class="property">exception </em><code class="sig-prename descclassname">data_node_editor.data_conf.</code><code class="sig-name descname">InvalidNodeRegistration</code><a class="headerlink" href="#data_node_editor.data_conf.InvalidNodeRegistration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#data_node_editor.data_conf.ConfException" title="data_node_editor.data_conf.ConfException"><code class="xref py py-class docutils literal notranslate"><span class="pre">data_node_editor.data_conf.ConfException</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="data_node_editor.data_conf.OpCodeNotRegistered">
+<em class="property">exception </em><code class="sig-prename descclassname">data_node_editor.data_conf.</code><code class="sig-name descname">OpCodeNotRegistered</code><a class="headerlink" href="#data_node_editor.data_conf.OpCodeNotRegistered" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#data_node_editor.data_conf.ConfException" title="data_node_editor.data_conf.ConfException"><code class="xref py py-class docutils literal notranslate"><span class="pre">data_node_editor.data_conf.ConfException</span></code></a></p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="data_drag_listbox.html" class="btn btn-neutral float-left" title="data_drag_listbox module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Laurent Copey
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

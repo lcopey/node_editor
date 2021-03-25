@@ -39,17 +39,10 @@ class NodeGraphicsView(QGraphicsView):
     scenePosChanged = pyqtSignal(int, int)
 
     def __init__(self, scene: 'Scene', parent=None):
-        """
+        """Instanciate `NodeGraphicsView` that holds the :class:`~nodeeditor.node_graphics_scene.GraphicsScene`.
 
-        Parameters
-        ----------
-        scene : `Scene`
-            reference to the :class:`~nodeeditor.node_scene.Scene`
-        parent : ``QWidget``
-            parent widget
+        Instance Attributes :
 
-        Instance Attributes
-        -------------------
         - **grScene** - reference to the :class:`~nodeeditor.node_graphics_scene.GraphicsScene`
         - **mode** - state of the `Graphics View`
         - **zoomInFactor**- ``float`` - zoom step scaling, default 1.25
@@ -58,6 +51,15 @@ class NodeGraphicsView(QGraphicsView):
         - **zoomStep** - ``int`` - the relative zoom step when zooming in/out
         - **zoomRange** - ``[min, max]``
 
+        Parameters
+        ----------
+        scene : `Scene`
+            reference to the :class:`~nodeeditor.node_scene.Scene`
+        parent : ``QWidget``
+            parent widget
+        Returns
+        -------
+        None
         """
         super().__init__(parent=parent)
         self.scene = scene  # reference to parent scene
@@ -206,16 +208,21 @@ class NodeGraphicsView(QGraphicsView):
             super().mouseReleaseEvent(event)
 
     def leftMouseButtonPress(self, event: QMouseEvent):
-        """Handle left mouse button click
+        """Handle left mouse button click.
 
         Change the current mode depending on which item is clicked on :
-            - `Node` or `Edge` + shift : add to selection
-            - `Socket` : Edge dragging or rerouting mode
-            - `Scene' + ctrl : Edge cutting mode
+
+        - `Node` or `Edge` + shift - add to selection.
+        - `Socket` - Edge dragging or rerouting mode.
+        - `Scene' + ctrl - Edge cutting mode.
+
         Parameters
         ----------
-        event : QMouseEvent
-
+        event: QMouseEvent
+            Event triggered by the mouse
+        Returns
+        -------
+        None
         """
         # get the item we clicked on
         item = self.getItemAtClick(event)

@@ -1,0 +1,285 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>data_node_graphics_base module &mdash; Node Editor 0.9.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="data_drag_listbox module" href="data_drag_listbox.html" />
+    <link rel="prev" title="data_node_base module" href="data_node_base.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> Node Editor
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.9.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../coding_standards.html">Coding Standards</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../node_editor/node_editor.html">node_editor package</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="data_node_editor.html">data_node_editor package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="data_node_editor.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="data_window.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">data_window</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data_subwindow.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">data_subwindow</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data_node_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">data_node_base</span></code> module</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">data_node_graphics_base</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data_drag_listbox.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">data_drag_listbox</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data_conf.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">data_conf</span></code> module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="data_node_editor.html#module-data_node_editor">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_node_editor.html#subpackages">Subpackages</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Node Editor</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="data_node_editor.html">data_node_editor package</a> &raquo;</li>
+        
+      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">data_node_graphics_base</span></code> module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/rst/data_node_editor/data_node_graphics_base.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-data_node_editor.data_node_graphics_base">
+<span id="data-node-graphics-base-module"></span><h1><code class="xref py py-mod docutils literal notranslate"><span class="pre">data_node_graphics_base</span></code> module<a class="headerlink" href="#module-data_node_editor.data_node_graphics_base" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="data_node_editor.data_node_graphics_base.VizGraphicsNode">
+<em class="property">class </em><code class="sig-prename descclassname">data_node_editor.data_node_graphics_base.</code><code class="sig-name descname">VizGraphicsNode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">node</span><span class="p">:</span> <span class="n"><a class="reference internal" href="../node_editor/node_node.html#node_editor.node_node.Node" title="node_editor.node_node.Node">node_editor.node_node.Node</a></span></em>, <em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_node_graphics_base.VizGraphicsNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../node_editor/node_graphics_node.html#node_editor.node_graphics_node.GraphicsNode" title="node_editor.node_graphics_node.GraphicsNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">node_editor.node_graphics_node.GraphicsNode</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="data_node_editor.data_node_graphics_base.OpGraphicsNode">
+<em class="property">class </em><code class="sig-prename descclassname">data_node_editor.data_node_graphics_base.</code><code class="sig-name descname">OpGraphicsNode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">node</span><span class="p">:</span> <span class="n"><a class="reference internal" href="../node_editor/node_node.html#node_editor.node_node.Node" title="node_editor.node_node.Node">node_editor.node_node.Node</a></span></em>, <em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_node_graphics_base.OpGraphicsNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../node_editor/node_graphics_node.html#node_editor.node_graphics_node.GraphicsNode" title="node_editor.node_graphics_node.GraphicsNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">node_editor.node_graphics_node.GraphicsNode</span></code></a></p>
+<dl class="py method">
+<dt id="data_node_editor.data_node_graphics_base.OpGraphicsNode.initTitle">
+<code class="sig-name descname">initTitle</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_node_graphics_base.OpGraphicsNode.initTitle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Title is instanciated as <cite>QGraphicsTextItem</cite></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_node_graphics_base.OpGraphicsNode.radius">
+<em class="property">property </em><code class="sig-name descname">radius</code><a class="headerlink" href="#data_node_editor.data_node_graphics_base.OpGraphicsNode.radius" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_node_graphics_base.OpGraphicsNode.getSocketPosition">
+<code class="sig-name descname">getSocketPosition</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">position</span><span class="p">:</span> <span class="n"><a class="reference internal" href="../node_editor/node_socket.html#node_editor.node_socket.SocketPosition" title="node_editor.node_socket.SocketPosition">node_editor.node_socket.SocketPosition</a></span></em>, <em class="sig-param"><span class="n">num_out_of</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>float<span class="p">]</span><a class="headerlink" href="#data_node_editor.data_node_graphics_base.OpGraphicsNode.getSocketPosition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overrides default <code class="xref py py-class docutils literal notranslate"><span class="pre">GraphicalNode</span></code> getSocketPosition to position the socket on
+the circular node.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_node_graphics_base.OpGraphicsNode.paint">
+<code class="sig-name descname">paint</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">painter</span><span class="p">:</span> <span class="n">PyQt5.QtGui.QPainter</span></em>, <em class="sig-param"><span class="n">option</span><span class="p">:</span> <span class="n">PyQt5.QtWidgets.QStyleOptionGraphicsItem</span></em>, <em class="sig-param"><span class="n">widget</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>PyQt5.QtWidgets.QWidget<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">Ellipsis</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#data_node_editor.data_node_graphics_base.OpGraphicsNode.paint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Paint the node as filled circle of radius equal to heigth / 2</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>painter</strong> (<em>QPainter</em>) – </p></li>
+<li><p><strong>option</strong> (<em>QStyleOptionGraphicsItem</em>) – </p></li>
+<li><p><strong>widget</strong> (<em>QWidget</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="data_drag_listbox.html" class="btn btn-neutral float-right" title="data_drag_listbox module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="data_node_base.html" class="btn btn-neutral float-left" title="data_node_base module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Laurent Copey
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

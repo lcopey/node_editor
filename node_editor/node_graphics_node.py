@@ -237,8 +237,8 @@ class GraphicsNode(QGraphicsRectItem):
         """Mouse move event
 
         Handle two cases :
-            - either the `Graphical Node` is resizeable and a handle is selected, the trigger the resize event
-            - or the node is selected and update the `Graphical Socket` and `Graphical Edge`.
+        - either the `Graphical Node` is resizeable and a handle is selected, the trigger the resize event.
+        - or the node is selected and update the `Graphical Socket` and `Graphical Edge`.
         Parameters
         ----------
         event : QGraphicsSceneMouseEvent

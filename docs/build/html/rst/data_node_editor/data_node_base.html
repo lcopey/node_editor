@@ -1,0 +1,431 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>data_node_base module &mdash; Node Editor 0.9.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="data_node_graphics_base module" href="data_node_graphics_base.html" />
+    <link rel="prev" title="data_subwindow module" href="data_subwindow.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> Node Editor
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.9.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../coding_standards.html">Coding Standards</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../node_editor/node_editor.html">node_editor package</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="data_node_editor.html">data_node_editor package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="data_node_editor.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="data_window.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">data_window</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data_subwindow.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">data_subwindow</span></code> module</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">data_node_base</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data_node_graphics_base.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">data_node_graphics_base</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data_drag_listbox.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">data_drag_listbox</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data_conf.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">data_conf</span></code> module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="data_node_editor.html#module-data_node_editor">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_node_editor.html#subpackages">Subpackages</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Node Editor</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="data_node_editor.html">data_node_editor package</a> &raquo;</li>
+        
+      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">data_node_base</span></code> module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/rst/data_node_editor/data_node_base.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-data_node_editor.data_node_base">
+<span id="data-node-base-module"></span><h1><code class="xref py py-mod docutils literal notranslate"><span class="pre">data_node_base</span></code> module<a class="headerlink" href="#module-data_node_editor.data_node_base" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="data_node_editor.data_node_base.DataNode">
+<em class="property">class </em><code class="sig-prename descclassname">data_node_editor.data_node_base.</code><code class="sig-name descname">DataNode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scene</span><span class="p">:</span> <span class="n">Scene</span></em>, <em class="sig-param"><span class="n">inputs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">outputs</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_node_base.DataNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../node_editor/node_node.html#node_editor.node_node.Node" title="node_editor.node_node.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">node_editor.node_node.Node</span></code></a></p>
+<p>Instantiate a <cite>DataNode</cite> which is a subclass of <a class="reference internal" href="../node_editor/node_node.html#node_editor.node_node.Node" title="node_editor.node_node.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a></p>
+<p><strong>Instance Attributes</strong></p>
+<ul class="simple">
+<li><p>scene : reference to the <a class="reference internal" href="../node_editor/node_scene.html#node_editor.node_scene.Scene" title="node_editor.node_scene.Scene"><code class="xref py py-class docutils literal notranslate"><span class="pre">Scene</span></code></a></p></li>
+<li><p>grNode : by default, reference to the <code class="xref py py-class docutils literal notranslate"><span class="pre">VizGraphicsNode</span></code></p></li>
+<li><p>input_socket_position : <code class="xref py py-class docutils literal notranslate"><span class="pre">SocketPosition</span></code></p></li>
+<li><p>output_socket_position : <code class="xref py py-class docutils literal notranslate"><span class="pre">SocketPosition</span></code></p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>scene</strong> (<a class="reference internal" href="../node_editor/node_scene.html#node_editor.node_scene.Scene" title="node_editor.node_scene.Scene"><em>Scene</em></a>) – reference to the <a class="reference internal" href="../node_editor/node_scene.html#node_editor.node_scene.Scene" title="node_editor.node_scene.Scene"><code class="xref py py-class docutils literal notranslate"><span class="pre">Scene</span></code></a></p></li>
+<li><p><strong>inputs</strong> (<em>List</em><em>[</em><em>int</em><em>]</em>) – </p></li>
+<li><p><strong>outputs</strong> (<em>List</em><em>[</em><em>int</em><em>]</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="data_node_editor.data_node_base.DataNode.GraphicsNode_class">
+<code class="sig-name descname">GraphicsNode_class</code><a class="headerlink" href="#data_node_editor.data_node_base.DataNode.GraphicsNode_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="data_node_graphics_base.html#data_node_editor.data_node_graphics_base.VizGraphicsNode" title="data_node_editor.data_node_graphics_base.VizGraphicsNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">data_node_editor.data_node_graphics_base.VizGraphicsNode</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="data_node_editor.data_node_base.DataNode.NodeContent_class">
+<code class="sig-name descname">NodeContent_class</code><em class="property"> = None</em><a class="headerlink" href="#data_node_editor.data_node_base.DataNode.NodeContent_class" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="data_node_editor.data_node_base.DataNode.icon">
+<code class="sig-name descname">icon</code><em class="property"> = ''</em><a class="headerlink" href="#data_node_editor.data_node_base.DataNode.icon" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="data_node_editor.data_node_base.DataNode.op_title">
+<code class="sig-name descname">op_title</code><em class="property"> = 'Undefined'</em><a class="headerlink" href="#data_node_editor.data_node_base.DataNode.op_title" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="data_node_editor.data_node_base.DataNode.content_label">
+<code class="sig-name descname">content_label</code><em class="property"> = ''</em><a class="headerlink" href="#data_node_editor.data_node_base.DataNode.content_label" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="data_node_editor.data_node_base.DataNode.content_label_objname">
+<code class="sig-name descname">content_label_objname</code><em class="property"> = 'calc_node_bg'</em><a class="headerlink" href="#data_node_editor.data_node_base.DataNode.content_label_objname" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class representing the <cite>DataNode</cite></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_node_base.DataNode.initPropertiesWidget">
+<code class="sig-name descname">initPropertiesWidget</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_node_base.DataNode.initPropertiesWidget" title="Permalink to this definition">¶</a></dt>
+<dd><p>To be overridden, defines an attribute named properties_widget used in the properties toolbar</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_node_base.DataNode.hasPropertiesWidget">
+<code class="sig-name descname">hasPropertiesWidget</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_node_base.DataNode.hasPropertiesWidget" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_node_base.DataNode.getOpCode">
+<em class="property">classmethod </em><code class="sig-name descname">getOpCode</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_node_base.DataNode.getOpCode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the op_code of the node.</p>
+<p>Corresponds to the class name definition as it should be unique.
+Helper function to work with NodeFactory class</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_node_base.DataNode.print">
+<code class="sig-name descname">print</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_node_base.DataNode.print" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_node_base.DataNode.initSettings">
+<code class="sig-name descname">initSettings</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_node_base.DataNode.initSettings" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_node_base.DataNode.getNodeSettings">
+<code class="sig-name descname">getNodeSettings</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#data_node_editor.data_node_base.DataNode.getNodeSettings" title="Permalink to this definition">¶</a></dt>
+<dd><p>To be overridden - should returns the node settings</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_node_base.DataNode.restoreNodeSettings">
+<code class="sig-name descname">restoreNodeSettings</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">dict</span></em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#data_node_editor.data_node_base.DataNode.restoreNodeSettings" title="Permalink to this definition">¶</a></dt>
+<dd><p>To be overridden - restore the node settings</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_node_base.DataNode.serialize">
+<code class="sig-name descname">serialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#data_node_editor.data_node_base.DataNode.serialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serialize the node.</p>
+<p>Call <code class="xref py py-meth docutils literal notranslate"><span class="pre">getNodeSettings()</span></code> to retrieve the node specific settings.
+:returns: Dictionary of node settings and parameters to serialize
+:rtype: dict</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_node_base.DataNode.deserialize">
+<code class="sig-name descname">deserialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">dict</span></em>, <em class="sig-param"><span class="n">hashmap</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>dict<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">restore_id</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#data_node_editor.data_node_base.DataNode.deserialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deserialize the node with corresponding data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>dict</em>) – Serialized settings of the node</p></li>
+<li><p><strong>hashmap</strong> (<em>dict</em>) – </p></li>
+<li><p><strong>restore_id</strong> (<em>bool</em>) – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, set the ‘id’ attribute to data[‘id’] else a new object with its own id is generated.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if successful, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_node_base.DataNode.forcedEval">
+<code class="sig-name descname">forcedEval</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Any<a class="headerlink" href="#data_node_editor.data_node_base.DataNode.forcedEval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force evaluation of the current <cite>DataNode</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_node_base.DataNode.eval">
+<code class="sig-name descname">eval</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">force</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; Any<a class="headerlink" href="#data_node_editor.data_node_base.DataNode.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate this <cite>Node</cite>.</p>
+<p>Return cached value in case no change was detected. Evaluation can be forced by setting Force to <code class="docutils literal notranslate"><span class="pre">True</span></code>.
+Otherwise, evaluate this <cite>Node</cite> by calling <code class="xref py py-meth docutils literal notranslate"><span class="pre">evalImplementation()</span></code>.
+In case of ValueError, set the node and their children as dirty.
+Any other error will set the node and their children as invalid
+:param force: <code class="docutils literal notranslate"><span class="pre">True</span></code> Force evaluation of this <cite>Node</cite>.
+:type force: bool</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_node_base.DataNode.evalImplementation">
+<code class="sig-name descname">evalImplementation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">force</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_node_base.DataNode.evalImplementation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluation implementation of the current <cite>DataNode</cite>.</p>
+<dl class="simple">
+<dt>Evaluation of the node usually implements the following steps :</dt><dd><ul class="simple">
+<li><p>get values of the inputs</p></li>
+<li><dl class="simple">
+<dt>handle errors :</dt><dd><ul>
+<li><p>mark invalid and DescendantDirty</p></li>
+<li><p>set tooltip with error message</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p>reset the states of the Node : un-Dirty and Valid</p></li>
+<li><p>store the current evaluation in self.value</p></li>
+<li><p>reset tooltip</p></li>
+<li><p>markDescendantDirty(True) :py:meth:’~data_node_base.DataNode.markDescendantInvalid(False)’</p></li>
+<li><p>evaluate the children of the <cite>Node</cite></p></li>
+<li><p>return current evaluation</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_node_base.DataNode.onInputChanged">
+<code class="sig-name descname">onInputChanged</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">socket</span><span class="p">:</span> <span class="n">Socket</span></em><span class="sig-paren">)</span> &#x2192; Any<a class="headerlink" href="#data_node_editor.data_node_base.DataNode.onInputChanged" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event called when an <cite>Edge</cite> is connected to the inputs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>socket</strong> (<em>'Socket'</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="data_node_graphics_base.html" class="btn btn-neutral float-right" title="data_node_graphics_base module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="data_subwindow.html" class="btn btn-neutral float-left" title="data_subwindow module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Laurent Copey
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
