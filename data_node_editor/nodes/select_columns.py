@@ -4,7 +4,7 @@ import pandas as pd
 from ..data_conf import *
 from ..data_node_base import *
 from ..data_node_graphics_base import OpGraphicsNode
-from .node_widgets import TreeWidgetUI
+from .node_widgets import CheckableTreeUI
 from typing import TYPE_CHECKING, Union, List, Tuple, Any
 
 if TYPE_CHECKING:
@@ -32,7 +32,7 @@ class DataNode_SelectColumns(DataNode):
         """Initialize the layout of properties DockWidget"""
         self.propertiesWidget = QWidget()
         # widget holding the column name
-        self.treeWidget = TreeWidgetUI()
+        self.treeWidget = CheckableTreeUI()
         self.treeWidget.itemChecked.connect(self.forcedEval)
 
         layout = QVBoxLayout()

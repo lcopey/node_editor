@@ -5,7 +5,7 @@ from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import pyqtSignal, QSize
 from node_editor.utils import dumpException, get_path_relative_to_file
 
-from .tree_widgets import CheckableHierarchicalTreeWidget
+from tree_widgets import CheckableTreeWidget
 
 from typing import Union, Any, List, Tuple
 
@@ -30,12 +30,13 @@ def _get_icon(file_path):
     return QIcon(QPixmap(os.path.join(_RESOURCE_PATH, file_path)))
 
 
-class TreeWidgetUI(QWidget):
+class CheckableTreeUI(QWidget):
     itemChecked = pyqtSignal()
 
-    def __init__(self, parent=None):
-        super(TreeWidgetUI, self).__init__()
-        self.treeWidget = CheckableHierarchicalTreeWidget(parent)
+    def __init__(self, parent=None, checkable: bool = True):
+        super(CheckableTreeUI, self).__init__(parent, )
+        self.treeWidget = CheckableTreeWidget(parent, checkable=checkable)
+        self.treeWidget.clicked.connect(self.itemChecked.emit)
 
         layout = QVBoxLayout()
         button_layout = QHBoxLayout()
@@ -94,7 +95,7 @@ if __name__ == '__main__':
     import numpy as np
 
     app = QApplication(sys.argv)
-    tree = CheckableHierarchicalTreeWidget()
+    tree = CheckableTreeUI()
     columns = pd.MultiIndex.from_tuples(
         [(i, f'level_1_{j}', f'level_2_{k}', np.random.randint(0, 2, dtype=bool)) for i in range(2) for j in range(3)
          for k in range(5)])

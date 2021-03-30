@@ -1,17 +1,19 @@
 import pandas as pd
 import numpy as np
-from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem
+from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem, QApplication
 from PyQt5.QtCore import Qt
 from .child_items import TreeItem
 from typing import Union, List, Tuple, TYPE_CHECKING
 
 
-class CheckableHierarchicalTreeWidget(QTreeWidget):
+class CheckableTreeWidget(QTreeWidget):
     """Widget implementing a hierarchical tree view of dataframe header"""
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, checkable: bool = False, default_checked: bool = True):
         super().__init__(parent=parent)
         self.setHeaderHidden(True)
+        self.checkable = checkable
+        self.default_checked = default_checked
         # self.itemClicked.connect(self.debug)
         # self.setColumnCount(2)  # in case additional information are needed
 
@@ -46,7 +48,9 @@ class CheckableHierarchicalTreeWidget(QTreeWidget):
                 outer_levels = level_values[:, 0]
                 unique_levels = np.unique(outer_levels)
                 for level in unique_levels:
-                    inner_item = TreeItem(parent=parent, value=level, checkable=True)
+                    inner_item = TreeItem(parent=parent, value=level,
+                                          checkable=self.checkable,
+                                          checked=Qt.Checked if self.default_checked else Qt.Unchecked)
                     inner_levels = level_values[outer_levels == level, 1:]
                     recurse(inner_item, inner_levels, checked[outer_levels == level])
 
@@ -54,7 +58,8 @@ class CheckableHierarchicalTreeWidget(QTreeWidget):
             else:
                 unique_levels = np.unique(level_values)
                 for level, check in zip(unique_levels, checked):
-                    inner_item = TreeItem(parent=parent, value=level, checkable=True,
+                    inner_item = TreeItem(parent=parent, value=level,
+                                          checkable=self.checkable,
                                           checked=Qt.Checked if check else Qt.Unchecked)
 
         self.clear()
@@ -80,7 +85,6 @@ class CheckableHierarchicalTreeWidget(QTreeWidget):
         -------
         List[Tuple]
             List of tuple values
-
         """
         checked_items = []
 
@@ -140,3 +144,20 @@ class CheckableHierarchicalTreeWidget(QTreeWidget):
 
     def debug(self):
         print(self.getItems())
+
+
+if __name__ == '__main__':
+    import sys
+    import numpy as np
+
+    app = QApplication(sys.argv)
+    tree = CheckableTreeWidget()
+    columns = pd.MultiIndex.from_tuples(
+        [(i, f'level_1_{j}', f'level_2_{k}', np.random.randint(0, 2, dtype=bool)) for i in range(2) for j in
+         range(3)
+         for k in range(5)])
+    # columns = pd.Index(np.arange(10))
+    tree.initModel(columns, include_checked=True)
+
+    tree.show()
+    sys.exit(app.exec_())
