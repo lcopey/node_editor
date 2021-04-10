@@ -5,7 +5,10 @@ from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import pyqtSignal, QSize
 from node_editor.utils import dumpException, get_path_relative_to_file
 
-from tree_widgets import CheckableTreeWidget
+if __name__ == '__main__':
+    from widgets import CheckableTreeWidget
+else:
+    from .widgets import CheckableTreeWidget
 
 from typing import Union, Any, List, Tuple
 

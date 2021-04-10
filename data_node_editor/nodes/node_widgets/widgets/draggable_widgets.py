@@ -3,17 +3,25 @@ from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QDragEnterEvent, QDropEvent
 from PyQt5.QtCore import Qt
 from node_editor.utils import dumpException
-from typing import Union
+from typing import Union, Optional, Type
 from .child_items import ValuedItem, ListItem, TreeItem
 from .utils import LISTBOX_W_VALUE_MIMETYPE
 
 
 class Draggable(QWidget):
-    """Is intented to be subclassed by QTreeWidget or QListWidget"""
+    """Utility class which is intented to be subclassed by QTreeWidget or QListWidget"""
     itemDropped = None
     itemClass = ValuedItem
+    dropValidator = list()
 
-    def __init__(self, parent=None):
+    def __init__(self, parent: Optional[QWidget] = None):
+        """
+
+        Parameters
+        ----------
+        parent: Optional[QWidget]
+            Widget parent to this instance
+        """
         super(Draggable, self).__init__(parent)
         self.initDragOptions()
         self.setDefaultDropAction(Qt.MoveAction)
@@ -61,10 +69,12 @@ class Draggable(QWidget):
             if mime.hasFormat(LISTBOX_W_VALUE_MIMETYPE):
                 # Retrieve value from mime data
                 new_item = self.getItemClass().from_mime(mime)
-                self.finishDrop(item, source, new_item)
-                assert self.itemDropped is not None, 'itemDropped should be reimplemented'
-                self.itemDropped.emit()
-                event.acceptProposedAction()
+                if self.validateDrop(item, source, new_item):
+                    self.finishDrop(item, source, new_item)
+                    assert self.itemDropped is not None, 'itemDropped should be reimplemented'
+                    self.itemDropped.emit()
+                    event.acceptProposedAction()
+
         except Exception as e:
             dumpException(e)
 
@@ -74,6 +84,20 @@ class Draggable(QWidget):
     def removeItems(self, text: str):
         raise NotImplementedError
 
+    @classmethod
+    def getDropValidator(cls):
+        return cls.dropValidator
+
+    @classmethod
+    def registerDropValidator(cls, callback: 'callable'):
+        cls.dropValidator.append(callback)
+
+    def validateDrop(self, itemAt, source, newItem) -> bool:
+        result = True
+        for callback in self.dropValidator:
+            result &= callback(self, itemAt, source, newItem)
+        return result
+
 
 class DraggableListWidget(QListWidget, Draggable):
     itemClass = ListItem
@@ -82,7 +106,7 @@ class DraggableListWidget(QListWidget, Draggable):
     def __init__(self, parent=None):
         super(DraggableListWidget, self).__init__(parent)
 
-    def finishDrop(self, item_at, source, new_item):
+    def finishDrop(self, item_at, source, new_item: Union[TreeItem, ListItem]):
         source.removeItems(new_item.text())
         currentRow = self.row(item_at)
         self.insertItem(currentRow, new_item)

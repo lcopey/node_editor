@@ -76,7 +76,8 @@ class ListItem(QListWidgetItem, ValuedItem):
 class TreeItem(QTreeWidgetItem, ValuedItem):
     """Helper class instantiating a QTreeWidgetItem in a simple way"""
 
-    def __init__(self, parent=None, value: Any = None, checkable: bool = False, checked: Qt.CheckState = Qt.Checked):
+    def __init__(self, parent=None, value: Any = None,
+                 checkable: bool = False, checked: Qt.CheckState = Qt.Checked):
         """Helper class instantiating a QTreeWidget
 
         Parameters
