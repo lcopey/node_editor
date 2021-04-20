@@ -7,7 +7,7 @@ from .data_node_base import *
 
 from node_editor.node_node import Node
 from node_editor.node_editor_widget import NodeEditorWidget
-from node_editor.utils import dumpException
+from node_editor.utils import dumpException, get_path_relative_to_file
 
 from typing import TYPE_CHECKING
 
@@ -40,7 +40,7 @@ class DataSubWindow(NodeEditorWidget):
         for key in keys:
             node = NodeFactory.from_op_code(key)
             op_code = node.getOpCode()
-            self.node_actions[op_code] = QAction(QIcon(node.icon), node.op_title)
+            self.node_actions[op_code] = QAction(QIcon(get_path_relative_to_file(__file__, node.icon)), node.op_title)
             self.node_actions[op_code].setData(op_code)
 
     def initNodesContextMenu(self):
