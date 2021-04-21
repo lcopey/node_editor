@@ -8,7 +8,7 @@ from data_node_editor import DataWindow
 app = QApplication(sys.argv)
 
 
-class TestDataNodeEditor(unittest.TestCase):
+class TestNodeDataNodeEditor(unittest.TestCase):
     def setUp(self) -> None:
         # Lanch the application
 
