@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QWidget, QTableView, QVBoxLayout, QComboBox, QFrame,
 import pandas as pd
 import numpy as np
 
-from ..data_node_base import DataNode
+from ..data_node_base import DataNode, Configurable
 from ..data_node_graphics_base import OpGraphicsNode
 from ..data_conf import NodeFactory
 from .cast_columns_utils import TYPE_OPTIONS, ComboDelegate, TypeChooserModel
@@ -12,7 +12,7 @@ from typing import Union
 
 
 @NodeFactory.register()
-class OpNode_CastColumns(DataNode):
+class OpNode_CastColumns(DataNode, Configurable):
     icon = 'resources/table-cast-64.svg'
     op_title = 'Data Type'
     content_label = ''

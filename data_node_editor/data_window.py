@@ -3,6 +3,7 @@
 Module implementing the MainWindow to the calculator example
 """
 from .data_subwindow import DataSubWindow
+from .data_node_base import Configurable
 from .data_drag_listbox import DragListBox
 from .data_conf import NodeFactory
 # Import to include the node in the toolbar
@@ -382,7 +383,7 @@ class DataWindow(NodeEditorWindow):
 
                 elif len(itemsSelected) == 1:
                     itemSelected = itemsSelected[0]
-                    if hasattr(itemSelected, 'node') and itemSelected.node.hasPropertiesWidget():
+                    if hasattr(itemSelected, 'node') and isinstance(itemSelected.node, Configurable):
                         self.propDock.setWidget(itemSelected.node.propertiesWidget)
 
                     else:

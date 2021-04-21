@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QListWidget, QListWidgetIt
 from PyQt5.QtCore import Qt
 import pandas as pd
 from ..data_conf import *
-from ..data_node_base import *
+from ..data_node_base import DataNode, Configurable
 from ..data_node_graphics_base import OpGraphicsNode
 from .node_widgets import CheckableTreeUI
 from typing import TYPE_CHECKING, Union, List, Tuple, Any
@@ -15,7 +15,7 @@ DEBUG = True
 
 
 @NodeFactory.register()
-class DataNode_SelectColumns(DataNode):
+class DataNode_SelectColumns(DataNode, Configurable):
     icon = 'resources/table-select-columns-64.svg'
     op_title = 'Select Columns'
     content_label = ''

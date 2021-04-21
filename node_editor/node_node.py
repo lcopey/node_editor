@@ -22,7 +22,7 @@ class Node(Serializable):
     """Class representing the `Node`"""
 
     def __init__(self, scene: 'Scene', title: str = 'Undefined Node', inputs: List[int] = None,
-                 outputs: List[int] = None):
+                 outputs: List[int] = None,):
         """Instantiate a new `Node` and add it to the `Graphical Scene`
 
         **Instance Attributes**
@@ -39,7 +39,7 @@ class Node(Serializable):
         inputs : list of :class:`~node_editor.node_socket.Socket`
         outputs : list of :class:`~node_editor.node_socket.Socket`
         """
-        super().__init__()
+        super(Node, self).__init__()
 
         if inputs is None:
             inputs = []

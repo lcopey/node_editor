@@ -8,7 +8,25 @@ if TYPE_CHECKING:
     from node_editor.node_socket import Socket
     from node_editor.node_scene import Scene
 
-DEBUG = False
+DEBUG = True
+
+
+class Configurable:
+    """Configurable node implement PropertiesWidget methods"""
+
+    def __init__(self, **kwargs):
+        super(Configurable, self).__init__()
+        if DEBUG:
+            print('>Configurable', 'Instantiating')
+        self.propertiesWidget = None
+        self.initPropertiesWidget()
+
+    def initPropertiesWidget(self):
+        """To be overridden, defines an attribute named properties_widget used in the properties toolbar"""
+        raise NotImplementedError
+
+    def hasPropertiesWidget(self):
+        return self.propertiesWidget is not None
 
 
 class DataNode(Node):
@@ -41,23 +59,14 @@ class DataNode(Node):
             outputs = [1]
         if inputs is None:
             inputs = [2, 2]
-        super().__init__(scene, title=self.__class__.op_title, inputs=inputs, outputs=outputs)
+        super(DataNode, self).__init__(scene, title=self.__class__.op_title, inputs=inputs, outputs=outputs,)
 
         self.input_socket_position: Optional[SocketPosition] = None
         self.output_socket_position: Optional[SocketPosition] = None
 
-        self.propertiesWidget = None
-        self.initPropertiesWidget()
         # Nodes are dirty by default
         self.value = None
         self.markDirty()
-
-    def initPropertiesWidget(self):
-        """To be overridden, defines an attribute named properties_widget used in the properties toolbar"""
-        return None
-
-    def hasPropertiesWidget(self):
-        return self.propertiesWidget is not None
 
     @classmethod
     def getOpCode(cls):

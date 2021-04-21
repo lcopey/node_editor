@@ -11,7 +11,7 @@ from typing import Any, List
 # TODO implement read_csv file
 # TODO Automatic discover for different modules ?
 from node_editor.utils import dumpException
-from ..data_node_base import DataNode
+from ..data_node_base import DataNode, Configurable
 from ..data_node_graphics_base import OpGraphicsNode
 from ..data_conf import *
 
@@ -19,7 +19,7 @@ DEBUG = False
 
 
 @NodeFactory.register()
-class OpNode_ReadCSVFile(DataNode):
+class OpNode_ReadCSVFile(DataNode, Configurable):
     icon = 'resources/computer-folder-open-64.svg'
     op_title = 'CSV file'
     content_label = ''
@@ -29,7 +29,6 @@ class OpNode_ReadCSVFile(DataNode):
     NodeContent_class = None
 
     def __init__(self, scene):
-
         super().__init__(scene, inputs=[], outputs=[1])
         self.filepath = ''
         self.file_last_modified = None

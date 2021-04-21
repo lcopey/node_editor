@@ -1,5 +1,6 @@
 class Serializable:
     def __init__(self):
+        super(Serializable, self).__init__()
         self.id = id(self)
 
     def serialize(self):
