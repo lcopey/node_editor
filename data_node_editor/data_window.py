@@ -8,11 +8,10 @@ from .data_drag_listbox import DragListBox
 from .data_conf import NodeFactory
 # Import to include the node in the toolbar
 from .nodes import *
-import os
 
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
-from PyQt5.QtCore import QSignalMapper, Qt, QFileInfo
+from PyQt5.QtCore import QSignalMapper, Qt
 
 from node_editor.utils import loadStylessheets
 from node_editor.node_editor_window import NodeEditorWindow
@@ -22,13 +21,11 @@ from node_editor.utils import dumpException, pp, get_path_relative_to_file
 from node_editor.node_edge import Edge
 from node_editor.node_edge_validators import *
 
-from typing import TYPE_CHECKING
+from typing import Optional, Union, Tuple, Callable
 
 # Edge.registerEdgeValidator(edge_validator_debug)
 Edge.registerEdgeValidator(edge_cannot_connect_two_outputs_or_two_inputs)
 Edge.registerEdgeValidator(edge_cannot_connect_input_and_output_of_same_node)
-# images for the dark skin
-import examples.example_calculator.qss.nodeeditor_dark_resources
 
 DEBUG = True
 
@@ -36,15 +33,48 @@ DEBUG = True
 class DataWindow(NodeEditorWindow):
     """Class representing the MainWindow of the application.
 
+    It implements multiple documents area as well as two docks on the left and right.
+    The left one displays a list of nodes.
+    The right one displays parameters for some nodes.
+
     Instance Attributes:
         name_company and name_product - used to register the settings
+        mdiArea - Multiple Document Area holding the NodeEditor Widget
     """
+
+    def __init__(self):
+        # Instantiates attributes
+        # styles attributes
+        self._empty_icon: Optional[QIcon] = None  # icon used for subwindow
+        self._stylesheet_filenames: Optional[Tuple] = None
+        # mdiArea attributes
+        self._windowMapper: Optional[QSignalMapper] = None
+        self.mdiArea: Optional[QMdiArea] = None
+        # Bar menu
+        self.windowMenu: Optional[QMenuBar] = None
+        self.helpMenu: Optional[QMenuBar] = None
+        #  Action from windowMenu
+        self.actClose: Optional[QAction] = None
+        self.actCloseAll: Optional[QAction] = None
+        self.actTile: Optional[QAction] = None
+        self.actCascade: Optional[QAction] = None
+        self.actNext: Optional[QAction] = None
+        self.actPrevious: Optional[QAction] = None
+        self.actSeparator: Optional[QAction] = None
+        self.actAbout: Optional[QAction] = None
+        # Dock holding the properties
+        self.propDock: Optional[QDockWidget] = None
+        self.propDockLbl: Optional[QLabel] = None
+        # Dock holding the nodes list
+        self.nodesDock: Optional[QDockWidget] = None
+        self.nodeListWidget: Optional[DragListBox] = None
+
+        super(DataWindow, self).__init__()
 
     def initUI(self):
         """UI is composed with """
 
         # variable for QSettings
-        # print(os.getcwd())
         self.name_company = 'Copey'
         self.name_product = 'DataViz NodeEditor'
         main_icon_path = get_path_relative_to_file(__file__, 'resources/main-icon.png')
@@ -52,20 +82,19 @@ class DataWindow(NodeEditorWindow):
 
         # Load filesheets
         # TODO Review style
-        # self.stylesheet_filenames = (os.path.join(os.path.dirname(__file__), 'qss/nodeeditor.qss'),
+        # self._stylesheet_filenames = (os.path.join(os.path.dirname(__file__), 'qss/nodeeditor.qss'),
         #                              os.path.join(os.path.dirname(__file__), 'qss/nodeeditor-dark.qss'))
-        # self.stylesheet_filenames = (os.path.join(os.path.dirname(__file__), 'resources/nodeeditor.qss'))
-        self.stylesheet_filenames = (get_path_relative_to_file(__file__, 'resources/nodeeditor.qss'))
-        self.print(self.stylesheet_filenames)
-        loadStylessheets(*self.stylesheet_filenames)
-        # TODO Fix resource
-        self.empty_icon = QIcon("../examples/example_data")
+        self._stylesheet_filenames = (get_path_relative_to_file(__file__, 'resources/nodeeditor.qss'))
+        self.print(self._stylesheet_filenames)
+        loadStylessheets(*self._stylesheet_filenames)
+        # self._empty_icon = QIcon("../examples/example_data")
+        self._empty_icon = QIcon("../")
 
         if DEBUG:
             self.print('Registered Node')
             pp(NodeFactory.get_nodes())
 
-        # Instantiate the MultiDocument Area
+        # Instantiate the MultiDocument Area as the CentralWidget
         self.mdiArea = QMdiArea()
         self.mdiArea.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         self.mdiArea.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
@@ -76,9 +105,11 @@ class DataWindow(NodeEditorWindow):
         # Connect subWindowActivate to updateMenu
         # Activate the items on the file_menu and the edit_menu
         self.mdiArea.subWindowActivated.connect(self.updateMenus)
+        self.mdiArea.subWindowActivated.connect(self.refreshPropertiesDock)
+
         # from mdi example...
-        self.windowMapper = QSignalMapper(self)
-        self.windowMapper.mapped[QWidget].connect(self.setActiveSubWindow)
+        self._windowMapper = QSignalMapper(self)
+        self._windowMapper.mapped[QWidget].connect(self.setActiveSubWindow)
 
         # instantiate various elements
         self.createNodesDock()
@@ -93,6 +124,12 @@ class DataWindow(NodeEditorWindow):
 
         self.setWindowTitle("DataViz NodeEditor")
 
+    def _createAction(self, label: str, statusTip: str, triggered: Callable, shortcut=None):
+        kwargs = {'statusTip': statusTip, 'triggered': triggered}
+        if shortcut:
+            kwargs['shortcut'] = shortcut
+        return QAction(label, self, **kwargs)
+
     def createActions(self):
         """Instantiate various `QAction` for the main toolbar.
 
@@ -100,24 +137,24 @@ class DataWindow(NodeEditorWindow):
         Window and Help actions are specific to the :class:~`examples.calc_window.CalcWindow`
         """
         super().createActions()
-        self.actClose = QAction("Cl&ose", self, statusTip="Close the active window",
-                                triggered=self.mdiArea.closeActiveSubWindow)
-        self.actCloseAll = QAction("Close &All", self, statusTip="Close all the windows",
-                                   triggered=self.mdiArea.closeAllSubWindows)
-        self.actTile = QAction("&Tile", self, statusTip="Tile the windows", triggered=self.mdiArea.tileSubWindows)
-        self.actCascade = QAction("&Cascade", self, statusTip="Cascade the windows",
-                                  triggered=self.mdiArea.cascadeSubWindows)
-        self.actNext = QAction("Ne&xt", self, shortcut=QKeySequence.NextChild,
-                               statusTip="Move the focus to the next window",
-                               triggered=self.mdiArea.activateNextSubWindow)
-        self.actPrevious = QAction("Pre&vious", self, shortcut=QKeySequence.PreviousChild,
-                                   statusTip="Move the focus to the previous window",
-                                   triggered=self.mdiArea.activatePreviousSubWindow)
+        self.actClose = self._createAction("Cl&ose", statusTip="Close the active window",
+                                           triggered=self.mdiArea.closeActiveSubWindow)
+        self.actCloseAll = self._createAction("Close &All", statusTip="Close all the windows",
+                                              triggered=self.mdiArea.closeAllSubWindows)
+        self.actTile = self._createAction("&Tile", statusTip="Tile the windows", triggered=self.mdiArea.tileSubWindows)
+        self.actCascade = self._createAction("&Cascade", statusTip="Cascade the windows",
+                                             triggered=self.mdiArea.cascadeSubWindows)
+        self.actNext = self._createAction("Ne&xt", shortcut=QKeySequence.NextChild,
+                                          statusTip="Move the focus to the next window",
+                                          triggered=self.mdiArea.activateNextSubWindow)
+        self.actPrevious = self._createAction("Pre&vious", shortcut=QKeySequence.PreviousChild,
+                                              statusTip="Move the focus to the previous window",
+                                              triggered=self.mdiArea.activatePreviousSubWindow)
 
         self.actSeparator = QAction(self)
         self.actSeparator.setSeparator(True)
 
-        self.actAbout = QAction("&About", self, statusTip="Show the application's About box", triggered=self.about)
+        self.actAbout = self._createAction("&About", statusTip="Show the application's About box", triggered=self.about)
 
     def createMenus(self):
         """Populate File, Edit, Window and Help with `QAction`"""
@@ -143,15 +180,15 @@ class DataWindow(NodeEditorWindow):
         self.propDock.setFloating(False)
         self.propDock.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
 
-        self._propDockLayout = QVBoxLayout()
+        propDockLayout = QVBoxLayout()
         self.propDockLbl = QLabel('')
         self.propDockLbl.setWordWrap(True)
         self.propDockLbl.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
 
         # layout of node properties will be set to _propDockWdg
-        self._propDockWdg = QWidget()
-        self.propDock.setWidget(self._propDockWdg)
-        self._propDockWdg.setLayout(self._propDockLayout)
+        propDockWdg = QWidget()
+        self.propDock.setWidget(propDockWdg)
+        propDockWdg.setLayout(propDockLayout)
         self.addDockWidget(Qt.RightDockWidgetArea, self.propDock)
 
     def createNodesDock(self):
@@ -183,8 +220,8 @@ class DataWindow(NodeEditorWindow):
     def onFileOpen(self):
         """Open OpenFileDialog"""
         # OpenFile dialog
-        fnames, filter = QFileDialog.getOpenFileNames(self, 'Open graph from file', self.getFileDialogDirectory(),
-                                                      self.getFileDialogFilter())
+        fnames, file_filter = QFileDialog.getOpenFileNames(self, 'Open graph from file', self.getFileDialogDirectory(),
+                                                           self.getFileDialogFilter())
 
         try:
             for fname in fnames:
@@ -233,6 +270,20 @@ class DataWindow(NodeEditorWindow):
         else:
             self.propDock.show()
 
+    def closeEvent(self, event: QCloseEvent) -> None:
+        try:
+            self.mdiArea.closeAllSubWindows()
+            if self.mdiArea.currentSubWindow():
+                event.ignore()
+            else:
+                self.writeSettings()
+                event.accept()
+                # In case of fixing the application closing
+                # import sys
+                # sys.exit(0)
+        except Exception as e:
+            dumpException(e)
+
     def updateMenus(self):
         active = self.getCurrentNodeEditorWidget()
         hasMdiChild = (active is not None)
@@ -252,7 +303,7 @@ class DataWindow(NodeEditorWindow):
     def updateEditMenu(self):
         """Gray the properties of the editMenu in function of the active subwindow
         """
-        if DEBUG: self.print('updateEditMenu')
+        self.print('updateEditMenu')
         try:
             active = self.getCurrentNodeEditorWidget()
             hasMdiChild = (active is not None)
@@ -271,22 +322,17 @@ class DataWindow(NodeEditorWindow):
 
     def updateWindowMenu(self):
         """Gray the properties of the editMenu in function of the active subwindow"""
+        # clear all actions in window menu
         self.windowMenu.clear()
 
-        # Window menu
+        # Add nodes toolbar action to window menu
         toolbar_nodes = self.windowMenu.addAction('Nodes toolbar')
         toolbar_nodes.setCheckable(True)
         toolbar_nodes.triggered.connect(self.onWindowNodesToolbar)
         toolbar_nodes.setChecked(self.nodesDock.isVisible())
 
-        # Properties toolbar
-        toolbar_properties = self.windowMenu.addAction('Properties toolbar')
-        toolbar_properties.setCheckable(True)
-        toolbar_properties.triggered.connect(self.onPropertiesNodesToolbar)
-        toolbar_properties.setChecked(self.propDock.isVisible())
-
+        # Fill all other actions of window menu
         self.windowMenu.addSeparator()
-
         self.windowMenu.addAction(self.actClose)
         self.windowMenu.addAction(self.actCloseAll)
         self.windowMenu.addSeparator()
@@ -297,23 +343,29 @@ class DataWindow(NodeEditorWindow):
         self.windowMenu.addAction(self.actPrevious)
         self.windowMenu.addAction(self.actSeparator)
 
+        # Add properties toolbar action to window menu
+        toolbar_properties = self.windowMenu.addAction('Properties toolbar')
+        toolbar_properties.setCheckable(True)
+        toolbar_properties.triggered.connect(self.onPropertiesNodesToolbar)
+        toolbar_properties.setChecked(self.propDock.isVisible())
+
+        # Add windows actions to window menu
         windows = self.mdiArea.subWindowList()
         self.actSeparator.setVisible(len(windows) != 0)
 
         for i, window in enumerate(windows):
             child = window.widget()
 
-            text = "%d %s" % (i + 1, child.getUserFriendlyFilename())
-            if i < 9:
-                text = '&' + text
+            wnd_nb = f'{i + 1}' if i >= 9 else f'&{i + 1}'
+            text = wnd_nb + f'{child.getUserFriendlyFilename()}'
 
             action = self.windowMenu.addAction(text)
             action.setCheckable(True)
             action.setChecked(child is self.getCurrentNodeEditorWidget())
-            action.triggered.connect(self.windowMapper.map)
-            self.windowMapper.setMapping(action, window)
+            action.triggered.connect(self._windowMapper.map)
+            self._windowMapper.setMapping(action, window)
 
-    def getCurrentNodeEditorWidget(self) -> NodeEditorWidget:
+    def getCurrentNodeEditorWidget(self) -> Optional[Union[NodeEditorWidget, QWidget]]:
         """Return the widget currently holding the scene.
 
         For different application, the method can be overridden to return mdiArea, the central widget...
@@ -328,48 +380,54 @@ class DataWindow(NodeEditorWindow):
             return activeSubWindow.widget()
         return None
 
-    def about(self):
-        QMessageBox.about(self, "About Calculator NodeEditor Example",
-                          "The <b>Calculator NodeEditor</b> example demonstrates how to write multiple "
-                          "document interface applications using PyQt5 and NodeEditor.")
+    def createMdiChild(self, child_widget: Optional[DataSubWindow] = None) -> QMdiSubWindow:
+        """Add a new widget to mdiArea.
 
-    def closeEvent(self, event: QCloseEvent) -> None:
-        try:
-            self.mdiArea.closeAllSubWindows()
-            if self.mdiArea.currentSubWindow():
-                event.ignore()
-            else:
-                self.writeSettings()
-                event.accept()
-                # In case of fixing the application closing
-                # import sys
-                # sys.exit(0)
-        except Exception as e:
-            dumpException(e)
+        Parameters
+        ----------
+        child_widget: Optional[DataSubWindow]
+            if provided add DataSubWindow to mdiArea else instantiate a new one
 
-    def createMdiChild(self, child_widget=None):
-        nodeeditor = child_widget if child_widget is not None else DataSubWindow()
-        subwnd = self.mdiArea.addSubWindow(nodeeditor, )
-        subwnd.setWindowIcon(self.empty_icon)
+        Returns
+        -------
+        QMdiSubWindow
 
-        nodeeditor.scene.history.addHistoryModifiedListener(self.updateEditMenu)
-        # refresh dock properties when modifying the scene
-        nodeeditor.scene.history.addHistoryModifiedListener(self.refreshPropertiesDock)
-        nodeeditor.addCloseEventListener(self.onSubWndClose)
+        """
+        datasubwnd = child_widget if child_widget is not None else DataSubWindow()
+        subwnd = self.mdiArea.addSubWindow(datasubwnd, )
+        subwnd.setWindowIcon(self._empty_icon)
+
+        # update the Edit menu and the dock properties at each time stamp (modifying the scene)
+        datasubwnd.scene.history.addHistoryModifiedListener(self.updateEditMenu)
+        datasubwnd.scene.history.addHistoryModifiedListener(self.refreshPropertiesDock)
+        datasubwnd.addCloseEventListener(self.onSubWndClose)
         return subwnd
 
-    def findMdiChild(self, fileName):
+    def findMdiChild(self, filename: str) -> Optional[QMdiSubWindow]:
+        """Retrieve subwindow according to filename
+
+        Parameters
+        ----------
+        filename: str
+            name of the subwindow
+
+        Returns
+        -------
+        Optional[QMdiSubWindow]
+
+        """
         for window in self.mdiArea.subWindowList():
-            if window.widget().filename == fileName:
+            if window.widget().filename == filename:
                 return window
         return None
 
-    def setActiveSubWindow(self, window):
+    def setActiveSubWindow(self, window: QMdiSubWindow):
         if window:
             self.mdiArea.setActiveSubWindow(window)
 
     def refreshPropertiesDock(self):
-        # TODO separate the toolbar with one bottom widget holding some informations and a upper part holding a layout specific to each node
+        # TODO separate the toolbar with one bottom widget holding
+        #  some informations and a upper part holding a layout specific to each node
         self.print('Dock properties')
         # get DataSubWindow
         if hasattr(self.mdiArea.activeSubWindow(), 'widget'):
@@ -396,6 +454,11 @@ class DataWindow(NodeEditorWindow):
 
             except Exception as e:
                 dumpException(e)
+
+    def about(self):
+        QMessageBox.about(self, "About Calculator NodeEditor Example",
+                          "The <b>Calculator NodeEditor</b> example demonstrates how to write multiple "
+                          "document interface applications using PyQt5 and NodeEditor.")
 
     def print(self, *args):
         if DEBUG:

@@ -7,8 +7,6 @@ from node_editor.node_content_widget import NodeContentWidget
 from .const import Handle, handleCursors, handleUpdate
 from typing import Optional
 
-from node_editor.utils import print_func_name
-
 DEBUG = False
 
 OUTLINE_WIDTH = 1.0
@@ -247,8 +245,6 @@ class QGraphicsResizableRectItem(QGraphicsRectItem):
         painter.drawPath(path_outline.simplified())
 
         for handle in self.handles.values():
-
             path_handle = QPainterPath()
             path_handle.addRect(handle)
             painter.drawPath(path_handle)
-

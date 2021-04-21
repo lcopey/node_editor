@@ -4,7 +4,7 @@ from .node_serializable import Serializable
 from .utils import return_simple_id, dumpException
 from .node_graphics_edge import *
 
-from typing import TYPE_CHECKING, Optional, Type
+from typing import TYPE_CHECKING, Optional, Type, Callable
 
 if TYPE_CHECKING:
     from .node_scene import Scene
@@ -144,7 +144,7 @@ class Edge(Serializable):
         return cls.edge_validators
 
     @classmethod
-    def registerEdgeValidator(cls, validator_callback: 'callable'):
+    def registerEdgeValidator(cls, validator_callback: Callable):
         """Register Edge Validator Callback
 
         Parameters

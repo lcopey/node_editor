@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QGraphicsView
 from .node_edge import EDGE_TYPE_BEZIER, EDGE_TYPE_DIRECT, Edge
 from .node_graphics_socket import GraphicsSocket
-from .utils import print_items, dumpException
+from .utils import dumpException
 
 from typing import TYPE_CHECKING, Union, Type
 

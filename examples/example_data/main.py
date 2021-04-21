@@ -13,6 +13,7 @@ if __name__ == '__main__':
     dpi = screen.physicalDotsPerInch()
     print(dpi)
     # dpi 267.54
+    # classic dpi 70.00351648351648
 
     app.setStyle('Fusion')
     wnd = DataWindow()
