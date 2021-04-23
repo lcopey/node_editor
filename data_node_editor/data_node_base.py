@@ -59,7 +59,7 @@ class DataNode(Node):
             outputs = [1]
         if inputs is None:
             inputs = [2, 2]
-        super(DataNode, self).__init__(scene, title=self.__class__.op_title, inputs=inputs, outputs=outputs,)
+        super(DataNode, self).__init__(scene, title=self.__class__.op_title, inputs=inputs, outputs=outputs, )
 
         self.input_socket_position: Optional[SocketPosition] = None
         self.output_socket_position: Optional[SocketPosition] = None
@@ -75,10 +75,6 @@ class DataNode(Node):
         Corresponds to the class name definition as it should be unique.
         Helper function to work with NodeFactory class"""
         return cls.__name__
-
-    def print(self, *args):
-        if DEBUG:
-            print(f'> {self.__class__.__name__}', *args)
 
     def initSettings(self):
         super().initSettings()
@@ -221,3 +217,7 @@ class DataNode(Node):
         self.print(f'{self.__class__.__name__}::onInputChanged')
         self.markDirty()
         return self.eval()
+
+    def print(self, *args):
+        if DEBUG:
+            print(f'> {self.__class__.__name__}', *args)

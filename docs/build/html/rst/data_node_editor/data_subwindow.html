@@ -101,7 +101,6 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="data_node_editor.html#module-data_node_editor">Module contents</a></li>
-<li class="toctree-l2"><a class="reference internal" href="data_node_editor.html#subpackages">Subpackages</a></li>
 </ul>
 </li>
 </ul>
@@ -180,13 +179,64 @@
 <dl class="py method">
 <dt id="data_node_editor.data_subwindow.DataSubWindow.initNewNodeActions">
 <code class="sig-name descname">initNewNodeActions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_subwindow.DataSubWindow.initNewNodeActions" title="Permalink to this definition">¶</a></dt>
-<dd><p>Instantiates</p>
+<dd><p>Instantiates nodes actions.</p>
+<p>Those QActions only holds icons, title of the node and op_code which identify which nodes to create.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="data_node_editor.data_subwindow.DataSubWindow.initNodesContextMenu">
 <code class="sig-name descname">initNodesContextMenu</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_subwindow.DataSubWindow.initNodesContextMenu" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Instantiates context menu that popup on right click</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_subwindow.DataSubWindow.addCloseEventListener">
+<code class="sig-name descname">addCloseEventListener</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_subwindow.DataSubWindow.addCloseEventListener" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add callback to the callback list when closing the
+:classs:~`data_node_editor.data_node_editor.DataSubWindow`.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>callback</strong> (<em>Callable</em>) – function to call when closing :classs:~`data_node_editor.data_node_editor.DataSubWindow`.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_subwindow.DataSubWindow.setTitle">
+<code class="sig-name descname">setTitle</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_subwindow.DataSubWindow.setTitle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the title of the subwindow from the current filename.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_subwindow.DataSubWindow.onHistoryRestored">
+<code class="sig-name descname">onHistoryRestored</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_subwindow.DataSubWindow.onHistoryRestored" title="Permalink to this definition">¶</a></dt>
+<dd><p>Triggered when history is restored and eval nodes outputs.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_subwindow.DataSubWindow.onDragEnter">
+<code class="sig-name descname">onDragEnter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span><span class="p">:</span> <span class="n">PyQt5.QtGui.QDragEnterEvent</span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_subwindow.DataSubWindow.onDragEnter" title="Permalink to this definition">¶</a></dt>
+<dd><p>On drag enter. It is typically triggered when dragging a node from the
+:class:data_node_editor.data_drag_listbox.DragListBox.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_subwindow.DataSubWindow.onDrop">
+<code class="sig-name descname">onDrop</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span><span class="p">:</span> <span class="n">PyQt5.QtGui.QDropEvent</span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_subwindow.DataSubWindow.onDrop" title="Permalink to this definition">¶</a></dt>
+<dd><p>On dropping a node from the :class:data_node_editor.data_drag_listbox.DragListBox.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_subwindow.DataSubWindow.closeEvent">
+<code class="sig-name descname">closeEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_subwindow.DataSubWindow.closeEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close event</p>
+</dd></dl>
 
 <dl class="py method">
 <dt id="data_node_editor.data_subwindow.DataSubWindow.getMainWindow">
@@ -195,93 +245,81 @@
 </dd></dl>
 
 <dl class="py method">
-<dt id="data_node_editor.data_subwindow.DataSubWindow.onHistoryRestored">
-<code class="sig-name descname">onHistoryRestored</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_subwindow.DataSubWindow.onHistoryRestored" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="data_node_editor.data_subwindow.DataSubWindow.doEvalOutputs">
-<code class="sig-name descname">doEvalOutputs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_subwindow.DataSubWindow.doEvalOutputs" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
 <dt id="data_node_editor.data_subwindow.DataSubWindow.getNodeClassFromData">
-<code class="sig-name descname">getNodeClassFromData</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_subwindow.DataSubWindow.getNodeClassFromData" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="data_node_editor.data_subwindow.DataSubWindow.fileLoad">
-<code class="sig-name descname">fileLoad</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#data_node_editor.data_subwindow.DataSubWindow.fileLoad" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
+<code class="sig-name descname">getNodeClassFromData</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">dict</span></em><span class="sig-paren">)</span> &#x2192; Type<span class="p">[</span>Union<span class="p">[</span><a class="reference internal" href="../node_editor/node_node.html#node_editor.node_node.Node" title="node_editor.node_node.Node">node_editor.node_node.Node</a><span class="p">, </span><a class="reference internal" href="data_node_base.html#data_node_editor.data_node_base.DataNode" title="data_node_editor.data_node_base.DataNode">data_node_editor.data_node_base.DataNode</a><span class="p">]</span><span class="p">]</span><a class="headerlink" href="#data_node_editor.data_subwindow.DataSubWindow.getNodeClassFromData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns class definition for the op_code in data.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – Path of the file to load</p>
+<dd class="field-odd"><p><strong>data</strong> (<em>dict</em>) – Node or DataNode serialized as dict.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p>True : if the file is successfully loaded</p></li>
-<li><p>False : in case of error</p></li>
-</ul>
-</p>
+<dd class="field-even"><p></p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>bool</p>
+<dd class="field-odd"><p>Type[Union[<a class="reference internal" href="../node_editor/node_node.html#node_editor.node_node.Node" title="node_editor.node_node.Node">Node</a>, <a class="reference internal" href="data_node_base.html#data_node_editor.data_node_base.DataNode" title="data_node_editor.data_node_base.DataNode">DataNode</a>]]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="data_node_editor.data_subwindow.DataSubWindow.setTitle">
-<code class="sig-name descname">setTitle</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_subwindow.DataSubWindow.setTitle" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="data_node_editor.data_subwindow.DataSubWindow.evalOutputs">
+<code class="sig-name descname">evalOutputs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_subwindow.DataSubWindow.evalOutputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute nodes outputs.</p>
+</dd></dl>
 
 <dl class="py method">
-<dt id="data_node_editor.data_subwindow.DataSubWindow.addCloseEventListener">
-<code class="sig-name descname">addCloseEventListener</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">callback</span><span class="p">:</span> <span class="n">function</span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_subwindow.DataSubWindow.addCloseEventListener" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="data_node_editor.data_subwindow.DataSubWindow.closeEvent">
-<code class="sig-name descname">closeEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">QCloseEvent</span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_subwindow.DataSubWindow.closeEvent" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="data_node_editor.data_subwindow.DataSubWindow.onDragEnter">
-<code class="sig-name descname">onDragEnter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span><span class="p">:</span> <span class="n">PyQt5.QtGui.QDragEnterEvent</span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_subwindow.DataSubWindow.onDragEnter" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="data_node_editor.data_subwindow.DataSubWindow.onDrop">
-<code class="sig-name descname">onDrop</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span><span class="p">:</span> <span class="n">PyQt5.QtGui.QDropEvent</span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_subwindow.DataSubWindow.onDrop" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="data_node_editor.data_subwindow.DataSubWindow.fileLoad">
+<code class="sig-name descname">fileLoad</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#data_node_editor.data_subwindow.DataSubWindow.fileLoad" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load saved data node editor file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – path to saved data node editor</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>bool</em></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if successful else <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="data_node_editor.data_subwindow.DataSubWindow.contextMenuEvent">
-<code class="sig-name descname">contextMenuEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">QContextMenuEvent</span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_subwindow.DataSubWindow.contextMenuEvent" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="data_node_editor.data_subwindow.DataSubWindow.handleEdgeContextMenu">
-<code class="sig-name descname">handleEdgeContextMenu</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span><span class="p">:</span> <span class="n">PyQt5.QtGui.QContextMenuEvent</span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_subwindow.DataSubWindow.handleEdgeContextMenu" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname">contextMenuEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span><span class="p">:</span> <span class="n">PyQt5.QtGui.QContextMenuEvent</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#data_node_editor.data_subwindow.DataSubWindow.contextMenuEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Triggered when right clicking in the subwindow.</p>
+<p>On right click on a Node, trigger the node evaluation menu.
+On right click on an Edge, trigger the edge type menu.
+On right click on an empty space, trigger the new node context menu</p>
+</dd></dl>
 
 <dl class="py method">
 <dt id="data_node_editor.data_subwindow.DataSubWindow.handleNodeContextMenu">
 <code class="sig-name descname">handleNodeContextMenu</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span><span class="p">:</span> <span class="n">PyQt5.QtGui.QContextMenuEvent</span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_subwindow.DataSubWindow.handleNodeContextMenu" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Triggered when right clicking on a Node. Display a menu to change the node state.</p>
+</dd></dl>
 
 <dl class="py method">
-<dt id="data_node_editor.data_subwindow.DataSubWindow.determine_target_socket_of_node">
-<code class="sig-name descname">determine_target_socket_of_node</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">was_dragged_flag</span></em>, <em class="sig-param"><span class="n">new_calc_node</span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_subwindow.DataSubWindow.determine_target_socket_of_node" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="data_node_editor.data_subwindow.DataSubWindow.finish_new_node_state">
-<code class="sig-name descname">finish_new_node_state</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_calc_node</span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_subwindow.DataSubWindow.finish_new_node_state" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="data_node_editor.data_subwindow.DataSubWindow.handleEdgeContextMenu">
+<code class="sig-name descname">handleEdgeContextMenu</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span><span class="p">:</span> <span class="n">PyQt5.QtGui.QContextMenuEvent</span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_subwindow.DataSubWindow.handleEdgeContextMenu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Triggered when right clicking on an Edge. Display a menu to define the type of the edge</p>
+</dd></dl>
 
 <dl class="py method">
 <dt id="data_node_editor.data_subwindow.DataSubWindow.handleNewNodeContextMenu">
 <code class="sig-name descname">handleNewNodeContextMenu</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span><span class="p">:</span> <span class="n">PyQt5.QtGui.QContextMenuEvent</span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_subwindow.DataSubWindow.handleNewNodeContextMenu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Triggered when right clicking on an empty space. Display a menu to create new node on the scene.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_subwindow.DataSubWindow.finish_new_node_state">
+<code class="sig-name descname">finish_new_node_state</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_node</span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_subwindow.DataSubWindow.finish_new_node_state" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_subwindow.DataSubWindow.print">
+<code class="sig-name descname">print</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_subwindow.DataSubWindow.print" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

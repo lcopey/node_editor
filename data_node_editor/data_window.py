@@ -37,7 +37,7 @@ class DataWindow(NodeEditorWindow):
     The left one displays a list of nodes.
     The right one displays parameters for some nodes.
 
-    Instance Attributes:
+    **Instance Attributes**
         name_company and name_product - used to register the settings
         mdiArea - Multiple Document Area holding the NodeEditor Widget
     """

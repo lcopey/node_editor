@@ -22,10 +22,3 @@ Module contents
    :undoc-members:
    :show-inheritance:
 
-Subpackages
------------
-
-.. toctree::
-   :maxdepth: 4
-
-   data_node_editor.graphics

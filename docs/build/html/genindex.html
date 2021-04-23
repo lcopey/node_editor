@@ -293,14 +293,16 @@
       </ul></li>
       <li><a href="rst/data_node_editor/data_conf.html#data_node_editor.data_conf.ConfException">ConfException</a>
 </li>
+      <li><a href="rst/data_node_editor/data_node_base.html#data_node_editor.data_node_base.Configurable">Configurable (class in data_node_editor.data_node_base)</a>
+</li>
       <li><a href="rst/node_editor/node_graphics_node.html#node_editor.node_graphics_node.GraphicsNode.content">content() (node_editor.node_graphics_node.GraphicsNode property)</a>
 </li>
       <li><a href="rst/data_node_editor/data_node_base.html#data_node_editor.data_node_base.DataNode.content_label">content_label (data_node_editor.data_node_base.DataNode attribute)</a>
 </li>
-      <li><a href="rst/data_node_editor/data_node_base.html#data_node_editor.data_node_base.DataNode.content_label_objname">content_label_objname (data_node_editor.data_node_base.DataNode attribute)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="rst/data_node_editor/data_node_base.html#data_node_editor.data_node_base.DataNode.content_label_objname">content_label_objname (data_node_editor.data_node_base.DataNode attribute)</a>
+</li>
       <li><a href="rst/data_node_editor/data_subwindow.html#data_node_editor.data_subwindow.DataSubWindow.contextMenuEvent">contextMenuEvent() (data_node_editor.data_subwindow.DataSubWindow method)</a>
 </li>
       <li><a href="rst/data_node_editor/data_window.html#data_node_editor.data_window.DataWindow.createActions">createActions() (data_node_editor.data_window.DataWindow method)</a>
@@ -430,8 +432,6 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="rst/node_editor/node_scene_clipboard.html#node_editor.node_scene_clipboard.SceneClipboard.deserializeFromClipboard">deserializeFromClipboard() (node_editor.node_scene_clipboard.SceneClipboard method)</a>
 </li>
-      <li><a href="rst/data_node_editor/data_subwindow.html#data_node_editor.data_subwindow.DataSubWindow.determine_target_socket_of_node">determine_target_socket_of_node() (data_node_editor.data_subwindow.DataSubWindow method)</a>
-</li>
       <li><a href="rst/node_editor/node_graphics_edge.html#node_editor.node_graphics_edge.GraphicsEdge.determineEdgePathClass">determineEdgePathClass() (node_editor.node_graphics_edge.GraphicsEdge method)</a>
 </li>
       <li><a href="rst/node_editor/node_socket.html#node_editor.node_socket.Socket.determineMultiedges">determineMultiedges() (node_editor.node_socket.Socket method)</a>
@@ -439,8 +439,6 @@
       <li><a href="rst/node_editor/node_graphics_view.html#node_editor.node_graphics_view.NodeGraphicsView.distanceBetweenClickAndRelease">distanceBetweenClickAndRelease() (node_editor.node_graphics_view.NodeGraphicsView method)</a>
 </li>
       <li><a href="rst/node_editor/node_scene.html#node_editor.node_scene.Scene.doDeselectItems">doDeselectItems() (node_editor.node_scene.Scene method)</a>
-</li>
-      <li><a href="rst/data_node_editor/data_subwindow.html#data_node_editor.data_subwindow.DataSubWindow.doEvalOutputs">doEvalOutputs() (data_node_editor.data_subwindow.DataSubWindow method)</a>
 </li>
       <li><a href="rst/node_editor/node_edge.html#node_editor.node_edge.Edge.doSelect">doSelect() (node_editor.node_edge.Edge method)</a>
 
@@ -497,6 +495,8 @@
       <li><a href="rst/node_editor/node_node.html#node_editor.node_node.Node.evalChildren">evalChildren() (node_editor.node_node.Node method)</a>
 </li>
       <li><a href="rst/data_node_editor/data_node_base.html#data_node_editor.data_node_base.DataNode.evalImplementation">evalImplementation() (data_node_editor.data_node_base.DataNode method)</a>
+</li>
+      <li><a href="rst/data_node_editor/data_subwindow.html#data_node_editor.data_subwindow.DataSubWindow.evalOutputs">evalOutputs() (data_node_editor.data_subwindow.DataSubWindow method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -658,7 +658,7 @@
 </li>
       <li><a href="rst/node_editor/node_socket.html#node_editor.node_socket.Socket.hasAnyEdge">hasAnyEdge() (node_editor.node_socket.Socket method)</a>
 </li>
-      <li><a href="rst/data_node_editor/data_node_base.html#data_node_editor.data_node_base.DataNode.hasPropertiesWidget">hasPropertiesWidget() (data_node_editor.data_node_base.DataNode method)</a>
+      <li><a href="rst/data_node_editor/data_node_base.html#data_node_editor.data_node_base.Configurable.hasPropertiesWidget">hasPropertiesWidget() (data_node_editor.data_node_base.Configurable method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -708,7 +708,7 @@
 </li>
       <li><a href="rst/data_node_editor/data_subwindow.html#data_node_editor.data_subwindow.DataSubWindow.initNodesContextMenu">initNodesContextMenu() (data_node_editor.data_subwindow.DataSubWindow method)</a>
 </li>
-      <li><a href="rst/data_node_editor/data_node_base.html#data_node_editor.data_node_base.DataNode.initPropertiesWidget">initPropertiesWidget() (data_node_editor.data_node_base.DataNode method)</a>
+      <li><a href="rst/data_node_editor/data_node_base.html#data_node_editor.data_node_base.Configurable.initPropertiesWidget">initPropertiesWidget() (data_node_editor.data_node_base.Configurable method)</a>
 </li>
       <li><a href="rst/data_node_editor/data_node_base.html#data_node_editor.data_node_base.DataNode.initSettings">initSettings() (data_node_editor.data_node_base.DataNode method)</a>
 
@@ -1186,6 +1186,8 @@
       <li><a href="rst/data_node_editor/data_node_base.html#data_node_editor.data_node_base.DataNode.print">print() (data_node_editor.data_node_base.DataNode method)</a>
 
       <ul>
+        <li><a href="rst/data_node_editor/data_subwindow.html#data_node_editor.data_subwindow.DataSubWindow.print">(data_node_editor.data_subwindow.DataSubWindow method)</a>
+</li>
         <li><a href="rst/data_node_editor/data_window.html#data_node_editor.data_window.DataWindow.print">(data_node_editor.data_window.DataWindow method)</a>
 </li>
         <li><a href="rst/node_editor/node_edge.html#node_editor.node_edge.Edge.print">(node_editor.node_edge.Edge method)</a>
@@ -1201,8 +1203,6 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="rst/node_editor/utils.html#node_editor.utils.print_func_name">print_func_name() (in module node_editor.utils)</a>
-</li>
       <li><a href="rst/node_editor/utils.html#node_editor.utils.print_items">print_items() (in module node_editor.utils)</a>
 </li>
   </ul></td>

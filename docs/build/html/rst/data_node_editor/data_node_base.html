@@ -101,7 +101,6 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="data_node_editor.html#module-data_node_editor">Module contents</a></li>
-<li class="toctree-l2"><a class="reference internal" href="data_node_editor.html#subpackages">Subpackages</a></li>
 </ul>
 </li>
 </ul>
@@ -174,6 +173,24 @@
   <div class="section" id="module-data_node_editor.data_node_base">
 <span id="data-node-base-module"></span><h1><code class="xref py py-mod docutils literal notranslate"><span class="pre">data_node_base</span></code> module<a class="headerlink" href="#module-data_node_editor.data_node_base" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
+<dt id="data_node_editor.data_node_base.Configurable">
+<em class="property">class </em><code class="sig-prename descclassname">data_node_editor.data_node_base.</code><code class="sig-name descname">Configurable</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_node_base.Configurable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Configurable node implement PropertiesWidget methods</p>
+<dl class="py method">
+<dt id="data_node_editor.data_node_base.Configurable.initPropertiesWidget">
+<code class="sig-name descname">initPropertiesWidget</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_node_base.Configurable.initPropertiesWidget" title="Permalink to this definition">¶</a></dt>
+<dd><p>To be overridden, defines an attribute named properties_widget used in the properties toolbar</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_node_base.Configurable.hasPropertiesWidget">
+<code class="sig-name descname">hasPropertiesWidget</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_node_base.Configurable.hasPropertiesWidget" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt id="data_node_editor.data_node_base.DataNode">
 <em class="property">class </em><code class="sig-prename descclassname">data_node_editor.data_node_base.</code><code class="sig-name descname">DataNode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scene</span><span class="p">:</span> <span class="n">Scene</span></em>, <em class="sig-param"><span class="n">inputs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">outputs</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_node_base.DataNode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="../node_editor/node_node.html#node_editor.node_node.Node" title="node_editor.node_node.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">node_editor.node_node.Node</span></code></a></p>
@@ -227,28 +244,12 @@
 </dd></dl>
 
 <dl class="py method">
-<dt id="data_node_editor.data_node_base.DataNode.initPropertiesWidget">
-<code class="sig-name descname">initPropertiesWidget</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_node_base.DataNode.initPropertiesWidget" title="Permalink to this definition">¶</a></dt>
-<dd><p>To be overridden, defines an attribute named properties_widget used in the properties toolbar</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="data_node_editor.data_node_base.DataNode.hasPropertiesWidget">
-<code class="sig-name descname">hasPropertiesWidget</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_node_base.DataNode.hasPropertiesWidget" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
 <dt id="data_node_editor.data_node_base.DataNode.getOpCode">
 <em class="property">classmethod </em><code class="sig-name descname">getOpCode</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_node_base.DataNode.getOpCode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the op_code of the node.</p>
 <p>Corresponds to the class name definition as it should be unique.
 Helper function to work with NodeFactory class</p>
 </dd></dl>
-
-<dl class="py method">
-<dt id="data_node_editor.data_node_base.DataNode.print">
-<code class="sig-name descname">print</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_node_base.DataNode.print" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 <dl class="py method">
 <dt id="data_node_editor.data_node_base.DataNode.initSettings">
@@ -367,6 +368,11 @@ Any other error will set the node and their children as invalid
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_node_base.DataNode.print">
+<code class="sig-name descname">print</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_node_base.DataNode.print" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 

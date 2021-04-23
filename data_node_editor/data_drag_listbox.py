@@ -71,6 +71,7 @@ class DragListBox(QListWidget):
         item.setData(Qt.UserRole + 1, op_code)  # store op_code at position Qt.UserRole + 1
 
     def startDrag(self, *args, **kwargs):
+        """Initiates drag object"""
         try:
             # Retrieve the operational code
             item = self.currentItem()
@@ -87,6 +88,7 @@ class DragListBox(QListWidget):
             dataStream.writeQString(op_code)
             dataStream.writeQString(item.text())
 
+            # instantiate mime data of LISTBOX_MIMETYPE type
             mimeData = QMimeData()
             mimeData.setData(LISTBOX_MIMETYPE, itemData)
 

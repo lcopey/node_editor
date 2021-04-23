@@ -101,7 +101,6 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="data_node_editor.html#module-data_node_editor">Module contents</a></li>
-<li class="toctree-l2"><a class="reference internal" href="data_node_editor.html#subpackages">Subpackages</a></li>
 </ul>
 </li>
 </ul>
@@ -179,14 +178,20 @@
 <em class="property">class </em><code class="sig-prename descclassname">data_node_editor.data_window.</code><code class="sig-name descname">DataWindow</code><a class="headerlink" href="#data_node_editor.data_window.DataWindow" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="../node_editor/node_editor_window.html#node_editor.node_editor_window.NodeEditorWindow" title="node_editor.node_editor_window.NodeEditorWindow"><code class="xref py py-class docutils literal notranslate"><span class="pre">node_editor.node_editor_window.NodeEditorWindow</span></code></a></p>
 <p>Class representing the MainWindow of the application.</p>
+<p>It implements multiple documents area as well as two docks on the left and right.
+The left one displays a list of nodes.
+The right one displays parameters for some nodes.</p>
 <dl class="simple">
-<dt>Instance Attributes:</dt><dd><p>name_company and name_product - used to register the settings</p>
+<dt><strong>Instance Attributes</strong></dt><dd><p>name_company and name_product - used to register the settings
+mdiArea - Multiple Document Area holding the NodeEditor Widget</p>
 </dd>
 </dl>
 <dl class="py method">
 <dt id="data_node_editor.data_window.DataWindow.initUI">
 <code class="sig-name descname">initUI</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_window.DataWindow.initUI" title="Permalink to this definition">¶</a></dt>
-<dd><p>UI is composed with</p>
+<dd><p>UI is composed of two docks :
+- the one on the left is used to display nodes available to use.
+- the one on the right displays properties of the selected node.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -256,6 +261,12 @@ Window and Help actions are specific to the :class:~`examples.calc_window.CalcWi
 </dd></dl>
 
 <dl class="py method">
+<dt id="data_node_editor.data_window.DataWindow.closeEvent">
+<code class="sig-name descname">closeEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span><span class="p">:</span> <span class="n">PyQt5.QtGui.QCloseEvent</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#data_node_editor.data_window.DataWindow.closeEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close if no change is detected, else prompt a dialog asking to save.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt id="data_node_editor.data_window.DataWindow.updateMenus">
 <code class="sig-name descname">updateMenus</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_window.DataWindow.updateMenus" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -274,7 +285,7 @@ Window and Help actions are specific to the :class:~`examples.calc_window.CalcWi
 
 <dl class="py method">
 <dt id="data_node_editor.data_window.DataWindow.getCurrentNodeEditorWidget">
-<code class="sig-name descname">getCurrentNodeEditorWidget</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="../node_editor/node_editor_widget.html#node_editor.node_editor_widget.NodeEditorWidget" title="node_editor.node_editor_widget.NodeEditorWidget">node_editor.node_editor_widget.NodeEditorWidget</a><a class="headerlink" href="#data_node_editor.data_window.DataWindow.getCurrentNodeEditorWidget" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">getCurrentNodeEditorWidget</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Optional<span class="p">[</span>Union<span class="p">[</span><a class="reference internal" href="../node_editor/node_editor_widget.html#node_editor.node_editor_widget.NodeEditorWidget" title="node_editor.node_editor_widget.NodeEditorWidget">node_editor.node_editor_widget.NodeEditorWidget</a><span class="p">, </span>PyQt5.QtWidgets.QWidget<span class="p">]</span><span class="p">]</span><a class="headerlink" href="#data_node_editor.data_window.DataWindow.getCurrentNodeEditorWidget" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the widget currently holding the scene.</p>
 <p>For different application, the method can be overridden to return mdiArea, the central widget…</p>
 <dl class="field-list simple">
@@ -288,34 +299,52 @@ Window and Help actions are specific to the :class:~`examples.calc_window.CalcWi
 </dd></dl>
 
 <dl class="py method">
-<dt id="data_node_editor.data_window.DataWindow.about">
-<code class="sig-name descname">about</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_window.DataWindow.about" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="data_node_editor.data_window.DataWindow.closeEvent">
-<code class="sig-name descname">closeEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span><span class="p">:</span> <span class="n">PyQt5.QtGui.QCloseEvent</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#data_node_editor.data_window.DataWindow.closeEvent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Close if no change is detected, else prompt a dialog asking to save.</p>
+<dt id="data_node_editor.data_window.DataWindow.createMdiChild">
+<code class="sig-name descname">createMdiChild</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">child_widget</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference internal" href="data_subwindow.html#data_node_editor.data_subwindow.DataSubWindow" title="data_node_editor.data_subwindow.DataSubWindow">data_node_editor.data_subwindow.DataSubWindow</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; PyQt5.QtWidgets.QMdiSubWindow<a class="headerlink" href="#data_node_editor.data_window.DataWindow.createMdiChild" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new widget to mdiArea.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>child_widget</strong> (<em>Optional</em><em>[</em><a class="reference internal" href="data_subwindow.html#data_node_editor.data_subwindow.DataSubWindow" title="data_node_editor.data_subwindow.DataSubWindow"><em>DataSubWindow</em></a><em>]</em>) – if provided add DataSubWindow to mdiArea else instantiate a new one</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>QMdiSubWindow</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="data_node_editor.data_window.DataWindow.createMdiChild">
-<code class="sig-name descname">createMdiChild</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">child_widget</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_window.DataWindow.createMdiChild" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
 <dt id="data_node_editor.data_window.DataWindow.findMdiChild">
-<code class="sig-name descname">findMdiChild</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fileName</span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_window.DataWindow.findMdiChild" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname">findMdiChild</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; Optional<span class="p">[</span>PyQt5.QtWidgets.QMdiSubWindow<span class="p">]</span><a class="headerlink" href="#data_node_editor.data_window.DataWindow.findMdiChild" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve subwindow according to filename</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – name of the subwindow</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Optional[QMdiSubWindow]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="data_node_editor.data_window.DataWindow.setActiveSubWindow">
-<code class="sig-name descname">setActiveSubWindow</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">window</span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_window.DataWindow.setActiveSubWindow" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">setActiveSubWindow</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">window</span><span class="p">:</span> <span class="n">PyQt5.QtWidgets.QMdiSubWindow</span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_window.DataWindow.setActiveSubWindow" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="data_node_editor.data_window.DataWindow.refreshPropertiesDock">
 <code class="sig-name descname">refreshPropertiesDock</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_window.DataWindow.refreshPropertiesDock" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="data_node_editor.data_window.DataWindow.about">
+<code class="sig-name descname">about</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_node_editor.data_window.DataWindow.about" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">

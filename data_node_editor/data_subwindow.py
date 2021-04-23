@@ -12,7 +12,8 @@ from node_editor.utils import dumpException, get_path_relative_to_file
 from typing import TYPE_CHECKING, Union, Type, Callable
 
 if TYPE_CHECKING:
-    from .data_window import DataWindow
+    # from .data_window import DataWindow
+    from node_editor.node_socket import Socket
     from .data_node_base import DataNode
     from node_editor.node_node import Node
 
@@ -59,63 +60,6 @@ class DataSubWindow(NodeEditorWidget):
             context_menu.addAction(self.node_actions[key])
         return context_menu
 
-    def getMainWindow(self):
-        """Return the main window reference holding the subwindow"""
-        # QMdiSubWindow - > QWidget -> QMdiArea -> MainWindow
-        return self.parent().parent().parent().parent()
-
-    def onHistoryRestored(self):
-        """Triggered when history is restored and eval nodes outputs."""
-        self.doEvalOutputs()
-
-    def doEvalOutputs(self):
-        """Compute nodes outputs."""
-        # TODO implement NetWorkX to optimize computation
-        # TODO Fix eval outputs
-        for node in self.scene.nodes:
-            if node.__class__.__name__ == 'CalcNodeOutput':
-                node.eval()
-
-    def getNodeClassFromData(self, data: dict) -> Type[Union[Node, DataNode]]:
-        """Returns class definition for the op_code in data.
-
-        Parameters
-        ----------
-        data: dict
-            Node or DataNode serialized as dict.
-
-        Returns
-        -------
-        Type[Union[Node, DataNode]]
-
-        """
-        if 'op_code' not in data:
-            return Node
-        return NodeFactory.from_op_code(data['op_code'])
-
-    def fileLoad(self, filename: str) -> bool:
-        """Load saved data node editor file
-
-        Parameters
-        ----------
-        filename : str
-            path to saved data node editor
-
-        Returns
-        -------
-        bool
-        ``True`` if successful else ``False``
-
-        """
-        if super().fileLoad(filename):
-            self.doEvalOutputs()
-            return True
-        return False
-
-    def setTitle(self):
-        """Set the title of the subwindow from the current filename."""
-        self.setWindowTitle(self.getUserFriendlyFilename())
-
     def addCloseEventListener(self, callback: Callable):
         """Add callback to the callback list when closing the
         :classs:~`data_node_editor.data_node_editor.DataSubWindow`.
@@ -132,10 +76,13 @@ class DataSubWindow(NodeEditorWidget):
         """
         self._close_event_listeners.append(callback)
 
-    def closeEvent(self, event):
-        """Close event"""
-        for callback in self._close_event_listeners:
-            callback(self, event)
+    def setTitle(self):
+        """Set the title of the subwindow from the current filename."""
+        self.setWindowTitle(self.getUserFriendlyFilename())
+
+    def onHistoryRestored(self):
+        """Triggered when history is restored and eval nodes outputs."""
+        self.evalOutputs()
 
     def onDragEnter(self, event: QDragEnterEvent):
         """On drag enter. It is typically triggered when dragging a node from the
@@ -181,11 +128,71 @@ class DataSubWindow(NodeEditorWidget):
             if DEBUG: print(' ... drop ignored, not requested format ', LISTBOX_MIMETYPE)
             event.ignore()
 
+    def closeEvent(self, event):
+        """Close event"""
+        for callback in self._close_event_listeners:
+            callback(self, event)
+
+    def getMainWindow(self):
+        """Return the main window reference holding the subwindow"""
+        # QMdiSubWindow - > QWidget -> QMdiArea -> MainWindow
+        return self.parent().parent().parent().parent()
+
+    def getNodeClassFromData(self, data: dict) -> Type[Union[Node, DataNode]]:
+        """Returns class definition for the op_code in data.
+
+        Parameters
+        ----------
+        data: dict
+            Node or DataNode serialized as dict.
+
+        Returns
+        -------
+        Type[Union[Node, DataNode]]
+
+        """
+        if 'op_code' not in data:
+            return Node
+        return NodeFactory.from_op_code(data['op_code'])
+
+    def evalOutputs(self):
+        """Compute nodes outputs."""
+        # TODO implement NetWorkX to optimize computation
+        # TODO Fix eval outputs
+        for node in self.scene.nodes:
+            if node.__class__.__name__ == 'CalcNodeOutput':
+                node.eval()
+
+    def fileLoad(self, filename: str) -> bool:
+        """Load saved data node editor file
+
+        Parameters
+        ----------
+        filename : str
+            path to saved data node editor
+
+        Returns
+        -------
+        bool
+        ``True`` if successful else ``False``
+
+        """
+        if super().fileLoad(filename):
+            self.evalOutputs()
+            return True
+        return False
+
     def contextMenuEvent(self, event: QContextMenuEvent) -> None:
+        """Triggered when right clicking in the subwindow.
+
+        On right click on a Node, trigger the node evaluation menu.
+        On right click on an Edge, trigger the edge type menu.
+        On right click on an empty space, trigger the new node context menu"""
         try:
             item = self.scene.getItemAt(event.pos())
-            if DEBUG_CONTEXT: print(item)
+            self.print(item)
 
+            # on click on graphicsproxywidget, retrieve the corresponding widget
             if type(item) == QGraphicsProxyWidget:
                 item = item.widget()
 
@@ -203,13 +210,58 @@ class DataSubWindow(NodeEditorWidget):
         except Exception as e:
             dumpException(e)
 
+    def handleNodeContextMenu(self, event: QContextMenuEvent):
+        """Triggered when right clicking on a Node. Display a menu to change the node state."""
+        if DEBUG_CONTEXT:
+            print('Context: Node')
+        # define the context menu
+        context_menu = QMenu(self)
+        markDirtyAct = context_menu.addAction('Mark Dirty')
+        markDirtyDescendant = context_menu.addAction('Mark Descendant Dirty')
+        markInvalidAct = context_menu.addAction('Mark Invalid')
+        unmarkInvalidAct = context_menu.addAction('Unmark Invalid')
+        evalAct = context_menu.addAction('Eval')
+
+        # display the menu on the mouse position and get the action
+        action = context_menu.exec_(self.mapToGlobal(event.pos()))  # draw to scene and get the selected action
+
+        selected = None
+        item = self.scene.getItemAt(event.pos())
+        if type(item) == QGraphicsProxyWidget:
+            item = item.widget()
+
+        if hasattr(item, 'node'):
+            selected = item.node
+        if hasattr(item, 'socket'):
+            selected = item.socket.node
+
+        if DEBUG_CONTEXT:
+            print('>>Item selected', item)
+
+        if selected:
+            if action == markDirtyAct:
+                selected.markDirty()
+            elif action == markInvalidAct:
+                selected.markInvalid()
+            elif action == unmarkInvalidAct:
+                selected.markInvalid(False)
+            elif action == markDirtyDescendant:
+                selected.markDescendantDirty(True)
+            elif action == evalAct:
+                val = selected.eval()
+                if DEBUG_CONTEXT:
+                    print(val)
+
     def handleEdgeContextMenu(self, event: QContextMenuEvent):
+        """Triggered when right clicking on an Edge. Display a menu to define the type of the edge"""
         if DEBUG_CONTEXT: print('Context: Edge')
         # define the context menu
         context_menu = QMenu(self)
         bezierAct = context_menu.addAction('Bezier Edge')
         directAct = context_menu.addAction('Direct Edge')
-        action = context_menu.exec_(self.mapToGlobal(event.pos()))  # draw to scene and get the selected action
+
+        # draw to scene and get the selected action
+        action = context_menu.exec_(self.mapToGlobal(event.pos()))
 
         selected = None
         item = self.scene.getItemAt(event.pos())
@@ -222,84 +274,61 @@ class DataSubWindow(NodeEditorWidget):
         if selected and action == directAct:
             selected.edge_type = EDGE_TYPE_DIRECT
 
-    def handleNodeContextMenu(self, event: QContextMenuEvent):
-        if DEBUG_CONTEXT: print('Context: Node')
-        # define the context menu
-        context_menu = QMenu(self)
-        markDirtyAct = context_menu.addAction('Mark Dirty')
-        markDirtyDescendant = context_menu.addAction('Mark Descendant Dirty')
-        markInvalidAct = context_menu.addAction('Mark Invalid')
-        unmarkInvalidAct = context_menu.addAction('Unmark Invalid')
-        evalAct = context_menu.addAction('Eval')
-
-        action = context_menu.exec_(self.mapToGlobal(event.pos()))  # draw to scene and get the selected action
-
-        selected = None
-        item = self.scene.getItemAt(event.pos())
-        if type(item) == QGraphicsProxyWidget:
-            item = item.widget()
-
-        if hasattr(item, 'node'):
-            selected = item.node
-
-        if hasattr(item, 'socket'):
-            selected = item.socket.node
-
-        if DEBUG_CONTEXT: print('>>Item selected', item)
-
-        if selected and action == markDirtyAct:
-            selected.markDirty()
-        elif selected and action == markInvalidAct:
-            selected.markInvalid()
-        elif selected and action == unmarkInvalidAct:
-            selected.markInvalid(False)
-        elif selected and action == markDirtyDescendant:
-            selected.markDescendantDirty(True)
-        elif selected and action == evalAct:
-            val = selected.eval()
-            if DEBUG_CONTEXT: print(val)
-
-    def determine_target_socket_of_node(self, was_dragged_flag, new_calc_node):
-        target_socket = None
-        if was_dragged_flag:
-            if len(new_calc_node.inputs) > 0:
-                target_socket = new_calc_node.inputs[0]
-        else:
-            if len(new_calc_node.outputs) > 0:
-                target_socket = new_calc_node.outputs[0]
-
-        return target_socket
-
-    def finish_new_node_state(self, new_calc_node):
-        self.scene.doDeselectItems()
-        new_calc_node.grNode.doSelect(True)
-        new_calc_node.grNode.onSelected()
-
     def handleNewNodeContextMenu(self, event: QContextMenuEvent):
+        """Triggered when right clicking on an empty space. Display a menu to create new node on the scene."""
         if DEBUG_CONTEXT: print('Context: New Node')
         context_menu = self.initNodesContextMenu()
 
         action = context_menu.exec_(self.mapToGlobal(event.pos()))  # draw to scene and get the selected action
 
         if action is not None:
-            new_calc_node = NodeFactory.from_op_code(action.data())(self.scene)
+            new_node = NodeFactory.from_op_code(action.data())(self.scene)
             scene_pos = self.scene.getView().mapToScene(event.pos())
-            new_calc_node.setPos(scene_pos.x(), scene_pos.y())
+            new_node.setPos(scene_pos.x(), scene_pos.y())
 
             if self.scene.getView().isEdgeDragging():
                 # in dragging edge mode, connect the current edge to the first input
-                target_socket = self.determine_target_socket_of_node(
+                target_socket = self._determine_target_socket_of_node(
                     self.scene.getView().dragging.drag_start_socket.is_output,
-                    new_calc_node)
+                    new_node)
                 if target_socket is not None:
                     self.scene.getView().dragging.edgeDragEnd(target_socket.grSocket)
-                    self.finish_new_node_state(new_calc_node)
+                    self.finish_new_node_state(new_node)
 
                 # select the newly create node
-                new_calc_node.doSelect(True)
+                new_node.doSelect(True)
 
             else:
-                self.scene.history.storeHistory(f'Created {new_calc_node.__class__.__name__}')
+                self.scene.history.storeHistory(f'Created {new_node.__class__.__name__}')
+
+    def _determine_target_socket_of_node(self, was_dragged_flag: bool, new_node: DataNode) -> 'Socket':
+        """Return either the input or output socket of the new_node according to was_dragged_flag.
+
+        This function is essentially triggered when a new node is created when dragging an edge.
+        Parameters
+        ----------
+        was_dragged_flag: bool
+        new_node: DataNode
+
+        Returns
+        -------
+        Socket
+
+        """
+        target_socket = None
+        if was_dragged_flag:
+            if len(new_node.inputs) > 0:
+                target_socket = new_node.inputs[0]
+        else:
+            if len(new_node.outputs) > 0:
+                target_socket = new_node.outputs[0]
+
+        return target_socket
+
+    def finish_new_node_state(self, new_node):
+        self.scene.doDeselectItems()
+        new_node.grNode.doSelect(True)
+        new_node.grNode.onSelected()
 
     def print(self, *args):
         if DEBUG:
