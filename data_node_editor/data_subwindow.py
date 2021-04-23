@@ -9,10 +9,12 @@ from node_editor.node_node import Node
 from node_editor.node_editor_widget import NodeEditorWidget
 from node_editor.utils import dumpException, get_path_relative_to_file
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union, Type, Callable
 
 if TYPE_CHECKING:
     from .data_window import DataWindow
+    from .data_node_base import DataNode
+    from node_editor.node_node import Node
 
 DEBUG = True
 DEBUG_CONTEXT = False
@@ -22,6 +24,7 @@ class DataSubWindow(NodeEditorWidget):
     def __init__(self):
         super().__init__()
         # self.setAttribute(Qt.WA_DeleteOnClose)
+        self.node_actions = dict()
 
         self.setTitle()
         self.initNewNodeActions()
@@ -33,17 +36,21 @@ class DataSubWindow(NodeEditorWidget):
         self._close_event_listeners = []
 
     def initNewNodeActions(self):
-        """Instantiates """
+        """Instantiates nodes actions.
+
+        Those QActions only holds icons, title of the node and op_code which identify which nodes to create."""
         self.node_actions = {}
         keys = NodeFactory.get_nodes()
         keys.sort()
         for key in keys:
             node = NodeFactory.from_op_code(key)
             op_code = node.getOpCode()
-            self.node_actions[op_code] = QAction(QIcon(get_path_relative_to_file(__file__, node.icon)), node.op_title)
+            icon = QIcon(get_path_relative_to_file(__file__, node.icon))
+            self.node_actions[op_code] = QAction(icon, node.op_title)
             self.node_actions[op_code].setData(op_code)
 
     def initNodesContextMenu(self):
+        """Instantiates context menu that popup on right click"""
         # TODO Implement hierarchical menu
         context_menu = QMenu(self)
         keys = NodeFactory.get_nodes()
@@ -58,38 +65,81 @@ class DataSubWindow(NodeEditorWidget):
         return self.parent().parent().parent().parent()
 
     def onHistoryRestored(self):
+        """Triggered when history is restored and eval nodes outputs."""
         self.doEvalOutputs()
 
     def doEvalOutputs(self):
-        # eval all output nodes
-        # TODO Fix eval output
-        # TODO implement NetWorkX
+        """Compute nodes outputs."""
+        # TODO implement NetWorkX to optimize computation
+        # TODO Fix eval outputs
         for node in self.scene.nodes:
             if node.__class__.__name__ == 'CalcNodeOutput':
                 node.eval()
 
-    def getNodeClassFromData(self, data):
+    def getNodeClassFromData(self, data: dict) -> Type[Union[Node, DataNode]]:
+        """Returns class definition for the op_code in data.
+
+        Parameters
+        ----------
+        data: dict
+            Node or DataNode serialized as dict.
+
+        Returns
+        -------
+        Type[Union[Node, DataNode]]
+
+        """
         if 'op_code' not in data:
             return Node
         return NodeFactory.from_op_code(data['op_code'])
 
     def fileLoad(self, filename: str) -> bool:
+        """Load saved data node editor file
+
+        Parameters
+        ----------
+        filename : str
+            path to saved data node editor
+
+        Returns
+        -------
+        bool
+        ``True`` if successful else ``False``
+
+        """
         if super().fileLoad(filename):
             self.doEvalOutputs()
             return True
         return False
 
     def setTitle(self):
+        """Set the title of the subwindow from the current filename."""
         self.setWindowTitle(self.getUserFriendlyFilename())
 
-    def addCloseEventListener(self, callback: 'function'):
+    def addCloseEventListener(self, callback: Callable):
+        """Add callback to the callback list when closing the
+        :classs:~`data_node_editor.data_node_editor.DataSubWindow`.
+
+        Parameters
+        ----------
+        callback: Callable
+            function to call when closing :classs:~`data_node_editor.data_node_editor.DataSubWindow`.
+
+        Returns
+        -------
+        None
+
+        """
         self._close_event_listeners.append(callback)
 
     def closeEvent(self, event):
+        """Close event"""
         for callback in self._close_event_listeners:
             callback(self, event)
 
     def onDragEnter(self, event: QDragEnterEvent):
+        """On drag enter. It is typically triggered when dragging a node from the
+        :class:data_node_editor.data_drag_listbox.DragListBox."""
         if event.mimeData().hasFormat(LISTBOX_MIMETYPE):
             if DEBUG: print('drag enter accepted')
             event.acceptProposedAction()
@@ -98,9 +148,8 @@ class DataSubWindow(NodeEditorWidget):
             event.setAccepted(False)
 
     def onDrop(self, event: QDropEvent):
-        if DEBUG:
-            print('CalcSubWnd : onDrop')
-            print(event.mimeData().text())
+        """On dropping a node from the :class:data_node_editor.data_drag_listbox.DragListBox."""
+        self.print('> DataSubWindow : onDrop', event.mimeData().text())
         if event.mimeData().hasFormat(LISTBOX_MIMETYPE):
             eventData = event.mimeData().data(LISTBOX_MIMETYPE)
             dataStream = QDataStream(eventData, QIODevice.ReadOnly)

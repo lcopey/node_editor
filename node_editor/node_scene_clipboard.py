@@ -61,7 +61,7 @@ class SceneClipboard:
 
         return data
 
-    def deserializeFromClipboard(self, datas):
+    def deserializeFromClipboard(self, datas: dict):
 
         hashmap = {}
 
@@ -89,7 +89,7 @@ class SceneClipboard:
         mousex, mousey = mouse_scene_pos.x(), mouse_scene_pos.y()
 
         if DEBUG_PASTING:
-            print (" *** PASTA:")
+            print(" *** PASTA:")
             print("Copied boudaries:\n\tX:", minx, maxx, "   Y:", miny, maxy)
             print("\tbbox_center:", relbboxcenterx, relbboxcentery)
 

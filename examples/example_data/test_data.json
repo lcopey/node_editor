@@ -1,0 +1,71 @@
+{
+    "id": 2669046323376,
+    "scene_width": 64000,
+    "scene_height": 64000,
+    "nodes": [
+        {
+            "id": 2669046391664,
+            "title": "CSV file",
+            "pos_x": -220.0,
+            "pos_y": -46.0,
+            "width": 70.0,
+            "height": 42.0,
+            "resizeable": false,
+            "inputs": [],
+            "outputs": [
+                {
+                    "id": 2669102485072,
+                    "index": 0,
+                    "multi_edges": true,
+                    "position": 5,
+                    "socket_type": 1
+                }
+            ],
+            "op_code": "OpNode_ReadCSVFile",
+            "node_settings": {
+                "index_col": null,
+                "header": null,
+                "encoding": "utf-8",
+                "filepath_or_buffer": ""
+            }
+        },
+        {
+            "id": 2669102518336,
+            "title": "Table",
+            "pos_x": -93.0,
+            "pos_y": -178.0,
+            "width": 320.0,
+            "height": 200.0,
+            "resizeable": true,
+            "inputs": [
+                {
+                    "id": 2669102651568,
+                    "index": 0,
+                    "multi_edges": false,
+                    "position": 2,
+                    "socket_type": 1
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 2669102651616,
+                    "index": 0,
+                    "multi_edges": true,
+                    "position": 5,
+                    "socket_type": 1
+                }
+            ],
+            "content": {},
+            "op_code": "DataNode_Table",
+            "node_settings": {}
+        }
+    ],
+    "edges": [
+        {
+            "id": 2669102651520,
+            "edge_type": 2,
+            "start": 2669102485072,
+            "end": 2669102651568
+        }
+    ]
+}

@@ -72,7 +72,9 @@ class DataWindow(NodeEditorWindow):
         super(DataWindow, self).__init__()
 
     def initUI(self):
-        """UI is composed with """
+        """UI is composed of two docks :
+        - the one on the left is used to display nodes available to use.
+        - the one on the right displays properties of the selected node."""
 
         # variable for QSettings
         self.name_company = 'Copey'
@@ -125,6 +127,24 @@ class DataWindow(NodeEditorWindow):
         self.setWindowTitle("DataViz NodeEditor")
 
     def _createAction(self, label: str, statusTip: str, triggered: Callable, shortcut=None):
+        """Create a new QAction to populate the main tool.
+
+        Parameters
+        ----------
+        label: str
+            label of the action
+        statusTip: str
+            Tooltip
+        triggered: Callable
+            Callback to trigger when clicking the action
+        shortcut: Optional[QKeySequence]
+            Key sequence as shortcut for the action
+
+        Returns
+        -------
+        QAction
+
+        """
         kwargs = {'statusTip': statusTip, 'triggered': triggered}
         if shortcut:
             kwargs['shortcut'] = shortcut
