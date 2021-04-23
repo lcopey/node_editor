@@ -140,16 +140,20 @@ class DataSubWindow(NodeEditorWidget):
     def onDragEnter(self, event: QDragEnterEvent):
         """On drag enter. It is typically triggered when dragging a node from the
         :class:data_node_editor.data_drag_listbox.DragListBox."""
-        if event.mimeData().hasFormat(LISTBOX_MIMETYPE):
-            if DEBUG: print('drag enter accepted')
-            event.acceptProposedAction()
-        else:
-            if DEBUG: print('... denied drag enter event')
-            event.setAccepted(False)
+        try:
+            if event.mimeData().hasFormat(LISTBOX_MIMETYPE):
+                if DEBUG: print('drag enter accepted')
+                event.acceptProposedAction()
+            else:
+                if DEBUG: print('... denied drag enter event')
+                event.setAccepted(False)
+        except Exception as e:
+            dumpException(e)
 
     def onDrop(self, event: QDropEvent):
         """On dropping a node from the :class:data_node_editor.data_drag_listbox.DragListBox."""
-        self.print('> DataSubWindow : onDrop', event.mimeData().text())
+        self.print('> DataSubWindow : onDrop')
+        self.print(event.mimeData().text())
         if event.mimeData().hasFormat(LISTBOX_MIMETYPE):
             eventData = event.mimeData().data(LISTBOX_MIMETYPE)
             dataStream = QDataStream(eventData, QIODevice.ReadOnly)
@@ -296,3 +300,7 @@ class DataSubWindow(NodeEditorWidget):
 
             else:
                 self.scene.history.storeHistory(f'Created {new_calc_node.__class__.__name__}')
+
+    def print(self, *args):
+        if DEBUG:
+            print(f'> {self.__class__.__name__}', *args)
